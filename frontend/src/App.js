@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NavBar from './components/NavBar'
 import Home from './components/Home'
 import Login from './components/Login'
+import Private from './components/Private'
 
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -17,8 +18,8 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
-              <PublicRoute path="/login"><Login/></PublicRoute>
-              <PrivateRoute path="/signup"><Login/></PrivateRoute>
+              <PublicRoute  path="/login" exact component={Login}/>
+              <PrivateRoute path="/private" exact component={Private}/>
               <Route><Home/></Route>
           </Switch>
       </Router>
