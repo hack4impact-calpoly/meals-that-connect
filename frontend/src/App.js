@@ -28,7 +28,17 @@ class App extends Component {
 }
 
 export const isLoggedIn = () => {
-  return false;
+  isUser: false; //originally set to false
+  authenticate(cb) {
+    this.isUser = true;
+    setTimeout(cb, 100); //fake async
+  },
+  signout(cb) {
+    this.isUser = false;
+    setTimeout(cb, 100);
+  }
+
+
 }
 
 export default App;
