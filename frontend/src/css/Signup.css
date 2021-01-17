@@ -1,0 +1,22 @@
+h2 {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#signup-button {
+    display: block;
+    margin: 10px auto;
+}
+
+#cta-type {
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+}
+
+#volunteer-type {
+    display: flex;
+    margin-right: 100px;
+    font-size: 20px;
+}
