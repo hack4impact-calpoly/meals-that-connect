@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import FrontBanner from './FrontBanner.js';
+import Columns from './Columns.js'
 
 class Home extends Component {
     constructor(props) {
@@ -9,7 +11,10 @@ class Home extends Component {
     }
     render() {
         return (
-            <div>Home</div>
+            <main>
+            <FrontBanner />
+            <Columns />
+            </main>
         );
     }
 }
