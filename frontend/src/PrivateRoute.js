@@ -12,18 +12,4 @@ const PrivateRoute = ({ component: Component = null, render: Render = null, ...r
     );
 };
 
-// const PrivateRoute = ({ component: Component = null, render: Render = null, ...rest }) => {
-//     const authService = new AuthService();
-  
-//     return (
-//       <Route
-//         {...rest}
-//         render={props =>
-//           authService.isAuthenticated ? (Render ? (Render(props)) : Component ? (<Component {...props} />) : null) 
-//           : (<Redirect to={{ pathname: '/login', state: { from: props.location } }} />)
-//         }
-//       />
-//     );
-//   }
-
 export default PrivateRoute;
