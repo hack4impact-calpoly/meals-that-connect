@@ -9,9 +9,12 @@ import Private from './components/Private'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
+import Cookies from 'js-cookie';
+
 import './css/App.css';
 
 class App extends Component {
+
   render() {
     return (
     <div className="App">
@@ -27,18 +30,24 @@ class App extends Component {
   )}
 }
 
-export const isLoggedIn = () => {
-  isUser: false; //originally set to false
-  authenticate(cb) {
-    this.isUser = true;
-    setTimeout(cb, 100); //fake async
-  },
-  signout(cb) {
-    this.isUser = false;
-    setTimeout(cb, 100);
-  }
+// export const isLoggedIn = () => {
+//   return isAuthenticated.isLoggedIn;
+// }
 
+// export const isAuthenticated = {
+//   isLoggedIn: false,
 
-}
+//   //login in 
+//   login(cb){
+//     this.isLoggedIn = true
+//     setTimeout(cb, 100) // fake async to make it seem like you are logining in
+//   },
+
+//   //signout
+//   signout(cb){
+//     this.isLoggedIn = false
+//     setTimeout(cb, 100)
+//   }
+// }
 
 export default App;
