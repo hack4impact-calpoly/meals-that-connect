@@ -2,7 +2,7 @@
 
 # dependencies
 */node_modules
-*/node_modules/cookies.js
+*/node_modules/js-cookies
 /.pnp
 .pnp.js
 
