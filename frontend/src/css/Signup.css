@@ -1,7 +1,7 @@
 h2 {
     display: flex;
     align-items: center;
-    flex-direction: column;
+
 }
 
 #signup-button {
@@ -9,9 +9,23 @@ h2 {
     margin: 10px auto;
 }
 
+.signup-form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+label {
+    color: black;
+}
+
 #cta-type {
     display: flex;
     flex-direction: row;
+
+}
+
+label {
     font-size: 20px;
 }
 
