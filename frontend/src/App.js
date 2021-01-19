@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 import NavBar from './components/NavBar'
 import Home from './components/Home'
@@ -9,17 +10,23 @@ import Private from './components/Private'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import Cookies from 'js-cookie';
+import { isLoggedIn, isAuthenticated, hydrateStatewithLocalStorage } from './components/Login'
 
 import './css/App.css';
 
 class App extends Component {
+  
+  // when page is reloaded it calls function that will check if storage has a user logged in
+  componentDidMount() {
+    new Login().hydrateStatewithLocalStorage();
+  }
 
   render() {
     return (
     <div className="App">
       <Router>
           <NavBar/>
+          <UnAuthorize/>
           <Switch>
               <PublicRoute  path="/login" exact component={Login}/>
               <PrivateRoute path="/private" exact component={Private}/>
@@ -29,6 +36,12 @@ class App extends Component {
     </div>
   )}
 }
+
+export const UnAuthorize = withRouter(({ history }) => (
+    isLoggedIn() 
+      ? (<p> Click here to signout <button onClick={() => {isAuthenticated.signout(() => history.push('/login'))}}> Sign out </button> </p>)
+      : <p> Not logged in </p>
+))
 
 // export const isLoggedIn = () => {
 //   return isAuthenticated.isLoggedIn;

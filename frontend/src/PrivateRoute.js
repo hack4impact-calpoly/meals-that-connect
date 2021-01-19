@@ -4,6 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { isLoggedIn } from './components/Login.js';
 
 const PrivateRoute = ({ component: Component = null, render: Render = null, ...rest }) => {
+	console.log(isLoggedIn())
     return (
         <Route {...rest} render={props => (
             isLoggedIn() 
