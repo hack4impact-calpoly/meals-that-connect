@@ -10,7 +10,7 @@ import Private from './components/Private'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isLoggedIn, isAuthenticated, hydrateStatewithLocalStorage } from './components/Login'
+import { isLoggedIn, isAuthenticated, hydrateStatewithLocalStorage} from './components/Login'
 
 import './css/App.css';
 
@@ -37,30 +37,12 @@ class App extends Component {
   )}
 }
 
+//UnAuthorize deals with signing out the user
 export const UnAuthorize = withRouter(({ history }) => (
     isLoggedIn() 
       ? (<p> Click here to signout <button onClick={() => {isAuthenticated.signout(() => history.push('/login'))}}> Sign out </button> </p>)
       : <p> Not logged in </p>
 ))
 
-// export const isLoggedIn = () => {
-//   return isAuthenticated.isLoggedIn;
-// }
-
-// export const isAuthenticated = {
-//   isLoggedIn: false,
-
-//   //login in 
-//   login(cb){
-//     this.isLoggedIn = true
-//     setTimeout(cb, 100) // fake async to make it seem like you are logining in
-//   },
-
-//   //signout
-//   signout(cb){
-//     this.isLoggedIn = false
-//     setTimeout(cb, 100)
-//   }
-// }
 
 export default App;
