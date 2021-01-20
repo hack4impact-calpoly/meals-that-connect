@@ -12,13 +12,11 @@
     background-color: #f2fff0;
     font-family: 'Mulish', sans-serif;
 }
-.home h1{
+.home h5{
     text-align: left;
-    font-weight: 700;
-    font-size: 280%;
     color:rgb(0, 0, 0);
 }
-.home h2{
+.home h4{
     text-align: left;
     padding-top: 150px;
     font-weight: 300;
@@ -30,13 +28,12 @@
     width: 33%;
     height: 400px;
     background-color:#f2fff0;
-    border-top: 1px solid black;
     border-left: 1px solid black;
     overflow: hidden;
 }
 .column p{
     padding: 100px 10% 50px;
-    text-align: left;
+    text-align: center;
     color: black;
 }
 
@@ -66,9 +63,15 @@
     }
   }
 
-.row h1{
+.row {
+    width: 100%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.columns h1{
     margin: 0%;
-    padding-bottom: 5px;
+    padding-bottom:20px;
     text-align: center;
     font-family: 'Mulish', sans-serif;
     font-weight: 300;

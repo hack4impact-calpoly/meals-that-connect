@@ -1,20 +1,23 @@
 import styles from '../css/Component.module.css';
+import { Link } from "react-router-dom";
 
 function Columns() {
   return (
-    <div className = {styles.row}>
+    <div className = {styles.columns}>
         <h1>You Are:</h1>
+        <div className = {styles.row}>
         <div className = {styles.column}>
-            <p>Description Here</p>
-            <button href="#">CTA</button>
+            <p>Site Manager</p>
+            <Link to="login/site-manager"><button href="/login">Login</button></Link>
         </div>
         <div className = {styles.column}>
-            <p>Description Here</p>
-            <button href="#" className={styles.button}>CTA</button>
+            <p>Data Entry</p>
+            <Link to="login/data-entry"><button href="/login" className={styles.button}>Login</button></Link>
         </div>
         <div className = {styles.column}>
-            <p>Description Here</p>
-            <button href="#" className={styles.button}>CTA</button>
+            <p>Driver or Kitchen Staff</p>
+            <Link to="login/volunteer"><button href="/login" className={styles.button}>Login</button></Link>
+        </div>
         </div>
     </div>
   );
