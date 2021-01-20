@@ -8,15 +8,15 @@ function Columns() {
         <div className = {styles.row}>
         <div className = {styles.column}>
             <p>Site Manager</p>
-            <Link to="login"><button href="/login">Login</button></Link>
+            <Link to="login/site-manager"><button href="/login">Login</button></Link>
         </div>
         <div className = {styles.column}>
             <p>Data Entry</p>
-            <Link to="login"><button href="/login" className={styles.button}>Login</button></Link>
+            <Link to="login/data-entry"><button href="/login" className={styles.button}>Login</button></Link>
         </div>
         <div className = {styles.column}>
             <p>Driver or Kitchen Staff</p>
-            <Link to="login"><button href="/login" className={styles.button}>Login</button></Link>
+            <Link to="login/volunteer"><button href="/login" className={styles.button}>Login</button></Link>
         </div>
         </div>
     </div>
