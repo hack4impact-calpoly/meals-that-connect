@@ -7,6 +7,7 @@ class Signup extends Component {
         super(props);
         this.state = { 
             userType: "",
+            passwordValidated: true,
             isAuthenticated: false,
             personalData: { //shared across all users
                 firstName: "",
@@ -39,25 +40,38 @@ class Signup extends Component {
     changeVolunteerType = (event) => {
         let volunteerData = this.state.volunteerData;
         if (event.target.value === "driver") {
-            volunteerData["driver"] = true;
-            volunteerData["kitchenStaff"] = false;
+            volunteerData["driver"] = !volunteerData["driver"];
         }
         else {
-            volunteerData["driver"] = false;
-            volunteerData["kitchenStaff"] = true;
+            volunteerData["kitchenStaff"] = !volunteerData["kitchenStaff"];
         }
         this.setState({volunteerData: volunteerData});
+        
+    }
+
+    validatePassword = (event) => {
+        const confirmPassword = event.target.value;
+        const password = this.state.personalData["password"];
+        if (password !== confirmPassword) {
+            this.setState({passwordValidated: false});
+        }
+        else {
+            this.setState({passwordValidated: true});
+        }
     }
 
     addUser = (event) => {
-        if (this.state.userType === "siteManager") {
-            this.addSiteManager(this.state.personalData);
-        }
-        else if (this.state.userType === "data-entry") {
-            this.addDataEntry(this.state.personalData);
-        }
-        else {
-            this.addVolunteer(this.state.personalData, this.state.volunteerData);
+        if (this.state.passwordValidated === true) {
+            console.log("nice!")
+            if (this.state.userType === "siteManager") {
+                this.addSiteManager(this.state.personalData);
+            }
+            else if (this.state.userType === "data-entry") {
+                this.addDataEntry(this.state.personalData);
+            }
+            else {
+                this.addVolunteer(this.state.personalData, this.state.volunteerData);
+            }
         }
         event.preventDefault(); //prevent the page from reloading, might remove later
     }
@@ -72,7 +86,13 @@ class Signup extends Component {
             site: personalData["site"]
         }
 
-        this.postUserData(newSiteManager);
+        fetch('nice.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newSiteManager)
+        })
     }
 
     addDataEntry = (personalData) => {
@@ -85,7 +105,13 @@ class Signup extends Component {
             site: personalData["site"]
         }
 
-        this.postUserData(newDataEntry);
+        fetch('nice.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newDataEntry)
+        })
     }
 
     addVolunteer = (personalData, volunteerData) => {
@@ -98,10 +124,16 @@ class Signup extends Component {
             driver: volunteerData["driver"],
             kitchenStaff: volunteerData["kitchenStaff"],
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
-            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
+            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"]
         }
 
-        this.postUserData(newVolunteer);
+        fetch('nice.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newVolunteer)
+        })
     }
 
     postUserData = (userData) => {
@@ -117,8 +149,8 @@ class Signup extends Component {
     render() {
         return (
             <div>
-                <main className="signup-form">
-                    <h2>Sign up</h2>
+                <main id="signup-form">
+                    <h2 id="title">Sign up</h2>
                     <form onSubmit={this.addUser}>
                         <div id="cta-type">
                             <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType}/>
@@ -130,24 +162,31 @@ class Signup extends Component {
                         </div>
                         <input type="text" id="firstName" placeholder="First Name" onChange={this.handleChange} size="22" required/> <input type="text" id="lastName" placeholder="Last Name" onChange={this.handleChange} size="22" required/>
                         <br/>
-                        <input type="email" id="email" placeholder="Email ex: example@gmail.com" onChange={this.handleChange} size="50" required/>
+                        <input type="email" className="account-info" id="email" placeholder="Email ex: example@gmail.com" onChange={this.handleChange} size="50" required/>
                         <br/>
-                        <label for="password">Password: <br/>(Must contain at least one <br/>number, one uppercase, and one <br/>lowercase letter, and at least 6 or <br/>more characters long)</label>
+                        <label for="password">Password:</label>
                         <br/>
-                        <input type="password" id="password" placeholder="Password" onChange={this.handleChange} 
+                        <label id="pass-label" for="password">(Must contain at least one number, one uppercase, and one <br/>lowercase letter, and at least 6 or more characters long)</label>
+                        <br/>
+                        <input type="password" className="account-info" id="password" placeholder="Password" onChange={this.handleChange} 
                             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Must contain at least one number, one uppercase, and one lowercase letter, and at least 6 or more characters long"
                             size="50" required/>
                         <br/>
-                        <input type="password" id="password-confirm" placeholder="Confirm Password" size="50" required/>
+                        <input type="password" className="account-info" id="password-confirm" placeholder="Confirm Password" size="50" onChange={this.validatePassword}  required/>
                         <br/>
-                        {/* I have no idea why selecting volunteer and having this section conditionally render
-                            causes the first set of radio buttons to move left slightly, will investigate later!*/}
+                        <section>
+                            {this.state.passwordValidated === false &&
+                                <div>
+                                    <p id="pass-error">Confirm password does not match password!</p>
+                                </div>
+                            }
+                        </section>
                         <section> 
                             {this.state.userType === "volunteer" &&
                                 <div id="volunteer-type">
-                                    <input type="radio" id="driver" name="volunteer" value="driver" onChange={this.changeVolunteerType}/>
+                                    <input type="checkbox" id="driver" name="volunteer" value="driver" onChange={this.changeVolunteerType}/>
                                     <label for="driver">Driver</label>
-                                    <input type="radio" id="kitchen" name="volunteer" value="kitchen" onChange={this.changeVolunteerType}/>
+                                    <input type="checkbox" id="kitchen" name="volunteer" value="kitchen" onChange={this.changeVolunteerType}/>
                                     <label for="kitchen">Kitchen Volunteer</label>
                                 </div>
                             }
