@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/Signup.css';
+import env from "react-dotenv";
 
 class Signup extends Component {
 
@@ -83,10 +84,11 @@ class Signup extends Component {
             email: personalData["email"],
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
-            site: personalData["site"]
+            site: personalData["site"],
+            user: "siteManager"
         }
 
-        fetch('nice.com', {
+        fetch(env.backendURL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -102,10 +104,11 @@ class Signup extends Component {
             email: personalData["email"],
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
-            site: personalData["site"]
+            site: personalData["site"],
+            user: "dataEntry"
         }
 
-        fetch('nice.com', {
+        fetch(env.backendURL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,10 +127,11 @@ class Signup extends Component {
             driver: volunteerData["driver"],
             kitchenStaff: volunteerData["kitchenStaff"],
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
-            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"]
+            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
+            user: "volunteer"
         }
 
-        fetch('nice.com', {
+        fetch(env.backendURL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -137,7 +141,7 @@ class Signup extends Component {
     }
 
     postUserData = (userData) => {
-        fetch('nice.com', {
+        fetch(env.backendURL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
