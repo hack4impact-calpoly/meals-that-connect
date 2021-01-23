@@ -24,10 +24,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const SiteManager = require('./models/SiteManager');
-const Volunteer = require('./models/Volunteer');
-const DataEntry = require('./models/DataEntry');
-
 // //const signupSiteManager = require('./src/signupSiteManager')
 // const login = require('./src/login')
 // const signupDataEntry = require('./src/signupDataEntry')
@@ -38,42 +34,13 @@ const DataEntry = require('./models/DataEntry');
 // app.use('/signup', signupVolunteer);
 // //app.use('/signup', signupSiteManager)
 
+var signup = require('./src/signup')
+
+app.use('/signup', signup)
 
 app.get('/', (req, res) => {
     res.send('Hi from Meals that Connect!')
 })
-
-app.post('/signup', async (req, res) =>{
-   const {firstName, lastName, email, isAuthenticated, site, user} = req.body
-
-   let userType = getUser(user);
- 
-   userType.findOne({'email': email}).then(function(result) {
-      if (result) {
-         console.log("email already in use")
-         res.send("email already in use")
-      } 
-      else {
-         const password = bcrypt.hashSync(req.body.password, 9);
-         const doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
-         doc.save()
-         console.log("successfully added user")
-         res.send("success")
-      }
-   })
-});
-
-function getUser(user) {
-   if(user == "volunteer") {
-      return Volunteer
-   }
-   else if(user == "siteManager") {
-      return SiteManager
-   }
-   else {
-      return DataEntry
-   }
-}
 
 app.listen(3001, () => {
     console.log('App listening on port 3001')
