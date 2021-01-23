@@ -9,6 +9,6 @@ const dataEntrySchema = new mongoose.Schema({
    site: String
 })
 
-const DataEntry = mongoose.model("dataEntry", dataEntrySchema)
+const DataEntry = mongoose.model("dataentriers", dataEntrySchema)
 
 module.exports = DataEntry
