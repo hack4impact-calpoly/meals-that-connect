@@ -13,21 +13,21 @@ router.get('/', async (req, res) => {
    let userType = getUser(user)
   
    console.log(userType)
-   const account = await userType.findOne({'email': email}).then(function(result) {
+   userType.findOne({'email': email}).then(function(result) {
       if (!result) {
          console.log("Invalid email")
          res.send("Invalid email")
       }
       else {
-    /*     const account = userType.findOne({email: email})*/
-         console.log(account)
-         const valid = bcrypt.compareSync(password, account.password);
+         let userPassword = result.password
+         const valid = bcrypt.compareSync(password, userPassword);
          if (valid) {
             console.log("login successful")
             res.send("login successful")
-         } else
-         console.log("Invalid password")
-         res.send("Invalid password")             
+         } else {
+            console.log("Invalid password")
+            res.send("Invalid password")             
+           }
      }
    })
 });
