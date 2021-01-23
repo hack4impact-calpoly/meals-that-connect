@@ -24,18 +24,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// //const signupSiteManager = require('./src/signupSiteManager')
-// const login = require('./src/login')
-// const signupDataEntry = require('./src/signupDataEntry')
-// const signupVolunteer = require('./src/signupVolunteer')
-
-// app.use('/login', login);
-// app.use('/signup', signupDataEntry);
-// app.use('/signup', signupVolunteer);
-// //app.use('/signup', signupSiteManager)
-
+var login = require('./src/login')
 var signup = require('./src/signup')
 
+app.use('/login', login)
 app.use('/signup', signup)
 
 app.get('/', (req, res) => {
