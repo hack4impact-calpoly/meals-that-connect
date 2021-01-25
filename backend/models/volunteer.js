@@ -12,6 +12,6 @@ const volunteerSchema = new mongoose.Schema({
    site: String
 })
 
-const Volunteer = mongoose.model("Volunteer", volunteerSchema)
+const Volunteer = mongoose.model("volunteers", volunteerSchema)
 
 module.exports = Volunteer

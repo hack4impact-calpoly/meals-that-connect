@@ -9,7 +9,7 @@ const siteManagerSchema = new mongoose.Schema({
    site: String
 })
 
-const SiteManager = mongoose.model("siteManager", siteManagerSchema)
+const SiteManager = mongoose.model("sitemanagers", siteManagerSchema)
 
 module.exports = SiteManager
 

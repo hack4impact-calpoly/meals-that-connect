@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/Signup.css';
+import env from "react-dotenv";
 
 class Signup extends Component {
 
@@ -83,10 +84,15 @@ class Signup extends Component {
             email: personalData["email"],
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
-            site: personalData["site"]
+            site: personalData["site"],
+            user: "siteManager"
         }
 
+<<<<<<< HEAD
         fetch('nice.com', {
+=======
+        fetch(env.backendURL + 'signup', {
+>>>>>>> 35b880af0920214f0b3d50e2634870fbca055e65
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -102,10 +108,15 @@ class Signup extends Component {
             email: personalData["email"],
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
-            site: personalData["site"]
+            site: personalData["site"],
+            user: "dataEntry"
         }
 
+<<<<<<< HEAD
         fetch('nice.com', {
+=======
+        fetch(env.backendURL + 'signup', {
+>>>>>>> 35b880af0920214f0b3d50e2634870fbca055e65
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,10 +135,18 @@ class Signup extends Component {
             driver: volunteerData["driver"],
             kitchenStaff: volunteerData["kitchenStaff"],
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
+<<<<<<< HEAD
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"]
         }
 
         fetch('nice.com', {
+=======
+            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
+            user: "volunteer"
+        }
+
+        fetch(env.backendURL + 'signup', {
+>>>>>>> 35b880af0920214f0b3d50e2634870fbca055e65
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -137,7 +156,7 @@ class Signup extends Component {
     }
 
     postUserData = (userData) => {
-        fetch('nice.com', {
+        fetch(env.backendURL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
