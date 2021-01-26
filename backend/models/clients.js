@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
 const clientSchema = new mongoose.Schema({
-   firstName: String,
-   lastName: String,
-   address: String,
+   firstName: {type: String, required: true},
+   lastName: {type: String, required: true},
+   address: {type: String, required: true},
    foodDays: {
       M: Boolean,
       T: Boolean,
@@ -11,7 +11,7 @@ const clientSchema = new mongoose.Schema({
       Th: Boolean,
       F: Boolean
    },
-   frozenNumber: Number,
+   frozenNumber: {type: Number, required: true, default: 0},
    frozenDay: {
       M: Boolean,
       T: Boolean,
@@ -19,18 +19,18 @@ const clientSchema = new mongoose.Schema({
       Th: Boolean,
       F: Boolean
    },
-   phoneNumber: String,
+   phoneNumber: {type: String, required: true},
    emergencyContact: String,
    emergencyPhone: String,
-   noMilk: Boolean,
-   mealNumber: Number,
+   noMilk: {type: Boolean, required: true, default: false},
+   mealNumber: {type: Number, required: true, default: 1},
    specialInstructions: String,
-   clientC2: Boolean,
+   clientC2: {type: Boolean, required: true},
    NE: String,
    email: String,
-   holidayFrozen: Boolean,
-   routeNumber: String,
-   site: String
+   holidayFrozen: {type: Boolean, required: true, default: false},
+   routeNumber: {type: String, required: true},
+   site: {type: String, required: true}
 
 })
 
