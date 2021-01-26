@@ -5,11 +5,11 @@ const clientSchema = new mongoose.Schema({
    lastName: {type: String, required: true},
    address: {type: String, required: true},
    foodDays: {
-      M: Boolean,
-      T: Boolean,
-      W: Boolean,
-      Th: Boolean,
-      F: Boolean
+      M: {type: Boolean, required: true},
+      T: {type: Boolean, required: true},
+      W: {type: Boolean, required: true},
+      Th: {type: Boolean, required: true},
+      F: {type: Boolean, required: true}
    },
    frozenNumber: {type: Number, required: true, default: 0},
    frozenDay: {
