@@ -13,15 +13,29 @@ import Private from './components/Private'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isLoggedIn, isAuthenticated, hydrateStatewithLocalStorage} from './components/Login'
+import { isLoggedIn, isAuthenticated} from './components/Login'
 
 import './css/App.css';
 
 class App extends Component {
+
+  // this will check if user signed out or not
+    hydrateStatewithLocalStorage() {
+      const currentTime = new Date();
+      // checks if current value of isLoggedIn is in localStorage and it is true
+      if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) && 
+        (localStorage.hasOwnProperty("time")) && (localStorage.getItem("time") + 24 < currentTime.getHour())){
+        isAuthenticated.login();
+      }
+      if ((localStorage.hasOwnProperty("time")) && localStorage.getItem("time") + 24 > currentTime.getHour()){
+        isAuthenticated.signout();
+        //redirect back to login
+      }
+    }
   
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
-    new Login().hydrateStatewithLocalStorage();
+    //this.hydrateStatewithLocalStorage();
   }
 
   render() {
@@ -29,12 +43,11 @@ class App extends Component {
     <div className="App">
       <Router>
           <NavBar/>
-          <UnAuthorize/>
           <Switch>
 
-              <Route path="/login" component={Login}/>
+              <PublicRoute path="/login" component={Login}/>
               <Route path="/login/:user" component={Login}/>
-              <Route path="/signup"><Signup/></Route>
+              <PublicRoute path="/signup"><Signup/></PublicRoute>
 
               <PublicRoute  path="/login" exact component={Login}/>
               <PrivateRoute path="/private" exact component={Private}/>

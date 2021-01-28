@@ -15,17 +15,29 @@ class Login extends Component {
         };
     }
 
-    // this will check if user signed out or not
-    hydrateStatewithLocalStorage() {
-      // checks if current value of isLoggedIn is in localStorage and it is true
-      if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")
-        isAuthenticated.login();
-    }
+    // // this will check if user signed out or not
+    // hydrateStatewithLocalStorage() {
+    //   // checks if current value of isLoggedIn is in localStorage and it is true
+    //   if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")
+    //     isAuthenticated.login();
+    // }
 
     //calls authenticate which allows user to sign in and view private page
     login = () => {
       isAuthenticated.login(() =>
         this.setState({ RedirectLoggedUser: true })); // set redirect from login page to private to true
+        this.storeLoginUser();
+        console.log(localStorage.getItem("time"));
+        //console.log()
+        //console.log()
+    }
+
+    storeLoginUser = () => {
+        const date = new Date();
+        localStorage.setItem("userEmail", document.getElementById("email"));
+        localStorage.setItem("userType", this.userType)
+        localStorage.setItem("site", "login");
+        localStorage.setItem("time", date.getHours());
     }
 
     isNotLoggedIn = () => {
@@ -84,6 +96,7 @@ class Login extends Component {
                 <button id="signin-button" onClick={this.login}>Log In</button>
             </div>
           )}
+    }
 
 
 export const isLoggedIn = () => {
@@ -105,6 +118,9 @@ export const isAuthenticated = {
    signout(cb){
      this.isLoggedIn = false
      localStorage.setItem("isLoggedIn", "false")
+     localStorage.removeItem("userEmail");
+     localStorage.removeItem("site");
+     localStorage.removeItem("time");
      setTimeout(cb, 100)
    }
 }
