@@ -1,9 +1,11 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { isLoggedIn } from './components/Login.js';
+import { isLoggedIn } from './components/LoggedUser.js';
 
 const PrivateRoute = ({ component: Component = null, render: Render = null, ...rest }) => {
 	console.log(isLoggedIn())
+	console.log(localStorage.getItem('isLoggedIn'))
+	console.log(localStorage.getItem('time') + 24)
     return (
         <Route {...rest} render={props => (
             isLoggedIn() 

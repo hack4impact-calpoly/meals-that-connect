@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { isAuthenticated } from './Login'
+import { isLoggedIn, isAuthenticated } from './LoggedUser';
 import { withRouter, Redirect } from 'react-router-dom';
 
 class Private extends Component {
@@ -21,7 +21,7 @@ class Private extends Component {
         // if user has signed in redirect to private page
         if (RedirectLoggedUser === true) {
           return (
-            <Redirect to='/private' />
+            <Redirect to='/login' />
           )
         }
 

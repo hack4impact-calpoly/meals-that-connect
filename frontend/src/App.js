@@ -13,7 +13,7 @@ import Private from './components/Private'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isLoggedIn, isAuthenticated} from './components/Login'
+import { isLoggedIn, isAuthenticated, checkTime } from './components/LoggedUser'
 
 import './css/App.css';
 
@@ -21,21 +21,24 @@ class App extends Component {
 
   // this will check if user signed out or not
     hydrateStatewithLocalStorage() {
-      const currentTime = new Date();
+      let hoursPassed = checkTime();
       // checks if current value of isLoggedIn is in localStorage and it is true
-      if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) && 
-        (localStorage.hasOwnProperty("time")) && (localStorage.getItem("time") + 24 < currentTime.getHour())){
+      if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
+        ((localStorage.hasOwnProperty("time")) && (hoursPassed < 24))) {
+        console.log(hoursPassed)
         isAuthenticated.login();
       }
-      if ((localStorage.hasOwnProperty("time")) && localStorage.getItem("time") + 24 > currentTime.getHour()){
+      if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
+        ((localStorage.hasOwnProperty("time")) && (hoursPassed >= 24))) {
         isAuthenticated.signout();
         //redirect back to login
-      }
+      //}
     }
+  }
   
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
-    //this.hydrateStatewithLocalStorage();
+    this.hydrateStatewithLocalStorage();
   }
 
   render() {
@@ -59,12 +62,12 @@ class App extends Component {
   )}
 }
 
-//UnAuthorize deals with signing out the user
-export const UnAuthorize = withRouter(({ history }) => (
-    isLoggedIn() 
-      ? (<p> Click here to signout <button onClick={() => {isAuthenticated.signout(() => history.push('/login'))}}> Sign out </button> </p>)
-      : <p> Not logged in </p>
-))
+// //UnAuthorize deals with signing out the user
+// export const UnAuthorize = withRouter(({ history }) => (
+//     isLoggedIn() 
+//       ? (<p> Click here to signout <button onClick={() => {isAuthenticated.signout(() => history.push('/login'))}}> Sign out </button> </p>)
+//       : <p> Not logged in </p>
+// ))
 
 
 export default App;

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../css/Login.css';
 import '../css/Signup.css';
 import { Route, Redirect, withRouter } from 'react-router-dom';
+import {isAuthenticated} from './LoggedUser';
 
 class Login extends Component {
 
@@ -99,31 +100,31 @@ class Login extends Component {
     }
 
 
-export const isLoggedIn = () => {
-    return isAuthenticated.isLoggedIn;
- }
+// export const isLoggedIn = () => {
+//     return isAuthenticated.isLoggedIn;
+//  }
 
 
-export const isAuthenticated = { 
-   isLoggedIn: false,
+// export const isAuthenticated = { 
+//    isLoggedIn: false,
 
-   //login in 
-   login(cb){
-    this.isLoggedIn = true
-    localStorage.setItem("isLoggedIn", "true") // helps with keeping track that someone is logged in when they refresh the page
-    setTimeout(cb, 100) // fake async to make it seem like you are logining in
-  },
+//    //login in 
+//    login(cb){
+//     this.isLoggedIn = true
+//     localStorage.setItem("isLoggedIn", "true") // helps with keeping track that someone is logged in when they refresh the page
+//     setTimeout(cb, 100) // fake async to make it seem like you are logining in
+//   },
 
-   //signout
-   signout(cb){
-     this.isLoggedIn = false
-     localStorage.setItem("isLoggedIn", "false")
-     localStorage.removeItem("userEmail");
-     localStorage.removeItem("site");
-     localStorage.removeItem("time");
-     setTimeout(cb, 100)
-   }
-}
+//    //signout
+//    signout(cb){
+//      this.isLoggedIn = false
+//      localStorage.setItem("isLoggedIn", "false")
+//      localStorage.removeItem("userEmail");
+//      localStorage.removeItem("site");
+//      localStorage.removeItem("time");
+//      setTimeout(cb, 100)
+//    }
+// }
 
 
 export default Login;
