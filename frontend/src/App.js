@@ -7,7 +7,6 @@ import Home from './components/Home'
 import Login from './components/Login'
 
 import Signup from './components/Signup'
-<<<<<<< HEAD
 import SiteManagerHomepage from './components/SiteManagerHomepage'
 
 import Private from './components/Private'
@@ -17,9 +16,6 @@ import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
 import { isLoggedIn, isAuthenticated, checkTime } from './components/LoggedUser'
-=======
-import Table from './components/mealTotals'
->>>>>>> e2b2fc0... manager overview table build 1
 
 import './css/App.css';
 
