@@ -4,15 +4,20 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
-router.get('/routeSiteClients', async (req, res) => {
+router.post('/routeSiteClients', async (req, res) => {
   const {route, site} = req.body
-  clientList = getClientsByRouteSite(route, site)
-  res.send(clientList)
+  Client.find({site: site, routeNumber: route}, function (err, clients) {
+    if (err) { console.log(err) }
+    else {
+      res.send(clients)
+    }
+  })
 })
 
 router.get('/siteClients', async (req, res) => {
   const {site} = req.body
   clientList = getClientsBySite(site)
+
   res.send(clientList)
 })
 
@@ -28,7 +33,14 @@ router.get('/routeTotals', async (req, res) => {
 })
 
 async function getClientsByRouteSite(routeNum, site) {
-  return await Client.find({routeNumber: routeNum, site: site})
+  await Client.find({site: site}, 'firstName', function (err, clients) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      return clients
+    }
+  })
 }
 
 async function getClientsBySite(site) {

@@ -15,7 +15,7 @@ router.post('/', async (req, res) =>{
     userType.findOne({'email': email}).then(function(result) {
        if (result) {
           console.log("email already in use")
-          res.send("email already in use")
+          res.status(404).send("email already in use")
        } 
        else {
           const password = bcrypt.hashSync(req.body.password, 9);
@@ -27,7 +27,7 @@ router.post('/', async (req, res) =>{
              doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
           doc.save()
           console.log("successfully added user")
-          res.send("success")
+          res.status(200).send("success")
        }
     })
  });

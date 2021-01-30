@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const {userConnection} = require('../connections');
 
 const volunteerSchema = new mongoose.Schema({
    firstName: String,
@@ -12,6 +13,6 @@ const volunteerSchema = new mongoose.Schema({
    site: String
 })
 
-const Volunteer = mongoose.model("volunteers", volunteerSchema)
+const Volunteer = userConnection.model("volunteers", volunteerSchema)
 
 module.exports = Volunteer
