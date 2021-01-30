@@ -68,24 +68,39 @@ function MealTotals({ columns, data }) {
       </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
+          console.log(row)
+          console.log(i + "here")
           prepareRow(row)
+          if (i%3 === 0) {
+
+          let row1 = rows[i+1]
+          let row2 = rows[i+2]
+          prepareRow(row1)
+          prepareRow(row2)
           return (
             <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                if (cell['value'] === " "){
-                  return <td {...cell.getCellProps()} className="emptyCell">{cell.render('Cell')}</td>
-                }
-                else {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                }
-              })}
+            <tr>
+              <td rowSpan={3}>{row.cells[0].render('Cell')}</td>
+              <td>{row.cells[1].render('Cell')}</td>
+            </tr>
+            <tr><td>{row1.cells[1].render('Cell')}</td></tr>
+            <tr><td>{row2.cells[1].render('Cell')}</td></tr>
             </tr>
           )
-        })}
+        }})}
       </tbody>
     </table>
   )
 }
+
+// {row.cells.map(cell => {
+//   if (cell['value'] === " "){
+    
+//     return <td {...cell.getCellProps()} className="emptyCell">{cell.render('Cell')}</td>
+//   }
+//   else {
+//     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+//   }
 
 function Table() {
   const columns = React.useMemo(
@@ -112,11 +127,23 @@ function Table() {
       info: "Frozen"
     },
     {
-      route: "‎ ",
+      route: "‎1",
       info: "White bag"
     },
     {
-      route: " ",
+      route: "1",
+      info: "# of Meals"
+    },
+    {
+      route : "2",
+      info: "Frozen"
+    },
+    {
+      route: "‎2",
+      info: "White bag"
+    },
+    {
+      route: "2",
       info: "# of Meals"
     },
 
