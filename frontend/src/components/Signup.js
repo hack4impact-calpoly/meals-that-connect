@@ -88,11 +88,7 @@ class Signup extends Component {
             user: "siteManager"
         }
 
-<<<<<<< HEAD
-        fetch('nice.com', {
-=======
         fetch(env.backendURL + 'signup', {
->>>>>>> 35b880af0920214f0b3d50e2634870fbca055e65
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -112,11 +108,7 @@ class Signup extends Component {
             user: "dataEntry"
         }
 
-<<<<<<< HEAD
-        fetch('nice.com', {
-=======
         fetch(env.backendURL + 'signup', {
->>>>>>> 35b880af0920214f0b3d50e2634870fbca055e65
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -135,18 +127,11 @@ class Signup extends Component {
             driver: volunteerData["driver"],
             kitchenStaff: volunteerData["kitchenStaff"],
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
-<<<<<<< HEAD
-            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"]
-        }
-
-        fetch('nice.com', {
-=======
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
             user: "volunteer"
         }
 
         fetch(env.backendURL + 'signup', {
->>>>>>> 35b880af0920214f0b3d50e2634870fbca055e65
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -155,23 +140,13 @@ class Signup extends Component {
         })
     }
 
-    postUserData = (userData) => {
-        fetch(env.backendURL + 'signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-    }
-
     render() {
         return (
             <div>
                 <main id="signup-form">
-                    <h2 id="title">Sign up</h2>
+                    <h1 className="login-header">Sign up</h1>
                     <form onSubmit={this.addUser}>
-                        <div id="cta-type">
+                        <div className="cta-type">
                             <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType}/>
                             <label for="siteManager">Manager</label>
                             <input type="radio" id="data-entry" name="cta" value="data-entry" onChange={this.changeUserType}/>
@@ -210,7 +185,7 @@ class Signup extends Component {
                                 </div>
                             }
                         </section>
-                        <input type="submit" value="Sign Up"/>
+                        <input className="signin-button" type="submit" value="Sign Up"/>
                     </form>
                 </main>
             </div>

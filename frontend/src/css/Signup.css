@@ -34,8 +34,12 @@ input[type=checkbox] {
     transform: scale(1.3);
 }
 
+input[type=radio] {
+    justify-content: center;
+}
+
 .account-info {
-    width: 467px;
+    width: 650px;
 }
 
 #pass-error {
