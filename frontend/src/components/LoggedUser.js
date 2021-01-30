@@ -11,20 +11,25 @@ class LoggedUser extends Component{
 }
 
 //how much long has user been loggedin?
+
 export const checkTime = () => {
 	let countHours = 0;
 	if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.hasOwnProperty("time")){
-		const currentTime = new Date().getHours();
-		let startTime = localStorage.getItem("time");
-		console.log(startTime)
-		console.log(currentTime)
-		console.log(currentTime !== startTime)
+		const getcurrentTime = new Date().getHours();
+		const currentTime = Number(getcurrentTime);
+		//console.log(currentTime);
+		let getstartTime = localStorage.getItem("time");
+		let startTime = Number(getstartTime);
+		//console.log(currentTime !== startTime)
+		
 
 		//do a loop; incr countHours; add to start time until match w/ currentTime; add count hrs to startTime if == 24 
-		while (currentTime != startTime){
+		while (currentTime !== startTime){
+
 		 	startTime += 1;
-		 	if (startTime == 24){
+		 	if (startTime === 24){
 		 		startTime = 1;
+		 		
 		 	}
 		 	countHours += 1;
 		 }

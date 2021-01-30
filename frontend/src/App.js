@@ -20,18 +20,20 @@ import './css/App.css';
 class App extends Component {
 
   // this will check if user signed out or not
-    hydrateStatewithLocalStorage() {
-      let hoursPassed = checkTime();
+  hydrateStatewithLocalStorage() {
+    let hoursPassed = checkTime();
+      //console.log("first check")
+      //console.log(hoursPassed)
+      //console.log(hoursPassed < 1)
+      //console.log(hoursPassed >= 1)
       // checks if current value of isLoggedIn is in localStorage and it is true
-      if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
-        ((localStorage.hasOwnProperty("time")) && (hoursPassed < 24))) {
-        console.log(hoursPassed)
+    if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
+      ((localStorage.hasOwnProperty("time")) && (hoursPassed < 24))) {
         isAuthenticated.login();
       }
       if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
         ((localStorage.hasOwnProperty("time")) && (hoursPassed >= 24))) {
         isAuthenticated.signout();
-        //redirect back to login
       //}
     }
   }
