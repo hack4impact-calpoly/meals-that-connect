@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-
+import "../css/mealTotals.css"
 
 const Styles = styled.div`
   margin-top: 250px;
@@ -14,7 +14,7 @@ const Styles = styled.div`
     tr {  
       :last-child {
         td {
-          border-bottom: 0;
+          border-bottom: 1;
           flex-direc  
         }
       }
@@ -69,15 +69,20 @@ function MealTotals({ columns, data }) {
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row)
+          const info = row.cells[1]['value']
+          const deliveryInfo = Object.keys(info)
           return (
             <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                if (cell['value'] === " "){
-                  return <td {...cell.getCellProps()} className="emptyCell">{cell.render('Cell')}</td>
-                }
-                else {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                }
+              <td>{row.cells[0].render('Cell')}</td>
+              {deliveryInfo.map(key => {
+                return(
+                  <tr>
+                    <td>{key}</td>
+                    {info[key].map(num => {
+                      return <td>{num}</td>
+                    })}
+                  </tr>
+                )
               })}
             </tr>
           )
@@ -95,31 +100,140 @@ function Table() {
         columns: [
           {
             Header: 'Route',
-            accessor: 'route'
+            accessor: 'route',
+            columns: [
+              {
+                Header: ' ',
+                accessor: 'route'
+              }
+            ]
           },
           {
             Header: ' ',
-            accessor: 'info'
-          }
-        ]
+            accessor: 'info',
+            columns: [
+              {
+                Header: ' ',
+                accessor: 'info'
+              }
+            ]
+          },
+          {
+            Header: 'Monday',
+            columns: [
+              {
+                Header: 'date',
+                accessor: 'monday'
+              }
+            ]
+          },
+          {
+            Header: 'Tuesday',
+            // accessor: 'tuesday'
+            columns: [
+              {
+                Header: 'date',
+                accessor: 'tuesday'
+              }
+            ]
+          },
+          {
+            Header: 'Wednesday',
+            // accessor: 'wednesday'
+            columns: [
+              {
+                Header: 'date',
+                accessor: 'wednesday'
+              }
+            ]
+          },
+          {
+            Header: 'Thursday',
+            // accessor: 'thursday'
+            columns: [
+              {
+                Header: 'date',
+                accessor: 'thursday'
+              }
+            ]
+          },
+          {
+            Header: 'Friday',
+            // accessor: 'friday'
+            columns: [
+              {
+                Header: 'date',
+                accessor: 'friday'
+              }
+            ]
+          },
+        ],
       }
-    ]
+    ],
+    []
   )
   
   const routes = [
     {
       route : "1",
-      info: "Frozen"
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
     },
     {
-      route: "‎ ",
-      info: "White bag"
+      route : "2",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
     },
     {
-      route: " ",
-      info: "# of Meals"
+      route : "3",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
     },
-
+    {
+      route : "4A",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    },
+    {
+      route : "4B",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    },
+    {
+      route : "5",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    },
+    {
+      route : "6",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    },
+    {
+      route : "7",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    },
+    {
+      route : "8",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    },
+    {
+      route : "9",
+      info: {"Frozen": [1, 2, 3, 4, 5],
+             "White bag": [1, 2, 3, 4, 5], 
+             "# of Meals": [1, 2, 3, 4, 5]},
+    }
 ]
 
   const data = React.useMemo(() => routes, [])
