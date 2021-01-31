@@ -1,7 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
+<<<<<<< HEAD
 import "../css/mealTotals.css"
+=======
+
+>>>>>>> 6a2587b... Table test push
 
 const Styles = styled.div`
   margin-top: 250px;
@@ -14,7 +18,11 @@ const Styles = styled.div`
     tr {  
       :last-child {
         td {
+<<<<<<< HEAD
           border-bottom: 1;
+=======
+          border-bottom: 0;
+>>>>>>> 6a2587b... Table test push
           flex-direc  
         }
       }
@@ -69,6 +77,7 @@ function MealTotals({ columns, data }) {
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row)
+<<<<<<< HEAD
           const info = row.cells[1]['value']
           const deliveryInfo = Object.keys(info)
           return (
@@ -83,6 +92,17 @@ function MealTotals({ columns, data }) {
                     })}
                   </tr>
                 )
+=======
+          return (
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                if (cell['value'] === " "){
+                  return <td {...cell.getCellProps()} className="emptyCell">{cell.render('Cell')}</td>
+                }
+                else {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                }
+>>>>>>> 6a2587b... Table test push
               })}
             </tr>
           )
@@ -100,6 +120,7 @@ function Table() {
         columns: [
           {
             Header: 'Route',
+<<<<<<< HEAD
             accessor: 'route',
             columns: [
               {
@@ -171,11 +192,23 @@ function Table() {
       }
     ],
     []
+=======
+            accessor: 'route'
+          },
+          {
+            Header: ' ',
+            accessor: 'info'
+          }
+        ]
+      }
+    ]
+>>>>>>> 6a2587b... Table test push
   )
   
   const routes = [
     {
       route : "1",
+<<<<<<< HEAD
       info: {"Frozen": [1, 2, 3, 4, 5],
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
@@ -234,6 +267,19 @@ function Table() {
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
     }
+=======
+      info: "Frozen"
+    },
+    {
+      route: "‎ ",
+      info: "White bag"
+    },
+    {
+      route: " ",
+      info: "# of Meals"
+    },
+
+>>>>>>> 6a2587b... Table test push
 ]
 
   const data = React.useMemo(() => routes, [])
