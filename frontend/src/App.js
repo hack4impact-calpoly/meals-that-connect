@@ -10,6 +10,7 @@ import Signup from './components/Signup'
 
 import Private from './components/Private'
 import ResetPassword from './components/ResetPassword'
+import NewPassword from './components/NewPassword'
 
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -57,7 +58,8 @@ class App extends Component {
 
               <PublicRoute  path="/login" exact component={Login}/>
               <PrivateRoute path="/private" exact component={Private}/>
-              <PublicRoute path="/reset-password" exact component={ResetPassword} />
+              <PublicRoute path="/reset-password" exact component={ResetPassword}/>
+              <PublicRoute path="/set-new-password" excact component={NewPassword}/>
 
               <Route><Home/></Route>
           </Switch>

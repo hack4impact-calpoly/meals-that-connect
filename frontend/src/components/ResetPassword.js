@@ -11,8 +11,10 @@ class ResetPassword extends Component{
 		return(
 			<div className='ResetPassword'>
 				<h2> ResetPassword </h2>
-				<p> hello </p>
+				<p> Input your email below to reset your password. </p>
 				<input type="text" id="email" placeholder="Email" size="50"/>
+				<br/>
+				<button id='reset-pwd-button'> Send Reset Link </button>
 			</div>
 		)
 	}
