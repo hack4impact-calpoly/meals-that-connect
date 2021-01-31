@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import '../css/Login.css';
 import '../css/Signup.css';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Route, Redirect, Link } from 'react-router-dom';
 import {isAuthenticated} from './LoggedUser';
 
 class Login extends Component {
@@ -95,6 +95,7 @@ class Login extends Component {
                 </label>
                 <br/>
                 <button id="signin-button" onClick={this.login}>Log In</button>
+                <Link to="/reset-password">Forgot Password?</Link>
             </div>
           )}
     }
