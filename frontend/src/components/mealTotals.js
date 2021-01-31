@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-<<<<<<< HEAD
 import "../css/mealTotals.css"
+<<<<<<< HEAD
 =======
 
 >>>>>>> 6a2587b... Table test push
+=======
+>>>>>>> 80b7d61... manager overview build 1
 
 const Styles = styled.div`
   margin-top: 250px;
@@ -18,11 +20,13 @@ const Styles = styled.div`
     tr {  
       :last-child {
         td {
-<<<<<<< HEAD
           border-bottom: 1;
+<<<<<<< HEAD
 =======
           border-bottom: 0;
 >>>>>>> 6a2587b... Table test push
+=======
+>>>>>>> 80b7d61... manager overview build 1
           flex-direc  
         }
       }
@@ -120,7 +124,6 @@ function Table() {
         columns: [
           {
             Header: 'Route',
-<<<<<<< HEAD
             accessor: 'route',
             columns: [
               {
@@ -192,6 +195,7 @@ function Table() {
       }
     ],
     []
+<<<<<<< HEAD
 =======
             accessor: 'route'
           },
@@ -203,12 +207,13 @@ function Table() {
       }
     ]
 >>>>>>> 6a2587b... Table test push
+=======
+>>>>>>> 80b7d61... manager overview build 1
   )
   
   const routes = [
     {
       route : "1",
-<<<<<<< HEAD
       info: {"Frozen": [1, 2, 3, 4, 5],
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
@@ -267,6 +272,7 @@ function Table() {
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
     }
+<<<<<<< HEAD
 =======
       info: "Frozen"
     },
@@ -280,6 +286,8 @@ function Table() {
     },
 
 >>>>>>> 6a2587b... Table test push
+=======
+>>>>>>> 80b7d61... manager overview build 1
 ]
 
   const data = React.useMemo(() => routes, [])
