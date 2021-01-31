@@ -7,7 +7,11 @@ import Home from './components/Home'
 import Login from './components/Login'
 
 import Signup from './components/Signup'
+<<<<<<< HEAD
 import SiteManagerHomepage from './components/SiteManagerHomepage'
+=======
+import Table from './components/mealTotals'
+>>>>>>> 396b741... Table test push
 
 import Private from './components/Private'
 import ResetPassword from './components/ResetPassword'
@@ -51,10 +55,18 @@ class App extends Component {
 
               <PublicRoute path="/login" component={Login}/>
               <Route path="/login/:user" component={Login}/>
+<<<<<<< HEAD
               <PublicRoute path="/signup"><Signup/></PublicRoute>
               <PrivateRoute path="/private" exact component={Private}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
+=======
+              <Route path="/signup"><Signup/></Route>
+<<<<<<< HEAD
+>>>>>>> f59e28a... test0
               <Route path="/sitemanager"><SiteManagerHomepage/></Route>
+=======
+              <Route path="/table"><Table/></Route>
+>>>>>>> 396b741... Table test push
               <Route><Home/></Route>
           </Switch>
       </Router>
