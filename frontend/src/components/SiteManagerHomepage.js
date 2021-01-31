@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import MealTotals from './mealTotals';
+import RoutesOverview from './routesOverview';
+import './../css/manager.css'
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
@@ -7,7 +10,13 @@ class SiteManagerHomepage extends Component {
     }
     render() {
         return (
-            <div style={{marginTop: "200px"}}>Site Manager Homepage</div>
+            <div id="overview">
+                <h1 id="site-manager-header">Site Manager Overview</h1>
+                <div id="main">
+                    <RoutesOverview/>
+                    <MealTotals/>
+                </div>
+            </div>
         );
     }
 }

@@ -5,7 +5,7 @@ import NavBar from './components/NavBar'
 import Home from './components/Home'
 import Login from './components/Login'
 import Signup from './components/Signup'
-import Table from './components/mealTotals'
+import Manager from './components/SiteManagerHomepage'
 
 import './css/App.css';
 
@@ -19,7 +19,7 @@ class App extends Component {
               <Route path="/login" component={Login}/>
               <Route path="/login/:user" component={Login}/>
               <Route path="/signup"><Signup/></Route>
-              <Route path="/table"><Table/></Route>
+              <Route path="/manager-overview"><Manager/></Route>
               <Route><Home/></Route>
           </Switch>
       </Router>
