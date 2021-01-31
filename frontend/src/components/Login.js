@@ -101,7 +101,7 @@ class Login extends Component {
     }
 
 
-// export const isLoggedIn = () => {
+/// export const isLoggedIn = () => {
 //     return isAuthenticated.isLoggedIn;
 //  }
 

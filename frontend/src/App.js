@@ -53,7 +53,7 @@ class App extends Component {
 
               <PublicRoute path="/login" component={Login}/>
               <Route path="/login/:user" component={Login}/>
-              <PublicRoute path="/signup"><Signup/></PublicRoute>
+              <PublicRoute path="/signup" component={Signup}/>
 
               <PublicRoute  path="/login" exact component={Login}/>
               <PrivateRoute path="/private" exact component={Private}/>
