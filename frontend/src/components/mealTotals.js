@@ -2,12 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
 import "../css/mealTotals.css"
-<<<<<<< HEAD
-=======
-
->>>>>>> 6a2587b... Table test push
-=======
->>>>>>> 80b7d61... manager overview build 1
 
 const Styles = styled.div`
   margin-top: 250px;
@@ -21,12 +15,6 @@ const Styles = styled.div`
       :last-child {
         td {
           border-bottom: 1;
-<<<<<<< HEAD
-=======
-          border-bottom: 0;
->>>>>>> 6a2587b... Table test push
-=======
->>>>>>> 80b7d61... manager overview build 1
           flex-direc  
         }
       }
@@ -81,7 +69,6 @@ function MealTotals({ columns, data }) {
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row)
-<<<<<<< HEAD
           const info = row.cells[1]['value']
           const deliveryInfo = Object.keys(info)
           return (
@@ -96,17 +83,6 @@ function MealTotals({ columns, data }) {
                     })}
                   </tr>
                 )
-=======
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                if (cell['value'] === " "){
-                  return <td {...cell.getCellProps()} className="emptyCell">{cell.render('Cell')}</td>
-                }
-                else {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                }
->>>>>>> 6a2587b... Table test push
               })}
             </tr>
           )
@@ -195,20 +171,6 @@ function Table() {
       }
     ],
     []
-<<<<<<< HEAD
-=======
-            accessor: 'route'
-          },
-          {
-            Header: ' ',
-            accessor: 'info'
-          }
-        ]
-      }
-    ]
->>>>>>> 6a2587b... Table test push
-=======
->>>>>>> 80b7d61... manager overview build 1
   )
   
   const routes = [
@@ -272,22 +234,6 @@ function Table() {
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
     }
-<<<<<<< HEAD
-=======
-      info: "Frozen"
-    },
-    {
-      route: "‎ ",
-      info: "White bag"
-    },
-    {
-      route: " ",
-      info: "# of Meals"
-    },
-
->>>>>>> 6a2587b... Table test push
-=======
->>>>>>> 80b7d61... manager overview build 1
 ]
 
   const data = React.useMemo(() => routes, [])
