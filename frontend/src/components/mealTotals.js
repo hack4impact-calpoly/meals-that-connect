@@ -1,7 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
+<<<<<<< HEAD
 import "../css/mealTotals.css"
+=======
+
+>>>>>>> 6a2587b8a1496408d743fff9138148498d0a407a
 
 const Styles = styled.div`
   margin-top: 250px;
@@ -14,7 +18,11 @@ const Styles = styled.div`
     tr {  
       :last-child {
         td {
+<<<<<<< HEAD
           border-bottom: 1;
+=======
+          border-bottom: 0;
+>>>>>>> 6a2587b8a1496408d743fff9138148498d0a407a
           flex-direc  
         }
       }
@@ -100,6 +108,7 @@ function Table() {
         columns: [
           {
             Header: 'Route',
+<<<<<<< HEAD
             accessor: 'route',
             columns: [
               {
@@ -171,11 +180,23 @@ function Table() {
       }
     ],
     []
+=======
+            accessor: 'route'
+          },
+          {
+            Header: ' ',
+            accessor: 'info'
+          }
+        ]
+      }
+    ]
+>>>>>>> 6a2587b8a1496408d743fff9138148498d0a407a
   )
   
   const routes = [
     {
       route : "1",
+<<<<<<< HEAD
       info: {"Frozen": [1, 2, 3, 4, 5],
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
@@ -234,6 +255,19 @@ function Table() {
              "White bag": [1, 2, 3, 4, 5], 
              "# of Meals": [1, 2, 3, 4, 5]},
     }
+=======
+      info: "Frozen"
+    },
+    {
+      route: "‎ ",
+      info: "White bag"
+    },
+    {
+      route: " ",
+      info: "# of Meals"
+    },
+
+>>>>>>> 6a2587b8a1496408d743fff9138148498d0a407a
 ]
 
   const data = React.useMemo(() => routes, [])
