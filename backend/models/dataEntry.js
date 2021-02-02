@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const {userConnection} = require('../connections');
 
 const dataEntrySchema = new mongoose.Schema({
    firstName: String,
@@ -9,6 +10,6 @@ const dataEntrySchema = new mongoose.Schema({
    site: String
 })
 
-const DataEntry = mongoose.model("dataEntry", dataEntrySchema)
+const DataEntry = userConnection.model("dataentriers", dataEntrySchema)
 
 module.exports = DataEntry

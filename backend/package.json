@@ -4,13 +4,25 @@
   "description": "Backend for Meals that Connect",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "nodemon": "^2.0.6"
+    "express-validator": "^6.9.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.14",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "password-hash": "^1.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
