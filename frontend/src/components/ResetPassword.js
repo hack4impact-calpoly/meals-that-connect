@@ -10,7 +10,7 @@ class ResetPassword extends Component{
 	render(){
 		return(
 			<div className='ResetPassword'>
-				<h2> ResetPassword </h2>
+				<h2> Reset Password </h2>
 				<p> Input your email below to reset your password. </p>
 				<input type="text" id="email" placeholder="Email" size="50"/>
 				<br/>

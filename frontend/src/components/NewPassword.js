@@ -27,9 +27,12 @@ class NewPassword extends Component {
 	render(){
 		return(
 			<div className='NewPassword'>
-				<h2> NewPassword</h2>
-				hello
-				<p> Input your new password below. Please verify both passwords match. </p>
+				<h2> New Password</h2>
+
+				<p> Input your email and new password below. Please verify both passwords match. </p>
+
+                <input type="text" id="email" placeholder="Email" size="50"/>
+                <br/>
 				<input type="password" id="password1" placeholder="Enter new password" size="50"/>
                 <br/>
                 <input type="password" id="password2" placeholder="Re-enter new password" size="50"/>
