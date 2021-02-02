@@ -16,13 +16,6 @@ class Login extends Component {
         };
     }
 
-    // // this will check if user signed out or not
-    // hydrateStatewithLocalStorage() {
-    //   // checks if current value of isLoggedIn is in localStorage and it is true
-    //   if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")
-    //     isAuthenticated.login();
-    // }
-
     //calls authenticate which allows user to sign in and view private page
     login = () => {
       isAuthenticated.login(() =>
@@ -38,7 +31,7 @@ class Login extends Component {
         localStorage.setItem("userEmail", document.getElementById("email"));
         localStorage.setItem("userType", this.userType)
         localStorage.setItem("site", "login");
-        localStorage.setItem("time", date.getHours());
+        localStorage.setItem("time", date);
     }
 
     isNotLoggedIn = () => {

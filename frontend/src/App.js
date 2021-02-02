@@ -23,10 +23,8 @@ class App extends Component {
   // this will check if user signed out or not
   hydrateStatewithLocalStorage() {
     let hoursPassed = checkTime();
-      //console.log("first check")
-      //console.log(hoursPassed)
-      //console.log(hoursPassed < 1)
-      //console.log(hoursPassed >= 1)
+    console.log(hoursPassed)
+
       // checks if current value of isLoggedIn is in localStorage and it is true
     if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
       ((localStorage.hasOwnProperty("time")) && (hoursPassed < 24))) {
@@ -35,8 +33,7 @@ class App extends Component {
       if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
         ((localStorage.hasOwnProperty("time")) && (hoursPassed >= 24))) {
         isAuthenticated.signout();
-      //}
-    }
+      }
   }
   
   // when page is reloaded it calls function that will check if storage has a user logged in
@@ -66,12 +63,6 @@ class App extends Component {
   )}
 }
 
-// //UnAuthorize deals with signing out the user
-// export const UnAuthorize = withRouter(({ history }) => (
-//     isLoggedIn() 
-//       ? (<p> Click here to signout <button onClick={() => {isAuthenticated.signout(() => history.push('/login'))}}> Sign out </button> </p>)
-//       : <p> Not logged in </p>
-// ))
 
 
 export default App;

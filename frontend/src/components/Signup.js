@@ -29,7 +29,7 @@ class Signup extends Component {
         localStorage.setItem("userEmail", document.getElementById("email"));
         localStorage.setItem("userType", this.userType)
         localStorage.setItem("site", "signup");
-        localStorage.setItem("time", Date.toLocalString());
+        localStorage.setItem("time", new Date());
     }
     
     // updates personal data
