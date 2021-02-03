@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { userConnection } = require("../connections")
 
 const siteManagerSchema = new mongoose.Schema({
    firstName: String,
@@ -9,7 +10,7 @@ const siteManagerSchema = new mongoose.Schema({
    site: String
 })
 
-const SiteManager = mongoose.model("siteManager", siteManagerSchema)
+const SiteManager = userConnection.model("sitemanagers", siteManagerSchema)
 
 module.exports = SiteManager
 
