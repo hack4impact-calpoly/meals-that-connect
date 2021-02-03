@@ -27,6 +27,13 @@ class Signup extends Component {
             emptyUser: false
          };
     }
+
+    storeSignInUser = () => {
+        localStorage.setItem("userEmail", document.getElementById("email"));
+        localStorage.setItem("userType", this.userType)
+        localStorage.setItem("site", "signup");
+        localStorage.setItem("time", new Date());
+    }
     
     // updates personal data
     handleChange = (event) => {
