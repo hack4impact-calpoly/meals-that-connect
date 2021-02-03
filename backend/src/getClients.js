@@ -61,7 +61,6 @@ router.get('/routeTotals', async (req, res) => {
 
 async function getClientsByRouteSiteDay(routeNumber, site, day) {
   clientList = await getClientsByRouteSite(routeNumber, site)
-  console.log(clientList)
   totals = {"frozen": 0, "meals" : 0}
   for (var index in clientList) {
     if (clientList[index].foodDays[day]) {
