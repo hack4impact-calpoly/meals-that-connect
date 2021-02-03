@@ -12,7 +12,7 @@ class routesOverview extends Component {
     render() {
         return (
             <div id="route-sidebar">
-                <p>Routes Overview</p>
+                <p><b>Routes Overview</b></p>
                 <hr></hr>
                 <div className="route-links">
                     <Link to="/routes">

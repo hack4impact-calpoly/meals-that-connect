@@ -72,11 +72,11 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status == 404) {
+            if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/sitemanager");
+                _this.props.history.push("/manager-overview");
             }
         })
     }

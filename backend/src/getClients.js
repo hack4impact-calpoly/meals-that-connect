@@ -16,19 +16,19 @@ router.post('/routeSiteClients', async (req, res) => {
 
 router.get('/siteClients', async (req, res) => {
   const {site} = req.body
-  clientList = getClientsBySite(site)
+  const clientList = getClientsBySite(site)
 
   res.send(clientList)
 })
 
 router.get('/allClients', async (req, res) => {
-  clientList = getAll()
+  const clientList = getAll()
   res.send(clientList)
 })
 
 router.get('/routeTotals', async (req, res) => {
   const {site, day} = req.body
-  totals = getClientTotals(day, site)
+  const totals = getClientTotals(day, site)
   res.send(totals)
 })
 
@@ -58,7 +58,7 @@ function getClientTotals(day, site) {
   var totals = []
   var routes = ["1", "2", "3", "4A", "4B", "5", "6", "7", "8", "9"]
   for (var route in routes) {
-    clientList = getClientsByRouteSite(route, site)
+    var clientList = getClientsByRouteSite(route, site)
     frozen = getFrozen(clientList, day)
     noMilk = getNoMilk(clientList)
     reg = getReg(clientList, day)
