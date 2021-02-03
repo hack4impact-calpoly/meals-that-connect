@@ -4,9 +4,15 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
-router.post('/routeSiteClients', async (req, res) => {
-  const {route, site} = req.body
-  Client.find({site: site, routeNumber: route}, function (err, clients) {
+router.get('/routeSiteDay', async (req, res) => {
+  const {routeNumber, site, day} = req.body
+  totals = await getClientsByRouteSiteDay(routeNumber, site, day)
+  res.send(totals)
+})
+
+router.get('/routeSite', async (req, res) => {
+  const {routeNumber, site} = req.body
+  Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
     if (err) { console.log(err) }
     else {
       res.send(clients)
@@ -14,26 +20,62 @@ router.post('/routeSiteClients', async (req, res) => {
   })
 })
 
-router.get('/siteClients', async (req, res) => {
-  const {site} = req.body
-  clientList = getClientsBySite(site)
-
-  res.send(clientList)
+router.get('/route', async (req, res) => {
+  const {routeNumber} = req.body
+  Client.find({routeNumber: routeNumber}, function (err, clients) {
+    if (err) { console.log(err) }
+    else {
+      res.send(clients)
+    }
+  })
 })
 
-router.get('/allClients', async (req, res) => {
-  clientList = getAll()
-  res.send(clientList)
+router.get('/site', async (req, res) => {
+  const {site} = req.body
+  Client.find({site: site}, function (err, clients) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.send(clients)
+    }
+  })
+})
+
+router.get('/all', async (req, res) => {
+  Client.find({}, function (err, clients) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.send(clients)
+    }
+  })
 })
 
 router.get('/routeTotals', async (req, res) => {
   const {site, day} = req.body
-  totals = getClientTotals(day, site)
+  totals = await getClientTotals(day, site)
   res.send(totals)
 })
 
-async function getClientsByRouteSite(routeNum, site) {
-  await Client.find({site: site}, 'firstName', function (err, clients) {
+async function getClientsByRouteSiteDay(routeNumber, site, day) {
+  clientList = await getClientsByRouteSite(routeNumber, site)
+  console.log(clientList)
+  totals = {"frozen": 0, "meals" : 0}
+  for (var index in clientList) {
+    if (clientList[index].foodDays[day]) {
+      totals.meals += clientList[index].mealNumber
+    }
+    if (clientList[index].frozenDay[day]) {
+      totals.frozen += clientList[index].frozenNumber
+    }
+  }
+  return totals
+}
+
+async function getClientsByRouteSite(routeNum, siteName) {
+  return await Client.find({routeNumber: routeNum, site: siteName}, function (err, clients) {
     if (err) {
       console.log(err)
     }
@@ -43,35 +85,30 @@ async function getClientsByRouteSite(routeNum, site) {
   })
 }
 
-async function getClientsBySite(site) {
-  return await Client.find({site: site})
-}
-
-async function getAll() {
-  return await Client.find({})
-}
-
-function getClientTotals(day, site) {
+async function getClientTotals(day, site) {
   var frozen = 0
   var noMilk = 0
   var reg = 0;
   var totals = []
   var routes = ["1", "2", "3", "4A", "4B", "5", "6", "7", "8", "9"]
   for (var route in routes) {
-    clientList = getClientsByRouteSite(route, site)
+    clientList = await getClientsByRouteSite(routes[route], site)
     frozen = getFrozen(clientList, day)
-    noMilk = getNoMilk(clientList)
+    noMilk = getNoMilk(clientList, day)
     reg = getReg(clientList, day)
-    totals.push({route: route, frozen: frozen, noMilk: noMilk, regular: reg})
+    totals.push({route: routes[route], frozen: frozen, noMilk: noMilk, regular: reg})
+    frozen = 0
+    noMilk = 0
+    reg = 0
   }
   return totals
 }
 
 function getFrozen(clientList, day) {
   var frozen = 0;
-  for (var client in clientList) {
-    if (client.frozenDay[day] === true) {
-      frozen += client.frozenNumber
+  for (var index in clientList) {
+    if (clientList[index].frozenDay[day]) {
+      frozen += clientList[index].frozenNumber
     }
   }
   return frozen
@@ -79,22 +116,28 @@ function getFrozen(clientList, day) {
 
 function getReg(clientList, day) {
   var reg = 0;
-  for (var client in clientList) {
-    if (client.foodDays[day] === true) {
-      reg += client.mealNumber
+  for (var index in clientList) {
+    console.log("reg")
+    console.log(clientList[index].foodDays[day])
+    console.log(clientList[index].noMilk)
+    if (clientList[index].foodDays[day] && !clientList[index].noMilk) {
+      reg += clientList[index].mealNumber
     }
   }
   return reg
 }
 
 function getNoMilk(clientList, day) {
-  var num = 0
-  for (var client in clientList) {
-    if (client.noMilk === true) {
-      num += client.mealNumber
+  var whiteBag = 0
+  for (var index in clientList) {
+    console.log("milk")
+    console.log(clientList[index].foodDays)
+    console.log(clientList[index].noMilk)
+    if (clientList[index].foodDays[day] && clientList[index].noMilk) {
+      whiteBag += clientList[index].mealNumber
     }
   }
-  return num
+  return whiteBag
 }
 
 module.exports = router;
