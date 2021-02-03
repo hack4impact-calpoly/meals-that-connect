@@ -25,11 +25,14 @@ function makeNewConnection(uri) {
 
 const URL1 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Users?retryWrites=true&w=majority`;
 const URL2 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Clientele?retryWrites=true&w=majority`;
+const URL3 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Hours?retryWrites=true&w=majority`;
 
 const userConnection = makeNewConnection(URL1);
 const clientConnection = makeNewConnection(URL2);
+const hoursConnection = makeNewConnection(URL3);
 
 module.exports = {
     userConnection,
     clientConnection,
+    hoursConnection,
 };

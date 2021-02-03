@@ -4,13 +4,13 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
-router.get('/routeSiteDay', async (req, res) => {
+router.post('/routeSiteDay', async (req, res) => {
   const {routeNumber, site, day} = req.body
   totals = await getClientsByRouteSiteDay(routeNumber, site, day)
   res.send(totals)
 })
 
-router.get('/routeSite', async (req, res) => {
+router.post('/routeSite', async (req, res) => {
   const {routeNumber, site} = req.body
   Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
     if (err) { console.log(err) }
@@ -20,7 +20,7 @@ router.get('/routeSite', async (req, res) => {
   })
 })
 
-router.get('/route', async (req, res) => {
+router.post('/route', async (req, res) => {
   const {routeNumber} = req.body
   Client.find({routeNumber: routeNumber}, function (err, clients) {
     if (err) { console.log(err) }
@@ -30,7 +30,7 @@ router.get('/route', async (req, res) => {
   })
 })
 
-router.get('/site', async (req, res) => {
+router.post('/site', async (req, res) => {
   const {site} = req.body
   Client.find({site: site}, function (err, clients) {
     if (err) {
@@ -53,7 +53,7 @@ router.get('/all', async (req, res) => {
   })
 })
 
-router.get('/routeTotals', async (req, res) => {
+router.post('/routeTotals', async (req, res) => {
   const {site, day} = req.body
   totals = await getClientTotals(day, site)
   res.send(totals)
@@ -61,7 +61,6 @@ router.get('/routeTotals', async (req, res) => {
 
 async function getClientsByRouteSiteDay(routeNumber, site, day) {
   clientList = await getClientsByRouteSite(routeNumber, site)
-  console.log(clientList)
   totals = {"frozen": 0, "meals" : 0}
   for (var index in clientList) {
     if (clientList[index].foodDays[day]) {
@@ -117,9 +116,6 @@ function getFrozen(clientList, day) {
 function getReg(clientList, day) {
   var reg = 0;
   for (var index in clientList) {
-    console.log("reg")
-    console.log(clientList[index].foodDays[day])
-    console.log(clientList[index].noMilk)
     if (clientList[index].foodDays[day] && !clientList[index].noMilk) {
       reg += clientList[index].mealNumber
     }
@@ -130,9 +126,6 @@ function getReg(clientList, day) {
 function getNoMilk(clientList, day) {
   var whiteBag = 0
   for (var index in clientList) {
-    console.log("milk")
-    console.log(clientList[index].foodDays)
-    console.log(clientList[index].noMilk)
     if (clientList[index].foodDays[day] && clientList[index].noMilk) {
       whiteBag += clientList[index].mealNumber
     }
