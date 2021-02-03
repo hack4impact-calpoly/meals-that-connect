@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../css/Signup.css';
 import env from "react-dotenv";
+import { withRouter } from "react-router-dom";
 
 class Signup extends Component {
 
@@ -22,7 +23,8 @@ class Signup extends Component {
                 kitchenStaff: false,
                 isAuthenticated_driver: false,
                 isAuthenticated_kitchenStaff: false,
-            }
+            },
+            emptyUser: false
          };
     }
     
@@ -35,7 +37,7 @@ class Signup extends Component {
     }
 
     changeUserType = (event) => {
-        this.setState({userType: event.target.value});
+        this.setState({userType: event.target.value, emptyUser: false});
     }
 
     changeVolunteerType = (event) => {
@@ -47,7 +49,6 @@ class Signup extends Component {
             volunteerData["kitchenStaff"] = !volunteerData["kitchenStaff"];
         }
         this.setState({volunteerData: volunteerData});
-        
     }
 
     validatePassword = (event) => {
@@ -63,15 +64,17 @@ class Signup extends Component {
 
     addUser = (event) => {
         if (this.state.passwordValidated === true) {
-            console.log("nice!")
             if (this.state.userType === "siteManager") {
                 this.addSiteManager(this.state.personalData);
             }
             else if (this.state.userType === "data-entry") {
                 this.addDataEntry(this.state.personalData);
             }
-            else {
+            else if (this.state.userType === "volunteer") {
                 this.addVolunteer(this.state.personalData, this.state.volunteerData);
+            }
+            else {
+                this.setState({emptyUser: true})
             }
         }
         event.preventDefault(); //prevent the page from reloading, might remove later
@@ -88,13 +91,7 @@ class Signup extends Component {
             user: "siteManager"
         }
 
-        fetch(env.backendURL + 'signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newSiteManager)
-        })
+        this.signup(newSiteManager)
     }
 
     addDataEntry = (personalData) => {
@@ -108,13 +105,7 @@ class Signup extends Component {
             user: "dataEntry"
         }
 
-        fetch(env.backendURL + 'signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newDataEntry)
-        })
+        this.signup(newDataEntry)
     }
 
     addVolunteer = (personalData, volunteerData) => {
@@ -130,23 +121,26 @@ class Signup extends Component {
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
             user: "volunteer"
         }
-
-        fetch(env.backendURL + 'signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newVolunteer)
-        })
+        this.signup(newVolunteer)
     }
 
-    postUserData = (userData) => {
+    
+    signup = (user) => {
+        let _this = this
         fetch(env.backendURL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status == 404) {
+                _this.setState({error: true})
+            }
+            else {
+                _this.props.history.push("/sitemanager");
+            }
         })
     }
 
@@ -156,16 +150,24 @@ class Signup extends Component {
                 <main id="signup-form">
                     <h2 id="title">Sign up</h2>
                     <form onSubmit={this.addUser}>
-                        <div id="cta-type">
-                            <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType}/>
+                    <div id="cta-type">
+                        <div id="site-manager">
+                            <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType} checked={null}/>
                             <label for="siteManager">Manager</label>
-                            <input type="radio" id="data-entry" name="cta" value="data-entry" onChange={this.changeUserType}/>
+                        </div>
+                        <div id="data-entry">
+                            <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
                             <label for="data-entry">Data Entry</label>
-                            <input type="radio" id="volunteer" name="cta" value="volunteer" onChange={this.changeUserType}/>
+                        </div>
+                        <div id="volunteer">
+                            <input type="radio" id="volunteerID" name="cta" value="volunteer" onChange={this.changeUserType} checked={null}/>
                             <label for="volunteer">Volunteer</label>
                         </div>
-                        <input type="text" id="firstName" placeholder="First Name" onChange={this.handleChange} size="22" required/> <input type="text" id="lastName" placeholder="Last Name" onChange={this.handleChange} size="22" required/>
-                        <br/>
+                    </div>
+                        <div id="cta-type" style={{marginBottom: "0px"}}>
+                            <input type="text" id="firstName" className="user-name"  placeholder="First Name" onChange={this.handleChange} size="22" required/>
+                            <input type="text" id="lastName"  className="user-name" placeholder="Last Name" onChange={this.handleChange} size="22" required/>
+                        </div>
                         <input type="email" className="account-info" id="email" placeholder="Email ex: example@gmail.com" onChange={this.handleChange} size="50" required/>
                         <br/>
                         <label for="password">Password:</label>
@@ -195,6 +197,8 @@ class Signup extends Component {
                                 </div>
                             }
                         </section>
+                        {this.state.emptyUser && <div className="signup-error">Select the type of user</div>}
+                        {this.state.error && <div className="signup-error">Email taken</div>}
                         <input type="submit" value="Sign Up"/>
                     </form>
                 </main>
@@ -203,4 +207,4 @@ class Signup extends Component {
     }
 }
 
-export default Signup;
+export default withRouter(Signup);

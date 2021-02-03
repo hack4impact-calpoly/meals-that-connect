@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {clientConnection} = require('../connections');
 
 const clientSchema = new mongoose.Schema({
    firstName: {type: String, required: true},
@@ -34,6 +35,6 @@ const clientSchema = new mongoose.Schema({
 
 })
 
-const client = mongoose.model("Clients", clientSchema)
+const Client = clientConnection.model("Client", clientSchema, "Clients")
 
-module.exports = client
+module.exports = Client

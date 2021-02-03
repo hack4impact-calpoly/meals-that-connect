@@ -13,7 +13,7 @@ input {
     box-sizing: border-box;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
     font-family: 'Mulish', sans-serif;
     font-size: 20px;
 }
@@ -71,7 +71,9 @@ input[type=checkbox] {
 #cta-type {
     display: flex;
     flex-direction: row;
-    margin-bottom: 20px;
+    justify-content: center;
+    margin-bottom: 15px;
+    align-self: center;
 }
 
 #site-manager {
