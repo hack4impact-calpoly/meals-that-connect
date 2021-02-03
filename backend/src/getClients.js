@@ -117,9 +117,6 @@ function getFrozen(clientList, day) {
 function getReg(clientList, day) {
   var reg = 0;
   for (var index in clientList) {
-    console.log("reg")
-    console.log(clientList[index].foodDays[day])
-    console.log(clientList[index].noMilk)
     if (clientList[index].foodDays[day] && !clientList[index].noMilk) {
       reg += clientList[index].mealNumber
     }
@@ -130,9 +127,6 @@ function getReg(clientList, day) {
 function getNoMilk(clientList, day) {
   var whiteBag = 0
   for (var index in clientList) {
-    console.log("milk")
-    console.log(clientList[index].foodDays)
-    console.log(clientList[index].noMilk)
     if (clientList[index].foodDays[day] && clientList[index].noMilk) {
       whiteBag += clientList[index].mealNumber
     }
