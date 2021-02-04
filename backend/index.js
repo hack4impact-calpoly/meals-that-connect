@@ -1,23 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require("cors");
-const bcrypt = require('bcrypt');
 require('dotenv').config()
-
-const mongoose = require('mongoose')
-const connectionURL = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Users?retryWrites=true&w=majority`;
-mongoose.connect(connectionURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
-  }).then(() => console.log('Connected to MongoDB'))
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log("Successfully connected to mongodb")
-});
 
 const app = express();
 app.use(cors());
@@ -26,15 +10,24 @@ app.use(bodyParser.json());
 
 var login = require('./src/login')
 var signup = require('./src/signup')
+var clients = require('./src/getClients')
 
 app.use('/login', login)
 app.use('/signup', signup)
+app.use('/clients', clients)
 
 app.get('/', (req, res) => {
     res.send('Hi from Meals that Connect!')
 })
 
+//ensure email is database
+app.get('api/recipe/:email', (req, res) => {
+    const email = req.params.name
+    let userInfo
+    //get user that has that certain email
+    //userInfo = await DatabaseName.find({email: })
+})
+  
 app.listen(3001, () => {
     console.log('App listening on port 3001')
 })
-

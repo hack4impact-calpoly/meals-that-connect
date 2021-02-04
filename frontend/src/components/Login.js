@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import '../css/Login.css';
 import '../css/Signup.css';
+import { Route, Redirect, Link, withRouter } from 'react-router-dom';
+import {isAuthenticated} from './LoggedUser';
+import env from "react-dotenv";
 
 class Login extends Component {
 
@@ -8,9 +11,36 @@ class Login extends Component {
         super(props);
         this.state = { 
             isLoggedIn : false,
-            userType: this.props.match.params.user ? this.props.match.params.user : ""
+            RedirectLoggedUser: false,
+            userType: this.props.match.params.user ? this.props.match.params.user : "",
+            email: "",
+            password: "",
+            userType: this.props.match.params.user ? this.props.match.params.user : "",
+            error: false
         };
     }
+
+    //calls authenticate which allows user to sign in and view private page
+    login = () => {
+      isAuthenticated.login(() =>
+        this.setState({ RedirectLoggedUser: true })); // set redirect from login page to private to true
+        this.storeLoginUser();
+        console.log(localStorage.getItem("time"));
+        //console.log()
+        //console.log()
+    }
+
+    storeLoginUser = () => {
+        const date = new Date();
+        localStorage.setItem("userEmail", document.getElementById("email"));
+        localStorage.setItem("userType", this.userType)
+        localStorage.setItem("site", "login");
+        localStorage.setItem("time", date);
+    }
+
+    handleChange = (e) => {
+        this.setState({ [e.target.id]: e.target.value });
+    };
 
     isNotLoggedIn = () => {
         this.setState( { isLoggedIn : false } );
@@ -48,8 +78,43 @@ class Login extends Component {
         }
     }
 
+    login = () => {
+        let _this = this
+        const user = {
+            email: this.state.email,
+            password: this.state.password,
+            user: this.state.userType
+        }
+
+        fetch(env.backendURL + 'login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status == 404) {
+                _this.setState({error: true})
+            }
+            else {
+                _this.props.history.push("/sitemanager");
+            }
+        })
+    }
+
     render() {
         console.log(this.state.userType)
+
+        const { RedirectLoggedUser } = this.state;
+
+        // if user has signed in redirect to private page
+        if (RedirectLoggedUser === true) {
+          return (
+            <Redirect to='/private' />
+          )
+        }
+      
         return (
             <div className="login-form">
                 <h1>
@@ -72,19 +137,21 @@ class Login extends Component {
                         <label for="volunteer">Volunteer</label>
                     </div>
                 </div>
-                <input type="text" id="email" placeholder="Email" size="50"/>
+                <input type="text" id="email" placeholder="Email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
                 <br/>
-                <input type="password" id="password" placeholder="Password" size="50"/>
+                <input type="password" id="password" placeholder="Password" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
                 <br/>
                 <label class="password-security">
                     <input type="checkbox" id="password-visibility" onClick={() => this.passwordVisibility()}/>
                     Show Password
                 </label>
                 <br/>
-                <button id="signin-button">Log In</button>
+                <button id="signin-button" onClick={this.login}>Log In</button>
+                <Link to="/reset-password">Forgot Password?</Link>
+                {this.state.error && <div className="error">Invalid email or password</div>}
+                <button id="signin-button" onClick={this.login}>Log In</button>
             </div>
-        );
+          )}
     }
-}
-
-export default Login;
+                
+export default withRouter(Login);

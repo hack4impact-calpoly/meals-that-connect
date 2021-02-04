@@ -15,6 +15,7 @@
 
 #title {
     font-size: 70px;
+    margin: 30px;
 }
 
 input[type=text],
@@ -39,7 +40,12 @@ input[type=radio] {
 }
 
 .account-info {
-    width: 650px;
+    width: 475px;
+}
+
+.user-name {
+    width: 230px;
+    display: inline;
 }
 
 #pass-error {
@@ -49,4 +55,9 @@ input[type=radio] {
 #pass-label {
     font-size: 18px;
     text-align: center;
+}
+
+.signup-error {
+    margin: 20px;
+    color: red;
 }
