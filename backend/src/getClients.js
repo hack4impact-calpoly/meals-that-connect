@@ -14,6 +14,12 @@ router.post('/routeSiteClients', async (req, res) => {
   })
 })
 
+router.post('/routeSiteDay', async (req, res) => {
+  const {routeNumber, site, day} = req.body
+  var totals = await getClientsByRouteSiteDay(routeNumber, site, day)
+  res.send(totals)
+})
+
 router.get('/siteClients', async (req, res) => {
   const {site} = req.body
   const clientList = getClientsBySite(site)
@@ -32,8 +38,22 @@ router.get('/routeTotals', async (req, res) => {
   res.send(totals)
 })
 
-async function getClientsByRouteSite(routeNum, site) {
-  await Client.find({site: site}, 'firstName', function (err, clients) {
+async function getClientsByRouteSiteDay(routeNumber, site, day) {
+  var clientList = await getClientsByRouteSite(routeNumber, site)
+  var totals = {"frozen": 0, "meals" : 0}
+  for (var index in clientList) {
+    if (clientList[index].foodDays[day]) {
+      totals.meals += clientList[index].mealNumber
+    }
+    if (clientList[index].frozenDay[day]) {
+      totals.frozen += clientList[index].frozenNumber
+    }
+  }
+  return totals
+}
+
+async function getClientsByRouteSite(routeNum, siteName) {
+  return await Client.find({routeNumber: routeNum, site: siteName}, function (err, clients) {
     if (err) {
       console.log(err)
     }
@@ -57,8 +77,9 @@ function getClientTotals(day, site) {
   var reg = 0;
   var totals = []
   var routes = ["1", "2", "3", "4A", "4B", "5", "6", "7", "8", "9"]
+  var clientList;
   for (var route in routes) {
-    var clientList = getClientsByRouteSite(route, site)
+    clientList = getClientsByRouteSite(route, site)
     frozen = getFrozen(clientList, day)
     noMilk = getNoMilk(clientList)
     reg = getReg(clientList, day)

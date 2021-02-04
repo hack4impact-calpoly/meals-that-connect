@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import env from "react-dotenv";
 import "../css/mealTotals.css"
 
 const Styles = styled.div`
@@ -86,7 +85,8 @@ function MealTotals({ columns, data }) {
   )
 }
 
-function Table() {
+const Table = (props) => {
+  console.log(props.data)
   const columns = React.useMemo(
     () => [
       {
@@ -171,7 +171,7 @@ function Table() {
     {
       route: " ", 
       info: "Frozen", 
-      monday: getTableData("1"), 
+      monday: props.data[1]["meals"], 
       tuesday: "1",
       wednesday: "1",
       thursday: "1",
@@ -488,24 +488,6 @@ function getDate(tableDay) {
   return week[tableDay];
 }
 
-function getTableData(route) {
-  const req = {
-    site: 'SLO',
-    route: route
-  }
-  fetch(env.backendURL + 'clients/' + 'routeSiteClients', 
-    {
-      method: "POST",
-      headers: {
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(req)
-    }
-  )
-    .then(res => res.json())
-    .then(data => console.log(data))
 
-  return "0"
-}
 
 export default Table;

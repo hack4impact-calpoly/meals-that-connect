@@ -49,7 +49,6 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
-
               <PublicRoute path="/login" component={Login}/>
               <Route path="/login/:user" component={Login}/>
               <PublicRoute path="/signup"><Signup/></PublicRoute>

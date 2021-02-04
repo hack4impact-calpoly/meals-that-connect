@@ -98,7 +98,7 @@ class Login extends Component {
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/manager-overview");
+                _this.props.history.push("/sitemanager");
             }
         })
     }

@@ -41,10 +41,16 @@ class RouteHomepage extends Component {
         let routes = [1,2,3,4,5,6,7,8,9]
 
         return (
+            
             <div style={{marginTop: "200px"}}>
-                <div>Site Manager Homepage</div>
+                <div>Routes Homepage</div>
                 {this.state.clients.map((route, i) =>{
-					return <RoutePage routenum={routes[i]} data={route}/>
+					return (
+                        <section style={{paddingBottom: "500px"}}>
+                            <a style={{paddingTop: "150px"}} id={String(routes[i])}></a>
+                            <RoutePage routenum={routes[i]} data={route}></RoutePage>
+                        </section>
+                            );
 				})}
             </div>
         );
