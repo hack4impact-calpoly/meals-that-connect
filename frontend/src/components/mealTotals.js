@@ -86,7 +86,6 @@ function MealTotals({ columns, data }) {
 }
 
 const Table = (props) => {
-  console.log(props.data)
   const columns = React.useMemo(
     () => [
       {
@@ -171,15 +170,15 @@ const Table = (props) => {
     {
       route: " ", 
       info: "Frozen", 
-      monday: props.data[1]["meals"], 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "1", "M", 'frozen'), 
+      tuesday: getData(props.data, "1", "T", 'frozen'),
+      wednesday: getData(props.data, "1", "W", 'frozen'),
+      thursday: getData(props.data, "1", "Th", 'frozen'),
+      friday: getData(props.data, "1", "F", 'frozen'),
     },
     {
       route: "1", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -189,24 +188,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "1", "M", 'meals'), 
+      tuesday: getData(props.data, "1", "T", 'meals'),
+      wednesday: getData(props.data, "1", "W", 'meals'),
+      thursday: getData(props.data, "1", "Th", 'meals'),
+      friday: getData(props.data, "1", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "2", "M", 'frozen'), 
+      tuesday: getData(props.data, "2", "T", 'frozen'),
+      wednesday: getData(props.data, "2", "W", 'frozen'),
+      thursday: getData(props.data, "2", "Th", 'frozen'),
+      friday: getData(props.data, "2", "F", 'frozen'),
     },
     {
       route: "2", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -216,24 +215,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "2", "M", 'meals'), 
+      tuesday: getData(props.data, "2", "T", 'meals'),
+      wednesday: getData(props.data, "2", "W", 'meals'),
+      thursday: getData(props.data, "2", "Th", 'meals'),
+      friday: getData(props.data, "2", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "3", "M", 'frozen'), 
+      tuesday: getData(props.data, "3", "T", 'frozen'),
+      wednesday: getData(props.data, "3", "W", 'frozen'),
+      thursday: getData(props.data, "3", "Th", 'frozen'),
+      friday: getData(props.data, "3", "F", 'frozen'),
     },
     {
       route: "3", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -243,25 +242,25 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "3", "M", 'meals'), 
+      tuesday: getData(props.data, "3", "T", 'meals'),
+      wednesday: getData(props.data, "3", "W", 'meals'),
+      thursday: getData(props.data, "3", "Th", 'meals'),
+      friday: getData(props.data, "3", "F", 'meals'),
     },
 
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "4", "M", 'frozen'), 
+      tuesday: getData(props.data, "4", "T", 'frozen'),
+      wednesday: getData(props.data, "4", "W", 'frozen'),
+      thursday: getData(props.data, "4", "Th", 'frozen'),
+      friday: getData(props.data, "4", "F", 'frozen'),
     },
     {
       route: "4A", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -271,24 +270,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "4", "M", 'meals'), 
+      tuesday: getData(props.data, "4", "T", 'meals'),
+      wednesday: getData(props.data, "4", "W", 'meals'),
+      thursday: getData(props.data, "4", "Th", 'meals'),
+      friday: getData(props.data, "4", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "4", "M", 'frozen'), 
+      tuesday: getData(props.data, "4", "T", 'frozen'),
+      wednesday: getData(props.data, "4", "W", 'frozen'),
+      thursday: getData(props.data, "4", "Th", 'frozen'),
+      friday: getData(props.data, "4", "F", 'frozen'),
     },
     {
       route: "4B", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -298,24 +297,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "4", "M", 'meals'), 
+      tuesday: getData(props.data, "4", "T", 'meals'),
+      wednesday: getData(props.data, "4", "W", 'meals'),
+      thursday: getData(props.data, "4", "Th", 'meals'),
+      friday: getData(props.data, "4", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "5", "M", 'frozen'), 
+      tuesday: getData(props.data, "5", "T", 'frozen'),
+      wednesday: getData(props.data, "5", "W", 'frozen'),
+      thursday: getData(props.data, "5", "Th", 'frozen'),
+      friday: getData(props.data, "5", "F", 'frozen'),
     },
     {
       route: "5", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -325,24 +324,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "5", "M", 'meals'), 
+      tuesday: getData(props.data, "5", "T", 'meals'),
+      wednesday: getData(props.data, "5", "W", 'meals'),
+      thursday: getData(props.data, "5", "Th", 'meals'),
+      friday: getData(props.data, "5", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "6", "M", 'frozen'), 
+      tuesday: getData(props.data, "6", "T", 'frozen'),
+      wednesday: getData(props.data, "6", "W", 'frozen'),
+      thursday: getData(props.data, "6", "Th", 'frozen'),
+      friday: getData(props.data, "6", "F", 'frozen'),
     },
     {
       route: "6", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -352,24 +351,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "6", "M", 'meals'), 
+      tuesday: getData(props.data, "6", "T", 'meals'),
+      wednesday: getData(props.data, "6", "W", 'meals'),
+      thursday: getData(props.data, "6", "Th", 'meals'),
+      friday: getData(props.data, "6", "F", 'meals'),
     },  
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "7", "M", 'frozen'), 
+      tuesday: getData(props.data, "7", "T", 'frozen'),
+      wednesday: getData(props.data, "7", "W", 'frozen'),
+      thursday: getData(props.data, "7", "Th", 'frozen'),
+      friday: getData(props.data, "7", "F", 'frozen'),
     },
     {
       route: "7-Frozen", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -379,24 +378,24 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "7", "M", 'meals'), 
+      tuesday: getData(props.data, "7", "T", 'meals'),
+      wednesday: getData(props.data, "7", "W", 'meals'),
+      thursday: getData(props.data, "7", "Th", 'meals'),
+      friday: getData(props.data, "7", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "8", "M", 'frozen'), 
+      tuesday: getData(props.data, "8", "T", 'frozen'),
+      wednesday: getData(props.data, "8", "W", 'frozen'),
+      thursday: getData(props.data, "8", "Th", 'frozen'),
+      friday: getData(props.data, "8", "F", 'frozen'),
     },
     {
       route: "8", 
-      info: "White Bag", 
+      info: "-", 
       monday: "-", 
       tuesday: "-",
       wednesday: "-",
@@ -406,20 +405,20 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "8", "M", 'meals'), 
+      tuesday: getData(props.data, "8", "T", 'meals'),
+      wednesday: getData(props.data, "8", "W", 'meals'),
+      thursday: getData(props.data, "8", "Th", 'meals'),
+      friday: getData(props.data, "8", "F", 'meals'),
     },
     {
       route: " ", 
       info: "Frozen", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "9", "M", 'frozen'), 
+      tuesday: getData(props.data, "9", "T", 'frozen'),
+      wednesday: getData(props.data, "9", "W", 'frozen'),
+      thursday: getData(props.data, "9", "Th", 'frozen'),
+      friday: getData(props.data, "9", "F", 'frozen'),
     },
     {
       route: "9", 
@@ -433,15 +432,15 @@ const Table = (props) => {
     {
       route: " ", 
       info: "# of Meals", 
-      monday: "1", 
-      tuesday: "1",
-      wednesday: "1",
-      thursday: "1",
-      friday: "1",
+      monday: getData(props.data, "9", "M", 'meals'), 
+      tuesday: getData(props.data, "9", "T", 'meals'),
+      wednesday: getData(props.data, "9", "W", 'meals'),
+      thursday: getData(props.data, "9", "Th", 'meals'),
+      friday: getData(props.data, "9", "F", 'meals'),
     },
   ]
 
-  const data = React.useMemo(() => routes, [])
+  const data = React.useMemo(() => routes, [] )
 
   return (
     <Styles>
@@ -488,6 +487,27 @@ function getDate(tableDay) {
   return week[tableDay];
 }
 
+function getData(data, route, day, category) {
+  var dayNum = encodeDay(day);
+  var dataIndex = ((+(route) - 1) * 5) + dayNum;
+  return data[dataIndex][category];
+}
 
+function encodeDay(day){
+  switch (day) {
+    case "M":
+      return 0;
+    case "T":
+      return 1;
+    case "W":
+      return 2;
+    case "Th":
+      return 3;
+    case "F":
+      return 4;
+    default:
+      return -1;
+  }
+}
 
 export default Table;

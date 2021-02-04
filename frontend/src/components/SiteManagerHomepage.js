@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import MealTotals from './mealTotals';
 import RoutesOverview from './routesOverview';
 import env from "react-dotenv";
+
+import Spinner from "react-bootstrap/Spinner"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './../css/manager.css'
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             totals: []
          };
     }
@@ -18,12 +21,12 @@ class SiteManagerHomepage extends Component {
         let day = ["M", "T", "W", "Th", "F"]
         for(let i =0; i < routes.length; i++) {
             for (let j = 0; j < day.length; j++) {
-                await this.fetchClients(routes[i], day[j])
+                await this.fetchTotals(routes[i], day[j])
             }  
         }
     }
 
-    async fetchClients (routenum, day) {
+    async fetchTotals (routenum, day) {
         let info = {
             site: "SLO",
             routeNumber: routenum,
@@ -37,7 +40,6 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        
         this.setState({totals: [...this.state.totals, data]}) 
         return data;
     }
@@ -48,7 +50,10 @@ class SiteManagerHomepage extends Component {
                 <h1 id="site-manager-header">Site Manager Overview</h1>
                 <div id="main">
                     <RoutesOverview/>
-                    <MealTotals data={this.state.totals}/>
+                    {this.state.totals.length >= 50 ? <MealTotals data={this.state.totals}/> : 
+                    <div>
+                        <Spinner animation="border" role="status" />
+                    </div>}
                 </div>
             </div>
         );
