@@ -40,7 +40,7 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        this.setState({totals: [...this.state.totals, data]}) 
+        this.setState({totals: [...this.state.totals, data]})
         return data;
     }
 

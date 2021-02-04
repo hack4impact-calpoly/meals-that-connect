@@ -4,6 +4,16 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
+router.post('/routeSiteClients', async (req, res) => {
+  const {route, site} = req.body
+  Client.find({site: site, routeNumber: route}, function (err, clients) {
+    if (err) { console.log(err) }
+    else {
+      res.send(clients)
+    }
+  })
+})
+
 router.post('/routeSiteDay', async (req, res) => {
   const {routeNumber, site, day} = req.body
   var totals = await getClientsByRouteSiteDay(routeNumber, site, day)
@@ -79,7 +89,7 @@ async function getClientsByRouteSite(routeNum, siteName) {
       console.log(err)
     }
     else {
-      res.send(clients)
+      return clients
     }
   })
 }
