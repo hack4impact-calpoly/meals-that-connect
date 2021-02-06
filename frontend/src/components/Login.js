@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
+import '../css/Login.css';
 import '../css/Signup.css';
-import { Route, Redirect, Link } from 'react-router-dom';
+import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import {isAuthenticated} from './LoggedUser';
 import env from "react-dotenv";
-import '../css/Login.css';
-import { withRouter } from "react-router-dom";
+
 
 class Login extends Component {
 
@@ -22,13 +22,6 @@ class Login extends Component {
         };
     }
 
-    // // this will check if user signed out or not
-    // hydrateStatewithLocalStorage() {
-    //   // checks if current value of isLoggedIn is in localStorage and it is true
-    //   if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")
-    //     isAuthenticated.login();
-    // }
-
     //calls authenticate which allows user to sign in and view private page
     login = () => {
       isAuthenticated.login(() =>
@@ -44,8 +37,7 @@ class Login extends Component {
         localStorage.setItem("userEmail", document.getElementById("email"));
         localStorage.setItem("userType", this.userType)
         localStorage.setItem("site", "login");
-        localStorage.setItem("time", date.getHours());
-
+        localStorage.setItem("time", date);
     }
 
     handleChange = (e) => {
@@ -157,12 +149,12 @@ class Login extends Component {
                 </label>
                 <br/>
 
-                {this.state.error && <div className="error">Invalid email or password</div>}
                 <button id="signin-button" onClick={this.login}>Log In</button>
                 <Link to="/reset-password">Forgot Password?</Link>
+                {this.state.error && <div className="error">Invalid email or password</div>}
+                <button id="signin-button" onClick={this.login}>Log In</button>
             </div>
           )}
     }
-
 
 export default withRouter(Login);

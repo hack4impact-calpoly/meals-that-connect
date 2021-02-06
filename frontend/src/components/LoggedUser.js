@@ -15,24 +15,22 @@ class LoggedUser extends Component{
 export const checkTime = () => {
 	let countHours = 0;
 	if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.hasOwnProperty("time")){
-		const getcurrentTime = new Date().getHours();
-		const currentTime = Number(getcurrentTime);
+		const currentTime = new Date();
 		//console.log(currentTime);
-		let getstartTime = localStorage.getItem("time");
-		let startTime = Number(getstartTime);
-		//console.log(currentTime !== startTime)
+
+		//localStorage.getItem("time") was strored as a string, so we have to convert it as a date again
+		let getStartTime = localStorage.getItem("time");
+		let startTime = new Date(getStartTime);
+		//console.log(startTime);
+
+		//get difference in milliseconds
+		const diff = Math.abs(currentTime - startTime)
+		console.log(diff)
+		//get difference in hours
+		const hours = Math.ceil(diff / (1000 * 60 * 60));
+		console.log(hours)
 		
-
-		//do a loop; incr countHours; add to start time until match w/ currentTime; add count hrs to startTime if == 24 
-		while (currentTime !== startTime){
-
-		 	startTime += 1;
-		 	if (startTime === 24){
-		 		startTime = 1;
-		 		
-		 	}
-		 	countHours += 1;
-		 }
+		countHours = hours;
 	}
 	return countHours;
 }
