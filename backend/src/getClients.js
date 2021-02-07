@@ -15,8 +15,8 @@ router.post('/routeSiteClients', async (req, res) => {
 })
 
 router.post('/routeSiteDay', async (req, res) => {
-  const {routeNumber, site, day} = req.body
-  var totals = await getClientsByRouteSiteDay(routeNumber, site, day)
+  const {routeNumber, site} = req.body
+  var totals = await getTotalsByRouteSite(routeNumber, site)
   res.send(totals)
 })
 
@@ -69,16 +69,27 @@ router.post('/routeTotals', async (req, res) => {
   res.send(totals)
 })
 
-async function getClientsByRouteSiteDay(routeNumber, site, day) {
-  var clientList = await getClientsByRouteSite(routeNumber, site)
-  var totals = {"frozen": 0, "meals" : 0}
-  for (var index in clientList) {
-    if (clientList[index].foodDays[day]) {
-      totals.meals += clientList[index].mealNumber
+async function getTotalsByRouteSite(route, site) {
+  var clientList = await getClientsByRouteSite(route, site)
+  var days = ["M", "T", "W", "Th", "F"]
+  var totals = [];
+  var routeTotals = {"frozen": [], "meals" : []}
+  var frozenTotal = 0;
+  var mealTotal = 0;
+  for (var day in days) {
+    for (var index in clientList) {
+      if (clientList[index].foodDays[days[day]]) {
+        mealTotal += clientList[index].mealNumber
+      }
+      if (clientList[index].frozenDay[days[day]]) {
+        frozenTotal += clientList[index].frozenNumber
+      }
     }
-    if (clientList[index].frozenDay[day]) {
-      totals.frozen += clientList[index].frozenNumber
-    }
+    routeTotals["frozen"].push(frozenTotal);
+    routeTotals["meals"].push(mealTotal);
+    totals.push(routeTotals);
+    frozenTotal = 0;
+    mealTotal = 0;
   }
   return totals
 }

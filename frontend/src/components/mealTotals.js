@@ -489,8 +489,8 @@ function getDate(tableDay) {
 
 function getData(data, route, day, category) {
   var dayNum = encodeDay(day);
-  var dataIndex = ((+(route) - 1) * 5) + dayNum;
-  return data[dataIndex][category];
+  var routeNum = +(route);
+  return data[routeNum - 1][dayNum][category][dayNum];
 }
 
 function encodeDay(day){
