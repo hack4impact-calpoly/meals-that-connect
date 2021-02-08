@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RoutePage from './RoutePage';
 import env from "react-dotenv";
-import RoutesOverview from './routesOverview';
+import RoutesNavbar from './RoutesNavbar';
 
 class RouteHomepage extends Component {
     constructor(props) {
@@ -45,7 +45,7 @@ class RouteHomepage extends Component {
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Routes Page</h1>
                 <div>
-                    <RoutesOverview/>
+                    <RoutesNavbar/>
                     <div className="site-manager-container">
                         {this.state.clients.map((route, i) =>{
                             return (

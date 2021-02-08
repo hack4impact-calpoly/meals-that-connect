@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/Signup.css';
+import '../../css/Signup.css';
 import env from "react-dotenv";
 import { withRouter } from "react-router-dom";
 
@@ -28,11 +28,12 @@ class Signup extends Component {
          };
     }
 
-    storeSignInUser = () => {
-        localStorage.setItem("userEmail", document.getElementById("email"));
-        localStorage.setItem("userType", this.userType)
-        localStorage.setItem("site", "signup");
+    storeUser = () => {
+        localStorage.setItem("userEmail", this.state.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("site", "SLO");
         localStorage.setItem("time", new Date());
+        localStorage.setItem("isLoggedIn", true);
     }
     
     // updates personal data
@@ -146,7 +147,8 @@ class Signup extends Component {
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/manager-overview");
+                _this.storeUser()
+                _this.props.history.push("/sitemanager");
             }
         })
     }

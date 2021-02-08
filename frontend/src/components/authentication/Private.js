@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { isLoggedIn, isAuthenticated } from './LoggedUser';
+import { signout } from './authenticationUtils';
 import { withRouter, Redirect } from 'react-router-dom';
 
 class Private extends Component {
@@ -9,8 +9,8 @@ class Private extends Component {
 	}
 
 	signOut = () => {
-		isAuthenticated.signout(() => 
-			this.setState({ RedirectLoggedUser: true }));
+		signout()
+    this.setState({ RedirectLoggedUser: true });
 	}
 
 
@@ -26,9 +26,8 @@ class Private extends Component {
         }
 
         return (
-            <div className="Private">
-            <h2> Private </h2>
-            <p> Sign out button bellow is a prototype to test signout. </p> 
+            <div className="Private" style={{marginTop: '200px'}}>
+            <p> Sign out button for testing. </p> 
             <button onClick={this.signOut}> Sign out </button>
             </div>
         );

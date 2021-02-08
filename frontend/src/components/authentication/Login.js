@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import '../css/Login.css';
-import '../css/Signup.css';
+import '../../css/Login.css';
+import '../../css/Signup.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
-import {isAuthenticated} from './LoggedUser';
 import env from "react-dotenv";
 
 class Login extends Component {
@@ -19,22 +18,13 @@ class Login extends Component {
         };
     }
 
-    //calls authenticate which allows user to sign in and view private page
-    login = () => {
-      isAuthenticated.login(() =>
-        this.setState({ RedirectLoggedUser: true })); // set redirect from login page to private to true
-        this.storeLoginUser();
-        console.log(localStorage.getItem("time"));
-        //console.log()
-        //console.log()
-    }
-
-    storeLoginUser = () => {
+    storeUser = () => {
         const date = new Date();
-        localStorage.setItem("userEmail", document.getElementById("email"));
-        localStorage.setItem("userType", this.userType)
-        localStorage.setItem("site", "login");
+        localStorage.setItem("userEmail", this.state.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("site", "SLO");
         localStorage.setItem("time", date);
+        localStorage.setItem("isLoggedIn", true);
     }
 
     handleChange = (e) => {
@@ -97,6 +87,7 @@ class Login extends Component {
                 _this.setState({error: true})
             }
             else {
+                _this.storeUser()
                 _this.props.history.push("/sitemanager");
             }
         })
