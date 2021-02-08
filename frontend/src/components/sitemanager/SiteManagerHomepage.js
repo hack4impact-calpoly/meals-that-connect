@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import MealTotals from './mealTotals';
-import RoutesOverview from './routesOverview';
+import RoutesNavbar from './RoutesNavbar';
 import env from "react-dotenv";
 
 import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './../css/manager.css'
+import '../../css/manager.css'
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
@@ -42,14 +42,16 @@ class SiteManagerHomepage extends Component {
 
     render() {
         return (
-            <div id="overview">
-                <h1 id="site-manager-header">Site Manager Overview</h1>
-                <div id="main">
-                    <RoutesOverview/>
-                    {this.state.totals.length >= 10 ? <MealTotals data={this.state.totals}/> : 
-                    <div>
-                        <Spinner animation="border" role="status" />
-                    </div>}
+            <div className="site-manager-page">
+                <h1 className="site-manager-page-header">Site Manager Overview</h1>
+                <div>
+                    <RoutesNavbar/>
+                    <div className="site-manager-container">
+                        {this.state.totals.length >= 10 ? <MealTotals data={this.state.totals}/> : 
+                        <div>
+                            <Spinner animation="border" role="status" />
+                        </div>}
+                    </div>
                 </div>
             </div>
         );

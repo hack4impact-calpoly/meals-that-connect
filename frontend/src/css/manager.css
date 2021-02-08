@@ -1,21 +1,20 @@
 
-#overview {
+.site-manager-page{
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 
-#site-manager-header {
-    margin-bottom: 0px;
-    margin-top: 200px;
+.site-manager-page-header {
+    margin-bottom: 20px;
+    margin-top: 120px;
 }
 
-#main {
-    display: grid;
-    grid-template-columns: 15% 85%;
-    width: 100%;
-    margin-left: 100px;
-    margin-top: 20px;
-    margin-right: 100px;
+
+.site-manager-container {
+    margin-left: 340px;
+    height: calc(100vh - 210px);
+    width: calc(100vw - 340px);
+    margin-bottom: 20px;
+    overflow: auto;
 }

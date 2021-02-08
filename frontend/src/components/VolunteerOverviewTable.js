@@ -17,7 +17,6 @@ const Styles = styled.div`
    }
    th,
    td {
-     padding: 0.5rem;
      border-bottom: 1px solid black;
      border-right: 1px solid black;
      font-size: 20px;
@@ -27,6 +26,7 @@ const Styles = styled.div`
      }
    }
    th {
+     padding: 0.5rem;
      background: #D4D4D4;
      color: black;
      fontWeight: bold;
@@ -82,7 +82,7 @@ const VolunteerOverviewData = () => {
             },
             { Header: 'Email',
             accessor: 'email',
-            width: 250
+            width: 300
             },
             { Header: 'Using Digital System?',
             accessor: 'digitalSystem',
@@ -201,7 +201,7 @@ function VolunteerOverviewTable({ columns, data, updateMyData }) {
     () => ({
       minWidth: 10,
       width: 200,
-      maxWidth: 300,
+      maxWidth: 350,
       Cell: EditableCell
     }),
     []

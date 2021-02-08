@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/ResetPassword.css';
+import '../../css/ResetPassword.css';
 
 class ResetPassword extends Component{
 	constructor(props){

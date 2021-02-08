@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/routesOverview.css';
+import '../../css/routesNavbar.css';
 import { HashLink as Link } from "react-router-hash-link";
 
 class routesOverview extends Component {
@@ -12,9 +12,13 @@ class routesOverview extends Component {
     render() {
         return (
             <div id="route-sidebar">
-                <p><b>Routes Overview</b></p>
+                <h1><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">
+                    <Link to="sitemanager">
+                        <button type="button" className="route">Overview</button>
+                    </Link><br/>
+                    <hr></hr>
                     <Link to="routes#1">
                         <button type="button" className="route">Route 1</button>
                     </Link><br/>

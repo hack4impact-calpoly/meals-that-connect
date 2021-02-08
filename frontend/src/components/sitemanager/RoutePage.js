@@ -4,7 +4,7 @@ import { useTable } from 'react-table'
 
 const Styles = styled.div`
  table {
-   margin-top: 100px;
+   margin: 0px 20px 50px 0px;
    border-spacing: 0;
    border: 1px solid black;
    font-family: 'Mulish', sans-serif;
