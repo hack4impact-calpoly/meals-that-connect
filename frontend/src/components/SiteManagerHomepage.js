@@ -1,29 +1,34 @@
 import React, { Component } from 'react';
-import RoutePage from './RoutePage';
+import MealTotals from './mealTotals';
+import RoutesOverview from './routesOverview';
 import env from "react-dotenv";
+
+import Spinner from "react-bootstrap/Spinner"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './../css/manager.css'
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
-        this.state = {  
-            clients: []
-        };
+        this.state = {
+            totals: []
+         };
     }
 
     async componentDidMount(){
         // fetch all clients for each route
-        let routes = [1,2,3,4,5,6,7,8,9]
-        for(let i =0; i < routes.length; i++) {
-            await this.fetchClients(routes[i])
+        let routes = [1,2,3,4,4,5,6,7,8,9]
+        for(let i = 0; i < routes.length; i++) {
+            await this.fetchTotals(routes[i]) 
         }
     }
-    
-    async fetchClients (routenum) {
+
+    async fetchTotals (routenum) {
         let info = {
             site: "SLO",
-            route: routenum
+            routeNumber: routenum,
         }
-        let response = await fetch(env.backendURL + 'clients/routeSiteClients', {
+        let response = await fetch(env.backendURL + 'clients/routeSiteDay', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,21 +36,21 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        // let new_clients = this.state.clients
-        
-        this.setState({clients: [...this.state.clients, data]}) 
+        this.setState({totals: [...this.state.totals, data]})
         return data;
     }
 
     render() {
-        let routes = [1,2,3,4,5,6,7,8,9]
-
         return (
-            <div style={{marginTop: "200px"}}>
-                <div>Site Manager Homepage</div>
-                {this.state.clients.map((route, i) =>{
-					return <RoutePage routenum={routes[i]} data={route}/>
-				})}
+            <div id="overview">
+                <h1 id="site-manager-header">Site Manager Overview</h1>
+                <div id="main">
+                    <RoutesOverview/>
+                    {this.state.totals.length >= 10 ? <MealTotals data={this.state.totals}/> : 
+                    <div>
+                        <Spinner animation="border" role="status" />
+                    </div>}
+                </div>
             </div>
         );
     }

@@ -15,6 +15,7 @@ input {
 
 input[type=text], input[type=password], input[type=email] {
     font-family: 'Mulish', sans-serif;
+    margin: 5px;
     font-size: 20px;
 }
 

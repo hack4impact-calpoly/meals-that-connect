@@ -142,11 +142,11 @@ class Signup extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status == 404) {
+            if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/sitemanager");
+                _this.props.history.push("/manager-overview");
             }
         })
     }
@@ -164,11 +164,11 @@ class Signup extends Component {
                         </div>
                         <div id="data-entry">
                             <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
-                            <label for="data-entry">Data Entry</label>
+                            <label for="dataEntry">Data Entry</label>
                         </div>
                         <div id="volunteer">
                             <input type="radio" id="volunteerID" name="cta" value="volunteer" onChange={this.changeUserType} checked={null}/>
-                            <label for="volunteer">Volunteer</label>
+                            <label for="volunteerID">Volunteer</label>
                         </div>
                     </div>
                         <div id="cta-type" style={{marginBottom: "0px"}}>

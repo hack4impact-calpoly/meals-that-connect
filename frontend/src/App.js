@@ -7,7 +7,10 @@ import Home from './components/Home'
 import Login from './components/Login'
 
 import Signup from './components/Signup'
-import SiteManagerHomepage from './components/SiteManagerHomepage'
+import SiteManagerHomepage from './components/SiteManagerHomepage.js'
+import RouteHomePage from './components/RouteHomepage.js'
+
+import VolunteerOverview from './components/VolunteerOverview'
 
 import Private from './components/Private'
 import ResetPassword from './components/ResetPassword'
@@ -48,13 +51,14 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
-
               <PublicRoute path="/login" component={Login}/>
               <Route path="/login/:user" component={Login}/>
               <PublicRoute path="/signup"><Signup/></PublicRoute>
               <PrivateRoute path="/private" exact component={Private}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
               <Route path="/sitemanager"><SiteManagerHomepage/></Route>
+              <Route path="/routes"><RouteHomePage/></Route>
+              <Route exact path="/volunteer"><VolunteerOverview/></Route>
               <Route><Home/></Route>
           </Switch>
       </Router>

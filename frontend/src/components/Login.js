@@ -15,7 +15,6 @@ class Login extends Component {
             userType: this.props.match.params.user ? this.props.match.params.user : "",
             email: "",
             password: "",
-            userType: this.props.match.params.user ? this.props.match.params.user : "",
             error: false
         };
     }
@@ -94,7 +93,7 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status == 404) {
+            if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
@@ -117,7 +116,7 @@ class Login extends Component {
       
         return (
             <div className="login-form">
-                <h1>
+                <h1 id="title">
                     {window.location.pathname.split('/')[2] === "site-manager" ? "Site Manager " : ""} 
                     {window.location.pathname.split('/')[2] === "data-entry" ? "Data Entry " : ""}
                     {window.location.pathname.split('/')[2] === "volunteer" ? "Volunteer " : ""}
@@ -149,7 +148,6 @@ class Login extends Component {
                 <button id="signin-button" onClick={this.login}>Log In</button>
                 <Link to="/reset-password">Forgot Password?</Link>
                 {this.state.error && <div className="error">Invalid email or password</div>}
-                <button id="signin-button" onClick={this.login}>Log In</button>
             </div>
           )}
     }
