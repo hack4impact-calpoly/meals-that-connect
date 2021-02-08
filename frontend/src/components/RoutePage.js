@@ -155,8 +155,6 @@ const RoutePage = (props) => {
 
   const data = React.useMemo(() => props.data, [])
 
-  console.log(data)
-
   return (
   <Styles>
     <RouteTable columns={columns} data={data}/>
