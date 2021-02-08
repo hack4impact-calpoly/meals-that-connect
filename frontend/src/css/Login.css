@@ -1,4 +1,4 @@
-h2 {
+h1 {
     font-family: 'Mulish', sans-serif;
     font-weight: 400;
     color: black;
@@ -13,8 +13,9 @@ input {
     box-sizing: border-box;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
     font-family: 'Mulish', sans-serif;
+    font-size: 20px;
 }
 
 input[type=checkbox] {
@@ -25,7 +26,7 @@ input[type=checkbox] {
 .password-security {
     font-family: 'Mulish', sans-serif;
     font-weight: 400;
-    font-size: medium;
+    font-size: 20px;
     color: black;
     display: block;
     margin: 10px;
@@ -65,4 +66,35 @@ input[type=checkbox] {
     flex-direction: column;
     color: black;
     font-size: 20px;
+}
+
+#cta-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 15px;
+    align-self: center;
+}
+
+#site-manager {
+    margin-right: 20px;
+}
+
+#data-entry {
+    margin-right: 20px;
+}
+
+input[type=radio] {
+    -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+    transform: scale(1.5);
+    margin-right: 15px;
+}
+
+label {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: black;
+    display: inline;
+    margin: 5px;
 }

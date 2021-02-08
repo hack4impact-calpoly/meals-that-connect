@@ -1,0 +1,21 @@
+
+#overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+#site-manager-header {
+    margin-bottom: 0px;
+    margin-top: 200px;
+}
+
+#main {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    width: 100%;
+    margin-left: 100px;
+    margin-top: 20px;
+    margin-right: 100px;
+}
