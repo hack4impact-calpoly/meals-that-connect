@@ -82,6 +82,7 @@ const VolunteerOverviewData = () => {
             },
             { Header: 'Email',
             accessor: 'email',
+            width: 250
             },
             { Header: 'Using Digital System?',
             accessor: 'digitalSystem',
@@ -125,6 +126,23 @@ const VolunteerOverviewData = () => {
         []
     )
     const volunteerData = [
+      {
+        firstName: "josh",
+        lastName: "crodescu",
+        email: "joshcodrescu@email.com",
+        password: "jcpassword",
+        org: "SLO",
+        phoneNumber: "123-456-7890",
+        notes: "first person",
+        digitalSystem: false,
+        completedOrientation: true,
+        role: "driver",
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: false
+      },
       {
         firstName: "josh",
         lastName: "crodescu",
