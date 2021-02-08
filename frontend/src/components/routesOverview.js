@@ -6,14 +6,14 @@ class routesOverview extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { isSticky: false};
+        this.state = { };
     }
 
     render() {
         return (
             <div id="route-sidebar">
-                <p><b>Routes Overview</b></p>
-                <hr></hr>
+                <p id="route-title"><b>Routes Overview</b></p>
+                <hr/>
                 <nav className="route-links">
                     <Link to="routes#1">
                         <button type="button" className="route">Route 1</button>

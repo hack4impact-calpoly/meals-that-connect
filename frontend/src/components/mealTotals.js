@@ -4,11 +4,10 @@ import { useTable } from 'react-table'
 import "../css/mealTotals.css"
 
 const Styles = styled.div`
-  margin-left: 30px;
-  width: 90%;
+  margin-left: 300px;
   table {
     border-spacing: 0;
-    width: 100%; 
+    width: 95%; 
     border: solid 2px #142850;
     tr {  
       :last-child {
@@ -22,6 +21,7 @@ const Styles = styled.div`
         background: #b7f8ac;
         color: black;
         border: solid 1px #142850;
+        text-align: center;
         textAlign: column.textAlign;
         fontWeight: bold;
         minWidth: 80px;

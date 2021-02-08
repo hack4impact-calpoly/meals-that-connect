@@ -17,14 +17,14 @@ const Styles = styled.div`
    }
    th,
    td {
-     padding: 0.5rem;
-     border-bottom: 1px solid black;
-     border-right: 1px solid black;
-     font-size: 20px;
-
-     :last-child {
-       border-right: 0;
-     }
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+      font-size: 20px;
+      text-align: center;
+      :last-child {
+        border-right: 0;
+      }
    }
    th {
      background: #D4D4D4;
