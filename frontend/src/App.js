@@ -52,13 +52,13 @@ class App extends Component {
           <NavBar/>
           <Switch>
               <PublicRoute path="/login" component={Login}/>
-              <Route path="/login/:user" component={Login}/>
-              <PublicRoute path="/signup"><Signup/></PublicRoute>
+              <PublicRoute path="/login/:user" component={Login}/>
+              <PublicRoute path="/signup" component={Signup}/>
               <PrivateRoute path="/private" exact component={Private}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
-              <Route path="/sitemanager"><SiteManagerHomepage/></Route>
-              <Route path="/routes"><RouteHomePage/></Route>
-              <Route exact path="/volunteer"><VolunteerOverview/></Route>
+              <PrivateRoute path="/sitemanager" component={SiteManagerHomepage}/>
+              <PrivateRoute path="/routes" component={RouteHomePage}/>
+              <PrivateRoute exact path="/volunteer" component={VolunteerOverview}/>
               <Route><Home/></Route>
           </Switch>
       </Router>

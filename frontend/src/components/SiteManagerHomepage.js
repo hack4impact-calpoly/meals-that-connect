@@ -42,14 +42,16 @@ class SiteManagerHomepage extends Component {
 
     render() {
         return (
-            <div id="overview">
-                <h1 id="site-manager-header">Site Manager Overview</h1>
-                <div id="main">
+            <div className="site-manager-page">
+                <h1 className="site-manager-page-header">Site Manager Overview</h1>
+                <div>
                     <RoutesOverview/>
-                    {this.state.totals.length >= 10 ? <MealTotals data={this.state.totals}/> : 
-                    <div>
-                        <Spinner animation="border" role="status" />
-                    </div>}
+                    <div className="site-manager-container">
+                        {this.state.totals.length >= 10 ? <MealTotals data={this.state.totals}/> : 
+                        <div>
+                            <Spinner animation="border" role="status" />
+                        </div>}
+                    </div>
                 </div>
             </div>
         );

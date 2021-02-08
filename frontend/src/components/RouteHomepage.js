@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RoutePage from './RoutePage';
 import env from "react-dotenv";
+import RoutesOverview from './routesOverview';
 
 class RouteHomepage extends Component {
     constructor(props) {
@@ -41,18 +42,22 @@ class RouteHomepage extends Component {
         let routes = [1,2,3,4,5,6,7,8,9]
 
         return (
-            
-            <div style={{marginTop: "200px"}}>
-                <div>Routes Homepage</div>
-                {this.state.clients.map((route, i) =>{
-					return (
-                        <section style={{paddingBottom: "500px"}}>
-                            <a style={{paddingTop: "150px"}} id={String(routes[i])}></a>
-                            <RoutePage routenum={routes[i]} data={route}></RoutePage>
-                        </section>
-                            );
-				})}
+            <div className="site-manager-page">
+                <h1 className="site-manager-page-header">Routes Page</h1>
+                <div>
+                    <RoutesOverview/>
+                    <div className="site-manager-container">
+                        {this.state.clients.map((route, i) =>{
+                            return (
+                                <section>
+                                    <a id={String(routes[i])}></a>
+                                    <RoutePage routenum={routes[i]} data={route}></RoutePage>
+                                </section>
+                        );})}
+                    </div>
+                </div>
             </div>
+           
         );
     }
 }
