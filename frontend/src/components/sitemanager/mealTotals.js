@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import "../../css/MealTotals.css"
+import "../../css/mealTotals.css"
 
 const Styles = styled.div`
   margin-left: 30px;
