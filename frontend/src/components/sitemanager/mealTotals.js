@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import "../../css/mealTotals.css"
+import "../../css/MealTotals.css"
 
 const Styles = styled.div`
   margin-left: 30px;
@@ -24,6 +24,7 @@ const Styles = styled.div`
         border: solid 1px #142850;
         textAlign: column.textAlign;
         fontWeight: bold;
+        text-align: center;
         minWidth: 80px;
         padding: 3px 20px;
         font-size: 24px;

@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable, useBlockLayout } from 'react-table'
+import '../css/volunteerTable.css'
+import env from "react-dotenv";
 
 const Styles = styled.div`
  table {
@@ -21,188 +23,211 @@ const Styles = styled.div`
      border-right: 1px solid black;
      font-size: 20px;
 
-     :last-child {
-       border-right: 0;
-     }
-   }
-   th {
-     padding: 0.5rem;
-     background: #D4D4D4;
-     color: black;
-     fontWeight: bold;
-   }
- }
+      :last-child {
+        border-right: 0;
+      }
+    }
+    th {
+      padding: 0.5rem;
+      background: #D4D4D4;
+      color: black;
+      fontWeight: bold;
+    }
+  }
 `
 
-// Create an editable cell renderer
-const EditableCell = ({
-  value: initialValue,
-  row: { index },
-  column: { id },
-  updateMyData, // This is a custom function that we supplied to our table instance
-}) => {
+const EditableCell = (cellProperties, width) => {
   // We need to keep and update the state of the cell normally
-  const [value, setValue] = React.useState(initialValue)
-
-  const onChange = e => {
-    setValue(e.target.value)
-  }
-
-  // We'll only update the external data when the input is blurred
-  const onBlur = () => {
-    updateMyData(index, id, value)
-  }
-
-  // If the initialValue is changed external, sync it up with our state
-  React.useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  return <input value={value} onChange={onChange} onBlur={onBlur} />
+  //const [value, setValue] = React.useState(initialValue)
+  const [value, setValue] = React.useState(cellProperties["value"])
+  console.log(cellProperties)
+  return <span><input style={{width: (width - 1.25)}} value={value} 
+  onChange={e => setValue(e.target.value)}/></span>
 }
 
-const VolunteerOverviewData = () => {
-    const columns = React.useMemo(
-        () => [
-        {
-        Header: 'Volunteer Overview',
-        columns: [
-            { Header: 'First Name',
-            accessor: 'firstName'
-            },
-            { Header: 'Last Name',
-            accessor: 'lastName' 
-            },
-            { Header: 'Org.',
-            accessor: 'org',
-            width: 100
-            },
-            { Header: 'Phone',
-            accessor: 'phoneNumber',
-            },
-            { Header: 'Email',
-            accessor: 'email',
-            width: 300
-            },
-            { Header: 'Using Digital System?',
-            accessor: 'digitalSystem',
-            width: 100
-            },
-            { Header: 'M',
-            accessor: 'monday',
-            width: 70
-            },
-            { Header: 'T',
-            accessor: 'tuesday',
-            width: 70
-            },
-            { Header: 'W',
-            accessor: 'wednesday',
-            width: 70
-            },
-            { Header: 'Th',
-            accessor: 'thursday',
-            width: 70
-            },
-            { Header: 'F',
-            accessor: 'friday',
-            width: 70
-            },
-            { Header: 'Volunteer Certificate Signed?',
-            accessor: 'completedOrientation',
-            width: 130
-            },
-            { Header: 'Role',
-            accessor: 'role',
-            width: 130
-            },
-            { Header: 'Notes',
-            accessor: 'notes',
-            },
-            
-        ],},
-        
-        ],
-        []
-    )
-    const volunteerData = [
+const VolunteerOverviewData = (props) => {
+  const columns = React.useMemo(
+      () => [
       {
-        firstName: "josh",
-        lastName: "crodescu",
-        email: "joshcodrescu@email.com",
-        password: "jcpassword",
-        org: "SLO",
-        phoneNumber: "123-456-7890",
-        notes: "first person",
-        digitalSystem: false,
-        completedOrientation: true,
-        role: "driver",
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: false
-      },
-      {
-        firstName: "josh",
-        lastName: "crodescu",
-        email: "joshcodrescu@email.com",
-        password: "jcpassword",
-        org: "SLO",
-        phoneNumber: "123-456-7890",
-        notes: "first person",
-        digitalSystem: false,
-        completedOrientation: true,
-        role: "driver",
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: false
-      }
-    ]
-
-    
-  const [data, setData] = React.useState(() => volunteerData)
-  const [originalData] = React.useState(data)
-
-  // We need to keep the table from resetting the pageIndex when we
-  // Update data. So we can keep track of that flag with a ref.
-
-  // When our cell renderer calls updateMyData, we'll use
-  // the rowIndex, columnId and new value to update the
-  // original data
-  const updateMyData = (rowIndex, columnId, value) => {
-    // We also turn on the flag to not reset the page
-    setData(old =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex],
-            [columnId]: value,
+      Header: 'Volunteer Overview',
+      columns: [
+          { Header: 'First Name',
+          accessor: 'firstName',
+          width: 200,
+          Cell: (cellProperties) => EditableCell(cellProperties, 200) 
+            // var changedFlag = false;
+            // const email = cellProperties["email"]
+            // const key = cellProperties["column"]["id"]
+            // console.log(cellProperties)
+            // const [value, setValue] = React.useState(cellProperties["value"])
+            // return (
+            //     <input id="name" value={value} onChange={e => setValue(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/>
+            // )
+          },
+          { Header: 'Last Name',
+          accessor: 'lastName',
+          Cell: (cellProperties) => EditableCell(cellProperties, 200) 
+          },
+          { Header: 'Org.',
+          accessor: 'org',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
           }
-        }
-        return row
-      })
-    )
-  }
+          },
+          { Header: 'Phone',
+          accessor: 'phoneNumber',
+          width: 300,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="contact" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'Email',
+          accessor: 'email',
+          width: 300,
+          Cell: (cellProperties) => {
+            const [value] = React.useState(cellProperties["value"])
+            return (
+              <input id="contact" value={value} readOnly/>
+            )
+          }
+          },
+          { Header: 'Using Digital System?',
+          accessor: 'digitalSystem',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'M',
+          accessor: 'monday',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'T',
+          accessor: 'tuesday',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'W',
+          accessor: 'wednesday',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'Th',
+          accessor: 'thursday',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'F',
+          accessor: 'friday',
+          width: 100,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'Volunteer Certificate Signed?',
+          accessor: 'completedOrientation',
+          width: 130,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="role" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'Role',
+          accessor: 'role',
+          width: 130,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="role" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          { Header: 'Notes',
+          accessor: 'notes',
+          width: 270,
+          Cell: (cellProperties) => {
+            const [value, setValue] = React.useState(cellProperties["value"])
+            return (
+              <input id="contact" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
+            )
+          }
+          },
+          
+      ],},
+      
+      ],
+      []
+  )
 
-  console.log(data)
+  const updateDatabase = async (email, key, value, changed) => {
+    if (changed !== false) {
+      const updateData = {
+        email: email,
+        key: key,
+        value: value
+      }
+      await fetch(env.backendURL + 'volunteers/insertURL', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+      })
+    }
+    return 0
+  }
+  
+  const data = React.useMemo(() => props.data, []);
 
   return (
   <Styles>
-    <VolunteerOverviewTable columns={columns} data={data} updateMyData={updateMyData}/>
+    <VolunteerOverviewTable columns={columns} data={data}/>
   </Styles>
   )
 }
 
-function VolunteerOverviewTable({ columns, data, updateMyData }) {
+function VolunteerOverviewTable({ columns, data}) {
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 10,
       width: 200,
-      maxWidth: 350,
-      Cell: EditableCell
+      maxWidth: 300,
     }),
     []
   );
@@ -216,7 +241,6 @@ function VolunteerOverviewTable({ columns, data, updateMyData }) {
     columns,
     data,
     defaultColumn,
-    updateMyData
     },
     useBlockLayout
     )
@@ -239,7 +263,7 @@ function VolunteerOverviewTable({ columns, data, updateMyData }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map(cell => {
-              return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              return <td>{cell.render('Cell', {email: row["original"]["email"], value: cell["value"]})}</td>
             })}
           </tr>
         )

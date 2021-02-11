@@ -157,7 +157,7 @@ class Signup extends Component {
         return (
             <div>
                 <main id="signup-form">
-                    <h2 id="title">Sign up</h2>
+                    <h1 className="login-header">Sign up</h1>
                     <form onSubmit={this.addUser}>
                     <div id="cta-type">
                         <div id="site-manager">
