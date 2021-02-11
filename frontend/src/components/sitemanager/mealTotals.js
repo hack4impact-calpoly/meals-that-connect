@@ -24,6 +24,7 @@ const Styles = styled.div`
         border: solid 1px #142850;
         textAlign: column.textAlign;
         fontWeight: bold;
+        text-align: center;
         minWidth: 80px;
         padding: 3px 20px;
         font-size: 24px;
