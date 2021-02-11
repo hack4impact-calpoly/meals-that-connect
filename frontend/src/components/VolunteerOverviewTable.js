@@ -37,178 +37,19 @@ const Styles = styled.div`
   }
 `
 
-const EditableCell = ({
-  cellProperties,
-  value: initialValue,
-  row: { index },
-  column: { id },
-}) => {
+const EditableCell = (cellProperties) => {
   // We need to keep and update the state of the cell normally
-  const [value, setValue] = React.useState(initialValue)
-  console.log(cellProperties)
-  return <input value={value}/>
-}
+  var changedFlag = false;
+  const email = cellProperties["email"]
+  const key = cellProperties["column"]["id"]
+  const [value, setValue] = React.useState(cellProperties["value"])
 
-const VolunteerOverviewData = (props) => {
-  const columns = React.useMemo(
-      () => [
-      {
-      Header: 'Volunteer Overview',
-      columns: [
-          { Header: 'First Name',
-          accessor: 'firstName',
-          Cell: (cellProperties) => { EditableCell(cellProperties) }
-            // var changedFlag = false;
-            // const email = cellProperties["email"]
-            // const key = cellProperties["column"]["id"]
-            // console.log(cellProperties)
-            // const [value, setValue] = React.useState(cellProperties["value"])
-            // return (
-            //     <input id="name" value={value} onChange={e => setValue(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/>
-            // )
-          },
-          { Header: 'Last Name',
-          accessor: 'lastName',
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-                <input id="name" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Org.',
-          accessor: 'org',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Phone',
-          accessor: 'phoneNumber',
-          width: 300,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="contact" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Email',
-          accessor: 'email',
-          width: 300,
-          Cell: (cellProperties) => {
-            const [value] = React.useState(cellProperties["value"])
-            return (
-              <input id="contact" value={value} readOnly/>
-            )
-          }
-          },
-          { Header: 'Using Digital System?',
-          accessor: 'digitalSystem',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'M',
-          accessor: 'monday',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'T',
-          accessor: 'tuesday',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'W',
-          accessor: 'wednesday',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Th',
-          accessor: 'thursday',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'F',
-          accessor: 'friday',
-          width: 100,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="data" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Volunteer Certificate Signed?',
-          accessor: 'completedOrientation',
-          width: 130,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="role" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Role',
-          accessor: 'role',
-          width: 130,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="role" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          { Header: 'Notes',
-          accessor: 'notes',
-          width: 270,
-          Cell: (cellProperties) => {
-            const [value, setValue] = React.useState(cellProperties["value"])
-            return (
-              <input id="contact" value={value} onChange={e => setValue(e.target.value)} onBlur={updateDatabase()}/>
-            )
-          }
-          },
-          
-      ],},
-      
-      ],
-      []
-  )
-
-  const updateDatabase = async (email, key, value, changed) => {
+  const updateDatabase = async (emailD, keyD, valueD, changed) => {
     if (changed !== false) {
       const updateData = {
-        email: email,
-        key: key,
-        value: value
+        email: emailD,
+        key: keyD,
+        value: valueD
       }
       await fetch(env.backendURL + 'volunteers/insertURL', {
           method: 'POST',
@@ -220,6 +61,92 @@ const VolunteerOverviewData = (props) => {
     }
     return 0
   }
+
+  return (
+      <input value={value} onChange={e => setValue(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/>
+  )
+}
+
+const VolunteerOverviewData = (props) => {
+  const columns = React.useMemo(
+      () => [
+      {
+      Header: 'Volunteer Overview',
+      columns: [
+          { Header: 'First Name',
+          accessor: 'firstName',
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Last Name',
+          accessor: 'lastName',
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Org.',
+          accessor: 'org',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Phone',
+          accessor: 'phoneNumber',
+          width: 300,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Email',
+          accessor: 'email',
+          width: 300,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Using Digital System?',
+          accessor: 'digitalSystem',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'M',
+          accessor: 'monday',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'T',
+          accessor: 'tuesday',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'W',
+          accessor: 'wednesday',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Th',
+          accessor: 'thursday',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'F',
+          accessor: 'friday',
+          width: 100,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Volunteer Certificate Signed?',
+          accessor: 'completedOrientation',
+          width: 130,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Role',
+          accessor: 'role',
+          width: 130,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          { Header: 'Notes',
+          accessor: 'notes',
+          width: 270,
+          Cell: (cellProperties) => EditableCell(cellProperties)
+          },
+          
+      ],},
+      
+      ],
+      []
+  )
   
   const data = React.useMemo(() => props.data, []);
 
@@ -230,7 +157,7 @@ const VolunteerOverviewData = (props) => {
   )
 }
 
-function VolunteerOverviewTable({ columns, data}) {
+function VolunteerOverviewTable({ columns, data }) {
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 10,
