@@ -34,7 +34,7 @@ const Styles = styled.div`
  }
 `
 
-const RoutePage = (props) => {
+const RouteTable = (props) => {
   const columns = React.useMemo(
     () => [
     {
@@ -157,12 +157,12 @@ const RoutePage = (props) => {
 
   return (
   <Styles>
-    <RouteTable columns={columns} data={data}/>
+    <Table columns={columns} data={data}/>
   </Styles>
   )
 }
 
-function RouteTable({ columns, data }) {
+function Table({ columns, data }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -201,4 +201,4 @@ function RouteTable({ columns, data }) {
  )
 }
 
-export default RoutePage;
+export default RouteTable;

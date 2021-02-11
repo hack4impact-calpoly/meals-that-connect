@@ -4,7 +4,7 @@ import { useTable, useBlockLayout } from 'react-table'
 
 const Styles = styled.div`
  table {
-   margin-top: 100px;
+   margin-top: 30px;
    border-spacing: 0;
    border: 1px solid black;
    font-family: 'Mulish', sans-serif;

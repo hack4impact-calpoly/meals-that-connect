@@ -13,10 +13,12 @@ class VolunteerOverview extends Component {
 
     render() {
         return (
-            <div style={{marginTop: "100px"}} id="overview">
-                <h2>Volunteer Overview</h2>
+            <div className="site-manager-page">
+            <h1 className="site-manager-page-header">Volunteer Overview</h1>
+            <div className="site-manager-container2">
                 <VolunteerOverviewTable/>
             </div>
+        </div>
         );
     }
 }
