@@ -4,7 +4,9 @@ const router = express.Router();
 const Volunteer = require("../models/Volunteer")
 const Hours = require("../models/hours")
 
-router.post('/', async (req, res) => {
+// Takes in a volunteer's email and the corresponding category that is being
+// updated and updates the database
+router.post('/OverviewTable', async (req, res) => {
    const {email, key, data} = req.body
 
    var query = {}
@@ -22,7 +24,9 @@ router.post('/', async (req, res) => {
    })
 });
 
-router.post('/', async (req, res) => {
+// Takes in first and last name to find the correct volunteer in the
+// database and updates their hours
+router.post('/Hours', async (req, res) => {
    const {firstName, lastName, key, data} = req.body
 
    var query = {}
