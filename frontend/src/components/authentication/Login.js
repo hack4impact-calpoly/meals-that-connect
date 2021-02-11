@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-
 import '../css/Login.css';
 import '../css/Signup.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
-import {isAuthenticated} from './LoggedUser';
 import env from "react-dotenv";
 
 
@@ -17,27 +15,17 @@ class Login extends Component {
             userType: this.props.match.params.user ? this.props.match.params.user : "",
             email: "",
             password: "",
-            userType: this.props.match.params.user ? this.props.match.params.user : "",
             error: false
         };
     }
 
-    //calls authenticate which allows user to sign in and view private page
-    login = () => {
-      isAuthenticated.login(() =>
-        this.setState({ RedirectLoggedUser: true })); // set redirect from login page to private to true
-        this.storeLoginUser();
-        console.log(localStorage.getItem("time"));
-        //console.log()
-        //console.log()
-    }
-
-    storeLoginUser = () => {
+    storeUser = () => {
         const date = new Date();
-        localStorage.setItem("userEmail", document.getElementById("email"));
-        localStorage.setItem("userType", this.userType)
-        localStorage.setItem("site", "login");
+        localStorage.setItem("userEmail", this.state.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("site", "SLO");
         localStorage.setItem("time", date);
+        localStorage.setItem("isLoggedIn", true);
     }
 
     handleChange = (e) => {
@@ -96,10 +84,11 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status == 404) {
+            if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
+                _this.storeUser()
                 _this.props.history.push("/sitemanager");
             }
         })
@@ -119,7 +108,7 @@ class Login extends Component {
 
         return (
             <div className="login-form">
-                <h1>
+                <h1 id="title">
                     {window.location.pathname.split('/')[2] === "site-manager" ? "Site Manager " : ""} 
                     {window.location.pathname.split('/')[2] === "data-entry" ? "Data Entry " : ""}
                     {window.location.pathname.split('/')[2] === "volunteer" ? "Volunteer " : ""}
@@ -152,7 +141,6 @@ class Login extends Component {
                 <button id="signin-button" onClick={this.login}>Log In</button>
                 <Link to="/reset-password">Forgot Password?</Link>
                 {this.state.error && <div className="error">Invalid email or password</div>}
-                <button id="signin-button" onClick={this.login}>Log In</button>
             </div>
           )}
     }
