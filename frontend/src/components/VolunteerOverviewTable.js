@@ -5,24 +5,23 @@ import '../css/volunteerTable.css'
 import env from "react-dotenv";
 
 const Styles = styled.div`
-  table {
-    margin-top: 100px;
-    border-spacing: 0;
-    border: 1px solid black;
-    font-family: 'Mulish', sans-serif;
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-    th,
-    td {
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-      text-align: center;
-      font-size: 20px;
+ table {
+   margin-top: 30px;
+   border-spacing: 0;
+   border: 1px solid black;
+   font-family: 'Mulish', sans-serif;
+   tr {
+     :last-child {
+       td {
+         border-bottom: 0;
+       }
+     }
+   }
+   th,
+   td {
+     border-bottom: 1px solid black;
+     border-right: 1px solid black;
+     font-size: 20px;
 
       :last-child {
         border-right: 0;
@@ -37,15 +36,22 @@ const Styles = styled.div`
   }
 `
 
-const EditableCell = (cellProperties) => {
+const EditableCell = (cellProperties, width) => {
   // We need to keep and update the state of the cell normally
   var changedFlag = false;
-  const email = cellProperties["email"]
-  const key = cellProperties["column"]["id"]
-  const [value, setValue] = React.useState(cellProperties["value"])
+  const email = cellProperties["email"];
+  const key = cellProperties["column"]["id"];
+  const [value, setValue] = React.useState(cellProperties["value"]);
+
+  const handleChange = (value) => {
+    setValue(value);
+    changedFlag = true;
+  }
 
   const updateDatabase = async (emailD, keyD, valueD, changed) => {
+    console.log("ohno")
     if (changed !== false) {
+      console.log("nice")
       const updateData = {
         email: emailD,
         key: keyD,
@@ -63,7 +69,7 @@ const EditableCell = (cellProperties) => {
   }
 
   return (
-      <input value={value} onChange={e => setValue(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/>
+      <span><input style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/></span>
   )
 }
 
@@ -75,71 +81,71 @@ const VolunteerOverviewData = (props) => {
       columns: [
           { Header: 'First Name',
           accessor: 'firstName',
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 200)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 200)
           },
           { Header: 'Org.',
           accessor: 'org',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 101)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
           width: 300,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 300)
           },
           { Header: 'Email',
           accessor: 'email',
           width: 300,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 299)
           },
           { Header: 'Using Digital System?',
           accessor: 'digitalSystem',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 101)
           },
           { Header: 'M',
           accessor: 'monday',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 101)
           },
           { Header: 'T',
           accessor: 'tuesday',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 100)
           },
           { Header: 'W',
           accessor: 'wednesday',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 100)
           },
           { Header: 'Th',
           accessor: 'thursday',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 100)
           },
           { Header: 'F',
           accessor: 'friday',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 101)
           },
           { Header: 'Volunteer Certificate Signed?',
           accessor: 'completedOrientation',
           width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 130)
           },
           { Header: 'Role',
           accessor: 'role',
           width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 130)
           },
           { Header: 'Notes',
           accessor: 'notes',
           width: 270,
-          Cell: (cellProperties) => EditableCell(cellProperties)
+          Cell: (cellProperties) => EditableCell(cellProperties, 270)
           },
           
       ],},
@@ -162,7 +168,7 @@ function VolunteerOverviewTable({ columns, data }) {
     () => ({
       minWidth: 10,
       width: 200,
-      maxWidth: 270,
+      maxWidth: 300,
     }),
     []
   );
