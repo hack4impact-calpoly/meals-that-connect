@@ -43,9 +43,8 @@ const EditableCell = (cellProperties, width) => {
   const key = cellProperties["column"]["id"];
   const [value, setValue] = React.useState(cellProperties["value"]);
 
-  const handleChange = (value) => {
-    setValue(value);
-    changedFlag = true;
+  const handleChange = (targetValue) => {
+    setValue(targetValue);
   }
 
   const updateDatabase = async (emailD, keyD, valueD, changed) => {
