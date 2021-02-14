@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 
+
 class VolunteerInfo extends Component{
 	constructor(props){
 		super(props);
@@ -24,30 +25,42 @@ class VolunteerInfo extends Component{
                 site: ""
             },
             comments: "Please enter any additional information you would like to include.",
+
             Monday: false,
             Tuesday: false,
             Wednesday: false,
             Thursday: false,
             Friday: false,
             Saturday: false,
-            Sunday: false
+            Sunday: false,
+
+            checkedBox: false
 		}
 
 	}
 
-	handleCheckedBox = (event) => {
+	handleChange = (event) => {
 		this.setState({ [event.target.name]: event.target.checked });
+	}
 
+	addDays = () => {
 		let daysArray = this.state.personalData.days;
 		console.log(daysArray);
-		console.log(event.target.name)
+		//console.log(event.target.name)
 
-		if (event.target.checked == true){
+		//if (event.target.checked == true){
 			//daysArray.push(event.target.label)
 
-		}
+		//}
 	}
 
+	submitInfo = () => {
+		this.addDays();
+	}
+
+	//to do:
+	// - make phone num, email, days required ~ throw error if not filled
+	// - display page if not filled by user
 	render(){
 
 		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
@@ -57,53 +70,110 @@ class VolunteerInfo extends Component{
 			<div className='VolunteerInfo-form'>
 				<h2 id="header"> Volunteer Additional Info </h2>
 				
-				<label for="phoneNumber">Phone Number: </label>
-				<label id="phone-label"> (Enter your phone number below in the following format: (###)###-####)</label>
-				<input type="text" id="phoneNumber" placeholder='Phone Number' size="22" required/> 
+				<form onSumbit={this.submitInfo}>
+					<label for="phoneNumber"> Phone Number:* </label>
+					<br/>
+					<label id="phone-label"> (Enter your phone number below in the following format: (###)###-####)</label>
+					<br/>
+					<input type="text" id="phoneNumber" placeholder='Phone Number' size="22" required/> 
 
-				<input type="text" id="email" placeholder="Email ex: example@gmail.com" size="50" required/>
+					<br/>
+					<label for="email"> Email:* </label>
+					<br/>
+					<input type="text" id="email" placeholder="Email ex: example@gmail.com" size="50" required/>
+
+					<div className="days-display">
+						<label id="days-text">Select Days Available:* </label>
+
+						<div className="days-row">
+
+							<label id="checkbox-display"> 
+								<input name="Monday"  
+								type="checkbox" 
+								checked={Monday} 
+								onChange={this.handleChange} />
+							 	Monday 
+							</label>
+
+							<label id="checkbox-display"> 
+								<input name="Tuesday"  
+								type="checkbox" 
+								checked={Tuesday} 
+								onChange={this.handleChange} />
+							 	Tuesday 
+							</label>
+
+							<label id="checkbox-display"> 
+								<input name="Wednesday"  
+								type="checkbox" 
+								checked={Wednesday} 
+								onChange={this.handleChange} />
+							 	Wednesday 
+							</label>
+
+							<label id="checkbox-display"> 
+								<input name="Thursday"  
+								type="checkbox" 
+								checked={Thursday} 
+								onChange={this.handleChange} />
+							 	Thursday 
+							</label>
+
+							<label id="checkbox-display"> 
+								<input name="Friday"  
+								type="checkbox" 
+								checked={Friday} 
+								onChange={this.handleChange} />
+							 	Friday 
+							</label>
+
+							<label id="checkbox-display"> 
+								<input name="Saturday"  
+								type="checkbox" 
+								checked={Saturday} 
+								onChange={this.handleChange} />
+							 	Saturday 
+							</label>
+
+							<label id="checkbox-display"> 
+								<input name="Sunday"  
+								type="checkbox" 
+								checked={Sunday} 
+								onChange={this.handleChange} />
+							 	Sunday
+							</label>
+
+
+						</div>
+					</div>
 				
 				<div className="days-display">
 				<FormControl required error={error} >
 					<FormLabel id="days-text"> Select Days Available: </FormLabel>
 					<FormGroup id="days-row">
-          			<FormControlLabel
-            			control={<Checkbox checked={Monday} onChange={this.handleCheckedBox} name="Monday" id="days-text" />}
-            		label="Monday"
-          			/>
-          			<FormControlLabel
-            		control={<Checkbox checked={Tuesday} onChange={this.handleCheckedBox} name="Tuesday" />}
-            		label="Tuesday"
-          			/>
-          			<FormControlLabel
-            		control={<Checkbox checked={Wednesday} onChange={this.handleCheckedBox} name="Wednesday" />}
-            		label="Wednesday"
-          			/>
-          			<FormControlLabel
-            		control={<Checkbox checked={Thursday} onChange={this.handleCheckedBox} name="Thursday" />}
-            		label="Thursday"
-          			/>
-          			<FormControlLabel
-            		control={<Checkbox checked={Friday} onChange={this.handleCheckedBox} name="Friday" />}
-            		label="Friday"
-          			/>
-          			<FormControlLabel
-            		control={<Checkbox checked={Saturday} onChange={this.handleCheckedBox} name="Saturday" />}
-            		label="Saturday"
-          			/>
-          			<FormControlLabel
-            		control={<Checkbox checked={Sunday} onChange={this.handleCheckedBox} name="Sunday" />}
-            		label="Sunday"
-          			/>
+          			
         			</FormGroup>
         			<FormHelperText>Select one or more days.</FormHelperText>
 				</FormControl>
 				</div>
 
+					<div className="comments">
+					<label> Comments  (not required): </label>
+					<br/>
+					<textarea
+					name="comments"
+					value={this.state.comments}
+					onChange={this.handleChange}
+					rows={5}
+					/>
+					<br/>
+					
+					</div>
 
-				<label> Comments(not required): </label>
-				<br/>
-				<textarea value={this.state.comments} />
+					<input type="submit" value="Submit"/>
+					
+
+				</form>
 				
 
 				
