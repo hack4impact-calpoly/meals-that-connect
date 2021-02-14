@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import '../css/Login.css';
-import '../css/Signup.css';
+import '../../css/Login.css';
+import '../../css/Signup.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import env from "react-dotenv";
 
