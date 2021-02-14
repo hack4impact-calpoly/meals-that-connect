@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react';
 import '../css/VolunteerInfo.css'
 import '../css/Signup.css';
 import '../css/Login.css'
+import env from "react-dotenv";
 
 //npm install @material-ui/core
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,8 +22,6 @@ class VolunteerInfo extends Component{
                 phoneNumber: "",
                 email: "",
                 days: [], //may change look at user type 
-                password: "",
-                site: ""
             },
             comments: "Please enter any additional information you would like to include.",
 
@@ -43,19 +42,48 @@ class VolunteerInfo extends Component{
 		this.setState({ [event.target.name]: event.target.checked });
 	}
 
-	addDays = () => {
-		let daysArray = this.state.personalData.days;
-		console.log(daysArray);
-		//console.log(event.target.name)
+	updateInfo = (event) => {
+		let personalData = this.state.personalData;
+        personalData[event.target.id] = event.target.value;
 
-		//if (event.target.checked == true){
-			//daysArray.push(event.target.label)
-
-		//}
+        this.setState({personalData: personalData});
 	}
 
-	submitInfo = () => {
+	addDays = () => {
+		let personalData = this.state.personalData;
+		let daysArray = personalData.days;
+		//console.log(daysArray);
+
+		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
+
+		if (Monday && !daysArray.includes("Monday")){ daysArray.push("Monday") }
+		if (Tuesday && !daysArray.includes("Tuesday")){ daysArray.push("Tuesday") }
+		if (Wednesday && !daysArray.includes("Wednesday")){ daysArray.push("Wednesday") }
+		if (Thursday && !daysArray.includes("Thursday")){ daysArray.push("Thursday") }
+		if (Friday && !daysArray.includes("Friday")){ daysArray.push("Friday") }
+		if (Saturday && !daysArray.includes("Saturday")){ daysArray.push("Saturday") }
+		if (Sunday && !daysArray.includes("Sunday")){ daysArray.push("Sunday") }
+
+		personalData.days = daysArray;
+
+		this.setState({ personalData: personalData });
+
+		//console.log(Monday);
+		//console.log(!daysArray.includes("Monday"));
+		//console.log(daysArray);
+	}
+
+	submitInfo = (event) => {
+		//make sure this works correctly!
 		this.addDays();
+
+		this.sendVolunteerInfo(this.state.personalData)
+
+		event.preventDefault();
+	}
+
+	sendVolunteerInfo = (info) => {
+
 	}
 
 	//to do:
@@ -75,12 +103,12 @@ class VolunteerInfo extends Component{
 					<br/>
 					<label id="phone-label"> (Enter your phone number below in the following format: (###)###-####)</label>
 					<br/>
-					<input type="text" id="phoneNumber" placeholder='Phone Number' size="22" required/> 
+					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="22" required/> 
 
 					<br/>
 					<label for="email"> Email:* </label>
 					<br/>
-					<input type="text" id="email" placeholder="Email ex: example@gmail.com" size="50" required/>
+					<input type="text" id="email" placeholder="Email ex: example@gmail.com" onChange={this.updateInfo} size="50" required/>
 
 					<div className="days-display">
 						<label id="days-text">Select Days Available:* </label>

@@ -34,6 +34,25 @@ router.post('/siteVolunHours', async (req, res) => {
   res.send(totals)
 })
 
+router.post('/updateVolunteerInfo', async (req, res) => {
+  const { phoneNumber, email, days } = req.body
+
+  Volunteer.findOne({'email': email}).then(function(err, volunteer) {
+      if (err) {
+      console.log(err)
+    }
+    else {
+      await Volunteer.updateOne(
+      {email: email},
+      {$set: {"phoneNumber": phoneNumber, "availability": days}}
+      )
+      res.send(volunteer)
+    }
+  })
+  console.log("works!")
+  res.send("works!")
+})
+
 async function getVolunteersBySite(siteName) {
   return await Volunteer.find({site: siteName}, function (err, volunteers) {
     if (err) {
