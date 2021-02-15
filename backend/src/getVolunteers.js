@@ -34,6 +34,7 @@ router.post('/siteVolunHours', async (req, res) => {
   res.send(totals)
 })
 
+
 router.post('/updateVolunteerInfo', async (req, res) => {
   const { phoneNumber, email, days, notes } = req.body
 
@@ -59,6 +60,7 @@ router.post('/updateVolunteerInfo', async (req, res) => {
   })
   console.log("works!")
 })
+
 
 async function getVolunteersBySite(siteName) {
   return await Volunteer.find({site: siteName}, function (err, volunteers) {
@@ -94,7 +96,7 @@ async function getVolunteerHours(site) {
 async function updateVolunteer(email, phoneNumber, days, notes) {
   await Volunteer.updateOne(
       {email: email},
-      {$set: {phoneNumber: phoneNumber, availability: days, notes: notes}}
+      {$set: {phoneNumber: phoneNumber, availability: days, notes: notes, completedInfo: true}}
       )
       console.log("set")
 }
