@@ -3,6 +3,7 @@ import '../css/VolunteerInfo.css'
 import '../css/Signup.css';
 import '../css/Login.css';
 import env from "react-dotenv";
+import { withRouter } from "react-router-dom";
 
 
 class VolunteerInfo extends Component{
@@ -22,8 +23,6 @@ class VolunteerInfo extends Component{
             Wednesday: false,
             Thursday: false,
             Friday: false,
-            Saturday: false,
-            Sunday: false,
 
             notCheckedBox: false
 
@@ -61,12 +60,13 @@ class VolunteerInfo extends Component{
 		let personalData = this.state.personalData;
 		//console.log(daysArray);
 
-		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
+		const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.state;
 
 		console.log(Monday)
 
-		let available = {M: Monday, T: Tuesday, W: Wednesday, Th: Thursday, F: Friday };
+		let available = {"M": Monday, "T": Tuesday, "W": Wednesday, "Th": Thursday, "F": Friday };
 		console.log(available);
+		console.log(available.M);
 
 		personalData.days = available;
 
@@ -75,9 +75,9 @@ class VolunteerInfo extends Component{
 	}
 
 	addInfo = (event) => {
-		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
+		const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.state;
 		//check if one box is checked
-  		const error = [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].filter((v) => v).length < 1;
+  		const error = [Monday, Tuesday, Wednesday, Thursday, Friday].filter((v) => v).length < 1;
   		console.log(error)
 
   		if (error === true) {
@@ -87,6 +87,7 @@ class VolunteerInfo extends Component{
 			//make sure this works correctly!
 			this.addDays();
 
+			console.log(this.state.personalData)
 			this.sendVolunteerInfo(this.state.personalData)
   		}
 
@@ -94,7 +95,22 @@ class VolunteerInfo extends Component{
 	}
 
 	sendVolunteerInfo = (info) => {
-
+		let _this = this
+        fetch(env.backendURL + '/updateVolunteerInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        })
+        .then((res) => {
+            if (res.status === 404) {
+                _this.setState({error: true})
+            }
+            else {
+                _this.props.history.push("/sitemanager");
+            }
+        })
 	}
 
 	//to do:
@@ -102,7 +118,7 @@ class VolunteerInfo extends Component{
 	// - display page if not filled by user 
 	render(){
 
-		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
+		const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.state;
 
 		return(
 			<div className='VolunteerInfo-form'>
@@ -164,21 +180,6 @@ class VolunteerInfo extends Component{
 							 	Friday 
 							</label>
 
-							<label id="checkbox-display"> 
-								<input name="Saturday"  
-								type="checkbox" 
-								checked={Saturday} 
-								onChange={this.handleChange} />
-							 	Saturday 
-							</label>
-
-							<label id="checkbox-display"> 
-								<input name="Sunday"  
-								type="checkbox" 
-								checked={Sunday} 
-								onChange={this.handleChange} />
-							 	Sunday
-							</label>
 
 
 						</div>
@@ -199,6 +200,7 @@ class VolunteerInfo extends Component{
 
 					</div>
 
+					{this.state.error && <div className="signup-error">Email not found</div>}
 					<input type="submit" value="Submit"/>
 				</form>
 				
@@ -207,4 +209,4 @@ class VolunteerInfo extends Component{
 	}
 }
 
-export default VolunteerInfo;
+export default withRouter(VolunteerInfo);
