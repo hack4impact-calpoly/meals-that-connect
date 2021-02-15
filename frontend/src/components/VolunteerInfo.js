@@ -96,7 +96,7 @@ class VolunteerInfo extends Component{
 
 	sendVolunteerInfo = (info) => {
 		let _this = this
-        fetch(env.backendURL + '/updateVolunteerInfo', {
+        fetch(env.backendURL + 'volunteers/updateVolunteerInfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -114,7 +114,6 @@ class VolunteerInfo extends Component{
 	}
 
 	//to do:
-	// - make phone num, email, days required ~ throw error if not filled (check)
 	// - display page if not filled by user 
 	render(){
 

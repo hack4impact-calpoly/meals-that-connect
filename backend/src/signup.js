@@ -22,14 +22,8 @@ router.post('/', async (req, res) =>{
           var doc;
           if (user == "volunteer") {
              const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability, completedInfo} = req.body  
-             console.log(driver)
-             console.log(site)
-             console.log(completedInfo)
-             console.log(phoneNumber)
-             console.log(availability)
              doc = new userType({ firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, completedInfo })
           } else {
-            console.log(site)
              doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
           }
           doc.save()

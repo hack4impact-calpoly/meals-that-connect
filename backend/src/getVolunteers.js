@@ -38,27 +38,22 @@ router.post('/siteVolunHours', async (req, res) => {
 router.post('/updateVolunteerInfo', async (req, res) => {
   const { phoneNumber, email, days, notes } = req.body
 
-  let user = await Volunteer.find({"email": email})
-  console.log(user)
+  let user = await Volunteer.findOne({"email": email})
 
-  console.log(days)
-
-
-  Volunteer.findOne({"email": email}).then(function(err, volunteer) {
-    if (err) {
-      console.log(err)
+  Volunteer.findOne({"email": email}).then(function(volunteer) {
+    //console.log("hello")
+    //console.log(notes)
+    if (!volunteer) {
       console.log("email not valid")
       res.status(404).send("email not valid")
     }
     else {
       updateVolunteer(email, phoneNumber, days, notes)
-      //res.send("set!")
       res.status(200).send("success")
       console.log("success")
       console.log(volunteer)
     }
   })
-  console.log("works!")
 })
 
 
