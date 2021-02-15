@@ -37,6 +37,11 @@ input[type=checkbox]{
     margin: 10px auto;
 }
 
+.checkbox-error {
+    font-size: 15px;
+    color: red;
+}
+
 .VolunteerInfo-form {
     display: flex;
     align-items: center;

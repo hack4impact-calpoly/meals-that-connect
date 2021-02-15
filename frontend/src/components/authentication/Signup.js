@@ -148,7 +148,12 @@ class Signup extends Component {
             }
             else {
                 _this.storeUser()
-                _this.props.history.push("/sitemanager");
+                if (this.state.userType === "volunteer"){
+                    _this.props.history.push("/volunteer-additional-info");
+                }
+                else{
+                     _this.props.history.push("/sitemanager");
+                }
             }
         })
     }

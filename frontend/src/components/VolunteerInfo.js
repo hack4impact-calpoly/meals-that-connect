@@ -1,17 +1,8 @@
 import React, { Component, useState } from 'react';
 import '../css/VolunteerInfo.css'
 import '../css/Signup.css';
-import '../css/Login.css'
+import '../css/Login.css';
 import env from "react-dotenv";
-
-//npm install @material-ui/core
-import { makeStyles } from '@material-ui/core/styles';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
 
 
 class VolunteerInfo extends Component{
@@ -21,7 +12,8 @@ class VolunteerInfo extends Component{
 			personalData: {
                 phoneNumber: "",
                 email: "",
-                days: [], //may change look at user type 
+                days: {},  
+                notes: ""
             },
             comments: "Please enter any additional information you would like to include.",
 
@@ -33,51 +25,70 @@ class VolunteerInfo extends Component{
             Saturday: false,
             Sunday: false,
 
-            checkedBox: false
+            notCheckedBox: false
+
 		}
+
+		//this.submitInfo = this.submitInfo.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.updateInfo = this.updateInfo.bind(this);
 
 	}
 
 	handleChange = (event) => {
 		this.setState({ [event.target.name]: event.target.checked });
+
+		if (event.target.name !== "comments"){
+			this.setState({notCheckedBox: false})
+		}
 	}
 
 	updateInfo = (event) => {
 		let personalData = this.state.personalData;
+		//console.log(event.target)
         personalData[event.target.id] = event.target.value;
 
         this.setState({personalData: personalData});
 	}
 
+	updateComments = (event) => {
+		this.handleChange(event);
+		this.updateInfo(event);
+		//console.log(this.state.personalData.notes)
+	}
+
 	addDays = () => {
 		let personalData = this.state.personalData;
-		let daysArray = personalData.days;
 		//console.log(daysArray);
 
 		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
 
-		if (Monday && !daysArray.includes("Monday")){ daysArray.push("Monday") }
-		if (Tuesday && !daysArray.includes("Tuesday")){ daysArray.push("Tuesday") }
-		if (Wednesday && !daysArray.includes("Wednesday")){ daysArray.push("Wednesday") }
-		if (Thursday && !daysArray.includes("Thursday")){ daysArray.push("Thursday") }
-		if (Friday && !daysArray.includes("Friday")){ daysArray.push("Friday") }
-		if (Saturday && !daysArray.includes("Saturday")){ daysArray.push("Saturday") }
-		if (Sunday && !daysArray.includes("Sunday")){ daysArray.push("Sunday") }
+		console.log(Monday)
 
-		personalData.days = daysArray;
+		let available = {M: Monday, T: Tuesday, W: Wednesday, Th: Thursday, F: Friday };
+		console.log(available);
+
+		personalData.days = available;
 
 		this.setState({ personalData: personalData });
 
-		//console.log(Monday);
-		//console.log(!daysArray.includes("Monday"));
-		//console.log(daysArray);
 	}
 
-	submitInfo = (event) => {
-		//make sure this works correctly!
-		this.addDays();
+	addInfo = (event) => {
+		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
+		//check if one box is checked
+  		const error = [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].filter((v) => v).length < 1;
+  		console.log(error)
 
-		this.sendVolunteerInfo(this.state.personalData)
+  		if (error === true) {
+  			this.setState({notCheckedBox: true})
+  		}
+  		else {
+			//make sure this works correctly!
+			this.addDays();
+
+			this.sendVolunteerInfo(this.state.personalData)
+  		}
 
 		event.preventDefault();
 	}
@@ -87,29 +98,27 @@ class VolunteerInfo extends Component{
 	}
 
 	//to do:
-	// - make phone num, email, days required ~ throw error if not filled
-	// - display page if not filled by user
+	// - make phone num, email, days required ~ throw error if not filled (check)
+	// - display page if not filled by user 
 	render(){
 
 		const { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = this.state;
-  		const error = [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].filter((v) => v).length < 1;
 
 		return(
 			<div className='VolunteerInfo-form'>
 				<h2 id="header"> Volunteer Additional Info </h2>
 				
-				<form onSumbit={this.submitInfo}>
+				<form onSubmit={this.addInfo}>
 					<label for="phoneNumber"> Phone Number:* </label>
 					<br/>
-					<label id="phone-label"> (Enter your phone number below in the following format: (###)###-####)</label>
-					<br/>
-					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="22" required/> 
-
+					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="12" required/> 
+					
 					<br/>
 					<label for="email"> Email:* </label>
 					<br/>
-					<input type="text" id="email" placeholder="Email ex: example@gmail.com" onChange={this.updateInfo} size="50" required/>
+					<input type="email" id="email" placeholder="Email ex: example@gmail.com" onChange={this.updateInfo} size="50" required/>
 
+					<br/>
 					<div className="days-display">
 						<label id="days-text">Select Days Available:* </label>
 
@@ -173,37 +182,25 @@ class VolunteerInfo extends Component{
 
 
 						</div>
+						{this.state.notCheckedBox && <div className="checkbox-error">Select one of more days</div>}
 					</div>
-				
-				<div className="days-display">
-				<FormControl required error={error} >
-					<FormLabel id="days-text"> Select Days Available: </FormLabel>
-					<FormGroup id="days-row">
-          			
-        			</FormGroup>
-        			<FormHelperText>Select one or more days.</FormHelperText>
-				</FormControl>
-				</div>
 
 					<div className="comments">
-					<label> Comments  (not required): </label>
-					<br/>
-					<textarea
-					name="comments"
-					value={this.state.comments}
-					onChange={this.handleChange}
-					rows={5}
-					/>
-					<br/>
-					
+						<label> Comments  (not required): </label>
+						<br/>
+						<textarea
+						id="notes"
+						name="comments"
+						value={this.state.comments}
+						onChange={this.updateComments}
+						rows={5}
+						/>
+						<br/>
+
 					</div>
 
 					<input type="submit" value="Submit"/>
-					
-
 				</form>
-				
-
 				
 			</div>
 		)

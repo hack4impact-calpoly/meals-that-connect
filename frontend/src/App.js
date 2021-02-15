@@ -47,7 +47,7 @@ class App extends Component {
               <PrivateRoute path="/routes" component={RouteHomePage}/>
               <PrivateRoute exact path="/volunteer" component={VolunteerOverview}/>
 
-              <PublicRoute exact path="/volunteer-additional-info" component={VolunteerInfo}/>
+              <PrivateRoute exact path="/volunteer-additional-info" component={VolunteerInfo}/>
 
               <Route><Home/></Route>
           </Switch>
