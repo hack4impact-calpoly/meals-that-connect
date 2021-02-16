@@ -49,7 +49,7 @@ router.post('/updateVolunteerInfo', async (req, res) => {
       updateVolunteer(email, phoneNumber, days, notes)
       res.status(200).send("success")
       console.log("success")
-      console.log(volunteer)
+      //console.log(volunteer)
     }
   })
 })
@@ -57,7 +57,7 @@ router.post('/updateVolunteerInfo', async (req, res) => {
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body
-  console.log(email)
+  
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
       console.log(volunteer)
@@ -65,12 +65,12 @@ router.post('/volunteerComplete', async(req, res) => {
     }
     else {
       if (volunteer.phoneNumber !== "0") {
-        res.status(200).send("success")
-        console.log(volunteer.phoneNumber)
+        res.status(200).send("Info completed")
+        console.log("Info completed")
       }
       else {
         res.status(404).send("not completedInfo")
-        console.log(volunteer.phoneNumber)
+        console.log("not completedInfo")
       }
     }
   })
