@@ -18,7 +18,13 @@ import ResetPassword from './components/authentication/ResetPassword'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
+<<<<<<< HEAD
 import { isAuthenticated } from './components/authentication/authenticationUtils.js';
+=======
+import VolunteerHours from './components/VolunteerHoursOverview'
+
+import { isLoggedIn, isAuthenticated, checkTime } from './components/LoggedUser'
+>>>>>>> volunteer_hours
 
 import './css/App.css';
 
@@ -39,11 +45,15 @@ class App extends Component {
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
+<<<<<<< HEAD
 
               <PrivateRoute path="/signout" exact component={Private}/>
               <PrivateRoute path="/sitemanager" component={SiteManagerHomepage}/>
               <PrivateRoute path="/routes" component={RouteHomePage}/>
               <PrivateRoute exact path="/volunteer" component={VolunteerOverview}/>
+=======
+              <Route path="/volunteer-hours"><VolunteerHours/></Route>
+>>>>>>> volunteer_hours
               <Route><Home/></Route>
           </Switch>
       </Router>
