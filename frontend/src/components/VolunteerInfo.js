@@ -121,7 +121,7 @@ class VolunteerInfo extends Component{
 
 		return(
 			<div className='VolunteerInfo-form'>
-				<h2 id="header"> Volunteer Additional Info </h2>
+				<h2 id="header"> Volunteer Additional Information </h2>
 				
 				<form onSubmit={this.addInfo}>
 					<label for="phoneNumber"> Phone Number:* </label>
