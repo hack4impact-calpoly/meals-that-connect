@@ -68,6 +68,25 @@ class Login extends Component {
         }
     }
 
+    volunteerInfoCheck = (user) => {
+        let _this = this
+        fetch(env.backendURL + 'volunteers/volunteerComplete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status === 404) {
+                _this.props.history.push("/volunteer-additional-info");
+            }
+            else {
+                _this.props.history.push("/sitemanager");
+            }
+        })
+    }
+
     login = () => {
         let _this = this
         const user = {
@@ -89,7 +108,12 @@ class Login extends Component {
             }
             else {
                 _this.storeUser()
-                _this.props.history.push("/sitemanager");
+                if (this.state.userType === "volunteer"){
+                    this.volunteerInfoCheck(user)
+                }
+                else {
+                    _this.props.history.push("/sitemanager");
+                }
             }
         })
     }

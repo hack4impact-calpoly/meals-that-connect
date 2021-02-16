@@ -41,8 +41,6 @@ router.post('/updateVolunteerInfo', async (req, res) => {
   let user = await Volunteer.findOne({"email": email})
 
   Volunteer.findOne({"email": email}).then(function(volunteer) {
-    //console.log("hello")
-    //console.log(notes)
     if (!volunteer) {
       console.log("email not valid")
       res.status(404).send("email not valid")
@@ -52,6 +50,28 @@ router.post('/updateVolunteerInfo', async (req, res) => {
       res.status(200).send("success")
       console.log("success")
       console.log(volunteer)
+    }
+  })
+})
+
+
+router.post('/volunteerComplete', async(req, res) => {
+  const { email } = req.body
+  console.log(email)
+  Volunteer.findOne({"email": email}).then(function(volunteer) {
+    if (!volunteer) {
+      console.log(volunteer)
+      res.status(404).send("email not valid")
+    }
+    else {
+      if (volunteer.completedInfo) {
+        res.status(200).send("success")
+        console.log(volunteer.completedInfo)
+      }
+      else {
+        res.status(404).send("not completedInfo")
+        console.log(volunteer.completedInfo)
+      }
     }
   })
 })
