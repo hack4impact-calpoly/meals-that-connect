@@ -1,4 +1,4 @@
-import styles from '../css/Component.module.css';
+import styles from '../../css/Component.module.css';
 
 function FrontBanner() {
   return (
