@@ -131,7 +131,7 @@ class Signup extends Component {
 
             phoneNumber: "0",
             availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
-            completedInfo: false
+        
         }
         this.signup(newVolunteer)
     }

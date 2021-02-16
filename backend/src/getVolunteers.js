@@ -64,13 +64,13 @@ router.post('/volunteerComplete', async(req, res) => {
       res.status(404).send("email not valid")
     }
     else {
-      if (volunteer.completedInfo) {
+      if (volunteer.phoneNumber !== "0") {
         res.status(200).send("success")
-        console.log(volunteer.completedInfo)
+        console.log(volunteer.phoneNumber)
       }
       else {
         res.status(404).send("not completedInfo")
-        console.log(volunteer.completedInfo)
+        console.log(volunteer.phoneNumber)
       }
     }
   })
@@ -111,7 +111,7 @@ async function getVolunteerHours(site) {
 async function updateVolunteer(email, phoneNumber, days, notes) {
   await Volunteer.updateOne(
       {email: email},
-      {$set: {phoneNumber: phoneNumber, availability: days, notes: notes, completedInfo: true}}
+      {$set: {phoneNumber: phoneNumber, availability: days, notes: notes }}
       )
       console.log("set")
 }
