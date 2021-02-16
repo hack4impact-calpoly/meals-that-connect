@@ -21,8 +21,8 @@ router.post('/', async (req, res) =>{
           const password = bcrypt.hashSync(req.body.password, 9);
           var doc;
           if (user == "volunteer") {
-             const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability, completedInfo} = req.body  
-             doc = new userType({ firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, completedInfo })
+             const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
+             doc = new userType({ firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
           } else {
              doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
           }
