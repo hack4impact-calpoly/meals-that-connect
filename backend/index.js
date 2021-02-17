@@ -12,11 +12,13 @@ var login = require('./src/login')
 var signup = require('./src/signup')
 var clients = require('./src/getClients')
 var tables = require('./src/volunteerTables')
+var volunteer = require('./src/getVolunteers')
 
 app.use('/login', login)
 app.use('/signup', signup)
 app.use('/clients', clients)
 app.use('/tables', tables)
+app.use('/volunteers', volunteer)
 
 app.get('/', (req, res) => {
     res.send('Hi from Meals that Connect!')

@@ -35,6 +35,6 @@ const clientSchema = new mongoose.Schema({
 
 })
 
-const Client = clientConnection.model("Client", clientSchema, "Clients")
+const Client = clientConnection.model("Clients", clientSchema, "Clients")
 
 module.exports = Client

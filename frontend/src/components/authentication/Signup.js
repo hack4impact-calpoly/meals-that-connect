@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/Signup.css';
+import '../../css/Signup.css';
 import env from "react-dotenv";
 import { withRouter } from "react-router-dom";
 
@@ -28,11 +28,12 @@ class Signup extends Component {
          };
     }
 
-    storeSignInUser = () => {
-        localStorage.setItem("userEmail", document.getElementById("email"));
-        localStorage.setItem("userType", this.userType)
-        localStorage.setItem("site", "signup");
+    storeUser = () => {
+        localStorage.setItem("userEmail", this.state.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("site", "SLO");
         localStorage.setItem("time", new Date());
+        localStorage.setItem("isLoggedIn", true);
     }
     
     // updates personal data
@@ -142,10 +143,11 @@ class Signup extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status == 404) {
+            if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
+                _this.storeUser()
                 _this.props.history.push("/sitemanager");
             }
         })
@@ -164,11 +166,11 @@ class Signup extends Component {
                         </div>
                         <div id="data-entry">
                             <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
-                            <label for="data-entry">Data Entry</label>
+                            <label for="dataEntry">Data Entry</label>
                         </div>
                         <div id="volunteer">
                             <input type="radio" id="volunteerID" name="cta" value="volunteer" onChange={this.changeUserType} checked={null}/>
-                            <label for="volunteer">Volunteer</label>
+                            <label for="volunteerID">Volunteer</label>
                         </div>
                     </div>
                         <div id="cta-type" style={{marginBottom: "0px"}}>
