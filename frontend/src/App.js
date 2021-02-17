@@ -11,6 +11,7 @@ import SiteManagerHomepage from './components/sitemanager/SiteManagerHomepage.js
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
 
 import VolunteerOverview from './components/VolunteerOverview'
+import VolunteerInfo from './components/VolunteerInfo'
 
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
@@ -36,6 +37,7 @@ class App extends Component {
           <NavBar/>
           <Switch>
               <PublicRoute path="/login" component={Login}/>
+
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
@@ -44,6 +46,9 @@ class App extends Component {
               <PrivateRoute path="/sitemanager" component={SiteManagerHomepage}/>
               <PrivateRoute path="/routes" component={RouteHomePage}/>
               <PrivateRoute exact path="/volunteer" component={VolunteerOverview}/>
+
+              <PrivateRoute exact path="/volunteer-additional-info" component={VolunteerInfo}/>
+
               <Route><Home/></Route>
           </Switch>
       </Router>
