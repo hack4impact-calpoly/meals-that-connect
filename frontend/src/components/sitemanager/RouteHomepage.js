@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import RoutePage from './RoutePage';
 import env from "react-dotenv";
+import RoutesNavbar from './RoutesNavbar';
 
-class SiteManagerHomepage extends Component {
+class RouteHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {  
@@ -41,14 +42,24 @@ class SiteManagerHomepage extends Component {
         let routes = [1,2,3,4,5,6,7,8,9]
 
         return (
-            <div style={{marginTop: "200px"}}>
-                <div>Site Manager Homepage</div>
-                {this.state.clients.map((route, i) =>{
-					return <RoutePage routenum={routes[i]} data={route}/>
-				})}
+            <div className="site-manager-page">
+                <h1 className="site-manager-page-header">Routes Page</h1>
+                <div>
+                    <RoutesNavbar/>
+                    <div className="site-manager-container">
+                        {this.state.clients.map((route, i) =>{
+                            return (
+                                <section>
+                                    <a id={String(routes[i])}></a>
+                                    <RoutePage routenum={routes[i]} data={route}></RoutePage>
+                                </section>
+                        );})}
+                    </div>
+                </div>
             </div>
+           
         );
     }
 }
 
-export default SiteManagerHomepage;
+export default RouteHomepage;

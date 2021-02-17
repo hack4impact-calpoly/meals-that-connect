@@ -1,4 +1,4 @@
-import styles from '../css/Component.module.css';
+import styles from '../../css/Component.module.css';
 import { Link } from "react-router-dom";
 
 function Columns() {

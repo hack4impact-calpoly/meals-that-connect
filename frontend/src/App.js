@@ -3,45 +3,31 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 
 import NavBar from './components/NavBar'
-import Home from './components/Home'
-import Login from './components/Login'
+import Home from './components/homepage/Home'
+import Login from './components/authentication/Login'
 
-import Signup from './components/Signup'
-import SiteManagerHomepage from './components/SiteManagerHomepage'
+import Signup from './components/authentication/Signup'
+import SiteManagerHomepage from './components/sitemanager/SiteManagerHomepage.js'
+import RouteHomePage from './components/sitemanager/RouteHomepage.js'
+import VolunteerHours from './components/VolunteerHoursOverview'
 
-import Private from './components/Private'
-import ResetPassword from './components/ResetPassword'
+import VolunteerOverview from './components/VolunteerOverview'
+
+import Private from './components/authentication/Private'
+import ResetPassword from './components/authentication/ResetPassword'
 
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import VolunteerHours from './components/VolunteerHoursOverview'
-
-import { isLoggedIn, isAuthenticated, checkTime } from './components/LoggedUser'
+import { isAuthenticated } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
 
 class App extends Component {
-
-  // this will check if user signed out or not
-  hydrateStatewithLocalStorage() {
-    let hoursPassed = checkTime();
-    console.log(hoursPassed)
-
-      // checks if current value of isLoggedIn is in localStorage and it is true
-    if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
-      ((localStorage.hasOwnProperty("time")) && (hoursPassed < 24))) {
-        isAuthenticated.login();
-      }
-      if (((localStorage.hasOwnProperty("isLoggedIn") && localStorage.getItem("isLoggedIn") === "true")) &&
-        ((localStorage.hasOwnProperty("time")) && (hoursPassed >= 24))) {
-        isAuthenticated.signout();
-      }
-  }
   
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
-    this.hydrateStatewithLocalStorage();
+    isAuthenticated();
   }
 
   render() {
@@ -50,14 +36,15 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
-
               <PublicRoute path="/login" component={Login}/>
-              <Route path="/login/:user" component={Login}/>
-              <PublicRoute path="/signup"><Signup/></PublicRoute>
-              <PrivateRoute path="/private" exact component={Private}/>
+              <PublicRoute path="/login/:user" component={Login}/>
+              <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
-              <Route path="/sitemanager"><SiteManagerHomepage/></Route>
-              <Route path="/volunteer-hours"><VolunteerHours/></Route>
+              <PrivateRoute path="/volunteer-hours" component={VolunteerHours}/>
+              <PrivateRoute path="/signout" exact component={Private}/>
+              <PrivateRoute path="/sitemanager" component={SiteManagerHomepage}/>
+              <PrivateRoute path="/routes" component={RouteHomePage}/>
+              <PrivateRoute exact path="/volunteer" component={VolunteerOverview}/>
               <Route><Home/></Route>
           </Switch>
       </Router>

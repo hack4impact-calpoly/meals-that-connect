@@ -36,12 +36,14 @@ input[type=checkbox] {
 }
 
 .account-info {
-    width: 475px;
+    width: 470px;
+    margin: 5px;
 }
 
 .user-name {
     width: 230px;
     display: inline;
+    margin: 5px;
 }
 
 #pass-error {
