@@ -16,7 +16,7 @@ class VolunteerInfo extends Component{
                 days: {},  
                 notes: ""
             },
-            comments: "Please enter any additional information you would like to include.",
+            comments: "",
 
             Monday: false,
             Tuesday: false,
@@ -108,7 +108,7 @@ class VolunteerInfo extends Component{
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/sitemanager");
+                _this.props.history.push("/volunteer");
             }
         })
 	}
