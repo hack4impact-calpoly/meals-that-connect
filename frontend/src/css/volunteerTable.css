@@ -1,0 +1,20 @@
+#name {
+    width: 200px;
+    font-size: 20px;
+}
+
+#contact {
+    width: 270px;
+}
+
+#role {
+    width: 130px;
+}
+
+#data, #contact, #name, #role {
+    font-size: 20px;
+}
+
+#data {
+    width: 100px;
+}
