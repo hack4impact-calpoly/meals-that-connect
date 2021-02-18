@@ -9,6 +9,7 @@ import Login from './components/authentication/Login'
 import Signup from './components/authentication/Signup'
 import SiteManagerHomepage from './components/sitemanager/SiteManagerHomepage.js'
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
+import VolunteerHours from './components/VolunteerHoursOverview'
 
 import VolunteerOverview from './components/VolunteerOverview'
 
@@ -40,7 +41,7 @@ class App extends Component {
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
-
+              <PrivateRoute path="/volunteer-hours" component={VolunteerHours}/>
               <PrivateRoute path="/signout" exact component={Private}/>
               <PrivateRoute path="/sitemanager" component={SiteManagerHomepage}/>
               <PrivateRoute path="/routes" component={RouteHomePage}/>
