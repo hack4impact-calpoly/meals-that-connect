@@ -3,6 +3,7 @@ import '../../css/Login.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import env from "react-dotenv";
 
+
 class Login extends Component {
 
     constructor(props) {
@@ -54,7 +55,7 @@ class Login extends Component {
         if (path.length === 3) {
             if (path[2] === "site-manager") {
                 this.setState( { userType: path[2] } )
-                document.getElementById("siteManager").checked = true;
+                document.getElementById("site-manager").checked = true;
             }
             else if (path[2] === "data-entry") {
                 this.setState( { userType: path[2] } )
@@ -65,6 +66,25 @@ class Login extends Component {
                 document.getElementById("volunteerID").checked = true;
             }
         }
+    }
+
+    volunteerInfoCheck = (user) => {
+        let _this = this
+        fetch(env.backendURL + 'volunteers/volunteerComplete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status === 404) {
+                _this.props.history.push("/volunteer-additional-info");
+            }
+            else {
+                _this.props.history.push("/volunteer");
+            }
+        })
     }
 
     login = (e) => {
@@ -95,13 +115,17 @@ class Login extends Component {
             }
             else {
                 _this.storeUser()
-                _this.props.history.push("/sitemanager");
+                if (this.state.userType === "volunteer"){
+                    this.volunteerInfoCheck(user)
+                }
+                else {
+                    _this.props.history.push("/");
+                }
             }
         })
     }
 
     render() {
-
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page
@@ -110,7 +134,7 @@ class Login extends Component {
             <Redirect to='/private' />
           )
         }
-      
+
         return (
             <form className="auth-form" onSubmit={this.login}>
                 <div className="title">
@@ -121,8 +145,8 @@ class Login extends Component {
                 </div>
                 <div id="cta-type">
                     <div id="site-manager">
-                        <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType} checked={null}/>
-                        <label for="siteManager">Manager</label>
+                        <input type="radio" id="site-manager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
+                        <label for="site-manager">Manager</label>
                     </div>
                     <div id="data-entry">
                         <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
@@ -154,5 +178,5 @@ class Login extends Component {
             </form>
           )}
     }
-                
+
 export default withRouter(Login);

@@ -1,13 +1,17 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { isLoggedIn } from './components/authentication/authenticationUtils.js';
+import { isLoggedIn, hasPermission } from './components/authentication/authenticationUtils.js';
+import Home from './components/homepage/Home'
 
-const PrivateRoute = ({ component: Component = null, render: Render = null, ...rest }) => {
+const PrivateRoute = ({ component: Component = null, render: Render = null, requiredUser, ...rest }) => {
     return (
         <Route {...rest} render={props => (
-            isLoggedIn() 
-            ? (Render ? (Render(props)) : Component ? (<Component {...props} />) : null)
-            : <Redirect to=  '/login'/>
+            isLoggedIn()
+            ?   (   hasPermission(requiredUser)
+                    ? (Render ? (Render(props)) : Component ? (<Component {...props} />) : null)
+                    : <Redirect to="/no-permission"/>
+                )
+            : <Home/>
         )} />
     );
 };

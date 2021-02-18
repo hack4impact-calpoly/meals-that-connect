@@ -21,7 +21,7 @@ class Private extends Component {
         // if user has signed in redirect to private page
         if (RedirectLoggedUser === true) {
           return (
-            <Redirect to='/login' />
+            <Redirect to='/' />
           )
         }
 

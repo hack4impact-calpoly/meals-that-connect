@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RoutePage from './RoutePage';
+import RouteTable from './RouteTable';
 import env from "react-dotenv";
 import RoutesNavbar from './RoutesNavbar';
 
@@ -51,7 +51,7 @@ class RouteHomepage extends Component {
                             return (
                                 <section>
                                     <a id={String(routes[i])}></a>
-                                    <RoutePage routenum={routes[i]} data={route}></RoutePage>
+                                    <RouteTable routenum={routes[i]} data={route}></RouteTable>
                                 </section>
                         );})}
                     </div>
