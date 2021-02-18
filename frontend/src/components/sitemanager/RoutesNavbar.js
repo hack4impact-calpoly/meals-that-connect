@@ -15,7 +15,7 @@ class routesOverview extends Component {
                 <h1><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">
-                    <Link to="sitemanager">
+                    <Link to="/">
                         <button type="button" className="route">Overview</button>
                     </Link><br/>
                     <hr></hr>

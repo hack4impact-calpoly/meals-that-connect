@@ -32,14 +32,14 @@ class VolunteerOverview extends Component {
     render() {
         return (
             <div className="site-manager-page">
-            <h1 className="site-manager-page-header">Volunteer Overview</h1>
-            <div className="site-manager-container2">
-                {this.state.loaded === true ? <VolunteerOverviewTable data={this.state.volunteerData}/> : 
-                <div>
-                    <Spinner animation="border" role="status" />
-                </div>}
+                <h1 className="site-manager-page-header">Volunteer Overview</h1>
+                <div className="site-manager-container2">
+                    {this.state.loaded === true ? <VolunteerOverviewTable data={this.state.volunteerData}/> : 
+                    <div>
+                        <Spinner animation="border" role="status" />
+                    </div>}
+                </div>
             </div>
-        </div>
         );
     }
 }
