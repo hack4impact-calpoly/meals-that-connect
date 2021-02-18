@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../../css/Signup.css';
 import env from "react-dotenv";
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
+import fire from '../../fire.js';
 
 class Signup extends Component {
 
@@ -26,6 +27,20 @@ class Signup extends Component {
             },
             emptyUser: false
          };
+    }
+
+    firebase_signup = (email, password) => {
+        fire.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in 
+            var user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ..
+        });
     }
 
     storeUser = () => {
@@ -138,6 +153,7 @@ class Signup extends Component {
 
     
     signup = (user) => {
+        this.firebase_signup(user.email, user.password)
         let _this = this
         fetch(env.backendURL + 'signup', {
             method: 'POST',
