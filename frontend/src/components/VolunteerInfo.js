@@ -125,7 +125,7 @@ class VolunteerInfo extends Component{
 				<form onSubmit={this.addInfo}>
 					<label for="phoneNumber"> Phone Number:* </label>
 					<br/>
-					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="12" required/> 
+					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="50" style={{width: '500px'}} required/> 
 
 					<br/>
 					<div className="days-display">
