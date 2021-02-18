@@ -9,6 +9,7 @@ import Login from './components/authentication/Login'
 import Signup from './components/authentication/Signup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
+import VolunteerHours from './components/VolunteerHoursOverview'
 
 import VolunteerOverview from './components/VolunteerOverview'
 
