@@ -51,7 +51,7 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" path="/routes" component={RouteHomePage}/>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
+              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
           </Switch>
       </Router>
     </div>
