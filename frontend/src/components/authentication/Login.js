@@ -140,9 +140,9 @@ class Login extends Component {
                     Show Password
                 </label>
                 <br/>
+                {this.state.error && <div className="error">Invalid email or password</div>}
                 <button id="login-button" onClick={this.login}>LOG IN</button>
                 <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
-                {this.state.error && <div className="error">Invalid email or password</div>}
             </div>
           )}
     }

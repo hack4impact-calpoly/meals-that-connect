@@ -145,3 +145,12 @@ input[type=radio] {
     background-color: #2098D1;
     color: white;
 }
+
+.error{
+    margin-bottom: -10px;
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 17px;
+    color: rgb(241, 80, 80);
+}

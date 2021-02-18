@@ -195,7 +195,7 @@ class Signup extends Component {
                     <section>
                         {this.state.passwordValidated === false &&
                             <div>
-                                <p id="pass-error">Confirm password does not match password!</p>
+                                <p id="error">Confirm password does not match password!</p>
                             </div>
                         }
                     </section>
@@ -212,8 +212,8 @@ class Signup extends Component {
                             </div>
                         }
                     </section>
-                    {this.state.emptyUser && <div className="signup-error">Select the type of user</div>}
-                    {this.state.error && <div className="signup-error">Email taken</div>}
+                    {this.state.emptyUser && <div className="error">Select the type of user</div>}
+                    {this.state.error && <div className="error">Email taken</div>}
                     <input id = "signup-button" type="submit" value="CREATE ACCOUNT"/>
                     <p>Already have an account? <Link to="/login">Log in</Link></p>
                     </form>
