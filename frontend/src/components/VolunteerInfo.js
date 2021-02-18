@@ -187,6 +187,7 @@ class VolunteerInfo extends Component{
 						name="comments"
 						value={this.state.comments}
 						onChange={this.updateComments}
+						placeholder="Please enter any additional information you would like to include."
 						rows={5}
 						cols={50}
 						/>
