@@ -82,7 +82,7 @@ class Login extends Component {
                 _this.props.history.push("/volunteer-additional-info");
             }
             else {
-                _this.props.history.push("/sitemanager");
+                _this.props.history.push("/volunteer");
             }
         })
     }

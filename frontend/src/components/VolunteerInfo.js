@@ -12,11 +12,11 @@ class VolunteerInfo extends Component{
 		this.state = {
 			personalData: {
                 phoneNumber: "",
-                email: "",
+                email: localStorage.getItem("userEmail"),
                 days: {},  
                 notes: ""
             },
-            comments: "Please enter any additional information you would like to include.",
+            comments: "",
 
             Monday: false,
             Tuesday: false,
@@ -108,13 +108,12 @@ class VolunteerInfo extends Component{
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/sitemanager");
+                _this.props.history.push("/volunteer");
             }
         })
 	}
 
-	//to do:
-	// - display page if not filled by user 
+
 	render(){
 
 		const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.state;
@@ -126,12 +125,7 @@ class VolunteerInfo extends Component{
 				<form onSubmit={this.addInfo}>
 					<label for="phoneNumber"> Phone Number:* </label>
 					<br/>
-					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="12" required/> 
-					
-					<br/>
-					<label for="email"> Email:* </label>
-					<br/>
-					<input type="email" id="email" placeholder="Email ex: example@gmail.com" onChange={this.updateInfo} size="50" required/>
+					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="50" style={{width: '500px'}} required/> 
 
 					<br/>
 					<div className="days-display">
@@ -194,6 +188,7 @@ class VolunteerInfo extends Component{
 						value={this.state.comments}
 						onChange={this.updateComments}
 						rows={5}
+						cols={50}
 						/>
 						<br/>
 
