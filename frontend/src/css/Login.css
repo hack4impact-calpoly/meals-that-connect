@@ -1,52 +1,139 @@
-h1 {
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
-    color: black;
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+
+.login-form {
     display: flex;
     align-items: center;
+    margin: 200px;
+    margin-top:160px;
+    padding-top: 50px;
+    padding-bottom: 30px;
     flex-direction: column;
+
+    background-color: white;
+    background-clip: padding-box;
+    filter: drop-shadow(5px 10px 5px grey);
+    overflow: hidden;
 }
 
+.title
+{
+    padding-top: 50px;
+}
+.title h1
+{
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 40px;
+}
+
+p{
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 17px;
+    color:black;
+}
+
+#cta-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+    align-self: center;
+}
+#cta-type label{
+    margin-left: 10px;
+    margin-right: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: #7E7C7C;
+}
+
+.input-email{
+    justify-content: left;
+    text-align: left;
+    padding-right: 440px;
+    margin-bottom: 10px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+.input-password{
+    justify-content: left;
+    text-align: left;
+    padding-right: 395px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
 input {
     padding: 12px 20px;
     margin: 8px;
-    box-sizing: border-box;
+    border: none;
 }
-
 input[type=text], input[type=password], input[type=email] {
-    font-family: 'Mulish', sans-serif;
-    margin: 5px;
+    font-family: 'Quicksand', sans-serif;
     font-size: 20px;
+    background-color: #F5F5F5;
 }
-
+.login-form input[type=text]:focus,
+.login-form input[type=email]:focus,
+.login-form input[type=password]:focus {
+    border-width:0px;
+    border:none;
+    background-color: #D3D3D3;
+}
 input[type=checkbox] {
     -webkit-transform: scale(2);
     transform: scale(2);
 }
-
-.password-security {
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    color: black;
-    display: block;
-    margin: 10px;
+input[type=radio] {
+    -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+    transform: scale(1.5);
+    margin-right: 15px;
 }
 
+.link{
+    display: inline;
+    margin-top: -32px;
+    margin-bottom: 10px;
+    padding-left: 370px;
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 15px;
+    color:black;
+}
+
+.password-security {
+    margin-top: -10px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #7E7C7C;
+    display: block;
+}
 #password-visibility {
     margin-right: 20px;
 }
 
-#signin-button {
+#login-button {
     display: block;
-    margin: 10px auto;
+    margin: 30px;
     overflow: hidden;
-    padding: 12px 28px;
+    padding: 12px 210px;
     border: none;
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 20px;
-    display: inline-block;
+    letter-spacing: 2px;
     -webkit-transform: perspective(1px) translateZ(0);
     transform: perspective(1px) translateZ(0);
     -webkit-transition-duration: 0.3s;
@@ -54,48 +141,7 @@ input[type=checkbox] {
     -webkit-transition-property: color, background-color;
     transition-property: color, background-color;
 }
-
-#signin-button:hover, #signin button-fade:focus, #signin button-fade:active {
+#login-button:hover, #signin button-fade:focus, #signin button-fade:active {
     background-color: #2098D1;
     color: white;
-}
-
-.login-form {
-    display: flex;
-    align-items: center;
-    margin-top: 200px;
-    flex-direction: column;
-    color: black;
-    font-size: 20px;
-}
-
-#cta-type {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 15px;
-    align-self: center;
-}
-
-#site-manager {
-    margin-right: 20px;
-}
-
-#data-entry {
-    margin-right: 20px;
-}
-
-input[type=radio] {
-    -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
-    transform: scale(1.5);
-    margin-right: 15px;
-}
-
-label {
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    color: black;
-    display: inline;
-    margin: 5px;
 }

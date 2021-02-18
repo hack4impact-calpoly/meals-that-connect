@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../../css/Login.css';
-import '../../css/Signup.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import env from "react-dotenv";
 
@@ -107,12 +106,12 @@ class Login extends Component {
       
         return (
             <div className="login-form">
-                <h1 id="title">
-                    {window.location.pathname.split('/')[2] === "site-manager" ? "Site Manager " : ""} 
-                    {window.location.pathname.split('/')[2] === "data-entry" ? "Data Entry " : ""}
-                    {window.location.pathname.split('/')[2] === "volunteer" ? "Volunteer " : ""}
-                    Login
-                </h1>
+                <div className="title">
+                        {window.location.pathname.split('/')[2] === "site-manager" ? "Site Manager " : ""} 
+                        {window.location.pathname.split('/')[2] === "data-entry" ? "Data Entry " : ""}
+                        {window.location.pathname.split('/')[2] === "volunteer" ? "Volunteer " : ""}
+                    <h1>SIGN IN</h1>
+                </div>
                 <div id="cta-type">
                     <div id="site-manager">
                         <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType} checked={null}/>
@@ -127,17 +126,22 @@ class Login extends Component {
                         <label for="volunteer">Volunteer</label>
                     </div>
                 </div>
-                <input type="text" id="email" placeholder="Email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
+                <p className= "input-email">Email</p>
+                <input type="text" id="email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
                 <br/>
-                <input type="password" id="password" placeholder="Password" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
+                <p className= "input-password">Password</p>
+                <div className = "link">
+                <Link to="/reset-password">Forgot Password?</Link>
+                </div>
+                <input type="password" id="password" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
                 <br/>
                 <label class="password-security">
                     <input type="checkbox" id="password-visibility" onClick={() => this.passwordVisibility()}/>
                     Show Password
                 </label>
                 <br/>
-                <button id="signin-button" onClick={this.login}>Log In</button>
-                <Link to="/reset-password">Forgot Password?</Link>
+                <button id="login-button" onClick={this.login}>LOG IN</button>
+                <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
                 {this.state.error && <div className="error">Invalid email or password</div>}
             </div>
           )}
