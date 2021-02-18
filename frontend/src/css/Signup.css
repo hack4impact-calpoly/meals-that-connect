@@ -1,33 +1,106 @@
-#signup-button {
-    display: block;
-    margin: 10px auto;
-}
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 
-#signup-form {
+.signup-form {
     display: flex;
-    font-family: 'Mulish', sans-serif;
     align-items: center;
-    margin-top: 130px;
+    margin: 200px;
+    margin-top:160px;
+    padding-top: 50px; 
+    padding-bottom: 30px;
     flex-direction: column;
-    color: black;
-    font-size: 25px;
+
+    background-color: white;
+    background-clip: padding-box;
+    filter: drop-shadow(5px 10px 5px grey);
+    overflow: hidden;
 }
 
 #title {
-    font-size: 70px;
-    margin: 30px;
+    padding-top: 50px;
+    line-height: 50px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 40px;
+}
+p{
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 17px;
+    color:black;
+}
+
+#cta-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+    align-self: center;
+}
+#cta-type label{
+    margin-left: 10px;
+    margin-right: 20px;
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: #7E7C7C;
+}
+
+.input-name{
+    display: flex;
+    margin-top: 20px;
+}
+#first-name{
+    margin-left: 35px;
+    padding-right: 80px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+#last-name{
+    padding-left: 50px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+#input{
+    display: flex;
+    margin-top: 20px;
+    margin-left: 35px;
+    padding-right: 80px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+#pass-label{
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    color:black;
 }
 
 input[type=text],
 input[type=email],
 input[type=password] {
+    font-family: 'Quicksand', sans-serif;
     height: 60px;
 }
 
 input[type=text]:focus,
 input[type=email]:focus,
 input[type=password]:focus {
-    background-color: #b7f8ac;
+    border-width:0px;
+    border:none;
+    background-color: #D3D3D3;
 }
 
 input[type=checkbox] {
@@ -50,16 +123,61 @@ input[type=radio] {
     margin: 5px;
 }
 
-#pass-error {
-    color: red;
+#signup-button {
+    display: block;
+    margin: 30px;
+    overflow: hidden;
+    padding: 12px 145px;
+    border: none;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 2px;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+#signup-button:hover{
+    background-color: #2098D1;
+    color: white;
 }
 
-#pass-label {
-    font-size: 18px;
-    text-align: center;
+.volunteer-type{
+    margin-top: 20px;
+}
+.volunteer-type p{
+    display: flex;
+    margin-left: 35px;
+}
+.volunteer-text{
+    display: flex;
+    margin-top: 20px;
+    margin-left: 100px;
+}
+#driver-text{
+    padding-left: 10px;
+    margin-right: 80px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+#kitchen-text{
+    padding-left: 10px;
+    padding-right: 15px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
 }
 
 .signup-error {
-    margin: 20px;
-    color: red;
+    margin: 20px 0px -10px;
+    color: rgb(241, 80, 80);
+    font-size: 17px;
 }
+
