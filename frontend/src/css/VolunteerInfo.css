@@ -1,0 +1,70 @@
+
+#title {
+    padding-top: 50px;
+    line-height: 50px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 35px;
+}
+
+.input-container{
+    margin-left: 15px;
+    justify-content: left;
+    text-align: left;
+    margin-bottom: 10px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+
+.days-display{
+	display: 'flex';
+}
+
+.days-row{
+    margin-left: 25px;
+	flex-direction: row;
+    width: 500px;
+    justify-content: left;
+	font-size: 15px;
+}
+#checkbox-display{
+	margin: 0px 0px 0px 10px;
+}
+
+input[type=checkbox]{
+	margin: 5px 5px 0;
+}
+
+#days-text{
+	font-size: 20px;
+}
+
+#submit-button {
+    display: block;
+    margin: 10px auto;
+}
+
+.checkbox-error {
+    margin-top: 20px;
+    font-size: 15px;
+    color: red;
+}
+
+.comments {
+    width: 600px;
+}
+
+.comment-box {
+    width: 500px;
+    margin: 20px 30px 00px 50px;
+    display: flex;
+    padding: 10px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}

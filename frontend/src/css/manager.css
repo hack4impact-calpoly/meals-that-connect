@@ -18,3 +18,29 @@
     margin-bottom: 20px;
     overflow: auto;
 }
+
+.site-manager-container2 {
+    margin: 20px 50px;
+    max-width: 95vw;
+    overflow: auto;
+}
+
+.site-manager-page input{
+    padding: 10px;
+    border: none;
+    background: none;
+    width: 100%;
+}
+
+.site-manager-page input:hover{
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.site-manager-page input:focus {
+    outline: none !important;
+    background: white;
+    cursor: default;
+    box-shadow: 0 0 15px #719ECE;
+}
