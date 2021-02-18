@@ -171,7 +171,8 @@ input[type=checkbox] {
     color: #7E7C7C;
 }
 
-#error {
+.signup-error {
+    margin: 20px 0px -10px;
     color: rgb(241, 80, 80);
     font-size: 17px;
 }

@@ -11,6 +11,7 @@ class Login extends Component {
             isLoggedIn : false,
             RedirectLoggedUser: false,
             userType: this.props.match.params.user ? this.props.match.params.user : "",
+            emptyUser: false,
             email: "",
             password: "",
             error: false
@@ -44,7 +45,7 @@ class Login extends Component {
     }
 
     changeUserType = (event) => {
-        this.setState({userType: event.target.value});
+        this.setState({userType: event.target.value, emptyUser: false});
     }
     
     componentDidMount() {
@@ -66,8 +67,15 @@ class Login extends Component {
         }
     }
 
-    login = () => {
+    login = (e) => {
+        e.preventDefault();
         let _this = this
+
+        if (this.state.userType == "") {
+            this.setState({emptyUser: true})
+            return;
+        }
+
         const user = {
             email: this.state.email,
             password: this.state.password,
@@ -93,7 +101,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log(this.state.userType)
 
         const { RedirectLoggedUser } = this.state;
 
@@ -105,7 +112,7 @@ class Login extends Component {
         }
       
         return (
-            <div className="login-form">
+            <form className="auth-form" onSubmit={this.login}>
                 <div className="title">
                         {window.location.pathname.split('/')[2] === "site-manager" ? "Site Manager " : ""} 
                         {window.location.pathname.split('/')[2] === "data-entry" ? "Data Entry " : ""}
@@ -140,10 +147,11 @@ class Login extends Component {
                     Show Password
                 </label>
                 <br/>
+                {this.state.emptyUser && <div className="error">Select the type of user</div>}
                 {this.state.error && <div className="error">Invalid email or password</div>}
-                <button id="login-button" onClick={this.login}>LOG IN</button>
+                <button id="login-button" type="submit">LOG IN</button>
                 <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
-            </div>
+            </form>
           )}
     }
                 

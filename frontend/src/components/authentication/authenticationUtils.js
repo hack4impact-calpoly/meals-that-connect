@@ -1,7 +1,6 @@
 
 // This will check if user should remain signed in
 export function isAuthenticated() {
-    printLocalStorage()
     if (isLoggedIn()) {
         let hoursPassed = getHoursPassed();
         // Keeps users logged in for 24 hours
