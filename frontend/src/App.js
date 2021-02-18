@@ -11,6 +11,7 @@ import SiteManagerHomepage from './components/sitemanager/SiteManagerHomepage.js
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
 
 import VolunteerOverview from './components/VolunteerOverview'
+import VolunteerHoursOverview from './components/VolunteerHoursOverview'
 
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
@@ -18,13 +19,7 @@ import ResetPassword from './components/authentication/ResetPassword'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-<<<<<<< HEAD
 import { isAuthenticated } from './components/authentication/authenticationUtils.js';
-=======
-import VolunteerHours from './components/VolunteerHoursOverview'
-
-import { isLoggedIn, isAuthenticated, checkTime } from './components/LoggedUser'
->>>>>>> volunteer_hours
 
 import './css/App.css';
 
@@ -45,15 +40,12 @@ class App extends Component {
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
-<<<<<<< HEAD
 
               <PrivateRoute path="/signout" exact component={Private}/>
               <PrivateRoute path="/sitemanager" component={SiteManagerHomepage}/>
               <PrivateRoute path="/routes" component={RouteHomePage}/>
               <PrivateRoute exact path="/volunteer" component={VolunteerOverview}/>
-=======
-              <Route path="/volunteer-hours"><VolunteerHours/></Route>
->>>>>>> volunteer_hours
+              <PrivateRoute exact path="/volunteer-hours" component={VolunteerHoursOverview}/>
               <Route><Home/></Route>
           </Switch>
       </Router>
