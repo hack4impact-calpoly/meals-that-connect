@@ -18,6 +18,7 @@ const Styles = styled.div`
    th,
    td {
      padding: 0.5rem;
+     text-align: center;
      border-bottom: 1px solid black;
      border-right: 1px solid black;
      font-size: 20px;
@@ -34,7 +35,7 @@ const Styles = styled.div`
  }
 `
 
-const RoutePage = (props) => {
+const RouteTable = (props) => {
   const columns = React.useMemo(
     () => [
     {
@@ -157,12 +158,12 @@ const RoutePage = (props) => {
 
   return (
   <Styles>
-    <RouteTable columns={columns} data={data}/>
+    <Table columns={columns} data={data}/>
   </Styles>
   )
 }
 
-function RouteTable({ columns, data }) {
+function Table({ columns, data }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -201,4 +202,4 @@ function RouteTable({ columns, data }) {
  )
 }
 
-export default RoutePage;
+export default RouteTable;

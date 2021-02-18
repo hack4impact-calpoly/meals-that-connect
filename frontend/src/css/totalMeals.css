@@ -1,8 +1,8 @@
-.info {
+.info{
     border: solid 2px #142850;
 }
 
-#top-cell-route {
+#top-cell-route{
     border-top: solid 1px black;
     border-bottom: solid 0px;
 }
@@ -17,10 +17,12 @@
     border-bottom: solid 4px black;
 }
 
-#last-cell {
+#last-cell{
     border-bottom: solid 4px black;
 }
 
-#top-cell-route, #middle-cell-route, #last-cell-route {
+#top-cell-route,
+#middle-cell-route,
+#last-cell-route{
     border-left: solid 1px black;
 }

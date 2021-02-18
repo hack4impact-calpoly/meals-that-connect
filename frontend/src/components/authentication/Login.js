@@ -55,7 +55,7 @@ class Login extends Component {
         if (path.length === 3) {
             if (path[2] === "site-manager") {
                 this.setState( { userType: path[2] } )
-                document.getElementById("siteManager").checked = true;
+                document.getElementById("site-manager").checked = true;
             }
             else if (path[2] === "data-entry") {
                 this.setState( { userType: path[2] } )
@@ -112,15 +112,13 @@ class Login extends Component {
                     this.volunteerInfoCheck(user)
                 }
                 else {
-                    _this.props.history.push("/sitemanager");
+                    _this.props.history.push("/");
                 }
             }
         })
     }
 
     render() {
-        console.log(this.state.userType)
-
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page
@@ -140,8 +138,8 @@ class Login extends Component {
                 </h1>
                 <div id="cta-type">
                     <div id="site-manager">
-                        <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType} checked={null}/>
-                        <label for="siteManager">Manager</label>
+                        <input type="radio" id="site-manager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
+                        <label for="site-manager">Manager</label>
                     </div>
                     <div id="data-entry">
                         <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
