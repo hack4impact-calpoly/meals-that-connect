@@ -12,6 +12,7 @@ import RouteHomePage from './components/sitemanager/RouteHomepage.js'
 import VolunteerHours from './components/VolunteerHoursOverview'
 
 import VolunteerOverview from './components/VolunteerOverview'
+import VolunteerInfo from './components/VolunteerInfo'
 
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
@@ -50,6 +51,7 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" path="/routes" component={RouteHomePage}/>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
           </Switch>
       </Router>
     </div>

@@ -4,6 +4,7 @@ import '../../css/Signup.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import env from "react-dotenv";
 
+
 class Login extends Component {
 
     constructor(props) {
@@ -67,6 +68,25 @@ class Login extends Component {
         }
     }
 
+    volunteerInfoCheck = (user) => {
+        let _this = this
+        fetch(env.backendURL + 'volunteers/volunteerComplete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status === 404) {
+                _this.props.history.push("/volunteer-additional-info");
+            }
+            else {
+                _this.props.history.push("/volunteer");
+            }
+        })
+    }
+
     login = () => {
         let _this = this
         const user = {
@@ -88,7 +108,12 @@ class Login extends Component {
             }
             else {
                 _this.storeUser()
-                _this.props.history.push("/");
+                if (this.state.userType === "volunteer"){
+                    this.volunteerInfoCheck(user)
+                }
+                else {
+                    _this.props.history.push("/");
+                }
             }
         })
     }
@@ -102,7 +127,7 @@ class Login extends Component {
             <Redirect to='/private' />
           )
         }
-      
+
         return (
             <div className="login-form">
                 <h1 id="title">
@@ -134,11 +159,12 @@ class Login extends Component {
                     Show Password
                 </label>
                 <br/>
+
                 <button id="signin-button" onClick={this.login}>Log In</button>
                 <Link to="/reset-password">Forgot Password?</Link>
                 {this.state.error && <div className="error">Invalid email or password</div>}
             </div>
           )}
     }
-                
+
 export default withRouter(Login);

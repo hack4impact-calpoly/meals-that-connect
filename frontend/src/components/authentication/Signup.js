@@ -16,7 +16,7 @@ class Signup extends Component {
                 lastName: "",
                 email: "",
                 password: "",
-                site: ""
+                site: "SLO"
             },
             volunteerData: { //volunteers only
                 driver: false,
@@ -127,7 +127,11 @@ class Signup extends Component {
             kitchenStaff: volunteerData["kitchenStaff"],
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
-            user: "volunteer"
+            user: "volunteer",
+
+            phoneNumber: "0",
+            availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
+        
         }
         this.signup(newVolunteer)
     }
@@ -148,7 +152,12 @@ class Signup extends Component {
             }
             else {
                 _this.storeUser()
-                _this.props.history.push("/");
+                if (this.state.userType === "volunteer"){
+                    _this.props.history.push("/volunteer-additional-info");
+                }
+                else{
+                  _this.props.history.push("/");
+                }
             }
         })
     }
