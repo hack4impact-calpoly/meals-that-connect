@@ -11,7 +11,6 @@ router.post('/', async (req, res) => {
    const {email, password, user} = req.body
    let userType = getUser(user)
    userType.findOne({'email': email}).then(function(result) {
-      
       if (!result) {
          console.log("Invalid email")
          res.send("Invalid email", 404)

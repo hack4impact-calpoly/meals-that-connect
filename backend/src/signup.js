@@ -30,6 +30,9 @@ router.post('/', async (req, res) =>{
           console.log("successfully added user")
           res.status(200).send("success")
        }
+    }).catch(err => {
+       console.log(err)
+       res.send(500).send("Internal server error")
     })
  });
  

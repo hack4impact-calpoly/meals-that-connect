@@ -34,7 +34,8 @@ class Signup extends Component {
         .then((userCredential) => {
             // Signed in 
             var user = userCredential.user;
-            // ...
+            // Send verification email
+            this.firebase_sendVerification(user);
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -45,6 +46,19 @@ class Signup extends Component {
                 alert(errorMessage);
               }
               console.log(error);
+        });
+    }
+
+    firebase_sendVerification = (user) => {
+        var user = fire.auth().currentUser;
+
+        user.sendEmailVerification().then(function() {
+            // Email sent.
+        }).catch(function(error) {
+            // An error happened.
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error);
         });
     }
 
@@ -158,7 +172,7 @@ class Signup extends Component {
 
     
     signup = (user) => {
-        this.firebase_signup(user.email, user.password)
+        // this.firebase_signup(user.email, user.password)
         let _this = this
         fetch(env.backendURL + 'signup', {
             method: 'POST',
@@ -172,13 +186,15 @@ class Signup extends Component {
                 _this.setState({error: true})
             }
             else {
+                _this.firebase_signup(user.email, user.password)
                 _this.storeUser()
-                if (this.state.userType === "volunteer"){
-                    _this.props.history.push("/volunteer-additional-info");
-                }
-                else{
-                  _this.props.history.push("/");
-                }
+                // if (this.state.userType === "volunteer"){
+                //     _this.props.history.push("/volunteer-additional-info");
+                // }
+                // else{
+                //   _this.props.history.push("/");
+                // }
+                _this.props.history.push("/email-verification");
             }
         })
     }

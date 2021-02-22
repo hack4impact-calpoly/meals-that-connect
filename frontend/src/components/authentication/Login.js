@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../../css/Login.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import env from "react-dotenv";
-
+import fire from '../../fire.js';
 
 class Login extends Component {
 
@@ -68,6 +68,48 @@ class Login extends Component {
         }
     }
 
+    firebase_signin = (email, password) => {
+        fire.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in
+            var user = userCredential.user;
+            // ...
+            this.firebase_checkEmailVerif(user);
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error)
+        });
+        }
+
+    firebase_checkEmailVerif = (user) => {
+        var user = fire.auth().user;
+        var uid, emailVerified;
+
+        if (user != null) {
+        emailVerified = user.emailVerified;
+        
+        if (!emailVerified) {
+            this.props.history.push("/email-verification");
+        } 
+        else {
+            if (this.state.userType === "volunteer"){
+                this.volunteerInfoCheck(user)
+            }
+            else {
+                this.props.history.push("/");
+            }
+        }
+
+        // uid = user.uid;  
+        // The user's ID, unique to the Firebase project. Do NOT use
+        // this value to authenticate with your backend server, if
+        // you have one. Use User.getToken() instead.
+}
+    }
+
     volunteerInfoCheck = (user) => {
         let _this = this
         fetch(env.backendURL + 'volunteers/volunteerComplete', {
@@ -96,6 +138,8 @@ class Login extends Component {
             return;
         }
 
+        console.log(this.state.userType)
+
         const user = {
             email: this.state.email,
             password: this.state.password,
@@ -112,14 +156,16 @@ class Login extends Component {
         .then((res) => {
             if (res.status === 404) {
                 _this.setState({error: true})
+                console.log(res)
             }
             else {
                 _this.storeUser()
+                // this.firebase_signin(this.state.email, this.state.password);
                 if (this.state.userType === "volunteer"){
                     this.volunteerInfoCheck(user)
                 }
                 else {
-                    _this.props.history.push("/");
+                    this.props.history.push("/");
                 }
             }
         })
