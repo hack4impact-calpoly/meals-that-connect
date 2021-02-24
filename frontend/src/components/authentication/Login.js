@@ -19,15 +19,6 @@ class Login extends Component {
         };
     }
 
-    storeUser = () => {
-        const date = new Date();
-        localStorage.setItem("userEmail", this.state.email);
-        localStorage.setItem("userType", this.state.userType);
-        localStorage.setItem("site", "SLO");
-        localStorage.setItem("time", date);
-        localStorage.setItem("isLoggedIn", true);
-    }
-
     handleChange = (e) => {
         this.setState({ [e.target.id]: e.target.value });
     };
@@ -68,48 +59,73 @@ class Login extends Component {
         }
     }
 
-    firebase_signin = (email, password) => {
-        fire.auth().signInWithEmailAndPassword(email, password)
+    login = (e) => {
+        e.preventDefault();
+
+        if (this.state.userType == "") {
+            this.setState({emptyUser: true})
+            return;
+        }
+
+        const user = {
+            email: this.state.email,
+            password: this.state.password,
+            user: this.state.userType
+        }
+
+        this.firebase_signin(user);
+    }
+
+    firebase_signin = (user) => {
+        fire.auth().signInWithEmailAndPassword(user.email, user.password)
         .then((userCredential) => {
-            // Signed in
-            var user = userCredential.user;
-            // ...
-            this.firebase_checkEmailVerif(user);
+            var firebase_user = userCredential.user;
+            this.firebase_checkEmailVerif(firebase_user, user);
         })
         .catch((error) => {
-            var errorCode = error.code;
             var errorMessage = error.message;
             alert(errorMessage);
             console.log(error)
         });
         }
 
-    firebase_checkEmailVerif = (user) => {
-        var user = fire.auth().user;
-        var uid, emailVerified;
-
-        if (user != null) {
-        emailVerified = user.emailVerified;
+    firebase_checkEmailVerif = (firebase_user, user) => {
+        var emailVerified = firebase_user.emailVerified;
         
         if (!emailVerified) {
             this.props.history.push("/email-verification");
         } 
         else {
-            if (this.state.userType === "volunteer"){
-                this.volunteerInfoCheck(user)
-            }
-            else {
-                this.props.history.push("/");
-            }
+            this.mongo_login(user)
         }
-
-        // uid = user.uid;  
-        // The user's ID, unique to the Firebase project. Do NOT use
-        // this value to authenticate with your backend server, if
-        // you have one. Use User.getToken() instead.
-}
     }
 
+    mongo_login = (user) => {
+        let _this = this
+        fetch(env.backendURL + 'login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status === 404) {
+                _this.setState({error: true})
+                console.log(res)
+            }
+            else {
+                _this.storeUser()
+                if (this.state.userType === "volunteer"){
+                    this.volunteerInfoCheck(user)
+                }
+                else {
+                    this.props.history.push("/");
+                }
+            }
+        })
+    }
+    
     volunteerInfoCheck = (user) => {
         let _this = this
         fetch(env.backendURL + 'volunteers/volunteerComplete', {
@@ -129,46 +145,13 @@ class Login extends Component {
         })
     }
 
-    login = (e) => {
-        e.preventDefault();
-        let _this = this
-
-        if (this.state.userType == "") {
-            this.setState({emptyUser: true})
-            return;
-        }
-
-        console.log(this.state.userType)
-
-        const user = {
-            email: this.state.email,
-            password: this.state.password,
-            user: this.state.userType
-        }
-
-        fetch(env.backendURL + 'login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        .then((res) => {
-            if (res.status === 404) {
-                _this.setState({error: true})
-                console.log(res)
-            }
-            else {
-                _this.storeUser()
-                // this.firebase_signin(this.state.email, this.state.password);
-                if (this.state.userType === "volunteer"){
-                    this.volunteerInfoCheck(user)
-                }
-                else {
-                    this.props.history.push("/");
-                }
-            }
-        })
+    storeUser = () => {
+        const date = new Date();
+        localStorage.setItem("userEmail", this.state.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("site", "SLO");
+        localStorage.setItem("time", date);
+        localStorage.setItem("isLoggedIn", true);
     }
 
     render() {

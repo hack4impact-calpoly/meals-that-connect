@@ -186,7 +186,7 @@ class Signup extends Component {
                 _this.setState({error: true})
             }
             else {
-                _this.firebase_signup(user.email, user.password)
+                //_this.firebase_signup(user.email, user.password)
                 _this.storeUser()
                 // if (this.state.userType === "volunteer"){
                 //     _this.props.history.push("/volunteer-additional-info");
