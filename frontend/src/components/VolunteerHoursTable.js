@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
+import env from "react-dotenv";
 
 const Styles = styled.div`
  table {
@@ -38,7 +39,6 @@ const Styles = styled.div`
 `
 
 const EditableCell = (cellProperties, width) => {
-  // We need to keep and update the state of the cell normally
     var changedFlag = false;
     const firstName = cellProperties["firstName"];
     const lastName = cellProperties["lastName"];
@@ -50,9 +50,8 @@ const EditableCell = (cellProperties, width) => {
   }
 
   const updateDatabase = async (firstNameD, lastNameD, keyD, valueD, changed) => {
-    console.log("ohno")
     if (changed !== false) {
-      console.log("nice")
+      console.log("yup")
       const updateData = {
         firstName: firstNameD,
         lastName: lastNameD,
@@ -71,9 +70,9 @@ const EditableCell = (cellProperties, width) => {
   }
 
   return (
-      <span><input style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/>
+      <span><input style={{width: width -1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/></span>
   )
-}
+};
 
 const VolunteerHoursTable = (props) => {
   const columns = React.useMemo(
@@ -110,6 +109,7 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekOneMonHome',
+                        width: 100,
                         Cell: (cellProperties) => EditableCell(cellProperties, 20),
                     },
                     {
@@ -286,7 +286,7 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekTwoThuHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 20),
+                       Cell: (cellProperties) => EditableCell(cellProperties, 20),
                     },
                     {
                         Header: 'Dining',
@@ -345,7 +345,7 @@ const VolunteerHoursTable = (props) => {
         Header: 'TUE',
         accessor: 'weekThreeTue',
         columns: [
-            {
+           {
                 Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(15)}</div> ),
                 accessor: 'weekThreeTueDate',
                 columns: [
@@ -650,7 +650,7 @@ const VolunteerHoursTable = (props) => {
         ],
     },
     ],
-    
+    [] 
   )
     
   const volunteer = [
@@ -699,7 +699,7 @@ function RouteTable({ columns, data }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map(cell => {
-              return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              return <td>{cell.render('Cell', {firstName: row["original"]["firstName"], value: cell["value"]})}</td>
             })}
           </tr>
         )
