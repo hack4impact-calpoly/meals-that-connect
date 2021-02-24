@@ -22,6 +22,14 @@ router.post('/email-taken', async (req, res) =>{
    });
 });
 
+router.get('/delete', async (req, res) =>{
+   var myquery = { 'firstName': "Emily" };
+   SiteManager.deleteMany(myquery, function(err, obj) {
+      if (err) throw err;
+      console.log(obj);
+   });
+});
+
 router.post('/', async (req, res) =>{
     const {firstName, lastName, email, isAuthenticated, site, user} = req.body
  

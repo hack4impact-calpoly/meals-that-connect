@@ -44,7 +44,8 @@ class App extends Component {
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
-              <PublicRoute path="/reset-password" exact component={ResetPassword} />
+              <PublicRoute path="/reset-password" exact component={ResetPassword} />              
+              <PublicRoute exact path="/email-verification" component={EmailVerification}/>
               {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
 
@@ -55,7 +56,6 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
-              <PrivateRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/>
           </Switch>
       </Router>
     </div>
