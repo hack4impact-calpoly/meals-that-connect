@@ -11,6 +11,9 @@ router.post('/', async (req, res) =>{
     const {firstName, lastName, email, isAuthenticated, site, user} = req.body
  
     let userType = getUser(user);
+    if (userType == null) {
+       res.status(404).send("Invalid user type") 
+    }
   
     userType.findOne({'email': email}).then(function(result) {
        if (result) {
@@ -34,15 +37,14 @@ router.post('/', async (req, res) =>{
  });
  
  function getUser(user) {
-    if(user == "volunteer") {
-       return Volunteer
-    }
-    else if(user == "siteManager") {
-       return SiteManager
-    }
-    else {
-       return DataEntry
-    }
- }
+   if (user === "volunteer")
+      return Volunteer
+   else if (user === "site-manager")
+      return SiteManager
+   else if (user === "data-entry")
+      return DataEntry
+   else
+      return null
+}
 
  module.exports = router;

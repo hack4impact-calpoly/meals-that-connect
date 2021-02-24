@@ -88,7 +88,7 @@ class Signup extends Component {
     addUser = (event) => {
         event.preventDefault();
         if (this.state.passwordValidated === true) {
-            if (this.state.userType === "siteManager") {
+            if (this.state.userType === "site-manager") {
                 this.addSiteManager(this.state.personalData);
             }
             else if (this.state.userType === "data-entry") {
@@ -111,7 +111,7 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "siteManager"
+            user: "site-manager"
         }
 
         this.signup(newSiteManager)
@@ -125,7 +125,7 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "dataEntry"
+            user: "data-entry"
         }
 
         this.signup(newDataEntry)
@@ -185,7 +185,7 @@ class Signup extends Component {
                 <form onSubmit={this.addUser}>
                 <div id="cta-type">
                     <div id="site-manager">
-                        <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType} checked={null}/>
+                        <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
                         <label for="siteManager">Manager</label>
                     </div>
                     <div id="data-entry">
