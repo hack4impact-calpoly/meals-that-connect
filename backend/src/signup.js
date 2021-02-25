@@ -32,8 +32,8 @@ router.post('/', async (req, res) =>{
        }
     })
  });
- 
- function getUser(user) {
+
+function getUser(user) {
     if(user == "volunteer") {
        return Volunteer
     }
