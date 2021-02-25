@@ -44,7 +44,7 @@ const EditableCell = (cellProperties, width) => {
     const lastName = cellProperties["lastName"];
     const key = cellProperties["column"]["id"];
     const [value, setValue] = React.useState(cellProperties["value"]);
-
+    
     const handleChange = (targetValue) => {
     setValue(targetValue);
   }
@@ -70,7 +70,7 @@ const EditableCell = (cellProperties, width) => {
   }
 
   return (
-      <span><input style={{width: width + 10}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/></span>
+      <span><input style={{width: width +20, margin: '-5px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/></span>
   )
 };
 
@@ -108,13 +108,17 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        // change the databse of hours to a different name? getting a list of objecs
+                        // intead of correct hours variable
+                        accessor: 'hours',
+                        
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                         
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -131,12 +135,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekOneTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -153,12 +157,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekOneWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -175,12 +179,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekOnThuHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -197,12 +201,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekOneFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -219,12 +223,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekTwoMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekTwoMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -241,12 +245,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekTwoTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekTwoTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -263,12 +267,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekTwoWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekTwoWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -285,12 +289,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekTwoThuHome',
-                       Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                       Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekTwoThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -307,12 +311,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekTwoFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekTwoFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -329,12 +333,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekThreeMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekThreeMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -351,12 +355,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekThreeTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekThreeTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -373,12 +377,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekThreeWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekThreeWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -395,12 +399,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekThreeThursHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekThreeThursDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -417,12 +421,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekThreeFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekThreeFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -439,12 +443,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekFourMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekFourMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -461,12 +465,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekFourTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekFourTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -483,12 +487,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekFourWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekFourWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -505,12 +509,12 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'weekFourThurHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekFourThurDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
+                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },
                 ],
             },
@@ -651,18 +655,9 @@ const VolunteerHoursTable = (props) => {
     ],
     [] 
   )
-   /* 
-  const volunteer = [
-                        {
-                            lastName: 'Parmar', 
-                            firstName: 'Anushree',
-                            signature: 'Yes',
-                            weekOneMonHome: '1',
-                        },
-                    ]
-*/
+   
   const data = React.useMemo(() => props.data, [])
-
+  
   return (
   <Styles>
     <RouteTable columns={columns} data={data}/>

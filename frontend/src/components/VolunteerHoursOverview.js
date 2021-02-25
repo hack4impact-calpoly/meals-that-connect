@@ -31,19 +31,9 @@ class VolunteerHoursOverview extends Component {
 
     render() {
         return (
-        /*
-            <div style={ { marginTop: '100px' } } id='overview'>
-                <h2>Volunteer Hours Overview</h2>
-                <div id='volunteer-table'>
-                    <VolunteerHoursTable/>
-                </div>
-                    {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData}/> :
-                    <Spinner animation="border" role="status" />
-            </div>
-*/
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
-                <div className="site-manager-container2">
+                <div className="site-manager-container3">
                     {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
