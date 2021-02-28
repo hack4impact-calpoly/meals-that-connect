@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
+import env from "react-dotenv"
+
+const FOOD_DAYS = "foodDays"
+const FROZEN_DAYS = "frozenDay"
+const BOOL_CELL_WIDTH = 65
 
 const Styles = styled.div`
  table {
@@ -35,6 +40,89 @@ const Styles = styled.div`
  }
 `
 
+const EditableCell = (cellProperties, foodOrFrozen, day, width) => {
+  // We need to keep and update the state of the cell normally
+  var useStateCall = 0;
+
+  if (foodOrFrozen != null)
+  {
+    useStateCall = cellProperties["original"][foodOrFrozen][day];
+  }
+  else
+  {
+    useStateCall = cellProperties["value"];
+  }
+
+  var [value, setValue] = React.useState(useStateCall);
+  var [selected, setSelected] = React.useState(value);
+
+
+  const handleChange = (targetValue) => {
+    setValue(targetValue);
+  }
+
+  const updateDatabase = async (newValue, originalValue, clientID) => {
+    if (newValue !== originalValue)
+    {
+      const key = cellProperties["column"]["id"]
+      const updateData = {
+        id: clientID,
+        key: key,
+        data: newValue
+      }
+
+      await fetch(env.backendURL + 'clients/update-routes', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+      })
+    }
+  }
+
+  const updateCheckbox = async (clientID) => {
+    setSelected(!selected);
+    const accessor = cellProperties["column"]["id"];
+    const header = cellProperties["column"]["Header"];
+    const key = accessor.slice(0, accessor.length - header.length);
+    const data = cellProperties["row"]["original"][key];
+    data[header] = !selected;
+
+    const updateData = {
+        id: clientID,
+        key: key,
+        data: data
+      }
+    await fetch(env.backendURL + 'clients/update-routes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+    })
+  }
+
+  /*
+    check if value is a boolean
+    if true then make input type checkbox and check it if boolean is also true
+    if not boolean then normal input
+  */
+  if (value === true || value === false)
+  {
+    return (
+      <span><input type="checkbox" style={{width: width - 1.25}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} /></span>
+    )
+  }
+  else
+  {
+    return (
+        <span><input style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/></span>
+    )
+  }
+
+}
+
 const RouteTable = (props) => {
   const columns = React.useMemo(
     () => [
@@ -42,35 +130,36 @@ const RouteTable = (props) => {
     Header: 'Route '+ props.routenum,
     columns: [
       { Header: 'First Name',
-      accessor: 'firstName'},
+      accessor: 'firstName',
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+      },
       { Header: 'Last Name',
-      accessor: 'lastName' },
+      accessor: 'lastName',
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100) 
+      },
       { Header: 'Address',
-      accessor: 'address'},
+      accessor: 'address',
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400)
+      },
       { Header: 'M',
       accessor: 'foodDaysM',
-      Cell: row => 
-        (<div>{row.row.original.foodDays['M'].toString()}</div>)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "M", BOOL_CELL_WIDTH)
       },
       { Header: 'T',
       accessor: 'foodDaysT',
-      Cell: row => 
-        (<div>{row.row.original.foodDays['T'].toString()}</div>)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "T", BOOL_CELL_WIDTH)
       },
       { Header: 'W',
       accessor: 'foodDaysW',
-      Cell: row => 
-        (<div>{row.row.original.foodDays['W'].toString()}</div>)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "W", BOOL_CELL_WIDTH)
       },
       { Header: 'Th',
       accessor: 'foodDaysTh',
-      Cell: row => 
-        (<div>{row.row.original.foodDays['Th'].toString()}</div>)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "Th", BOOL_CELL_WIDTH)
       },
       { Header: 'F',
       accessor: 'foodDaysF',
-      Cell: row => 
-        (<div>{row.row.original.foodDays['F'].toString()}</div>)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH)
       },
       ],},
     {
@@ -78,77 +167,77 @@ const RouteTable = (props) => {
     columns: [
       { Header: 'Frozen',
       accessor: 'frozenNumber',
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 65)
       },
       { Header: 'M',
         accessor: 'frozenDaysM',
-        Cell: row => 
-          (<div>{row.row.original.frozenDay['M'].toString()}</div>)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH)
         },
       { Header: 'T',
         accessor: 'frozenDaysT',
-        Cell: row => 
-          (<div>{row.row.original.frozenDay['T'].toString()}</div>)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH)
         },
       { Header: 'W',
         accessor: 'frozenDaysW',
-        Cell: row => 
-          (<div>{row.row.original.frozenDay['W'].toString()}</div>)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH)
         },
       { Header: 'Th',
         accessor: 'frozenDaysTh',
-        Cell: row => 
-          (<div>{row.row.original.frozenDay['Th'].toString()}</div>)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH)
         },
       { Header: 'F',
         accessor: 'frozenDaysF',
-        Cell: row => 
-          (<div>{row.row.original.frozenDay['F'].toString()}</div>)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH)
       },],},
     {
     Header: 'Phone',
     accessor: 'phoneNumber',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'Emergency Contact',
     accessor: 'emergencyContact',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'E. Contact Phone',
     accessor: 'emergencyPhone',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'No Milk',
     accessor: 'noMilk',
-    Cell: row => 
-      (<div>{row.row.original.noMilk.toString()}</div>)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'Num. of Meals',
     accessor: 'mealNumber',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'Special Instructions',
     accessor: 'specialInstructions',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'C2 Client',
     accessor: 'clientC2',
-    Cell: row => 
-      (<div>{row.row.original.clientC2.toString()}</div>)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'N/E',
     accessor: 'NE',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     },
     {
     Header: 'Email Address',
     accessor: 'email',
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400)
     },
     {
     Header: 'Holiday Frozen',
     accessor: 'holidayFrozen',
-    Cell: row => 
-      (<div>{row.row.original.holidayFrozen.toString()}</div>)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
     }
     ],
     []
@@ -192,7 +281,7 @@ function Table({ columns, data }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map(cell => {
-              return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              return <td>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
             })}
           </tr>
         )
