@@ -44,3 +44,9 @@
     cursor: default;
     box-shadow: 0 0 15px #719ECE;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

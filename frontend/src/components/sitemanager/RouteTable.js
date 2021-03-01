@@ -3,9 +3,11 @@ import styled from 'styled-components'
 import { useTable } from 'react-table'
 import env from "react-dotenv"
 
-const FOOD_DAYS = "foodDays"
-const FROZEN_DAYS = "frozenDay"
-const BOOL_CELL_WIDTH = 65
+const FOOD_DAYS = "foodDays";
+const FROZEN_DAYS = "frozenDay";
+const BOOL_CELL_WIDTH = 65;
+const REG_CELL_WIDTH = 100;
+const days = ["M", "T", "W", "Th", "F"];
 
 const Styles = styled.div`
  table {
@@ -40,7 +42,7 @@ const Styles = styled.div`
  }
 `
 
-const EditableCell = (cellProperties, foodOrFrozen, day, width) => {
+const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   // We need to keep and update the state of the cell normally
   var useStateCall = 0;
 
@@ -81,8 +83,8 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width) => {
     }
   }
 
-  const updateCheckbox = async (clientID) => {
-    setSelected(!selected);
+  const updateDatabaseDays = async (clientID) =>
+  {
     const accessor = cellProperties["column"]["id"];
     const header = cellProperties["column"]["Header"];
     const key = accessor.slice(0, accessor.length - header.length);
@@ -103,6 +105,18 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width) => {
     })
   }
 
+  const updateCheckbox = async (clientID) => {
+    setSelected(!selected);
+    if(days.includes(cellProperties["column"]["Header"]))
+    {
+      updateDatabaseDays(clientID)
+    }
+    else
+    {
+      updateDatabase(!selected, selected, clientID);
+    }
+  }
+
   /*
     check if value is a boolean
     if true then make input type checkbox and check it if boolean is also true
@@ -111,13 +125,13 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width) => {
   if (value === true || value === false)
   {
     return (
-      <span><input type="checkbox" style={{width: width - 1.25}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} /></span>
+      <span><input type={inputType} style={{width: width - 1.25}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} /></span>
     )
   }
   else
   {
     return (
-        <span><input style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/></span>
+        <span><input type={inputType} style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/></span>
     )
   }
 
@@ -131,35 +145,35 @@ const RouteTable = (props) => {
     columns: [
       { Header: 'First Name',
       accessor: 'firstName',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
       },
       { Header: 'Last Name',
       accessor: 'lastName',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100) 
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
       },
       { Header: 'Address',
       accessor: 'address',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400)
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
       },
       { Header: 'M',
       accessor: 'foodDaysM',
-      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "M", BOOL_CELL_WIDTH)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'T',
       accessor: 'foodDaysT',
-      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "T", BOOL_CELL_WIDTH)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'W',
       accessor: 'foodDaysW',
-      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "W", BOOL_CELL_WIDTH)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'Th',
       accessor: 'foodDaysTh',
-      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "Th", BOOL_CELL_WIDTH)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'F',
       accessor: 'foodDaysF',
-      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH)
+      Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },
       ],},
     {
@@ -167,77 +181,77 @@ const RouteTable = (props) => {
     columns: [
       { Header: 'Frozen',
       accessor: 'frozenNumber',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 65)
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 65, "number")
       },
       { Header: 'M',
         accessor: 'frozenDaysM',
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'T',
         accessor: 'frozenDaysT',
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'W',
         accessor: 'frozenDaysW',
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'Th',
         accessor: 'frozenDaysTh',
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'F',
         accessor: 'frozenDaysF',
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH)
+        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },],},
     {
     Header: 'Phone',
     accessor: 'phoneNumber',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
     },
     {
     Header: 'Emergency Contact',
     accessor: 'emergencyContact',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
     },
     {
     Header: 'E. Contact Phone',
     accessor: 'emergencyPhone',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
     },
     {
     Header: 'No Milk',
     accessor: 'noMilk',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
     },
     {
     Header: 'Num. of Meals',
     accessor: 'mealNumber',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
     },
     {
     Header: 'Special Instructions',
     accessor: 'specialInstructions',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
     },
     {
     Header: 'C2 Client',
     accessor: 'clientC2',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
     },
     {
     Header: 'N/E',
     accessor: 'NE',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
     },
     {
     Header: 'Email Address',
     accessor: 'email',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "email")
     },
     {
     Header: 'Holiday Frozen',
     accessor: 'holidayFrozen',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100)
+    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
     }
     ],
     []
