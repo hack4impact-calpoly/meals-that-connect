@@ -55,7 +55,7 @@ class Signup extends Component {
     handleChange = (event) => {
         let personalData = this.state.personalData;
         personalData[event.target.id] = event.target.value;
-        
+
         this.setState({personalData: personalData});
     }
 
