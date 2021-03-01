@@ -17,7 +17,7 @@ class Signup extends Component {
                 lastName: "",
                 email: "",
                 password: "",
-                site: ""
+                site: "SLO"
             },
             volunteerData: { //volunteers only
                 driver: false,
@@ -55,10 +55,7 @@ class Signup extends Component {
     handleChange = (event) => {
         let personalData = this.state.personalData;
         personalData[event.target.id] = event.target.value;
-
-        console.log(event.target.id)
-        console.log(event.target.value)
-
+        
         this.setState({personalData: personalData});
     }
 
@@ -204,7 +201,6 @@ class Signup extends Component {
                 <div className= "drop-down-site">
                     <p id= "select-site">Select site:</p>
                     <select style={{width: '150px'}} id= "site" value={this.state.value} onChange={this.handleChange}>
-                        <option value=""> </option>
                         <option value="SLO">SLO</option>
                         <option value="Five cities">Five cities</option>
                         <option value="Cambria">Cambria</option>
