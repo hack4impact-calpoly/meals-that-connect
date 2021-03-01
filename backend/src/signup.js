@@ -11,6 +11,9 @@ router.post('/', async (req, res) =>{
     const {firstName, lastName, email, isAuthenticated, site, user} = req.body
  
     let userType = getUser(user);
+    if (userType == null) {
+       res.status(404).send("Invalid user type") 
+    }
   
     userType.findOne({'email': email}).then(function(result) {
        if (result) {
@@ -21,10 +24,11 @@ router.post('/', async (req, res) =>{
           const password = bcrypt.hashSync(req.body.password, 9);
           var doc;
           if (user == "volunteer") {
-             const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff} = req.body  
-             doc = new userType({ firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site })
-          } else 
+             const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
+             doc = new userType({ firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
+          } else {
              doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
+          }
           doc.save()
           console.log("successfully added user")
           res.status(200).send("success")
@@ -33,15 +37,14 @@ router.post('/', async (req, res) =>{
  });
  
  function getUser(user) {
-    if(user == "volunteer") {
-       return Volunteer
-    }
-    else if(user == "siteManager") {
-       return SiteManager
-    }
-    else {
-       return DataEntry
-    }
- }
+   if (user === "volunteer")
+      return Volunteer
+   else if (user === "site-manager")
+      return SiteManager
+   else if (user === "data-entry")
+      return DataEntry
+   else
+      return null
+}
 
  module.exports = router;
