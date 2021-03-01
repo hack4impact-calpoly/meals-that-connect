@@ -85,10 +85,10 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
 
   const updateDatabaseDays = async (clientID) =>
   {
-    const accessor = cellProperties["column"]["id"];
-    const header = cellProperties["column"]["Header"];
+    const accessor = cellProperties["column"]["id"]; //foodDaysM
+    const header = cellProperties["column"]["Header"]; //day (M/T/W/Th/F)
     const key = accessor.slice(0, accessor.length - header.length);
-    const data = cellProperties["row"]["original"][key];
+    const data = cellProperties["row"]["original"][key]; //{M: true, T: false}
     data[header] = !selected;
 
     const updateData = {
@@ -107,6 +107,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
 
   const updateCheckbox = async (clientID) => {
     setSelected(!selected);
+    console.log(cellProperties)
     if(days.includes(cellProperties["column"]["Header"]))
     {
       updateDatabaseDays(clientID)
