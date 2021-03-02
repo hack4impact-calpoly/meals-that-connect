@@ -116,7 +116,7 @@ const VolunteerHoursTable = (props) => {
                     },
                     {
                         Header: 'Dining',
-                        accessor: 'weekOneMonDining',
+                        accessor: 'dinner',
                          
                         Cell: (cellProperties) => EditableCell(cellProperties, 60),
                     },

@@ -8,7 +8,8 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
+            volunteerID: "",
             isLoggedIn : false,
             RedirectLoggedUser: false,
             userType: this.props.match.params.user ? this.props.match.params.user : "",
@@ -21,6 +22,9 @@ class Login extends Component {
 
     storeUser = () => {
         const date = new Date();
+        if (this.state.userType == "volunteer") {
+           localStorage.setItem("volunteerID", this.state.volunteerID);
+        }
         localStorage.setItem("userEmail", this.state.email);
         localStorage.setItem("userType", this.state.userType);
         localStorage.setItem("site", "SLO");
