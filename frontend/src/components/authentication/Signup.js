@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../../css/Signup.css';
 import env from "react-dotenv";
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
+import fire from '../../fire.js';
 
 class Signup extends Component {
 
@@ -28,10 +29,24 @@ class Signup extends Component {
          };
     }
 
+    firebase_signup = (email, password) => {
+        fire.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in 
+            var user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ..
+        });
+    }
+
     storeUser = () => {
         localStorage.setItem("userEmail", this.state.email);
         localStorage.setItem("userType", this.state.userType);
-        localStorage.setItem("site", "SLO");
+        localStorage.setItem("site", this.state.site);
         localStorage.setItem("time", new Date());
         localStorage.setItem("isLoggedIn", true);
     }
@@ -73,7 +88,7 @@ class Signup extends Component {
     addUser = (event) => {
         event.preventDefault();
         if (this.state.passwordValidated === true) {
-            if (this.state.userType === "siteManager") {
+            if (this.state.userType === "site-manager") {
                 this.addSiteManager(this.state.personalData);
             }
             else if (this.state.userType === "data-entry") {
@@ -96,7 +111,7 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "siteManager"
+            user: "site-manager"
         }
 
         this.signup(newSiteManager)
@@ -110,7 +125,7 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "dataEntry"
+            user: "data-entry"
         }
 
         this.signup(newDataEntry)
@@ -138,6 +153,7 @@ class Signup extends Component {
 
     
     signup = (user) => {
+        this.firebase_signup(user.email, user.password)
         let _this = this
         fetch(env.backendURL + 'signup', {
             method: 'POST',
@@ -169,7 +185,7 @@ class Signup extends Component {
                 <form onSubmit={this.addUser}>
                 <div id="cta-type">
                     <div id="site-manager">
-                        <input type="radio" id="siteManager" name="cta" value="siteManager" onChange={this.changeUserType} checked={null}/>
+                        <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
                         <label for="siteManager">Manager</label>
                     </div>
                     <div id="data-entry">
@@ -181,6 +197,16 @@ class Signup extends Component {
                         <label for="volunteerID">Volunteer</label>
                     </div>
                 </div>
+
+                <div className= "drop-down-site">
+                    <p id= "select-site">Select site:</p>
+                    <select style={{width: '150px'}} id= "site" value={this.state.value} onChange={this.handleChange}>
+                        <option value="SLO">SLO</option>
+                        <option value="Five cities">Five cities</option>
+                        <option value="Cambria">Cambria</option>
+                    </select>
+                </div>
+
                 <div className= "input-name">
                     <p id="first-name">First Name</p>
                     <p id="last-name">Last Name</p>
