@@ -10,6 +10,10 @@ const DataEntry = require('../models/DataEntry')
 router.post('/', async (req, res) => {
    const {email, password, user} = req.body
    let userType = getUser(user)
+   if (userType == null) {
+      res.status(404).send("Invalid user type") 
+   }
+
    userType.findOne({'email': email}).then(function(result) {
       
       if (!result) {
@@ -35,10 +39,12 @@ router.post('/', async (req, res) => {
 function getUser(user) {
    if (user === "volunteer")
       return Volunteer
-   else if (user === "siteManager")
+   else if (user === "site-manager")
       return SiteManager
-   else
+   else if (user === "data-entry")
       return DataEntry
+   else
+      return null
 }
 
 module.exports = router;
