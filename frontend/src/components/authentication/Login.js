@@ -8,7 +8,8 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
+            volunteerID: "",
             isLoggedIn : false,
             RedirectLoggedUser: false,
             userType: this.props.match.params.user ? this.props.match.params.user : "",
@@ -21,6 +22,9 @@ class Login extends Component {
 
     storeUser = () => {
         const date = new Date();
+        if (this.state.userType == "volunteer") {
+           localStorage.setItem("volunteerID", this.state.volunteerID);
+        }
         localStorage.setItem("userEmail", this.state.email);
         localStorage.setItem("userType", this.state.userType);
         localStorage.setItem("site", "SLO");
@@ -54,8 +58,8 @@ class Login extends Component {
 
         if (path.length === 3) {
             if (path[2] === "site-manager") {
+                document.getElementById("siteManager").checked = true;
                 this.setState( { userType: path[2] } )
-                document.getElementById("site-manager").checked = true;
             }
             else if (path[2] === "data-entry") {
                 this.setState( { userType: path[2] } )
@@ -145,7 +149,7 @@ class Login extends Component {
                 </div>
                 <div id="cta-type">
                     <div id="site-manager">
-                        <input type="radio" id="site-manager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
+                        <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
                         <label for="site-manager">Manager</label>
                     </div>
                     <div id="data-entry">
