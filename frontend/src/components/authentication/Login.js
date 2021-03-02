@@ -113,17 +113,23 @@ class Login extends Component {
         .then((res) => {
             if (res.status === 404) {
                 _this.setState({error: true})
-                console.log(res)
             }
             else {
-                _this.storeUser(user)
-                if (this.state.userType === "volunteer"){
-                    this.volunteerInfoCheck(user)
-                }
-                else {
-                    this.props.history.push("/");
-                }
+                return res.json()
             }
+        })
+        .then(data => {
+            _this.storeUser(data)
+            if (this.state.userType === "volunteer"){
+                this.volunteerInfoCheck(data)
+            }
+            else {
+                this.props.history.push("/");
+            }
+        })
+        .catch(err => {
+            console.log("Error")
+            _this.setState({error: true})
         })
     }
     
@@ -137,7 +143,7 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status === 404) {
+            if (res.status === 300) {
                 _this.props.history.push("/volunteer-additional-info");
             }
             else {
