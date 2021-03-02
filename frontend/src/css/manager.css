@@ -25,6 +25,12 @@
     overflow: auto;
 }
 
+.site-manager-container3 {
+   margin: 20px 50px;
+   max-width: 95vw;
+   overflow: auto;
+}
+
 .site-manager-page input{
     padding: 10px;
     border: none;

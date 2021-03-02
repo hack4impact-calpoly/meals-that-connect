@@ -24,8 +24,9 @@ router.post('/', async (req, res) =>{
           const password = bcrypt.hashSync(req.body.password, 9);
           var doc;
           if (user == "volunteer") {
+             var volunteerID = getID();
              const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
-             doc = new userType({ firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
+             doc = new userType({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
           } else {
              doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
           }
@@ -35,6 +36,11 @@ router.post('/', async (req, res) =>{
        }
     })
  });
+
+// Generates random string ID. Very low probability of duplicate IDs
+function getID() {
+   return '_' + Math.random().toString(36).substr(2, 9);
+}
  
  function getUser(user) {
    if (user === "volunteer")
@@ -46,5 +52,4 @@ router.post('/', async (req, res) =>{
    else
       return null
 }
-
  module.exports = router;
