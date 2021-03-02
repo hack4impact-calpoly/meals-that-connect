@@ -8,7 +8,8 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
+            volunteerID: "",
             isLoggedIn : false,
             RedirectLoggedUser: false,
             userType: this.props.match.params.user ? this.props.match.params.user : "",
@@ -45,8 +46,8 @@ class Login extends Component {
 
         if (path.length === 3) {
             if (path[2] === "site-manager") {
+                document.getElementById("siteManager").checked = true;
                 this.setState( { userType: path[2] } )
-                document.getElementById("site-manager").checked = true;
             }
             else if (path[2] === "data-entry") {
                 this.setState( { userType: path[2] } )
@@ -112,17 +113,23 @@ class Login extends Component {
         .then((res) => {
             if (res.status === 404) {
                 _this.setState({error: true})
-                console.log(res)
             }
             else {
-                _this.storeUser()
-                if (this.state.userType === "volunteer"){
-                    this.volunteerInfoCheck(user)
-                }
-                else {
-                    this.props.history.push("/");
-                }
+                return res.json()
             }
+        })
+        .then(data => {
+            _this.storeUser(data)
+            if (this.state.userType === "volunteer"){
+                this.volunteerInfoCheck(data)
+            }
+            else {
+                this.props.history.push("/");
+            }
+        })
+        .catch(err => {
+            console.log("Error")
+            _this.setState({error: true})
         })
     }
     
@@ -136,7 +143,7 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status === 404) {
+            if (res.status === 300) {
                 _this.props.history.push("/volunteer-additional-info");
             }
             else {
@@ -145,11 +152,14 @@ class Login extends Component {
         })
     }
 
-    storeUser = () => {
+    storeUser = (user) => {
         const date = new Date();
-        localStorage.setItem("userEmail", this.state.email);
+        if (this.state.userType == "volunteer") {
+           localStorage.setItem("volunteerID", this.state.volunteerID);
+        }
+        localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userType", this.state.userType);
-        localStorage.setItem("site", "SLO");
+        localStorage.setItem("site", user.site);
         localStorage.setItem("time", date);
         localStorage.setItem("isLoggedIn", true);
     }
@@ -174,7 +184,7 @@ class Login extends Component {
                 </div>
                 <div id="cta-type">
                     <div id="site-manager">
-                        <input type="radio" id="site-manager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
+                        <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
                         <label for="site-manager">Manager</label>
                     </div>
                     <div id="data-entry">

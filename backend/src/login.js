@@ -25,6 +25,9 @@ router.post('/email-taken', async (req, res) =>{
 router.post('/', async (req, res) => {
    const {email, password, user} = req.body
    let userType = getUser(user)
+   if (userType == null) {
+      res.status(404).send("Invalid user type") 
+   }
 
    userType.findOne({'email': email}).then(function(result) {
       if (!result) {
@@ -36,7 +39,10 @@ router.post('/', async (req, res) => {
          const valid = bcrypt.compareSync(password, userPassword);
          if (valid) {
             console.log("login successful")
-            res.send("login successful")
+            if (user == "volunteer") {
+               res.send(result)
+            } 
+            res.send(result)
          } else {
             console.log("Invalid password")
                res.status(404).send("Invalid password")   
@@ -76,8 +82,10 @@ function getUser(user) {
       return Volunteer
    else if (user === "site-manager")
       return SiteManager
-   else
+   else if (user === "data-entry")
       return DataEntry
+   else
+      return null
 }
 
 module.exports = router;

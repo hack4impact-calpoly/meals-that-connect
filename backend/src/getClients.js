@@ -69,6 +69,24 @@ router.post('/routeTotals', async (req, res) => {
   res.send(totals)
 })
 
+router.post('/update-routes', async (req, res) => {
+   const {id, key, data} = req.body
+
+   var query = {}
+   query[key] = data;
+
+   Client.updateOne({'_id': id}, query)
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+        } else {
+          console.log("Information updated");
+          res.send("Information updated");
+          }
+    })
+});
+
 async function getTotalsByRouteSite(route, site) {
   var clientList = await getClientsByRouteSite(route, site)
   var days = ["M", "T", "W", "Th", "F"]

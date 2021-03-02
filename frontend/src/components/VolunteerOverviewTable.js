@@ -48,9 +48,7 @@ const EditableCell = (cellProperties, width) => {
   }
 
   const updateDatabase = async (emailD, keyD, valueD, changed) => {
-    console.log("ohno")
     if (changed !== false) {
-      console.log("nice")
       const updateData = {
         email: emailD,
         key: keyD,

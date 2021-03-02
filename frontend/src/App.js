@@ -7,6 +7,7 @@ import Home from './components/homepage/Home'
 import Login from './components/authentication/Login'
 
 import Signup from './components/authentication/Signup'
+import MasterSignup from './components/authentication/MasterSignup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
 import VolunteerHours from './components/VolunteerHoursOverview'
@@ -44,6 +45,7 @@ class App extends Component {
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
+              <PublicRoute path="/master-signup" component={MasterSignup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
               {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
@@ -53,9 +55,9 @@ class App extends Component {
               <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" path="/routes" component={RouteHomePage}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
-              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
+              <PrivateRoute requiredUser="none" exact path="/volunteer" component={VolunteerOverview}/>
+              <PrivateRoute requiredUser="none" exact path="/volunteer-hours" component={VolunteerHours}/>
+              <PrivateRoute requiredUser="none" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
           </Switch>
       </Router>
     </div>
