@@ -46,7 +46,7 @@ class Signup extends Component {
     storeUser = () => {
         localStorage.setItem("userEmail", this.state.email);
         localStorage.setItem("userType", this.state.userType);
-        localStorage.setItem("site", "SLO");
+        localStorage.setItem("site", this.state.site);
         localStorage.setItem("time", new Date());
         localStorage.setItem("isLoggedIn", true);
     }
@@ -197,6 +197,16 @@ class Signup extends Component {
                         <label for="volunteerID">Volunteer</label>
                     </div>
                 </div>
+
+                <div className= "drop-down-site">
+                    <p id= "select-site">Select site:</p>
+                    <select style={{width: '150px'}} id= "site" value={this.state.value} onChange={this.handleChange}>
+                        <option value="SLO">SLO</option>
+                        <option value="Five cities">Five cities</option>
+                        <option value="Cambria">Cambria</option>
+                    </select>
+                </div>
+
                 <div className= "input-name">
                     <p id="first-name">First Name</p>
                     <p id="last-name">Last Name</p>
