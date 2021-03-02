@@ -30,7 +30,7 @@ router.get('/allVolunteers', async (req, res) => {
 
 router.post('/siteVolunHours', async (req, res) => {
   const {site} = req.body
-  totals = await getVolunteerHours(site)
+  var totals = await getVolunteerHours(site)
   res.send(totals)
 })
 
@@ -89,16 +89,17 @@ async function getVolunteersBySite(siteName) {
 }
 //rewrite this funcion
 async function getVolunteerHours(site) {
-    volunteerList = await getVolunteersBySite(site)
-    totals = []
+    var volunteerList = await getVolunteersBySite(site)
+    var totals = []
     for (var index in volunteerList) {
-      first = volunteerList[index].firstName
-      last = volunteerList[index].lastName
-      VolunteerHours = await Hours.find({firstName: first, lastName: last}, function (err, hrs)
+      var first = volunteerList[index].firstName
+      var last = volunteerList[index].lastName
+      await Hours.find({firstName: first, lastName: last}, function (err, hrs)
       {
         if (err)
         {
-          console.log(err)}
+          console.log(err)
+        }
         else
         {
           totals.push({firstName: first, lastName: last, hours: hrs})

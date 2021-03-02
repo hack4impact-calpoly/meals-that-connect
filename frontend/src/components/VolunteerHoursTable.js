@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { useTable } from 'react-table'
 import env from "react-dotenv";
 
+const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+
 const Styles = styled.div`
  table {
    margin-top: 10px;
@@ -38,6 +40,87 @@ const Styles = styled.div`
  }
 `
 
+/*
+const dynamicCol = (data) =>
+{
+    var columnArray = [];
+    var currentDate = new Date()
+    var d = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+    var days = d.getDate();
+
+    for (var i = 0; i < days; i++)
+    {
+        var column = {};
+        var subColumn = {};
+        var subSubColumnHome = {};
+        var subSubColumnDining = {};
+        var daysIndex = i % 7;
+        
+        if (daysIndex === 5 || daysIndex === 6)
+        {
+            continue;
+        }
+        //lowest level
+        subSubColumnHome["Header"] = "Home";
+        subSubColumnHome["accessor"] = `${DAYS[daysIndex]}${i}HOME`;
+        if (getDateHeader(i) === 1)
+        {
+          subSubColumnHome["Cell"] = "0";
+        }
+
+        subSubColumnDining["Header"] = "Dining";
+        subSubColumnDining["accessor"] = `${DAYS[daysIndex]}${i}DINING`;
+
+        //medium level
+        subColumn["Header"] = <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDateHeader(i)}</div>;
+        subColumn["accessor"] = `${DAYS[daysIndex]}${i}DATE`;
+        subColumn["columns"] = [subSubColumnHome, subSubColumnDining];
+
+        //highest level
+        column["Header"] = DAYS[daysIndex];
+        column["columns"] = [subColumn];
+        columnArray.push(column);
+    }
+    return columnArray
+}
+
+const VolunteerHoursTable = (props) => {
+    var datesArray = dynamicCol(props.data[0])
+    var infoArray = [
+                        {
+                            Header: 'Volunteer Name',
+                            columns: [
+                            {                 
+                                accessor: 'lastName',
+                                Header: () => ( <div style={ { textAlign: 'left' } }>Last</div> ),
+                                Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.lastName.toString()}</div> ),
+                            }, 
+                            {                 
+                                accessor: 'firstName',
+                                Header: () => ( <div style={ { textAlign: 'left' } }>First</div> ),
+                                Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.firstName.toString()}</div> ),
+                            },
+                            ],
+                        },
+                        {
+                            Header: 'Volunteer Signature (I received newsletter)',
+                            accessor: 'signature',
+                            Cell: row => ( <div style={ { textAlign: 'left' } }>Yes</div> ),
+                        }
+                    ]
+    var combinedArray = infoArray.concat(datesArray)
+    
+    const columns = React.useMemo(
+        () => combinedArray
+    )
+
+    const data = React.useMemo(() => props.data[0], [])
+    return (
+    <Styles>
+        <RouteTable columns={columns} data={data}/>
+    </Styles>
+    )
+*/
 const EditableCell = (cellProperties, width) => {
     var changedFlag = false;
     const firstName = cellProperties["firstName"];
@@ -704,7 +787,7 @@ function RouteTable({ columns, data }) {
  )
 }
 
-function getDate(tableDay) {
+function getDateHeader(tableDay) {
     let curr = new Date();
     let firstDay = new Date(curr.getFullYear(), curr.getMonth(), 1).getDay();
     let lastDay = new Date(curr.getFullYear(), curr.getMonth()+1, 0).getDate()
