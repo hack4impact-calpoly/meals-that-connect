@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../../css/Login.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import env from "react-dotenv";
-
+import fire from '../../fire.js';
 
 class Login extends Component {
 
@@ -18,18 +18,6 @@ class Login extends Component {
             password: "",
             error: false
         };
-    }
-
-    storeUser = () => {
-        const date = new Date();
-        if (this.state.userType == "volunteer") {
-           localStorage.setItem("volunteerID", this.state.volunteerID);
-        }
-        localStorage.setItem("userEmail", this.state.email);
-        localStorage.setItem("userType", this.state.userType);
-        localStorage.setItem("site", "SLO");
-        localStorage.setItem("time", date);
-        localStorage.setItem("isLoggedIn", true);
     }
 
     handleChange = (e) => {
@@ -72,28 +60,8 @@ class Login extends Component {
         }
     }
 
-    volunteerInfoCheck = (user) => {
-        let _this = this
-        fetch(env.backendURL + 'volunteers/volunteerComplete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        .then((res) => {
-            if (res.status === 404) {
-                _this.props.history.push("/volunteer-additional-info");
-            }
-            else {
-                _this.props.history.push("/");
-            }
-        })
-    }
-
     login = (e) => {
         e.preventDefault();
-        let _this = this
 
         if (this.state.userType == "") {
             this.setState({emptyUser: true})
@@ -106,6 +74,35 @@ class Login extends Component {
             user: this.state.userType
         }
 
+        this.firebase_signin(user);
+    }
+
+    firebase_signin = (user) => {
+        fire.auth().signInWithEmailAndPassword(user.email, user.password)
+        .then((userCredential) => {
+            var firebase_user = userCredential.user;
+            this.firebase_checkEmailVerif(firebase_user, user);
+        })
+        .catch((error) => {
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error)
+        });
+        }
+
+    firebase_checkEmailVerif = (firebase_user, user) => {
+        var emailVerified = firebase_user.emailVerified;
+        
+        if (!emailVerified) {
+            this.props.history.push("/email-verification");
+        } 
+        else {
+            this.mongo_login(user)
+        }
+    }
+
+    mongo_login = (user) => {
+        let _this = this
         fetch(env.backendURL + 'login', {
             method: 'POST',
             headers: {
@@ -118,15 +115,53 @@ class Login extends Component {
                 _this.setState({error: true})
             }
             else {
-                _this.storeUser()
-                if (this.state.userType === "volunteer"){
-                    this.volunteerInfoCheck(user)
-                }
-                else {
-                    _this.props.history.push("/");
-                }
+                return res.json()
             }
         })
+        .then(data => {
+            _this.storeUser(data)
+            if (this.state.userType === "volunteer"){
+                this.volunteerInfoCheck(data)
+            }
+            else {
+                this.props.history.push("/");
+            }
+        })
+        .catch(err => {
+            console.log("Error")
+            _this.setState({error: true})
+        })
+    }
+    
+    volunteerInfoCheck = (user) => {
+        let _this = this
+        fetch(env.backendURL + 'volunteers/volunteerComplete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then((res) => {
+            if (res.status === 300) {
+                _this.props.history.push("/volunteer-additional-info");
+            }
+            else {
+                _this.props.history.push("/");
+            }
+        })
+    }
+
+    storeUser = (user) => {
+        const date = new Date();
+        if (this.state.userType == "volunteer") {
+           localStorage.setItem("volunteerID", this.state.volunteerID);
+        }
+        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("userType", this.state.userType);
+        localStorage.setItem("site", user.site);
+        localStorage.setItem("time", date);
+        localStorage.setItem("isLoggedIn", true);
     }
 
     render() {

@@ -60,7 +60,7 @@ router.post('/volunteerComplete', async(req, res) => {
   
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
-      console.log(volunteer)
+      //console.log(volunteer)
       res.status(404).send("email not valid")
     }
     else {
@@ -69,7 +69,7 @@ router.post('/volunteerComplete', async(req, res) => {
         console.log("Info completed")
       }
       else {
-        res.status(404).send("not completedInfo")
+        res.status(300).send("not completedInfo")
         console.log("not completedInfo")
       }
     }
