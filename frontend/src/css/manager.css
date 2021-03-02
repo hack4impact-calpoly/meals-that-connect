@@ -25,6 +25,12 @@
     overflow: auto;
 }
 
+.site-manager-container3 {
+   margin: 20px 50px;
+   max-width: 95vw;
+   overflow: auto;
+}
+
 .site-manager-page input{
     padding: 10px;
     border: none;
@@ -43,4 +49,10 @@
     background: white;
     cursor: default;
     box-shadow: 0 0 15px #719ECE;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

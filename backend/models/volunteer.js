@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const {userConnection} = require('../connections');
 
 const volunteerSchema = new mongoose.Schema({
+   volunteerID: {type: String, required: true},
    firstName: {type: String, required: true},
    lastName: {type: String, required: true},
    email: {type: String, required: true},
