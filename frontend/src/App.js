@@ -10,6 +10,7 @@ import Signup from './components/authentication/Signup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
 import VolunteerHours from './components/VolunteerHoursOverview'
+import EmailVerification from "./components/authentication/EmailVerification.js"
 
 import VolunteerOverview from './components/VolunteerOverview'
 import VolunteerInfo from './components/VolunteerInfo'
@@ -43,7 +44,10 @@ class App extends Component {
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
-              <PublicRoute path="/reset-password" exact component={ResetPassword} />
+              <PublicRoute path="/reset-password" exact component={ResetPassword} />              
+              <PublicRoute exact path="/email-verification" component={EmailVerification}/>
+              {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
+
 
               <PrivateRoute requiredUser="none" path="/signout" exact component={Private}/>
               <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>

@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+.email-verification {
+    display: flex;
+    align-items: center;
+    margin: 200px;
+    margin-top:160px;
+    padding-top: 30px; 
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    flex-direction: column;
+
+    background-color: white;
+    background-clip: padding-box;
+    filter: drop-shadow(5px 10px 5px grey);
+    overflow: hidden;
+
+    font-family: 'Quicksand', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 17px;
+    color:black;
+}
+
+#emailv-header {
+    font-weight: bold;
+}

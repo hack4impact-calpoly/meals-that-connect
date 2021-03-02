@@ -23,6 +23,9 @@ frontend/src/fire.js
 .env.test.local
 .env.production.local
 
+# vscode sftp
+.vscode
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

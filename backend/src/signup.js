@@ -7,6 +7,29 @@ const SiteManager = require('../models/SiteManager');
 const Volunteer = require('../models/Volunteer');
 const DataEntry = require('../models/DataEntry');
 
+router.post('/email-taken', async (req, res) =>{
+   const {email, user} = req.body
+   let userType = getUser(user);
+ 
+   userType.findOne({'email': email}).then(function(result) {
+      if (result) {
+         console.log("email already in use")
+         res.status(404).send("email already in use")
+      } 
+      else {
+         res.status(200).send("valid email")
+      }
+   });
+});
+
+router.get('/delete', async (req, res) =>{
+   var myquery = { 'firstName': "Emily" };
+   SiteManager.deleteMany(myquery, function(err, obj) {
+      if (err) throw err;
+      console.log(obj);
+   });
+});
+
 router.post('/', async (req, res) =>{
     const {firstName, lastName, email, isAuthenticated, site, user} = req.body
  
@@ -34,6 +57,9 @@ router.post('/', async (req, res) =>{
           console.log("successfully added user")
           res.status(200).send("success")
        }
+    }).catch(err => {
+       console.log(err)
+       res.send(500).send("Internal server error")
     })
  });
 
