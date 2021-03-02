@@ -87,7 +87,7 @@ async function getVolunteersBySite(siteName) {
     }
   })
 }
-
+//rewrite this funcion
 async function getVolunteerHours(site) {
     volunteerList = await getVolunteersBySite(site)
     totals = []

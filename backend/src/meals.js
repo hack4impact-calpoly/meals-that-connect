@@ -10,14 +10,14 @@ const Client = require("../models/clients")
 // to the correct data and preferences of the client.
 
 router.post('/schedule', async (req, res) => {
-   const {date, client} = req.body
+   const {date, volunteer} = req.body
    
    var meal;
 
-   meal = new Meal({'firstName': client.firstName, 'lastName': client.lastName, 
-                   'site': client.site, 'routeNumber': client.routeNumber, 'startDate': date,
-                   'mealNumber': client.mealNumber, 'foodDays': client.foodDays, 
-                   'frozenNumber': client.frozenNumber, 'frozenDay': client.frozenDay})
+   meal = new Meal({'volunteerID': volunteer.volunteerID, 'site': volunteer.site,
+                   'routeNumber': volunteer.routeNumber, 'startDate': date,
+                   'mealNumber': volunteer.mealNumber, 'foodDays': volunteer.foodDays, 
+                   'frozenNumber': volunteer.frozenNumber, 'frozenDay': volunteer.frozenDay})
  
    meal.save();
    console.log("meal successfully added");

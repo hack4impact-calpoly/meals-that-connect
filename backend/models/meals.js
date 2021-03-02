@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 const {mealsConnection} = require('../connections')
 
 const mealSchema = new mongoose.Schema({
-   firstName: {type: String, required: true},
-   lastName: {type: String, required: true},
+   volunteerID: {type: String, required: true},
    site: {type: String, required: true},
    routeNumber: {type: String, required: true},
    startDate: {type: Date, required: true},

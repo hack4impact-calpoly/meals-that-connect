@@ -21,11 +21,13 @@ router.post('/', async (req, res) => {
          const valid = bcrypt.compareSync(password, userPassword);
          if (valid) {
             console.log("login successful")
-            res.send("login successful")
+            if (user == "volunteer") {
+               res.send(result.volunteerID)
+            } 
          } else {
             console.log("Invalid password")
             res.send("Invalid password", 404)             
-           }
+         }
      }
    })
 });
