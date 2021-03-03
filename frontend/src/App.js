@@ -6,6 +6,9 @@ import NavBar from './components/NavBar'
 import Home from './components/homepage/Home'
 import Login from './components/authentication/Login'
 
+import SiteManagerNavBar from './components/sitemanager/SiteManagerNavBar'
+import DataVolunteerNavBar from './components/DataVolunteerNavBar'
+
 import Signup from './components/authentication/Signup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/RouteHomepage.js'
@@ -45,13 +48,17 @@ class App extends Component {
               <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
 
-              <PrivateRoute requiredUser="none" path="/signout" exact component={Private}/>
+              <PrivateRoute requiredUser="none" path="/signout"><NavBar/><Private /></PrivateRoute>
               <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
-              <PrivateRoute requiredUser="site-manager" path="/routes" component={RouteHomePage}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
+              <PrivateRoute requiredUser="site-manager" exact path = "/routes"><SiteManagerNavBar /><RouteHomePage /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><SiteManagerNavBar /><VolunteerOverview /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><SiteManagerNavBar /><VolunteerHours /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" path="/signout"><SiteManagerNavBar /><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><DataVolunteerNavBar /><VolunteerInfo /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="data-entry" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
+
           </Switch>
       </Router>
     </div>
