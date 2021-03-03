@@ -77,13 +77,13 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
   if (type === "checkbox")
   {
     return (
-        <span><input type={type} style={{width: width - 1}} checked={selected} onChange={e => updateCheckbox()}/></span>
+        <span><input type={type} style={{width: width - 1.25}} checked={selected} onChange={e => updateCheckbox()}/></span>
     )
   }
   else
   {
     return (
-        <span><input type={type} style={{width: width - 1}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase()}/></span>
+        <span><input type={type} style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase()}/></span>
     )
   }
 
@@ -95,11 +95,6 @@ const VolunteerOverviewData = (props) => {
       {
       Header: 'Volunteer Overview',
       columns: [
-          {
-            Header: 'Remove Volunteer',
-            width: 100,
-            Cell: (cellProperties) => <div style={{width: 99, cursor: 'pointer'}} onClick={e => deleteVolunteer(cellProperties)}>Remove</div> 
-          },
           { Header: 'First Name',
           accessor: 'firstName',
           Cell: (cellProperties) => EditableCell(cellProperties, 200, TEXT_TYPE, null)
