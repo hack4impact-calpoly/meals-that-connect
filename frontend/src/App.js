@@ -48,7 +48,7 @@ class App extends Component {
               <PublicRoute path="/signup" component={Signup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />
 
-              <PrivateRoute requiredUser="none" path="/signout"><NavBar/><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="none" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
               <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><SiteManagerNavBar /><RouteHomePage /></PrivateRoute>
