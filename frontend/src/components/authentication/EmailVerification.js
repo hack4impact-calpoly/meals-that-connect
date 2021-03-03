@@ -7,6 +7,7 @@ class EmailVerification extends Component {
 
     firebase_token_check = () => {
         fire.auth().signInWithEmailAndPassword('aaparmar@calpoly.edu', 'Pa55w0rd1').then(currentUser => {
+            console.log(currentUser)
             const idToken = fire.auth().currentUser.getIdToken();
             console.log(idToken);
         })

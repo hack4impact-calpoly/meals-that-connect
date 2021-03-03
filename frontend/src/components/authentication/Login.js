@@ -79,16 +79,54 @@ class Login extends Component {
 
     firebase_signin = (user) => {
         fire.auth().signInWithEmailAndPassword(user.email, user.password)
-        .then((userCredential) => {
+        .then(userCredential => {
             var firebase_user = userCredential.user;
-            this.firebase_checkEmailVerif(firebase_user, user);
+            //console.log(firebase_user)
+            this.firebase_getToken(userCredential);
+
+            //this.firebase_checkEmailVerif(firebase_user, user);
+
+            //const idToken = fire.auth().user.getIdToken();
+            // this.firebase_decodeToken(idToken);
         })
         .catch((error) => {
             var errorMessage = error.message;
             alert(errorMessage);
             console.log(error)
         });
-        }
+    }
+
+    firebase_getToken = (currentUser) => {
+        fire.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
+            // Send token to your backend via HTTPS
+            // ...
+            console.log(idToken);
+            console.log("get token");
+            this.firebase_decodeToken(currentUser, idToken);
+          }).catch(function(error) {
+            // Handle error
+            console.log(error);
+          });
+    }
+
+    firebase_decodeToken = (idToken) => {
+        console.log("here");
+        fire.auth().verifyIdToken(idToken)
+        .then((decodedToken) => {
+            console.log("decoding token");
+            console.log(decodedToken)
+            const uid = decodedToken.uid;
+            console.log(uid)
+            // ...
+        })
+        .catch((error) => {
+            // Handle error
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error);
+            console.log("not a verified token (?)")
+        });
+    }
 
     firebase_checkEmailVerif = (firebase_user, user) => {
         var emailVerified = firebase_user.emailVerified;
