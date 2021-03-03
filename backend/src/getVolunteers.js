@@ -60,7 +60,7 @@ router.post('/volunteerComplete', async(req, res) => {
   
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
-      console.log(volunteer)
+      //console.log(volunteer)
       res.status(404).send("email not valid")
     }
     else {
@@ -69,13 +69,34 @@ router.post('/volunteerComplete', async(req, res) => {
         console.log("Info completed")
       }
       else {
-        res.status(404).send("not completedInfo")
+        res.status(300).send("not completedInfo")
         console.log("not completedInfo")
       }
     }
   })
 })
 
+router.post('/volunteerDelete', async(req, res) => {
+  const { email } = req.body
+
+  Volunteer.deleteOne({"email": email})
+    .then(function(volunteer) {
+      if (!volunteer) {
+        console.log(volunteer)
+        res.status(404).send("email not valid")
+      }
+      else {
+        if (volunteer.phoneNumber !== "0") {
+          res.status(200).send("Info completed")
+          console.log("Info completed")
+        }
+        else {
+          res.status(404).send("not completedInfo")
+          console.log("not completedInfo")
+        }
+      }
+    })
+})
 
 async function getVolunteersBySite(siteName) {
   return await Volunteer.find({site: siteName}, function (err, volunteers) {
@@ -87,7 +108,7 @@ async function getVolunteersBySite(siteName) {
     }
   })
 }
-
+//rewrite this funcion
 async function getVolunteerHours(site) {
     var volunteerList = await getVolunteersBySite(site)
     var totals = []

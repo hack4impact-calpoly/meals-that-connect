@@ -5,8 +5,8 @@ const router = express.Router();
 const Hours = require("../models/Hours")
 
 router.post('/edit', async (req, res) => {
-    const {firstName, lastName, date, newHours} = req.body
-    Hours.find({firstName: firstName, lastName: lastName, date: date}, function (err, hourLog) {
+    const {volunteerID, firstName, lastName, date, newHours} = req.body
+    Hours.find({volunteerID: volunteerID, date: date}, function (err, hourLog) {
         if (err) {
             console.log(err)
         }
@@ -19,8 +19,8 @@ router.post('/edit', async (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
-    const {firstName, lastName, date, hours} = req.body
-    var temp = new Hours({firstName: firstName, lastName: lastName, date: date, hours: hours}, function (err, newHourLog) {
+    const {volunteerID, firstName, lastName, date, hours} = req.body
+    var temp = new Hours({volunteerID: volunteerID, date: date, hours: hours}, function (err, newHourLog) {
         if (err) {
             console.log(err)
         }
@@ -32,8 +32,8 @@ router.post('/add', async (req, res) => {
 })
 
 router.post('/delete', async (req, res) => {
-    const {firstName, lastName, date} = req.body
-    Hours.deleteOne({firstName: firstName, lastName: lastName, date: date}, function (err, deleted) {
+    const {volunteerID, firstName, lastName, date} = req.body
+    Hours.deleteOne({volunteerID: volunteerID, date: date}, function (err, deleted) {
         if (err) {
             console.log(err)
         }

@@ -183,3 +183,22 @@ input[type=radio] {
     font-size: 17px;
 }
 
+.drop-down-site {
+    margin-left: 0px;
+    padding-right: 0px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+
+#select-site {
+    margin-left: 0px;
+    padding-right: 0px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
