@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { signout } from './authenticationUtils';
 import { withRouter, Redirect } from 'react-router-dom';
-import PrivateRoute from '../../PrivateRoute';
-
-import SiteManagerNavBar from '../sitemanager/SiteManagerNavBar';
-
 
 class Private extends Component {
 	constructor(props){
@@ -30,11 +26,9 @@ class Private extends Component {
         }
 
         return (
-          <div className = "test">
             <div className="Private" style={{marginTop: '200px'}}>
             <p> Sign out button for testing. </p> 
             <button onClick={this.signOut}> Sign out </button>
-            </div>
             </div>
         );
     }
