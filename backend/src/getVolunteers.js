@@ -76,6 +76,27 @@ router.post('/volunteerComplete', async(req, res) => {
   })
 })
 
+router.post('/volunteerDelete', async(req, res) => {
+  const { email } = req.body
+
+  Volunteer.deleteOne({"email": email})
+    .then(function(volunteer) {
+      if (!volunteer) {
+        console.log(volunteer)
+        res.status(404).send("email not valid")
+      }
+      else {
+        if (volunteer.phoneNumber !== "0") {
+          res.status(200).send("Info completed")
+          console.log("Info completed")
+        }
+        else {
+          res.status(404).send("not completedInfo")
+          console.log("not completedInfo")
+        }
+      }
+    })
+})
 
 async function getVolunteersBySite(siteName) {
   return await Volunteer.find({site: siteName}, function (err, volunteers) {
