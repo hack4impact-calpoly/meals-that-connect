@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { signout } from './authenticationUtils';
 import { withRouter, Redirect } from 'react-router-dom';
+import fire from '../../fire.js';
 
 class Private extends Component {
 	constructor(props){
@@ -11,6 +12,11 @@ class Private extends Component {
 	signOut = () => {
 		signout()
     this.setState({ RedirectLoggedUser: true });
+    fire.auth().signOut().then(() => {
+      // Sign-out successful.
+    }).catch((error) => {
+      // An error happened.
+    });
 	}
 
 

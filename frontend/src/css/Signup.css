@@ -89,6 +89,7 @@ p{
 }
 
 input[type=text],
+input[type=tel],
 input[type=email],
 input[type=password] {
     font-family: 'Quicksand', sans-serif;
@@ -96,6 +97,7 @@ input[type=password] {
 }
 
 input[type=text]:focus,
+input[type=tel]:focus,
 input[type=email]:focus,
 input[type=password]:focus {
     border-width:0px;
@@ -181,3 +183,22 @@ input[type=radio] {
     font-size: 17px;
 }
 
+.drop-down-site {
+    margin-left: 0px;
+    padding-right: 0px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+
+#select-site {
+    margin-left: 0px;
+    padding-right: 0px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
