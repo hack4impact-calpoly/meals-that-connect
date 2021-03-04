@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../../css/routesNavbar.css';
 import { HashLink as Link } from "react-router-hash-link";
+import Calendar from 'react-calendar'
 
 class routesOverview extends Component {
 
@@ -15,6 +16,7 @@ class routesOverview extends Component {
                 <h1><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">
+                    <Calendar id="calendar"/>
                     <Link to="/">
                         <button type="button" className="route">Overview</button>
                     </Link><br/>
