@@ -23,6 +23,8 @@ import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
+import LogHours from './components/LogHours'
+
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
@@ -51,6 +53,7 @@ class App extends Component {
               <PublicRoute path="/master-signup" component={MasterSignup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
+              <PublicRoute exact path="/log-hours" component={LogHours}/>
               {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
 
