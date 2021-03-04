@@ -26,7 +26,6 @@ class ResetPassword extends Component{
 		
 		var auth = fire.auth();
 		var emailAddress = this.state.email;
-		//console.log("here");
 
 		auth.sendPasswordResetEmail(emailAddress).then(function() {
 			// Email sent.
@@ -40,8 +39,6 @@ class ResetPassword extends Component{
 	
 	}
 
-	//firebase function that gets the updated password --> backend
-
 	reset = (e) => {
 		e.preventDefault();
 
@@ -50,33 +47,15 @@ class ResetPassword extends Component{
             return;
         } else {
 			this.firebase_reset_password();
+			let _this = this
+            _this.props.history.push("/login");
 		}
 	}
-
-	ResetPassword = (userType, email, password) => {
-        let _this = this
-        fetch(env.backendURL + 'login/reset-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userType, email, password)
-        })
-        .then((res) => {
-            if (res.status === 404) {
-                _this.props.history.push("/volunteer-additional-info");
-            }
-            else {
-                _this.props.history.push("/");
-            }
-        })
-    }
 
 	render(){
 		return(
 			<div className='auth-form'>
 				<h2> Reset Password </h2>
-				{/* <br/> */}
 				<p> Please select the user type and input your email below. You will be sent a link to reset your password. </p>
 				<div id="cta-type">
                     <div id="site-manager">
@@ -92,8 +71,6 @@ class ResetPassword extends Component{
                         <label for="volunteer">Volunteer</label>
                     </div>
                 </div>
-				{/* <p> Please input your email below. You will be sent a link to reset your password. </p> */}
-				{/* <br/> */}
 				<p className= "input-email">Email</p>
                 <input type="text" id="email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
 				<br/>

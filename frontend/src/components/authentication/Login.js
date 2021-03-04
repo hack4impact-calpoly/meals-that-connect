@@ -81,50 +81,12 @@ class Login extends Component {
         fire.auth().signInWithEmailAndPassword(user.email, user.password)
         .then(userCredential => {
             var firebase_user = userCredential.user;
-            //console.log(firebase_user)
-            this.firebase_getToken(userCredential);
-
-            //this.firebase_checkEmailVerif(firebase_user, user);
-
-            //const idToken = fire.auth().user.getIdToken();
-            // this.firebase_decodeToken(idToken);
+            this.firebase_checkEmailVerif(firebase_user, user);
         })
         .catch((error) => {
             var errorMessage = error.message;
             alert(errorMessage);
             console.log(error)
-        });
-    }
-
-    firebase_getToken = (currentUser) => {
-        fire.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
-            // Send token to your backend via HTTPS
-            // ...
-            console.log(idToken);
-            console.log("get token");
-            this.firebase_decodeToken(currentUser, idToken);
-          }).catch(function(error) {
-            // Handle error
-            console.log(error);
-          });
-    }
-
-    firebase_decodeToken = (idToken) => {
-        console.log("here");
-        fire.auth().verifyIdToken(idToken)
-        .then((decodedToken) => {
-            console.log("decoding token");
-            console.log(decodedToken)
-            const uid = decodedToken.uid;
-            console.log(uid)
-            // ...
-        })
-        .catch((error) => {
-            // Handle error
-            var errorMessage = error.message;
-            alert(errorMessage);
-            console.log(error);
-            console.log("not a verified token (?)")
         });
     }
 
