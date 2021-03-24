@@ -19,6 +19,8 @@ import EmailVerification from "./components/authentication/EmailVerification.js"
 import VolunteerOverview from './components/VolunteerOverview'
 import VolunteerInfo from './components/VolunteerInfo'
 
+import ClientTableContainer from './components/sitemanager/ClientTableContainer.js'
+
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
@@ -59,6 +61,7 @@ class App extends Component {
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><SiteManagerNavBar /><RouteHomePage /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><SiteManagerNavBar /><VolunteerOverview /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/clients"><SiteManagerNavBar /><ClientTableContainer /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><SiteManagerNavBar /><VolunteerHours /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" path="/signout"><SiteManagerNavBar /><Private /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><DataVolunteerNavBar /><VolunteerInfo /></PrivateRoute>

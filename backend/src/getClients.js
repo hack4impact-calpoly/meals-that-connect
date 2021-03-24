@@ -4,6 +4,17 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
+// router.post('/addIndex', async (req, res) => {
+//   console.log("here")
+//   let i = 0;
+//   try {
+//     Client.update({}, {$set: {"index": 0}, false, true})
+//  } catch (e) {
+//     console.log(e);
+//  }
+//  res.send("success")
+// })
+
 router.post('/routeSiteClients', async (req, res) => {
   const {route, site} = req.body
   Client.find({site: site, routeNumber: route}, function (err, clients) {

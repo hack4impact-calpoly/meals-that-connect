@@ -81,6 +81,7 @@ class Login extends Component {
         fire.auth().signInWithEmailAndPassword(user.email, user.password)
         .then((userCredential) => {
             var firebase_user = userCredential.user;
+            console.log(firebase_user)
             this.firebase_checkEmailVerif(firebase_user, user);
         })
         .catch((error) => {
