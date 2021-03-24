@@ -1,10 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useTable } from 'react-table'
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { DndProvider, useDrag, useDrop, DragSource } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
 import env from "react-dotenv"
+import { Styles } from '../table-components'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
@@ -12,45 +12,6 @@ const BOOL_CELL_WIDTH = 65;
 const REG_CELL_WIDTH = 100;
 const days = ["M", "T", "W", "Th", "F"];
 
-const Styles = styled.div`
-  width: 100%; 
-
-  table {
-    border-spacing: 0;
-    width: 100%; 
-    border: solid 2px #142850;
-
-    tr {  
-      :last-child {
-        td {
-          border-bottom: 0;  
-        }
-      }
-    }
-
-    th{
-        background: #D4D4D4;
-        color: black;
-        border: solid 2px #142850;
-        textAlign: column.textAlign;
-        fontWeight: bold;
-        minWidth: 80px;
-        padding: 3px 20px;
-        font-size: 20px;
-    }
-    td {
-        padding: 3px 20px;
-        border: solid 1px gray;
-        background: white;
-        overflow: auto;
-        font-size: 18px;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
 
 const MyTable = ({ columns, data }) => {
     const [records, setRecords] = React.useState(data)
@@ -184,8 +145,9 @@ const Row = ({ row, index, moveRow }) => {
                     <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
                 </svg>
             </td>
+            
             {row.cells.map(cell => {
-                return <td style={{ width: cell.width }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              return <td>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
             })}
         </tr>
     )
@@ -287,42 +249,123 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   
   }
 
-//   {
-//     Header: 'Client',
-//     id: 'index',
-//     width: '50px',
-//     textAlign: 'center',
-//     display: 'none',
-//     Cell: row => (<div type="text" style={{ textAlign: 'center' }}>{row.row.index + 1}</div>)
-// },
-
 const Table = (props) => {
+
     const columns = React.useMemo(
         () => [
-              {
-                Header: 'Client',
-                id: 'index',
-                width: '50px',
-                textAlign: 'center',
-                display: 'none',
-                Cell: row => (<div type="text" style={{ textAlign: 'center' }}>{row.row.index + 1}</div>)
+          { Header: 'First Name',
+          accessor: 'firstName',
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+          },
+          { Header: 'Last Name',
+          accessor: 'lastName',
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
+          },
+          { Header: 'Route',
+          accessor: 'routeNumber',
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
+          },
+          { Header: 'Address',
+          accessor: 'address',
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
+          },
+          { Header: 'M',
+          accessor: 'foodDaysM',
+          Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
+          },
+          { Header: 'T',
+          accessor: 'foodDaysT',
+          Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
+          },
+          { Header: 'W',
+          accessor: 'foodDaysW',
+          Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
+          },
+          { Header: 'Th',
+          accessor: 'foodDaysTh',
+          Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
+          },
+          { Header: 'F',
+          accessor: 'foodDaysF',
+          Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
+          },
+          { Header: 'Frozen',
+          accessor: 'frozenNumber',
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, 65, "number")
+          },
+          { Header: 'M',
+            accessor: 'frozenDaysM',
+            Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
             },
-            {
-                Header: 'First Name',
-                accessor: 'firstName',
-                textAlign: 'left',
-                width: '150px',
-                Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+          { Header: 'T',
+            accessor: 'frozenDaysT',
+            Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
             },
-            { Header: 'Last Name',
-            accessor: 'lastName',
-            Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
+          { Header: 'W',
+            accessor: 'frozenDaysW',
+            Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
             },
-          
-            
+          { Header: 'Th',
+            accessor: 'frozenDaysTh',
+            Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
+            },
+          { Header: 'F',
+            accessor: 'frozenDaysF',
+            Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
+          },
+        //   {
+        //   Header: 'Phone',
+        //   accessor: 'phoneNumber',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
+        //   },
+        //   {
+        //   Header: 'Emergency Contact',
+        //   accessor: 'emergencyContact',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+        //   },
+        //   {
+        //   Header: 'E. Contact Phone',
+        //   accessor: 'emergencyPhone',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
+        //   },
+        //   {
+        //   Header: 'No Milk',
+        //   accessor: 'noMilk',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
+        //   },
+        //   {
+        //   Header: 'Num. of Meals',
+        //   accessor: 'mealNumber',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+        //   },
+        //   {
+        //   Header: 'Special Instructions',
+        //   accessor: 'specialInstructions',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
+        //   },
+        //   {
+        //   Header: 'C2 Client',
+        //   accessor: 'clientC2',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
+        //   },
+        //   {
+        //   Header: 'N/E',
+        //   accessor: 'NE',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+        //   },
+        //   {
+        //   Header: 'Email Address',
+        //   accessor: 'email',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "email")
+        //   },
+        //   {
+        //   Header: 'Holiday Frozen',
+        //   accessor: 'holidayFrozen',
+        //   Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
+        //   }
         ],
         []
-    )
+      )
 
     function editClient(ID) {
         const { history } = props;

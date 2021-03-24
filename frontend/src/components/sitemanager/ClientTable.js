@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import { useTable } from 'react-table'
 import env from "react-dotenv"
+import { Styles } from '../table-components'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
@@ -9,38 +9,6 @@ const BOOL_CELL_WIDTH = 65;
 const REG_CELL_WIDTH = 100;
 const days = ["M", "T", "W", "Th", "F"];
 
-const Styles = styled.div`
- table {
-   margin: 0px 20px 50px 0px;
-   border-spacing: 0;
-   border: 1px solid black;
-   font-family: 'Mulish', sans-serif;
-   tr {
-     :last-child {
-       td {
-         border-bottom: 0;
-       }
-     }
-   }
-   th,
-   td {
-     padding: 0.5rem;
-     text-align: center;
-     border-bottom: 1px solid black;
-     border-right: 1px solid black;
-     font-size: 20px;
-
-     :last-child {
-       border-right: 0;
-     }
-   }
-   th {
-     background: #D4D4D4;
-     color: black;
-     fontWeight: bold;
-   }
- }
-`
 
 const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   // We need to keep and update the state of the cell normally
@@ -201,56 +169,56 @@ const ClientTable = (props) => {
         accessor: 'frozenDaysF',
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },
-      {
-      Header: 'Phone',
-      accessor: 'phoneNumber',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
-      },
-      {
-      Header: 'Emergency Contact',
-      accessor: 'emergencyContact',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-      },
-      {
-      Header: 'E. Contact Phone',
-      accessor: 'emergencyPhone',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
-      },
-      {
-      Header: 'No Milk',
-      accessor: 'noMilk',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
-      },
-      {
-      Header: 'Num. of Meals',
-      accessor: 'mealNumber',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-      },
-      {
-      Header: 'Special Instructions',
-      accessor: 'specialInstructions',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
-      },
-      {
-      Header: 'C2 Client',
-      accessor: 'clientC2',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
-      },
-      {
-      Header: 'N/E',
-      accessor: 'NE',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-      },
-      {
-      Header: 'Email Address',
-      accessor: 'email',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "email")
-      },
-      {
-      Header: 'Holiday Frozen',
-      accessor: 'holidayFrozen',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
-      }
+      // {
+      // Header: 'Phone',
+      // accessor: 'phoneNumber',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
+      // },
+      // {
+      // Header: 'Emergency Contact',
+      // accessor: 'emergencyContact',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+      // },
+      // {
+      // Header: 'E. Contact Phone',
+      // accessor: 'emergencyPhone',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
+      // },
+      // {
+      // Header: 'No Milk',
+      // accessor: 'noMilk',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
+      // },
+      // {
+      // Header: 'Num. of Meals',
+      // accessor: 'mealNumber',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+      // },
+      // {
+      // Header: 'Special Instructions',
+      // accessor: 'specialInstructions',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
+      // },
+      // {
+      // Header: 'C2 Client',
+      // accessor: 'clientC2',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
+      // },
+      // {
+      // Header: 'N/E',
+      // accessor: 'NE',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+      // },
+      // {
+      // Header: 'Email Address',
+      // accessor: 'email',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "email")
+      // },
+      // {
+      // Header: 'Holiday Frozen',
+      // accessor: 'holidayFrozen',
+      // Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
+      // }
     ],
     []
   )
