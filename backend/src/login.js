@@ -51,6 +51,32 @@ router.post('/', async (req, res) => {
    })
 });
 
+// reset password
+router.post('/reset-password', async(req, res) => {
+   const {email, userType, password} = req.body
+
+   userType.findOne({"email": email}).then(function(user) {
+      if (!user) {
+        console.log("email not valid")
+        res.status(404).send("email not valid")
+      }
+      else {         
+        updateUser(email, password, userType)
+        res.status(200).send("success")
+        console.log("success")
+        //console.log(volunteer)
+      }
+   })
+})
+
+async function updateUser(email, password, userType) {
+   await userType.updateOne(
+       {email: email},
+       {$set: { password: password }}
+       )
+       console.log("set");
+}
+
 function getUser(user) {
    if (user === "volunteer")
       return Volunteer
