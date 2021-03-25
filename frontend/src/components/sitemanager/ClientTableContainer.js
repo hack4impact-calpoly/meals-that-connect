@@ -29,12 +29,18 @@ class ClientTableContainer extends Component {
        this.setState({clients: data, loaded: true})
     }
 
+    setData = (data) => {
+        console.log("here")
+        this.setState({clients: data})
+    }
+
     render() {
+        console.log(this.state.clients)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
                 <div className="site-manager-container3">
-                    {this.state.loaded === true ? <Clients data={this.state.clients}/> :
+                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}

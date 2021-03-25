@@ -4,17 +4,6 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
-// router.post('/addIndex', async (req, res) => {
-//   console.log("here")
-//   let i = 0;
-//   try {
-//     Client.update({}, {$set: {"index": 0}, false, true})
-//  } catch (e) {
-//     console.log(e);
-//  }
-//  res.send("success")
-// })
-
 router.post('/routeSiteClients', async (req, res) => {
   const {route, site} = req.body
   Client.find({site: site, routeNumber: route}, function (err, clients) {
@@ -53,11 +42,15 @@ router.post('/route', async (req, res) => {
 
 router.post('/site', async (req, res) => {
   const {site} = req.body
-  Client.find({site: site}, function (err, clients) {
+  Client.find({site: site, index: {$exists:true}}, function (err, clients) {
     if (err) {
       console.log(err)
     }
     else {
+      clients = clients.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
+      for (let i = 0; i < clients.length; i++) {
+        clients[i].index = i
+      }
       res.send(clients)
     }
   })
@@ -96,6 +89,25 @@ router.post('/update-routes', async (req, res) => {
           res.send("Information updated");
           }
     })
+});
+
+router.post('/update-client-routes', async (req, res) => {
+  const clients = req.body
+
+  for (let i = 0; i < clients.length; i++) {
+    Client.updateOne({'_id': clients[i].id}, {'index': clients[i].index})
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
+  }
+
+  res.send("Information updated");
 });
 
 async function getTotalsByRouteSite(route, site) {
