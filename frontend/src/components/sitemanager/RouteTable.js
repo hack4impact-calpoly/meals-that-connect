@@ -167,27 +167,27 @@ const RouteTable = (props) => {
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "number")
       },
       { Header: 'M',
-        accessor: 'frozenDaysM',
+        accessor: 'frozenDayM',
         width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'T',
-        accessor: 'frozenDaysT',
+        accessor: 'frozenDayT',
         width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'W',
-        accessor: 'frozenDaysW',
+        accessor: 'frozenDayW',
         width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'Th',
-        accessor: 'frozenDaysTh',
+        accessor: 'frozenDayTh',
         width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'F',
-        accessor: 'frozenDaysF',
+        accessor: 'frozenDayF',
         width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },],},

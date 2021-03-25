@@ -61,7 +61,7 @@ class RouteHomepage extends Component {
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Routes Page</h1>
                 <div>
-                    <RoutesNavbar/>
+                    <RoutesNavbar routes={routes}/>
                     <div className="site-manager-container">
                         {routes.map((route, i) =>{
                             return (
