@@ -5,31 +5,44 @@ import SiteManagerNavBar from './sitemanager/SiteManagerNavBar'
 import SiteManagerHomepage from './sitemanager/SiteManagerHomepage.js'
 import DataEntryHome from './dataEntryHome.js'
 import LogHours from './LogHours.js'
+import NavBar from './NavBar.js'
 import Home from './homepage/Home'
 
 
 class HomepageWrapper extends Component {
     constructor(props) {
         super(props);
-        this.state = { userType: localStorage.getItem('userType')};
+        this.state = {
+            isLoggedIn: localStorage.getItem('isLoggedIn'), 
+            userType: localStorage.getItem('userType')
+        };
     }
 
     render() {
         let homePage, navbar;
-        if (this.state.userType === 'site-manager')
+        
+        if (this.state.isLoggedIn === false)
         {
-            navbar = <SiteManagerNavBar />
-            homePage = <SiteManagerHomepage />
+            navbar = <NavBar />
+            homePage = <Home />
         }
-        else if (this.state.userType === 'data-entry')
+        else 
         {
-            navbar = <DataVolunteerNavBar />
-            homePage = <DataEntryHome />
-        }
-        else
-        {
-            navbar = <DataVolunteerNavBar />
-            homePage = <LogHours />
+            if (this.state.userType === 'site-manager')
+            {
+                navbar = <SiteManagerNavBar />
+                homePage = <SiteManagerHomepage />
+            }
+            else if (this.state.userType === 'data-entry')
+            {
+                navbar = <DataVolunteerNavBar />
+                homePage = <DataEntryHome />
+            }
+            else
+            {
+                navbar = <DataVolunteerNavBar />
+                homePage = <LogHours />
+            }
         }
 
         return (

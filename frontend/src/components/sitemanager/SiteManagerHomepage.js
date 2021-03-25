@@ -5,15 +5,24 @@ import env from "react-dotenv";
 
 import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../css/manager.css'
+import '../../css/manager.css';
+
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            totals: []
+            totals: [],
+            weeks: []
          };
     }
+
+    // componentDidUpdate(prevState){
+    //     let weekArr = localStorage.getItem("week")
+    //     if (weekArr != null && (weekArr.split(',') != prevState.weeks)){
+    //         this.setState({weeks: weekArr.split(',')})
+    //     }
+    // }
 
     async componentDidMount(){
         // fetch all clients for each route

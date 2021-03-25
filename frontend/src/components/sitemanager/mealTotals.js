@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
 import "../../css/totalMeals.css"
+import { useEffect } from 'react'
 
 const Styles = styled.div`
   margin-left: 30px;
@@ -87,6 +88,7 @@ function MealTotals({ columns, data }) {
 }
 
 const Table = (props) => {
+  console.log("log inside Table" + getDate(0));
   const columns = React.useMemo(
     () => [
       {
@@ -166,7 +168,7 @@ const Table = (props) => {
     ],
     []
   )
-  
+
   const routes = [
     {
       route: " ", 
@@ -472,7 +474,17 @@ function cellClass(cell) {
 }
 
 function getDate(tableDay) {
-  let curr = new Date();
+  let weekArr = localStorage.getItem('week').split(',');
+  //console.log(weekArr);
+  let curr;
+  if (weekArr.length === 1)
+  {
+    curr = new Date();
+  }
+  else
+  {
+    curr = new Date(weekArr[0]);
+  }
   let week = [];
 
   for (let i = 1; i <= 7; i++) {
@@ -484,7 +496,6 @@ function getDate(tableDay) {
     let mdy = month + "/" + date + "/" + year;
     week.push(mdy);
   }
-
   return week[tableDay];
 }
 

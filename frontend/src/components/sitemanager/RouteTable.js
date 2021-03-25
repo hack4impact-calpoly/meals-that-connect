@@ -205,8 +205,14 @@ const RouteTable = (props) => {
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },],},
     {
+    Header: 'Expand for Contact Info ->',
+    accessor: 'expand',
+    Cell: () => (<div style={{width: 120}}></div>)
+    },
+    {
     Header: 'Phone',
     accessor: 'phoneNumber',
+    show: false,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
     },
     {
@@ -267,7 +273,8 @@ const RouteTable = (props) => {
   )
 }
 
-function Table({ columns, data }) {
+function Table({ columns, data }) 
+{
   const {
     getTableProps,
     getTableBodyProps,
@@ -276,6 +283,9 @@ function Table({ columns, data }) {
     prepareRow} = useTable({
     columns,
     data,
+    initialState: {
+      hiddenColumns: ["phoneNumber", "emergencyContact", "emergencyPhone", "noMilk", "mealNumber", "specialInstructions", "clientC2", "NE", "email", "holidayFrozen"]
+    }
     })
 
   // Render the UI for your table
@@ -285,7 +295,7 @@ function Table({ columns, data }) {
       {headerGroups.map(headerGroup => (
         <tr {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map(column => (
-            <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+            <th onClick={() => showContact()} {...column.getHeaderProps()}>{column.render('Header')}</th>
           ))}
         </tr>
       ))}
@@ -304,6 +314,11 @@ function Table({ columns, data }) {
     </tbody>
   </table>
  )
+}
+
+function showContact()
+{
+
 }
 
 export default RouteTable;
