@@ -30,7 +30,6 @@ class ClientTableContainer extends Component {
     }
 
     setData = (data) => {
-        console.log("here")
         this.setState({clients: data})
     }
 
