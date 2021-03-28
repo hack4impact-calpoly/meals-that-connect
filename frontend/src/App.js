@@ -26,6 +26,7 @@ import PublicRoute from './PublicRoute';
 import { isAuthenticated } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
+import LogHours from './components/LogHours';
 
 class App extends Component {
   
@@ -48,6 +49,7 @@ class App extends Component {
               <PublicRoute path="/master-signup" component={MasterSignup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
+              <PublicRoute exact path="/log-hours" component={LogHours}/>
               {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
 
