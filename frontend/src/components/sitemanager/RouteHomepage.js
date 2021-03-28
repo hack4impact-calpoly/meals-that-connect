@@ -7,24 +7,20 @@ class RouteHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            clients: []
+            clients: {},
+            routes: []
         };
     }
 
     async componentDidMount(){
-        // fetch all clients for each route
-        let routes = [1,2,3,4,5,6,7,8,9]
-        for(let i =0; i < routes.length; i++) {
-            await this.fetchClients(routes[i])
-        }
+        await this.fetchClients()
     }
     
-    async fetchClients (routenum) {
+    async fetchClients () {
         let info = {
             site: "SLO",
-            route: routenum
         }
-        let response = await fetch(env.backendURL + 'clients/routeSiteClients', {
+        let response = await fetch(env.backendURL + 'clients/site', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,34 +28,56 @@ class RouteHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        // let new_clients = this.state.clients
-        
-        this.setState({clients: [...this.state.clients, data]}) 
-        return data;
+        let clients = {}
+        let prevRoute = null
+        let routeData = []
+        let routes = []
+        for (let i = 0; i < data.length; i++) {
+            let client = data[i]
+            if (i > 0 && client.routeNumber != prevRoute) {
+                clients[prevRoute] = routeData
+                routes.push(prevRoute)
+                routeData = []
+            }
+            prevRoute = client.routeNumber
+            routeData.push(client)
+        }
+        if (routeData.length > 0) {
+            clients[prevRoute] = routeData
+            routes.push(prevRoute)
+        }
+        this.setState({clients: clients, routes: routes}) 
+    }
+
+    setData = (data, route) => {
+        let newClients = this.state.clients
+        newClients[route] = data
+        this.setState({clients: newClients})
     }
 
     render() {
-        let routes = [1,2,3,4,5,6,7,8,9]
-
+        let {routes, clients} = this.state
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Routes Page</h1>
                 <div>
-                    <RoutesNavbar/>
+                    <RoutesNavbar routes={routes}/>
                     <div className="site-manager-container">
-                        {this.state.clients.map((route, i) =>{
+                        {routes.map((route, i) =>{
                             return (
                                 <section>
-                                    <a id={String(routes[i])}></a>
-                                    <RouteTable routenum={routes[i]} data={route}></RouteTable>
+                                    <a id={String(route)}></a>
+                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData}></RouteTable>
                                 </section>
                         );})}
-                    </div>
+                    </div> 
+                    
                 </div>
             </div>
            
         );
     }
 }
+
 
 export default RouteHomepage;

@@ -31,7 +31,8 @@ const clientSchema = new mongoose.Schema({
    email: String,
    holidayFrozen: {type: Boolean, required: true, default: false},
    routeNumber: {type: String, required: true},
-   site: {type: String, required: true}
+   site: {type: String, required: true},
+   index: {type: Number, required: true}
 
 })
 
