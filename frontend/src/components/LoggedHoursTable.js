@@ -155,7 +155,8 @@ const Table = (props) => {
         hours: "2", 
       },
     ]
-const data = React.useMemo(() => routes, [] )
+    
+const data = React.useMemo(() => props.data, [] )
 
   return (
     <Styles>
