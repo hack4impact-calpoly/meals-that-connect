@@ -19,13 +19,16 @@ router.post('/edit', async (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
+    console.log('entered')
     const {volunteerID, date, hours} = req.body
-    var temp = new Hours({volunteerID: volunteerID, date: date, hours: hours}, function (err, newHourLog) {
+    let formattedDate = new Date(date);
+    var temp = new Hours({volunteerID, formattedDate, hours}, function (err, newHourLog) {
         if (err) {
             console.log(err)
         }
         else {
             temp.save()
+            console.log(hours)
             res.send(`Successful hours added for ${date}`)
         }
     })
@@ -43,7 +46,7 @@ router.post('/delete', async (req, res) => {
     })
 })
 
-router.get('/all', async (req, res) => {
+router.post('/all', async (req, res) => {
     const {volunteerID} = req.body
     Hours.find({volunteerID: volunteerID}, function (err, hours) {
       if (err) {

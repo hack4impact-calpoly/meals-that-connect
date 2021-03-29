@@ -7,8 +7,7 @@ class LogHours extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // volunteerID: localStorage.getItem("volunteerID"),
-            volunteerID: '_o15v4m3hz',
+            volunteerID: localStorage.getItem("volunteerID"),
             log: [],
             date: "",
             hours : "",
@@ -21,35 +20,43 @@ class LogHours extends Component {
 
     async componentDidMount(){
         let info = {
-           volunteerID: "_o15v4m3hz",
+           volunteerID: this.state.volunteerID,
         }
-        let response = await fetch(env.backendURL + 'hours/all', {
-           method: 'POST',
-           headers: {
-              'Content-Type': 'application/json'
-           },
-           body: JSON.stringify(info)
-        })
-        const data = await response.json();
+        // let response = await fetch(env.backendURL + 'hours/all', {
+        //    method: 'POST',
+        //    headers: {
+        //       'Content-Type': 'application/json'
+        //    },
+        //    body: JSON.stringify(info)
+        // })
+        // const data = await response.json();
 
-        fetch(env.backendURL + 'hours/add', {
+        console.log(info)
+
+        fetch(env.backendURL + 'hours/all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(hourLog)
+            body: JSON.stringify(info)
         })
         .then((res) => {
-            console.log(res);
+            if (res.status === 404) {
+                this.setState({error: true})
+            }
+            else {
+                return res.json()
+            }
+        })
+        .then((data) => {
+            console.log(data)
+            this.setState({log: data})
         })
         .catch(err => {
             console.log("Error")
             this.setState({error: true})
         })
- 
-        this.setState({log: data})
 
-        console.log(data)
      }
 
     newLog = () => {
