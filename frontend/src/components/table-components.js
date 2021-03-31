@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components'
-import { useTable, useSortBy } from 'react-table'
+import { useTable } from 'react-table'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
@@ -68,7 +68,7 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
         const dragRecord = data[dragIndex]
         const hoverRecord = data[hoverIndex]
 
-        if (!route && (dragRecord.routeNumber != hoverRecord.routeNumber)) {
+        if (!route && (dragRecord.routeNumber !== hoverRecord.routeNumber)) {
             return false
         }
 
@@ -107,7 +107,6 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
           setData(newData)
         }
   
-        dragIndex = hoverIndex
         return true
     }
   

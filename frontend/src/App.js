@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 
 import NavBar from './components/NavBar.js'
-import Home from './components/homepage/Home'
 import Login from './components/authentication/Login'
 
 import Signup from './components/authentication/Signup'

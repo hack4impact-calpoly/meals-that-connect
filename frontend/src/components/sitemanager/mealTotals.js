@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
 import "../../css/totalMeals.css"
-import { useEffect } from 'react'
 
 const Styles = styled.div`
   margin-left: 30px;
@@ -260,23 +259,6 @@ function getDate(tableDay) {
     week.push(mdy);
   }
   return week[tableDay];
-}
-
-function encodeDay(day){
-  switch (day) {
-    case "M":
-      return 0;
-    case "T":
-      return 1;
-    case "W":
-      return 2;
-    case "Th":
-      return 3;
-    case "F":
-      return 4;
-    default:
-      return -1;
-  }
 }
 
 export default Table;

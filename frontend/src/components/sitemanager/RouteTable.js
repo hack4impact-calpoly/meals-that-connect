@@ -1,8 +1,4 @@
-import React, { useState } from 'react'
-import { useTable, useSortBy } from 'react-table'
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import update from 'immutability-helper';
+import React from 'react'
 import env from "react-dotenv"
 import { Styles, DraggableTable} from '../table-components'
 
@@ -12,7 +8,6 @@ const BOOL_CELL_WIDTH = 50;
 const REG_CELL_WIDTH = 130;
 const CELL_HEIGHT = 60;
 const days = ["M", "T", "W", "Th", "F"];
-const DND_ITEM_TYPE = 'client'
 
 
 const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
