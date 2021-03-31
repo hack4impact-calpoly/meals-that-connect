@@ -79,8 +79,9 @@ class Login extends Component {
 
     firebase_signin = (user) => {
         fire.auth().signInWithEmailAndPassword(user.email, user.password)
-        .then((userCredential) => {
+        .then(userCredential => {
             var firebase_user = userCredential.user;
+            console.log(firebase_user)
             this.firebase_checkEmailVerif(firebase_user, user);
         })
         .catch((error) => {
@@ -88,7 +89,7 @@ class Login extends Component {
             alert(errorMessage);
             console.log(error)
         });
-        }
+    }
 
     firebase_checkEmailVerif = (firebase_user, user) => {
         var emailVerified = firebase_user.emailVerified;
