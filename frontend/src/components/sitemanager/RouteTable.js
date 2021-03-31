@@ -1,46 +1,19 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
+import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import update from 'immutability-helper';
 import env from "react-dotenv"
+import { Styles, DraggableTable} from '../table-components'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
-const BOOL_CELL_WIDTH = 65;
-const REG_CELL_WIDTH = 100;
+const BOOL_CELL_WIDTH = 50;
+const REG_CELL_WIDTH = 130;
+const CELL_HEIGHT = 60;
 const days = ["M", "T", "W", "Th", "F"];
+const DND_ITEM_TYPE = 'client'
 
-const Styles = styled.div`
- table {
-   margin: 0px 20px 50px 0px;
-   border-spacing: 0;
-   border: 1px solid black;
-   font-family: 'Mulish', sans-serif;
-   tr {
-     :last-child {
-       td {
-         border-bottom: 0;
-       }
-     }
-   }
-   th,
-   td {
-     padding: 0.5rem;
-     text-align: center;
-     border-bottom: 1px solid black;
-     border-right: 1px solid black;
-     font-size: 20px;
-
-     :last-child {
-       border-right: 0;
-     }
-   }
-   th {
-     background: #D4D4D4;
-     color: black;
-     fontWeight: bold;
-   }
- }
-`
 
 const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   // We need to keep and update the state of the cell normally
@@ -107,7 +80,6 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
 
   const updateCheckbox = async (clientID) => {
     setSelected(!selected);
-    console.log(cellProperties)
     if(days.includes(cellProperties["column"]["Header"]))
     {
       updateDatabaseDays(clientID)
@@ -126,13 +98,13 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <span><input type={inputType} style={{width: width - 1.25}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} /></span>
+      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
     )
   }
   else
   {
     return (
-        <span><input type={inputType} style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/></span>
+        <input type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
     )
   }
 
@@ -146,34 +118,43 @@ const RouteTable = (props) => {
     columns: [
       { Header: 'First Name',
       accessor: 'firstName',
+      width: REG_CELL_WIDTH,
+      height: 70,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
       },
       { Header: 'Last Name',
       accessor: 'lastName',
+      width: REG_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
       },
       { Header: 'Address',
       accessor: 'address',
+      width: 400,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
       },
       { Header: 'M',
       accessor: 'foodDaysM',
+      width: BOOL_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'T',
       accessor: 'foodDaysT',
+      width: BOOL_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'W',
       accessor: 'foodDaysW',
+      width: BOOL_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'Th',
       accessor: 'foodDaysTh',
+      width: BOOL_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
       },
       { Header: 'F',
       accessor: 'foodDaysF',
+      width: BOOL_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },
       ],},
@@ -182,26 +163,32 @@ const RouteTable = (props) => {
     columns: [
       { Header: 'Frozen',
       accessor: 'frozenNumber',
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 65, "number")
+      width: 80,
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "number")
       },
       { Header: 'M',
-        accessor: 'frozenDaysM',
+        accessor: 'frozenDayM',
+        width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'T',
-        accessor: 'frozenDaysT',
+        accessor: 'frozenDayT',
+        width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'W',
-        accessor: 'frozenDaysW',
+        accessor: 'frozenDayW',
+        width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'Th',
-        accessor: 'frozenDaysTh',
+        accessor: 'frozenDayTh',
+        width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
         },
       { Header: 'F',
-        accessor: 'frozenDaysF',
+        accessor: 'frozenDayF',
+        width: BOOL_CELL_WIDTH,
         Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },],},
     {
@@ -212,17 +199,19 @@ const RouteTable = (props) => {
     {
     Header: 'Phone',
     accessor: 'phoneNumber',
-    show: false,
+    width: 150,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
     },
     {
     Header: 'Emergency Contact',
     accessor: 'emergencyContact',
+    width: REG_CELL_WIDTH,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
     },
     {
     Header: 'E. Contact Phone',
     accessor: 'emergencyPhone',
+    width: 150,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
     },
     {
@@ -233,88 +222,50 @@ const RouteTable = (props) => {
     {
     Header: 'Num. of Meals',
     accessor: 'mealNumber',
+    width: REG_CELL_WIDTH,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
     },
     {
     Header: 'Special Instructions',
     accessor: 'specialInstructions',
+    width: 400,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
     },
     {
     Header: 'C2 Client',
     accessor: 'clientC2',
+    width: REG_CELL_WIDTH,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
     },
     {
     Header: 'N/E',
     accessor: 'NE',
+    width: REG_CELL_WIDTH,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
     },
     {
     Header: 'Email Address',
     accessor: 'email',
+    width: 400,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "email")
     },
     {
     Header: 'Holiday Frozen',
     accessor: 'holidayFrozen',
+    width: REG_CELL_WIDTH,
     Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
     }
     ],
     []
   )
 
-  const data = React.useMemo(() => props.data, [])
-
   return (
-  <Styles>
-    <Table columns={columns} data={data}/>
+  <Styles height={CELL_HEIGHT}>
+    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum}/>
   </Styles>
   )
 }
 
-function Table({ columns, data }) 
-{
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow} = useTable({
-    columns,
-    data,
-    initialState: {
-      hiddenColumns: ["phoneNumber", "emergencyContact", "emergencyPhone", "noMilk", "mealNumber", "specialInstructions", "clientC2", "NE", "email", "holidayFrozen"]
-    }
-    })
-
-  // Render the UI for your table
-  return (
-  <table {...getTableProps()}>
-    <thead>
-      {headerGroups.map(headerGroup => (
-        <tr {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map(column => (
-            <th onClick={() => showContact()} {...column.getHeaderProps()}>{column.render('Header')}</th>
-          ))}
-        </tr>
-      ))}
-    </thead>
-    <tbody {...getTableBodyProps()}>
-      {rows.map(row => {
-        prepareRow(row)
-        return (
-          <tr {...row.getRowProps()}>
-            {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
-            })}
-          </tr>
-        )
-      })}
-    </tbody>
-  </table>
- )
-}
 
 function showContact()
 {

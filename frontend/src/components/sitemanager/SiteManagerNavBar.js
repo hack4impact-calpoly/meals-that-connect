@@ -8,7 +8,7 @@ class SiteManagerNavBar extends Component {
                 <h2>Meals that Connect</h2>
                     <Link className="navbar-link" to="/routes">Routes</Link>
                     <Link className="navbar-link" to="/volunteer">Volunteers</Link>
-                    <Link className="navbar-link" to="/">Clients</Link>
+                    <Link className="navbar-link" to="/clients">Clients</Link>
                     <Link className="navbar-link" to="/signout">
                         <img src = "https://static.thenounproject.com/png/3070444-200.png" height="35" />
                     </Link>

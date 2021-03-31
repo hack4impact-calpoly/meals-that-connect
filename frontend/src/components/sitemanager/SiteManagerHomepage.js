@@ -13,8 +13,7 @@ class SiteManagerHomepage extends Component {
         super(props);
         this.state = {
             totals: [],
-            weeks: [],
-            checkRender: false
+            routes: []
          };
     }
 
@@ -31,19 +30,14 @@ class SiteManagerHomepage extends Component {
     }
 
     async componentDidMount(){
-        // fetch all clients for each route
-        let routes = [1,2,3,4,4,5,6,7,8,9]
-        for(let i = 0; i < routes.length; i++) {
-            await this.fetchTotals(routes[i]) 
-        }
+        this.fetchMealTotals()
     }
 
-    async fetchTotals (routenum) {
+    async fetchMealTotals () {
         let info = {
             site: "SLO",
-            routeNumber: routenum,
         }
-        let response = await fetch(env.backendURL + 'clients/routeSiteDay', {
+        let response = await fetch(env.backendURL + 'clients/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -51,18 +45,19 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        this.setState({totals: [...this.state.totals, data]})
-        return data;
+        this.setState({totals: data.meals, routes: data.routes})
     }
 
     render() {
+        let {totals, routes} = this.state
+        console.log(this.state.totals)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
                 <div>
-                    <RoutesNavbar/>
+                    <RoutesNavbar routes={this.state.routes}/>
                     <div className="site-manager-container">
-                        {this.state.totals.length >= 10 ? <MealTotals data={this.state.totals}/> : 
+                        {this.state.totals.length >= 10 ? <MealTotals data={totals} routes={routes}/> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
