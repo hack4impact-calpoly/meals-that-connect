@@ -88,7 +88,6 @@ function MealTotals({ columns, data }) {
 }
 
 const Table = (props) => {
-  console.log("log inside Table" + getDate(0));
   const columns = React.useMemo(
     () => [
       {

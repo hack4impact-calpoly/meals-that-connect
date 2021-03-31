@@ -13,16 +13,22 @@ class SiteManagerHomepage extends Component {
         super(props);
         this.state = {
             totals: [],
-            weeks: []
+            weeks: [],
+            checkRender: false
          };
     }
 
-    // componentDidUpdate(prevState){
-    //     let weekArr = localStorage.getItem("week")
-    //     if (weekArr != null && (weekArr.split(',') != prevState.weeks)){
-    //         this.setState({weeks: weekArr.split(',')})
-    //     }
-    // }
+    componentDidUpdate(prevState){
+        let weekArr = localStorage.getItem("week").split(',')
+        console.log(prevState)
+        console.log(localStorage.getItem('week').split(','))
+        
+        // if (weekArr != null && (weekArr !== prevState.weeks )){
+        //     this.setState({checkRender: true})
+        // }
+        // if this.state.checkRender === true
+        //      this.setState
+    }
 
     async componentDidMount(){
         // fetch all clients for each route
