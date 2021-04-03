@@ -55,6 +55,8 @@ function MealTotals({ columns, data }) {
     data
   })
 
+  console.log("in MealsTotals")
+
   // Render the UI for your table
   return (
     <div id='tables'>

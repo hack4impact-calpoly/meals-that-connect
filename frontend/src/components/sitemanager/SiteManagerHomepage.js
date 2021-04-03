@@ -13,20 +13,19 @@ class SiteManagerHomepage extends Component {
         super(props);
         this.state = {
             totals: [],
-            routes: []
+            routes: [],
+            weeks: localStorage.getItem("week")
          };
     }
 
-    componentDidUpdate(prevState){
-        let weekArr = localStorage.getItem("week").split(',')
-        console.log(prevState)
-        console.log(localStorage.getItem('week').split(','))
-        
-        // if (weekArr != null && (weekArr !== prevState.weeks )){
-        //     this.setState({checkRender: true})
-        // }
-        // if this.state.checkRender === true
-        //      this.setState
+    componentDidUpdate(){
+        let weekArr = localStorage.getItem("week")
+        console.log("in update");
+        console.log(this.state.weeks !== weekArr)
+        if (weekArr !== '' && (this.state.weeks !== weekArr)) {
+            this.setState({weeks: weekArr})
+            console.log(this.state.weeks !== weekArr)
+        }
     }
 
     async componentDidMount(){
@@ -49,8 +48,9 @@ class SiteManagerHomepage extends Component {
     }
 
     render() {
+        console.log("render site manager homepg")
         let {totals, routes} = this.state
-        console.log(this.state.totals)
+        // ignore: <MealTotals data={totals} routes={routes} week={week}/> 
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
