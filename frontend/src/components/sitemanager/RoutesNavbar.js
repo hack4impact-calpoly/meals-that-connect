@@ -14,7 +14,7 @@ class routesOverview extends Component {
         let routes = this.props.routes
         return (
             <div id="route-sidebar">
-                <Calendar/>
+                <Calendar updateWeek={this.props.updateWeek}/>
                 <h1><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">

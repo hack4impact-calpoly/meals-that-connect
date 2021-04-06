@@ -42,7 +42,7 @@ const Styles = styled.div`
   }
 `
 
-function MealTotals({ columns, data }) {
+function MealTotals({ columns, data, meals }) {
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -54,8 +54,6 @@ function MealTotals({ columns, data }) {
     columns,
     data
   })
-
-  console.log("in MealsTotals")
 
   // Render the UI for your table
   return (
@@ -89,85 +87,107 @@ function MealTotals({ columns, data }) {
 }
 
 const Table = (props) => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Meal Totals',
-        columns: [
-          {
-            Header: ' ',
-            accessor: 'route',
-            columns: [
-              {
-                Header: 'Route',
-                accessor: 'route'
-              }
-            ]
-          },
-          {
-            Header: ' ',
-            accessor: 'info',
-            columns: [
-              {
-                Header: ' ',
-                accessor: 'info'
-              }
-            ]
-          },
-          {
-            Header: 'Monday',
-            columns: [
-              {
-                Header: getDate(0),
-                accessor: 'monday'
-              }
-            ]
-          },
-          {
-            Header: 'Tuesday',
-            // accessor: 'tuesday'
-            columns: [
-              {
-                Header: getDate(1),
-                accessor: 'tuesday'
-              }
-            ]
-          },
-          {
-            Header: 'Wednesday',
-            // accessor: 'wednesday'
-            columns: [
-              {
-                Header: getDate(2),
-                accessor: 'wednesday'
-              }
-            ]
-          },
-          {
-            Header: 'Thursday',
-            // accessor: 'thursday'
-            columns: [
-              {
-                Header: getDate(3),
-                accessor: 'thursday'
-              }
-            ]
-          },
-          {
-            Header: 'Friday',
-            // accessor: 'friday'
-            columns: [
-              {
-                Header: getDate(4),
-                accessor: 'friday'
-              }
+  let columns = [
+    {
+      Header: 'Meal Totals',
+      columns: [
+        {
+          Header: ' ',
+          accessor: 'route',
+          columns: [
+            {
+              Header: 'Route',
+              accessor: 'route'
+            }
+          ]
+        },
+        {
+          Header: ' ',
+          accessor: 'info',
+          columns: [
+            {
+              Header: ' ',
+              accessor: 'info'
+            }
+          ]
+        },
+        {
+          Header: 'Monday',
+          columns: [
+            {
+              Header: getDate(0),
+              accessor: 'monday'
+            }
+          ]
+        },
+        {
+          Header: 'Tuesday',
+          // accessor: 'tuesday'
+          columns: [
+            {
+              Header: getDate(1),
+              accessor: 'tuesday'
+            }
+          ]
+        },
+        {
+          Header: 'Wednesday',
+          // accessor: 'wednesday'
+          columns: [
+            {
+              Header: getDate(2),
+              accessor: 'wednesday'
+            }
+          ]
+        },
+        {
+          Header: 'Thursday',
+          // accessor: 'thursday'
+          columns: [
+            {
+              Header: getDate(3),
+              accessor: 'thursday'
+            }
+          ]
+        },
+        {
+          Header: 'Friday',
+          // accessor: 'friday'
+          columns: [
+            {
+              Header: getDate(4),
+              accessor: 'friday'}
             ]
           },
         ],
       }
-    ],
-    []
-  )
+    ]
+
+  function getDate(tableDay) {
+    let weekArr = localStorage.getItem('week').split(',');
+    weekArr = props.weekArr
+    let curr;
+    if (weekArr.length === 1)
+    {
+      curr = new Date();
+    }
+    else
+    {
+      curr = new Date(weekArr[0]);
+    }
+    let week = [];
+  
+    for (let i = 1; i <= 7; i++) {
+      let first = curr.getDate() - curr.getDay() + i;
+      let day = new Date(curr.setDate(first));
+      let month = day.getMonth() + 1;
+      let date = day.getDate();
+      let year = day.getFullYear();
+      let mdy = month + "/" + date + "/" + year;
+      week.push(mdy);
+    }
+    return week[tableDay];
+  }
 
   let routeList = []
   for (let i =0; i < props.routes.length; i++) {
@@ -211,7 +231,7 @@ const Table = (props) => {
 
   return (
     <Styles>
-      <MealTotals columns={columns} data={data}/>
+      <MealTotals columns={columns} data={routeList}/>
     </Styles>
   )
 }
@@ -235,32 +255,6 @@ function cellClass(cell) {
   else {
     return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
-}
-
-function getDate(tableDay) {
-  let weekArr = localStorage.getItem('week').split(',');
-  //console.log(weekArr);
-  let curr;
-  if (weekArr.length === 1)
-  {
-    curr = new Date();
-  }
-  else
-  {
-    curr = new Date(weekArr[0]);
-  }
-  let week = [];
-
-  for (let i = 1; i <= 7; i++) {
-    let first = curr.getDate() - curr.getDay() + i;
-    let day = new Date(curr.setDate(first));
-    let month = day.getMonth() + 1;
-    let date = day.getDate();
-    let year = day.getFullYear();
-    let mdy = month + "/" + date + "/" + year;
-    week.push(mdy);
-  }
-  return week[tableDay];
 }
 
 export default Table;

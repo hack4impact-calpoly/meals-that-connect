@@ -45,11 +45,10 @@ export default class Example extends React.Component {
   }
 
   handleDayChange = date => {
-    this.setState({
-      selectedDays: getWeekDays(getWeekRange(date).from),
-    });
+    let days = getWeekDays(getWeekRange(date).from)
+    this.setState({ selectedDays: days });
     localStorage.setItem("week", this.state.selectedDays);
-    console.log(localStorage.getItem("week").split(","));
+    this.props.updateWeek(days)
   };
 
   handleDayEnter = date => {
