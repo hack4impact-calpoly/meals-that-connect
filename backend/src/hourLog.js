@@ -19,19 +19,23 @@ router.post('/edit', async (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
-    console.log('entered')
+    console.log('adding')
     const {volunteerID, date, hours} = req.body
     let formattedDate = new Date(date);
-    var temp = new Hours({volunteerID, formattedDate, hours}, function (err, newHourLog) {
-        if (err) {
-            console.log(err)
-        }
-        else {
-            temp.save()
-            console.log(hours)
-            res.send(`Successful hours added for ${date}`)
-        }
-    })
+    console.log(formattedDate)
+    var doc = new Hours({volunteerID: volunteerID, formattedDate: formattedDate, home: hours, dinner: 0, signature: "no"});
+    doc.save()
+    res.send("Success")
+    // , function (err, newHourLog) {
+    //     if (err) {
+    //         console.log(err)
+    //     }
+    //     else {
+    //         temp.save()
+    //         console.log(newHourLog)
+    //         res.send(`Successful hours added for ${date}`)
+    //     }
+    // })
 })
 
 router.post('/delete', async (req, res) => {
