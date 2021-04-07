@@ -105,7 +105,7 @@ function HourLog({ columns, data }) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
-                return <td>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
+                return <td>{cell.render('Cell', {value: cell["value"], original: row["original"], hours: row["original"]["_id"], key: cell["column"]["id"]})}</td>
               })}
             </tr>
           )
@@ -136,31 +136,12 @@ const Table = (props) => {
     ],
     []
   )
-  
-  const routes = [
-    {
-      date: "1/1/11", 
-      hours: "2", 
-    },
-    {
-        date: "1/1/11", 
-        hours: "2", 
-      },
-      {
-        date: "1/1/11", 
-        hours: "2", 
-      },
-      {
-        date: "1/1/11", 
-        hours: "2", 
-      },
-    ]
     
 const data = React.useMemo(() => props.data, [] )
 
   return (
     <Styles>
-    <HourLog columns={columns} data={data} />
+    <HourLog columns={columns} data={props.data} />
     </Styles>
   )
 }

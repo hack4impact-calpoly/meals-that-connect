@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
+const Volunteer = require('../models/Volunteer');
 const Hours = require("../models/Hours")
 
 router.post('/edit', async (req, res) => {
@@ -19,19 +20,33 @@ router.post('/edit', async (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
-    console.log('entered')
+    // console.log('entered')
     const {volunteerID, date, hours} = req.body
-    let formattedDate = new Date(date);
-    var temp = new Hours({volunteerID, formattedDate, hours}, function (err, newHourLog) {
-        if (err) {
-            console.log(err)
+    var formattedDate = new Date(date);
+    console.log(formattedDate);
+    Volunteer.findOne({'volunteerID': volunteerID}).then(function(result) {
+        if (!result) {
+            console.log('not a volunteer')
         }
         else {
+            var temp = new Hours({'volunteerID' : volunteerID, 'date': formattedDate, 'home': hours})
             temp.save()
-            console.log(hours)
-            res.send(`Successful hours added for ${date}`)
+            console.log('successfully added hours')
         }
+    }).catch(err => {
+        console.log(err)
+        res.send(500).send("Internal server error")
     })
+    // var temp = new Hours({volunteerID, formattedDate, hours}, function (err, newHourLog) {
+    //     if (err) {
+    //         console.log(err)
+    //     }
+    //     else {
+    //         temp.save()
+    //         console.log(hours)
+    //         res.send(`Successful hours added for ${date}`)
+    //     }
+    // })
 })
 
 router.post('/delete', async (req, res) => {
