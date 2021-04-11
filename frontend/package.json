@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.6.0",
     "bootstrap": "^3.4.1",
     "bootstrap-icons": "^1.4.0",
+    "date-holidays": "^3.1.0",
     "firebase": "^8.3.2",
     "immutability-helper": "^3.1.1",
     "mongoose": "^5.11.12",

@@ -7,6 +7,12 @@ import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/manager.css'
 
+import * as Holidays from 'date-holidays'
+// var Holidays = require('date-holidays')
+var hd = new Holidays()
+
+
+
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
@@ -15,9 +21,17 @@ class SiteManagerHomepage extends Component {
             routes: []
          };
     }
+    // get supported countries
+    /*>
+    { AD: 'Andorra',
+    ...
+    US: 'United States' }
+    */
 
     async componentDidMount(){
         this.fetchMealTotals()
+
+        hd.getCountries()
     }
 
     async fetchMealTotals () {

@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 1000px;
+    margin-bottom: 40px;
 }
 
 .site-manager-page-header {
@@ -12,11 +14,12 @@
 
 
 .site-manager-container {
-    margin-left: 340px;
+    float: right;
+    /* margin-left: 340px;
     height: calc(100vh - 210px);
     width: calc(100vw - 340px);
     margin-bottom: 20px;
-    overflow: auto;
+    overflow: auto; */
 }
 
 .site-manager-container2 {
