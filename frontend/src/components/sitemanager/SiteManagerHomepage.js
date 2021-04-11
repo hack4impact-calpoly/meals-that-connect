@@ -14,7 +14,7 @@ class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            totals: [],
+            totals: null,
             routes: []
          };
     }
@@ -60,16 +60,15 @@ class SiteManagerHomepage extends Component {
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
-                <div className="mb5">
-                    <button onClick={this.printDocument}>Print</button>
-                </div>
-                <div>
+                <div className="site-manager-container">
                     <RoutesNavbar routes={this.state.routes}/>
-                    <div className="site-manager-container" id="site-manager-container">
-                        {this.state.totals.length >= 10 ? <MealTotals data={totals} routes={routes}/> : 
+                    <div id="site-manager-container">
+                        {this.state.totals ? <MealTotals data={totals} routes={routes}/> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+
+                        <button className="print-meals" onClick={this.printDocument}>Print Meal Totals</button>
                     </div>
                 </div>
             </div>

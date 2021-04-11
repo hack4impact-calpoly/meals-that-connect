@@ -5,7 +5,7 @@ import "../../css/totalMeals.css"
 
 const Styles = styled.div`
   margin-left: 30px;
-  width: 90%;
+  width: 100%;
   table {
     border-spacing: 0;
     width: 100%; 

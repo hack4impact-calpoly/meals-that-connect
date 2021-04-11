@@ -13,13 +13,7 @@ const clientSchema = new mongoose.Schema({
       F: {type: Boolean, required: true}
    },
    frozenNumber: {type: Number, required: true, default: 0},
-   frozenDay: {
-      M: Boolean,
-      T: Boolean,
-      W: Boolean,
-      Th: Boolean,
-      F: Boolean
-   },
+   frozenDay: {type: String, required: false},
    phoneNumber: {type: String, required: true},
    emergencyContact: String,
    emergencyPhone: String,
