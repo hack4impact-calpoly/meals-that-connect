@@ -15,15 +15,7 @@ const mealSchema = new mongoose.Schema({
       F: {type: Boolean, required: true}
    },
    frozenNumber: {type: Number, required: true, default: 0},
-   frozenDate: {type: Date, required: true},
-   frozenMealNumber: {type: Number, required: true},
-   frozenDay: {
-      M: Boolean,
-      T: Boolean,
-      W: Boolean,
-      Th: Boolean,
-      F: Boolean
-   }
+   frozenDay: {type: String, required: false}
 })
 
 const Meals = mealsConnection.model("meals", mealSchema)
