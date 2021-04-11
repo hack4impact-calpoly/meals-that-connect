@@ -164,8 +164,7 @@ const Table = (props) => {
     ]
 
   function getDate(tableDay) {
-    let weekArr = localStorage.getItem('week').split(',');
-    weekArr = props.weekArr
+    let weekArr = props.weekArr
     let curr;
     if (weekArr.length === 1)
     {

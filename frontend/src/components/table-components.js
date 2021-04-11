@@ -10,7 +10,6 @@ import env from "react-dotenv"
 
 const DND_ITEM_TYPE = 'client'
 
-
 export const Styles = styled.div`
 table {
   margin: 0px 20px 50px 0px;
@@ -45,8 +44,7 @@ table {
 }
 `
 
-
-export const DraggableTable = ({ columns, data, setData, route }) => {
+export const DraggableTable = ({ columns, data, setData, route, showModal }) => {
     const getRowId = React.useCallback(row => {
         return row.index
     }, [])
@@ -131,6 +129,7 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
                                     index={index}
                                     row={row}
                                     moveRow={moveRow}
+                                    showModal={showModal}
                                     {...row.getRowProps()}
                                 />
                             )
@@ -139,12 +138,12 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
             </table>
         </DndProvider>
     )
-  }
+}
   
-  const Row = ({ row, index, moveRow }) => {
+const Row = ({ row, index, moveRow, showModal }) => {
     const dropRef = React.useRef(null)
     const dragRef = React.useRef(null)
-  
+
     const [, drop] = useDrop({
         accept: DND_ITEM_TYPE,
         hover(item, monitor) {
@@ -172,7 +171,7 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
             }
         }
     })
-  
+
     const [{ isDragging }, drag, preview] = useDrag({
         type: DND_ITEM_TYPE, 
         item: { index },
@@ -180,12 +179,12 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
             isDragging: monitor.isDragging(),
         }),
     })
-  
+
     const opacity = isDragging ? 0 : 1
-  
+
     preview(drop(dropRef))
     drag(dragRef)
-  
+
     return (
         <tr ref={dropRef} style={{ opacity }}>
             <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>
@@ -195,8 +194,8 @@ export const DraggableTable = ({ columns, data, setData, route }) => {
             </td>
             
             {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
+                return <td onClick={() => showModal(row["original"])}>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
             })}
         </tr>
     )
-  }
+}

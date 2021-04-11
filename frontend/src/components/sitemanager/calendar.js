@@ -63,7 +63,7 @@ export default class Example extends React.Component {
     });
   };
 
-  handleWeekClick = (weekNumber, days, e) => {
+  handleWeekClick = (days) => {
     this.setState({
       selectedDays: days,
     });

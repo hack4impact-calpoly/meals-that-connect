@@ -93,13 +93,13 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
+      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
     )
   }
   else
   {
     return (
-        <input type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
+        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
     )
   }
 
@@ -256,15 +256,9 @@ const RouteTable = (props) => {
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum}/>
+    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/>
   </Styles>
   )
-}
-
-
-function showContact()
-{
-
 }
 
 export default RouteTable;

@@ -21,7 +21,6 @@ class SiteManagerHomepage extends Component {
     updateWeek = (week) => {
         console.log(week)
         this.setState({weekArr: week})
-
     }
 
     // componentDidUpdate(){
