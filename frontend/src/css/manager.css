@@ -10,13 +10,12 @@
     margin-top: 120px;
 }
 
-
 .site-manager-container {
     margin-left: 340px;
     height: calc(100vh - 210px);
     width: calc(100vw - 340px);
     margin-bottom: 20px;
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 .site-manager-container2 {
