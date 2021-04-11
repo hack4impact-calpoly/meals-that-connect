@@ -1,5 +1,6 @@
 
 .site-manager-page{
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,11 +12,13 @@
 }
 
 .site-manager-container {
-    margin-left: 340px;
-    height: calc(100vh - 210px);
-    width: calc(100vw - 340px);
-    margin-bottom: 20px;
-    /* overflow: auto; */
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+}
+.print-meals {
+    margin-top: 20px;
+    //background-color: #b7f8ac;
 }
 
 .site-manager-container2 {

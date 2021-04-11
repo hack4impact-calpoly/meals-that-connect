@@ -5,7 +5,8 @@
     padding-bottom: 20px;
     border: solid 3px black;
     width: 280px;
-    position: fixed;
+    height: 100%;
+    float: left;
 }
 
 hr {
