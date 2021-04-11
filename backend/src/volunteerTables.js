@@ -24,7 +24,7 @@ router.post('/OverviewTable', async (req, res) => {
    })
 });
 
-// Takes in first and last name to find the correct volunteer in the
+// Takes in volunteerID to find the correct volunteer in the
 // database and updates their hours
 router.post('/Hours', async (req, res) => {
    const {volunteerID, key, data} = req.body

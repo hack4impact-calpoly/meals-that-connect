@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^12.6.0",
     "bootstrap": "^3.4.1",
     "bootstrap-icons": "^1.4.0",
-    "firebase": "^8.2.9",
+    "firebase": "^8.3.2",
     "immutability-helper": "^3.1.1",
     "mongoose": "^5.11.12",
     "react": "^17.0.1",
@@ -24,6 +24,7 @@
     "react-router-hash-link": "^2.3.1",
     "react-scripts": "4.0.1",
     "react-table": "^7.6.3",
+    "reactjs-popup": "^2.0.4",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },

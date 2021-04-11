@@ -57,7 +57,6 @@ class App extends Component {
 
 
               <PrivateRoute requiredUser="none" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><SiteManagerNavBar /><RouteHomePage /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><SiteManagerNavBar /><VolunteerOverview /></PrivateRoute>
@@ -67,7 +66,8 @@ class App extends Component {
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><DataVolunteerNavBar /><VolunteerInfo /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
               <PrivateRoute requiredUser="data-entry" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
-
+              <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
+              
 
           </Switch>
       </Router>
