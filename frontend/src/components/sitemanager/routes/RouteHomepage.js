@@ -3,7 +3,7 @@ import RouteTable from './RouteTable';
 import env from "react-dotenv";
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
-import '../../css/Modal.css';
+import '../../../css/Modal.css';
 
 class RouteHomepage extends Component {
     constructor(props) {
@@ -13,39 +13,39 @@ class RouteHomepage extends Component {
             routes: [],
             showModal: false,
             currentClient:  {
-                                firstName: null,
-                                lastName: null,
-                                address: null,
-                                foodDays: {
-                                    M: null,
-                                    T: null,
-                                    W: null,
-                                    Th: null,
-                                    F: null
-                                },
-                                frozenNumber: null,
-                                frozenDay: {
-                                    M: null,
-                                    T: null,
-                                    W: null,
-                                    Th: null,
-                                    F: null
-                                },
-                                phoneNumber: null,
-                                emergencyContact: null,
-                                emergencyPhone: null,
-                                noMilk: null,
-                                mealNumber: null,
-                                specialInstructions: null,
-                                clientC2: null,
-                                NE: null,
-                                email: null,
-                                holidayFrozen: null,
-                                routeNumber: null,
-                                site: null,
-                                index: null
+                firstName: null,
+                lastName: null,
+                address: null,
+                foodDays: {
+                    M: null,
+                    T: null,
+                    W: null,
+                    Th: null,
+                    F: null
+                },
+                frozenNumber: null,
+                frozenDay: {
+                    M: null,
+                    T: null,
+                    W: null,
+                    Th: null,
+                    F: null
+                },
+                phoneNumber: null,
+                emergencyContact: null,
+                emergencyPhone: null,
+                noMilk: null,
+                mealNumber: null,
+                specialInstructions: null,
+                clientC2: null,
+                NE: null,
+                email: null,
+                holidayFrozen: null,
+                routeNumber: null,
+                site: null,
+                index: null
 
-                            }   
+            }   
         };
     }
 
@@ -113,14 +113,14 @@ class RouteHomepage extends Component {
         let {routes, clients} = this.state;
         let currentClient = this.state.currentClient;
         return (
-            <div className="site-manager-page">
+            <div style={{marginBottom: 40}}>
+                <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek}/>
                 <h1 className="site-manager-page-header">Routes Page</h1>
-                <div>
-                    <RoutesNavbar routes={routes} updateWeek={this.updateWeek}/>
-                    <div className="site-manager-container">
+                <div className="site-manager-container">
+                    <div>
                         {routes.map((route, i) =>{
                             return (
-                                <section>
+                                <section style={{marginRight: 80, paddingLeft: 320}}>
                                     <a id={String(route)}></a>
                                     <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}></RouteTable>
                                 </section>
@@ -217,6 +217,20 @@ class RouteHomepage extends Component {
                             </div>
                         </div>
                     </Modal>
+{/* 
+            <div style={{marginBottom: 40}}>
+            <RoutesNavbar routes={routes} fixed={true}/>
+            <h1 className="site-manager-page-header">Routes Page</h1>
+            <div className="site-manager-container">
+                <div >
+                    {routes.map((route, i) =>{
+                        return (
+                            <section style={{marginRight: 80, paddingLeft: 280}}>
+                                <a id={String(route)}></a>
+                                <RouteTable routenum={route} data={clients[route]} setData={this.setData}></RouteTable>
+                            </section>
+                    );})}
+                    </div> */}
                 </div>
             </div>
            

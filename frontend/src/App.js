@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 
-import NavBar from './components/NavBar.js'
+import NavBar from './components/navbar/NavbarWrapper'
+import Home from './components/homepage/Home'
 import Login from './components/authentication/Login'
 
 import Signup from './components/authentication/Signup'
 import MasterSignup from './components/authentication/MasterSignup'
 import HomePageWrapper from './components/HomepageWrapper'
-import RouteHomePage from './components/sitemanager/RouteHomepage.js'
-import VolunteerHours from './components/VolunteerHoursOverview'
+import RouteHomePage from './components/sitemanager/routes/RouteHomepage.js'
+import VolunteerHours from './components/sitemanager/volunteers/VolunteerHoursOverview'
 import EmailVerification from "./components/authentication/EmailVerification.js"
 
-import DataVolunteerNavBar from './components/DataVolunteerNavBar.js'
-import SiteManagerNavBar from './components/sitemanager/SiteManagerNavBar.js'
+import VolunteerOverview from './components/sitemanager/volunteers/VolunteerOverview'
+import VolunteerInfo from './components/volunteer/VolunteerInfo'
 
-import VolunteerOverview from './components/VolunteerOverview'
-import VolunteerInfo from './components/VolunteerInfo'
-
-import ClientTableContainer from './components/sitemanager/ClientTableContainer.js'
+import ClientTableContainer from './components/sitemanager/clients/ClientTableContainer.js'
 
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
@@ -58,18 +56,19 @@ class App extends Component {
               <PublicRoute path="/no-permission" component={NoPermission}/>
               {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
-              <PrivateRoute requiredUser="none" path="/signout" component={Private}></PrivateRoute>
-              <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>
-              <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
-              <PrivateRoute requiredUser="site-manager" exact path = "/routes"><SiteManagerNavBar /><RouteHomePage /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><SiteManagerNavBar /><VolunteerOverview /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/clients"><SiteManagerNavBar /><ClientTableContainer /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><SiteManagerNavBar /><VolunteerHours /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" path="/signout"><SiteManagerNavBar /><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><DataVolunteerNavBar /><VolunteerInfo /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="data-entry" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
 
+              <PrivateRoute requiredUser="none" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
+              <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><VolunteerOverview /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/clients"><ClientTableContainer /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="data-entry" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
+              
 
           </Switch>
       </Router>

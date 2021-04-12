@@ -124,7 +124,8 @@ function getRouteTotals(clientList) {
         if (clientList[index].foodDays[days[day]]) {
           mealTotal[day] += clientList[index].mealNumber
         }
-        if (clientList[index].frozenDay[days[day]]) {
+                
+        if (clientList[index].frozenDay == days[day]){
           frozenTotal[day] += clientList[index].frozenNumber
         }
       }

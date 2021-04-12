@@ -1,6 +1,6 @@
 import React from 'react'
 import env from "react-dotenv"
-import { Styles, DraggableTable} from '../table-components'
+import { Styles, DraggableTable} from '../../table-components'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
@@ -161,30 +161,10 @@ const RouteTable = (props) => {
       width: 80,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "number")
       },
-      { Header: 'M',
-        accessor: 'frozenDayM',
-        width: BOOL_CELL_WIDTH,
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
-        },
-      { Header: 'T',
-        accessor: 'frozenDayT',
-        width: BOOL_CELL_WIDTH,
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
-        },
-      { Header: 'W',
-        accessor: 'frozenDayW',
-        width: BOOL_CELL_WIDTH,
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
-        },
-      { Header: 'Th',
-        accessor: 'frozenDayTh',
-        width: BOOL_CELL_WIDTH,
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
-        },
-      { Header: 'F',
-        accessor: 'frozenDayF',
-        width: BOOL_CELL_WIDTH,
-        Cell: (cellProperties) => EditableCell(cellProperties, FROZEN_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
+      { Header: 'Frozen Day',
+      accessor: 'frozenDay',
+      widith: REG_CELL_WIDTH,
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
       },],},
     {
     Header: 'Expand for Contact Info ->',

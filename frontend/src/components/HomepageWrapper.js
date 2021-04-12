@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import env from "react-dotenv";
-import DataVolunteerNavBar from './DataVolunteerNavBar'
-import SiteManagerNavBar from './sitemanager/SiteManagerNavBar'
 import SiteManagerHomepage from './sitemanager/SiteManagerHomepage.js'
-import DataEntryHome from './dataEntryHome.js'
-import LogHours from './LogHours.js'
-import NavBar from './NavBar.js'
-import Home from './homepage/Home'
+import DataEntryHome from './data-entry/dataEntryHome.js'
+import LogHours from './volunteer/LogHours.js'
 
 
 class HomepageWrapper extends Component {
@@ -21,33 +16,21 @@ class HomepageWrapper extends Component {
     render() {
         let homePage, navbar;
         
-        if (this.state.isLoggedIn === false)
+        if (this.state.userType === 'site-manager')
         {
-            navbar = <NavBar />
-            homePage = <Home />
+            homePage = <SiteManagerHomepage />
         }
-        else 
+        else if (this.state.userType === 'data-entry')
         {
-            if (this.state.userType === 'site-manager')
-            {
-                navbar = <SiteManagerNavBar />
-                homePage = <SiteManagerHomepage />
-            }
-            else if (this.state.userType === 'data-entry')
-            {
-                navbar = <DataVolunteerNavBar />
-                homePage = <DataEntryHome />
-            }
-            else
-            {
-                navbar = <DataVolunteerNavBar />
-                homePage = <LogHours />
-            }
+            homePage = <DataEntryHome />
+        }
+        else
+        {
+            homePage = <LogHours />
         }
 
         return (
             <div>
-                {navbar}
                 {homePage}
             </div>
         );

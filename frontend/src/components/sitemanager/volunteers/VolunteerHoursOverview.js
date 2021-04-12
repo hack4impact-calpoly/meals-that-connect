@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import Clients from './Clients'
+import VolunteerHoursTable from './VolunteerHoursTable'
+import VolunteerNavbar from './VolunteerNavbar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from "react-bootstrap/Spinner"
 import env from "react-dotenv";
 
-class ClientTableContainer extends Component {
+class VolunteerHoursOverview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           clients: [],
+           volunteerData: [],
            loaded: false
         };
     }
@@ -17,7 +18,7 @@ class ClientTableContainer extends Component {
        let info = {
           site: "SLO",
        }
-       let response = await fetch(env.backendURL + 'clients/site', {
+       let response = await fetch(env.backendURL + 'volunteers/siteVolunHours', {
           method: 'POST',
           headers: {
              'Content-Type': 'application/json'
@@ -26,20 +27,16 @@ class ClientTableContainer extends Component {
        })
        const data = await response.json();
 
-       this.setState({clients: data, loaded: true})
-    }
-
-    setData = (data) => {
-        this.setState({clients: data})
+       this.setState({volunteerData: data, loaded: true})
     }
 
     render() {
-        console.log(this.state.clients)
         return (
-            <div className="site-manager-page">
-                <h1 className="site-manager-page-header">Clients</h1>
-                <div className="site-manager-container3">
-                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData}/> :
+            <div >
+                <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
+                <VolunteerNavbar/>
+                <div className="site-manager-container" style={{paddingLeft: 0}}>
+                    {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}
@@ -49,5 +46,4 @@ class ClientTableContainer extends Component {
     }
 }
 
-export default ClientTableContainer;
-
+export default VolunteerHoursOverview;
