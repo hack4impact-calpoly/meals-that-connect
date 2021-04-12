@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import MealTotals from './mealTotals';
-import RoutesNavbar from './RoutesNavbar';
-import PopupMealTotals from './PopupMealTotals';
+import MealTotals from './routes/mealTotals';
+import RoutesNavbar from './routes/RoutesNavbar';
+import PopupMealTotals from './routes/PopupMealTotals';
 import env from "react-dotenv";
-import { HashLink as Link } from "react-router-hash-link";
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
@@ -62,7 +61,6 @@ class SiteManagerHomepage extends Component {
 
     render() {
         let {totals, routes} = this.state
-        console.log(this.state.totals)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>

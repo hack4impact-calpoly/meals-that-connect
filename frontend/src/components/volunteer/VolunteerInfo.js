@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
-import '../css/VolunteerInfo.css'
-import '../css/Signup.css';
-import '../css/Login.css';
+import '../../css/VolunteerInfo.css'
+import '../../css/Signup.css';
+import '../../css/Login.css';
 import env from "react-dotenv";
 import { withRouter } from "react-router-dom";
 

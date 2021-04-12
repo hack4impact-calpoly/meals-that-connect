@@ -14,23 +14,11 @@
 .site-manager-container {
     display: flex;
     flex-direction: row;
-    padding: 30px;
+    padding: 10px 25px;
 }
 .print-meals {
     margin-top: 20px;
     //background-color: #b7f8ac;
-}
-
-.site-manager-container2 {
-    margin: 20px 50px;
-    max-width: 95vw;
-    overflow: auto;
-}
-
-.site-manager-container3 {
-   margin: 20px 50px;
-   max-width: 95vw;
-   overflow: auto;
 }
 
 .site-manager-container input{

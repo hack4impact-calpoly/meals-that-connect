@@ -1,10 +1,9 @@
-#route-sidebar {
+#route-sidebar, .site-manager-sidebar {
     background-color: #b7f8ac;
     margin: 0px 40px;
     padding-bottom: 20px;
     border: solid 3px black;
     width: 280px;
-    height: 100%;
     z-index: 3;
     float: left;
     max-height: 85vh;

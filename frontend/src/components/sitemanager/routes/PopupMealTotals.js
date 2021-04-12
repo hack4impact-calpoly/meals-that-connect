@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HashLink as Link } from "react-router-hash-link";
 import Popup from "reactjs-popup";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../css/manager.css'
+import '../../../css/manager.css'
 
 class PopupMealTotals extends Component {
 

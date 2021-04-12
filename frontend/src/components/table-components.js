@@ -14,7 +14,7 @@ const DND_ITEM_TYPE = 'client'
 export const Styles = styled.div`
 table {
   width: 100%;
-  margin: 0px 30px 30px 0px;
+  margin: 0px 100px 30px 50px;
   border-spacing: 0;
   border: 1px solid black;
   font-family: 'Mulish', sans-serif;

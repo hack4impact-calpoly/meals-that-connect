@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../css/routesNavbar.css';
+import '../../../css/routesNavbar.css';
 import { HashLink as Link } from "react-router-hash-link";
 
 class routesOverview extends Component {

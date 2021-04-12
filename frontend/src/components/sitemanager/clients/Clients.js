@@ -1,5 +1,5 @@
 import React from 'react'
-import { Styles, DraggableTable } from '../table-components'
+import { Styles, DraggableTable } from '../../table-components'
 import env from "react-dotenv"
 
 const FOOD_DAYS = "foodDays";

@@ -4,7 +4,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
 import env from "react-dotenv"
-import { Styles, DraggableTable} from '../table-components'
+import { Styles, DraggableTable} from '../../table-components'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
