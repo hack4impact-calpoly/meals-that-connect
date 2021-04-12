@@ -58,11 +58,11 @@ class RouteHomepage extends Component {
     render() {
         let {routes, clients} = this.state
         return (
-            <div className="site-manager-page">
+            <div style={{marginBottom: 40}}>
             <h1 className="site-manager-page-header">Routes Page</h1>
-            <div className="site-manager-container">
-                <RoutesNavbar routes={routes}/>
-                <div >
+            <div className="site-manager-container" style={{paddingTop: 100}}>
+                <RoutesNavbar routes={routes} fixed={true}/>
+                <div style={{paddingRight: '30px', paddingLeft: 350}}>
                     {routes.map((route, i) =>{
                         return (
                             <section>

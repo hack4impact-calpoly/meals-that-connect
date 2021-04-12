@@ -39,7 +39,10 @@ class SiteManagerHomepage extends Component {
     }
 
     printDocument() {
-        const input = document.getElementById('site-manager-container');
+        const input = document.getElementById('meal-totals')
+        console.log(input.height)
+        
+        console.log(input);
     
         html2canvas(input)
         .then((canvas) => {
@@ -47,7 +50,7 @@ class SiteManagerHomepage extends Component {
             const imgData = canvas.toDataURL('image/png');
             console.log(imgData)
             const pdf = new jsPDF();
-            pdf.addImage(canvas, 'JPEG', 2, 10, 180, 200);
+            pdf.addImage(canvas, 'JPEG', 2, 10, 180, 220);
             pdf.output('dataurlnewwindow');
             pdf.save("download.pdf");
         })
@@ -62,12 +65,11 @@ class SiteManagerHomepage extends Component {
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
                 <div className="site-manager-container">
                     <RoutesNavbar routes={this.state.routes}/>
-                    <div id="site-manager-container">
-                        {this.state.totals ? <MealTotals data={totals} routes={routes}/> : 
+                    <div>
+                        {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
-
                         <button className="print-meals" onClick={this.printDocument}>Print Meal Totals</button>
                     </div>
                 </div>

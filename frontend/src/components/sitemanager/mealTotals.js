@@ -4,9 +4,8 @@ import { useTable } from 'react-table'
 import "../../css/totalMeals.css"
 
 const Styles = styled.div`
-  margin-left: 30px;
-  width: 100%;
   table {
+    margin-left:-8px;
     border-spacing: 0;
     width: 100%; 
     border: solid 2px #142850;

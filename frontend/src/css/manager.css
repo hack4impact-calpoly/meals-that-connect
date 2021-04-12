@@ -33,20 +33,20 @@
    overflow: auto;
 }
 
-.site-manager-page input{
+.site-manager-container input{
     padding: 10px;
     border: none;
     background: none;
     width: 100%;
 }
 
-.site-manager-page input:hover{
+.site-manager-container input:hover{
     padding: 10px;
     border: none;
     cursor: pointer;
 }
 
-.site-manager-page input:focus {
+.site-manager-container input:focus {
     outline: none !important;
     background: white;
     cursor: default;

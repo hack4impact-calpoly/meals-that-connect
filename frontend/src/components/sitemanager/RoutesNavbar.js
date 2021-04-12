@@ -11,9 +11,11 @@ class routesOverview extends Component {
 
     render() {
         let routes = this.props.routes
+        let fixed = this.props.fixed
+
         return (
-            <div id="route-sidebar">
-                <h1><b>Routes</b></h1>
+            <div id="route-sidebar" style={fixed ? {position: 'fixed' } : {}}>
+                <h1 style={{width: 250}}><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">
                     <Link to="/">
