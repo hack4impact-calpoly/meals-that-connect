@@ -41,17 +41,31 @@ class SiteManagerHomepage extends Component {
     printDocument() {
         const input = document.getElementById('site-manager-container');
     
-        html2canvas(input)
+        html2canvas(input, {scrollY: -window.scrollY})
         .then((canvas) => {
-            console.log('here')
             const imgData = canvas.toDataURL('image/png');
-            console.log(imgData)
-            const pdf = new jsPDF();
-            pdf.addImage(canvas, 'JPEG', 2, 10, 180, 200);
-            pdf.output('dataurlnewwindow');
-            pdf.save("download.pdf");
-        })
-        ;
+
+            var sideMargin = 5;
+            var imgWidth = 200;
+            var pageHeight = 266;
+            var imgHeight = canvas.height * imgWidth /canvas.width;
+            var heightLeft = imgHeight;
+
+            var pdf = new jsPDF('p', 'mm');
+            var position = 5;
+
+            pdf.addImage(imgData, 'JPEG', sideMargin, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position  += heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'JPEG', sideMargin, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save("RouteOverview.pdf");
+        });
     }
 
     render() {
@@ -62,12 +76,11 @@ class SiteManagerHomepage extends Component {
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
                 <div className="site-manager-container">
                     <RoutesNavbar routes={this.state.routes}/>
-                    <div id="site-manager-container">
-                        {this.state.totals ? <MealTotals data={totals} routes={routes}/> : 
+                    <div>
+                        {this.state.totals ? <div id="site-manager-container"><MealTotals data={totals} routes={routes}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
-
                         <button className="print-meals" onClick={this.printDocument}>Print Meal Totals</button>
                     </div>
                 </div>
