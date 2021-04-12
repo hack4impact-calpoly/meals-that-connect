@@ -1,23 +1,42 @@
 import React, { Component } from 'react';
-import MealTotals from './mealTotals';
-import RoutesNavbar from './RoutesNavbar';
-import PopupMealTotals from './PopupMealTotals';
+import MealTotals from './routes/mealTotals';
+import RoutesNavbar from './routes/RoutesNavbar';
+import PopupMealTotals from './routes/PopupMealTotals';
 import env from "react-dotenv";
-import { HashLink as Link } from "react-router-hash-link";
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../css/manager.css'
+import '../../css/manager.css';
+
+
+import * as html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            totals: [],
-            routes: []
+            totals: null,
+            routes: [],
+            weekArr: []
          };
     }
+
+    updateWeek = (week) => {
+        console.log(week)
+        this.setState({weekArr: week})
+    }
+
+    // componentDidUpdate(){
+    //     let weekArr = localStorage.getItem("week")
+    //     console.log("in update");
+    //     console.log(this.state.weeks !== weekArr)
+    //     if (weekArr !== '' && (this.state.weeks !== weekArr)) {
+    //         this.setState({weeks: weekArr})
+    //         console.log(this.state.weeks !== weekArr)
+    //     }
+    // }
 
     async componentDidMount(){
         this.fetchMealTotals()
@@ -38,19 +57,38 @@ class SiteManagerHomepage extends Component {
         this.setState({totals: data.meals, routes: data.routes})
     }
 
+    printDocument() {
+        const input = document.getElementById('meal-totals')
+        console.log(input.height)
+        
+        console.log(input);
+    
+        html2canvas(input)
+        .then((canvas) => {
+            console.log('here')
+            const imgData = canvas.toDataURL('image/png');
+            console.log(imgData)
+            const pdf = new jsPDF();
+            pdf.addImage(canvas, 'JPEG', 2, 10, 180, 220);
+            pdf.output('dataurlnewwindow');
+            pdf.save("download.pdf");
+        })
+        ;
+    }
+
     render() {
-        let {totals, routes} = this.state
-        console.log(this.state.totals)
+        let {totals, routes, weekArr} = this.state
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
-                <div>
-                    <RoutesNavbar routes={this.state.routes}/>
-                    <div className="site-manager-container">
-                        {this.state.totals.length >= 10 ? <MealTotals data={totals} routes={routes}/> : 
+                <div className="site-manager-container">
+                    <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek}/>
+                    <div>
+                        {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes} weekArr={weekArr}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+                        <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
                         <PopupMealTotals />
                     </div>
                 </div>

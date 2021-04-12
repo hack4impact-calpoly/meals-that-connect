@@ -1,10 +1,6 @@
-import React, { useState } from 'react'
-import { useTable, useSortBy } from 'react-table'
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import update from 'immutability-helper';
+import React from 'react'
 import env from "react-dotenv"
-import { Styles, DraggableTable} from '../table-components'
+import { Styles, DraggableTable} from '../../table-components'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
@@ -12,7 +8,6 @@ const BOOL_CELL_WIDTH = 50;
 const REG_CELL_WIDTH = 130;
 const CELL_HEIGHT = 60;
 const days = ["M", "T", "W", "Th", "F"];
-const DND_ITEM_TYPE = 'client'
 
 
 const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
@@ -98,13 +93,13 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
+      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
     )
   }
   else
   {
     return (
-        <input type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
+        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
     )
   }
 
@@ -172,6 +167,11 @@ const RouteTable = (props) => {
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
       },],},
     {
+    Header: 'Expand for Contact Info ->',
+    accessor: 'expand',
+    Cell: () => (<div style={{width: 120}}></div>)
+    },
+    {
     Header: 'Phone',
     accessor: 'phoneNumber',
     width: 150,
@@ -236,10 +236,9 @@ const RouteTable = (props) => {
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum}/>
+    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/>
   </Styles>
   )
 }
-
 
 export default RouteTable;

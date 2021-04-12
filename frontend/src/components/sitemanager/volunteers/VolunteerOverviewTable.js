@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable, useBlockLayout } from 'react-table'
-import '../css/volunteerTable.css'
+import '../../../css/volunteerTable.css'
 import env from "react-dotenv";
 
 const TEXT_TYPE = "type";
 
 const Styles = styled.div`
  table {
-   margin-top: 30px;
+   margin: 20px 50px 50px 0px;
    border-spacing: 0;
    border: 1px solid black;
    font-family: 'Mulish', sans-serif;

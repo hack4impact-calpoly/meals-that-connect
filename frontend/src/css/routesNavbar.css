@@ -1,11 +1,13 @@
-#route-sidebar {
+#route-sidebar, .site-manager-sidebar {
     background-color: #b7f8ac;
-    margin-top: 0px;
-    margin-left: 40px;
+    margin: 0px 40px;
     padding-bottom: 20px;
     border: solid 3px black;
-    width: 280px;
-    position: fixed;
+    width: 320px;
+    z-index: 3;
+    float: left;
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 hr {
@@ -34,3 +36,5 @@ hr {
     color: white;
     cursor: pointer;
 }
+
+

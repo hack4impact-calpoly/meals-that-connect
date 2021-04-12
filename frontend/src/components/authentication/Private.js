@@ -29,13 +29,14 @@ class Private extends Component {
         if (RedirectLoggedUser === true) {
           return (
             <Redirect to='/' />
+            
           )
         }
 
         return (
             <div className="Private" style={{marginTop: '200px'}}>
-            <p> Sign out button for testing. </p> 
-            <button onClick={this.signOut}> Sign out </button>
+              <p> Sign out button for testing. </p> 
+              <button onClick={this.signOut}> Sign out </button>
             </div>
         );
     }

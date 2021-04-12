@@ -5,9 +5,7 @@ import env from "react-dotenv";
 
 const Styles = styled.div`
  table {
-   margin-top: 10px;
-   margin-left: 5px;
-   margin-right: 5px;
+   margin: 10px 30px 30px 10px;
    border-spacing: 0;
    border: 1px solid black;
    background-color: #f2fff0;

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import VolunteerHoursTable from './VolunteerHoursTable'
+import Clients from './Clients'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from "react-bootstrap/Spinner"
 import env from "react-dotenv";
 
-class VolunteerHoursOverview extends Component {
+class ClientTableContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           volunteerData: [],
+           clients: [],
            loaded: false
         };
     }
@@ -17,7 +17,7 @@ class VolunteerHoursOverview extends Component {
        let info = {
           site: "SLO",
        }
-       let response = await fetch(env.backendURL + 'volunteers/siteVolunHours', {
+       let response = await fetch(env.backendURL + 'clients/site', {
           method: 'POST',
           headers: {
              'Content-Type': 'application/json'
@@ -26,15 +26,20 @@ class VolunteerHoursOverview extends Component {
        })
        const data = await response.json();
 
-       this.setState({volunteerData: data, loaded: true})
+       this.setState({clients: data, loaded: true})
+    }
+
+    setData = (data) => {
+        this.setState({clients: data})
     }
 
     render() {
+        console.log(this.state.clients)
         return (
             <div className="site-manager-page">
-                <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
-                <div className="site-manager-container3">
-                    {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData}/> :
+                <h1 className="site-manager-page-header">Clients</h1>
+                <div className="site-manager-container">
+                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}
@@ -44,4 +49,5 @@ class VolunteerHoursOverview extends Component {
     }
 }
 
-export default VolunteerHoursOverview;
+export default ClientTableContainer;
+
