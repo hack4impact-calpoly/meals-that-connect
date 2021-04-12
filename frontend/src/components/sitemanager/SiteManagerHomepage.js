@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import MealTotals from './mealTotals';
 import RoutesNavbar from './RoutesNavbar';
+import PopupMealTotals from './PopupMealTotals';
 import env from "react-dotenv";
+import { HashLink as Link } from "react-router-hash-link";
+import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -71,6 +74,7 @@ class SiteManagerHomepage extends Component {
                             <Spinner animation="border" role="status" />
                         </div>}
                         <button className="print-meals" onClick={this.printDocument}>Print Meal Totals</button>
+                        <PopupMealTotals />
                     </div>
                 </div>
             </div>
