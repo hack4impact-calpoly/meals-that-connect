@@ -2,7 +2,9 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
+import Holidays from '@date/holidays-us';
 import '../../css/Calendar.css';
+import holidays from '@date/holidays-us';
 
 function getWeekDays(weekStart) {
   const days = [weekStart];
@@ -32,7 +34,8 @@ export default class Example extends React.Component {
       super(props);
       this.state = {
           hoverRange: undefined,
-          selectedDays: []
+          selectedDays: [],
+          holidays: []
       }; 
     }
 
@@ -42,6 +45,51 @@ export default class Example extends React.Component {
     {
       this.handleDayChange(new Date());
     }
+    if (this.state.holidays.length === 0)
+    {
+      this.getHolidays(2021); // change year later
+    }
+  }
+
+  getHolidays = year => {
+    let holidaysArr = [];
+
+    var newYears = Holidays.newYearsDay(year);
+    holidaysArr.push(newYears);
+
+    var mlk = Holidays.martinLutherKingDay(year);
+    holidaysArr.push(mlk);
+
+    var memorial = Holidays.memorialDay(year);
+    holidaysArr.push(memorial);
+
+    var indp = Holidays.independenceDay(year);
+    holidaysArr.push(indp);
+
+    var labor = Holidays.laborDay(year);
+    holidaysArr.push(labor);
+
+    var veterans = Holidays.veteransDay(year);
+    holidaysArr.push(veterans);
+
+    var thanksgiving = Holidays.thanksgiving(year);
+    holidaysArr.push(thanksgiving);
+
+    //var thanksgivingObs = Holidays.thanksgiving(year);
+    //thanksgivingObs.setDate();
+    //holidaysArr.push(thanksgivingObs);
+
+    var christmas = Holidays.christmas(year).observed;
+    holidaysArr.push(christmas);
+
+    // get new years date of next year and update it to be Dec. 31st of current year
+    var newYearsObs = Holidays.newYearsDay(year+1);
+    newYearsObs.setDate(0);
+    holidaysArr.push(newYearsObs);
+
+    this.setState({ holidays: holidaysArr });
+    this.props.updateHoliday(holidaysArr)
+    //console.log(holidaysArr);
   }
 
   handleDayChange = date => {
@@ -49,6 +97,8 @@ export default class Example extends React.Component {
     this.setState({ selectedDays: days });
     localStorage.setItem("week", this.state.selectedDays);
     this.props.updateWeek(days)
+
+    this.getHolidays(2021);
   };
 
   handleDayEnter = date => {
@@ -71,7 +121,7 @@ export default class Example extends React.Component {
 
   render() {
 
-    const { hoverRange, selectedDays } = this.state;
+    const { hoverRange, selectedDays, holidays } = this.state;
 
     const daysAreSelected = selectedDays.length > 0;
 
@@ -92,6 +142,7 @@ export default class Example extends React.Component {
         <DayPicker
           selectedDays={selectedDays}
           showOutsideDays
+          disabledDays={holidays}
           modifiers={modifiers}
           onDayClick={this.handleDayChange}
           onDayMouseEnter={this.handleDayEnter}

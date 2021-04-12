@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
 import "../../../css/totalMeals.css"
+import holidays from '@date/holidays-us'
 
 const Styles = styled.div`
   table {
@@ -86,6 +87,13 @@ function MealTotals({ columns, data, meals }) {
 }
 
 const Table = (props) => {
+  console.log("in meals total")
+  //console.log(props.holidayArr)
+  //console.log(props.holidayArr.includes(getDate(0)))
+  //console.log(props.holidayArr)
+  let holidayDates = getHolidayDate();
+  console.log(holidayDates.includes(getDate(0)));
+
   let columns = [
     {
       Header: 'Meal Totals',
@@ -115,7 +123,12 @@ const Table = (props) => {
           columns: [
             {
               Header: getDate(0),
-              accessor: 'monday'
+              accessor: 'monday',
+              getProps:  (state, rowInfo) => ({
+                style: {
+                    backgroundColor: (rowInfo.row.monday === holidayDates.includes(getDate(0)) ? 'red' : null)
+                }
+            })
             }
           ]
         },
@@ -185,6 +198,31 @@ const Table = (props) => {
       week.push(mdy);
     }
     return week[tableDay];
+  }
+
+  function getHolidayDate() {
+    let holidayArr = props.holidayArr
+    let curr;
+    if (holidayArr.length === 1)
+    {
+      curr = new Date();
+    }
+    else
+    {
+      curr = new Date(holidayArr[0]);
+    }
+    let week = [];
+  
+    for (let i = 0; i < holidayArr.length; i++) {
+      //let first = curr.getDate() - curr.getDay() + i;
+      let day = new Date(holidayArr[i]);
+      let month = day.getMonth() + 1;
+      let date = day.getDate();
+      let year = day.getFullYear();
+      let mdy = month + "/" + date + "/" + year;
+      week.push(mdy);
+    }
+    return week;
   }
 
   let routeList = []
