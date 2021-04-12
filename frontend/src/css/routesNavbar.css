@@ -3,7 +3,7 @@
     margin: 0px 40px;
     padding-bottom: 20px;
     border: solid 3px black;
-    width: 280px;
+    width: 320px;
     z-index: 3;
     float: left;
     max-height: 85vh;
@@ -36,3 +36,5 @@ hr {
     color: white;
     cursor: pointer;
 }
+
+

@@ -7,11 +7,15 @@ import LogHours from './volunteer/LogHours.js'
 class HomepageWrapper extends Component {
     constructor(props) {
         super(props);
-        this.state = { userType: localStorage.getItem('userType')};
+        this.state = {
+            isLoggedIn: localStorage.getItem('isLoggedIn'), 
+            userType: localStorage.getItem('userType')
+        };
     }
 
     render() {
         let homePage, navbar;
+        
         if (this.state.userType === 'site-manager')
         {
             homePage = <SiteManagerHomepage />

@@ -14,7 +14,7 @@ class VolunteerNavbar extends Component {
 
         return (
             <div className="site-manager-sidebar" style={{marginTop: 30}}>
-                <h1 style={{width: 250}}><b>Volunteers</b></h1>
+                <h1 style={{width: 400}}><b>Volunteers</b></h1>
                 <hr></hr>
                 <nav className="route-links">
                     <Link to="/volunteer">

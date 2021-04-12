@@ -63,7 +63,7 @@ class Login extends Component {
     login = (e) => {
         e.preventDefault();
 
-        if (this.state.userType == "") {
+        if (this.state.userType === "") {
             this.setState({emptyUser: true})
             return;
         }
@@ -155,7 +155,7 @@ class Login extends Component {
 
     storeUser = (user) => {
         const date = new Date();
-        if (this.state.userType == "volunteer") {
+        if (this.state.userType === "volunteer") {
            localStorage.setItem("volunteerID", this.state.volunteerID);
         }
         localStorage.setItem("userEmail", user.email);

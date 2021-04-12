@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../../../css/routesNavbar.css';
 import { HashLink as Link } from "react-router-hash-link";
+import Calendar from '../calendar';
 
 class routesOverview extends Component {
 
@@ -20,9 +21,11 @@ class routesOverview extends Component {
         let routes = this.props.routes
         let fixed = this.props.fixed
         let scroll = this.scrollWidthOffset
+        console.log(this.props)
 
         return (
-            <div id="route-sidebar" style={fixed ? {position: 'fixed', marginTop: 100 } : {}}>
+            <div id="route-sidebar" style={fixed ? {position: 'fixed', marginTop: 100, maxHeight: '85vh' } : {height: '100%'}}>
+                <Calendar updateWeek={this.props.updateWeek}/>
                 <h1 style={{width: 250}}><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">

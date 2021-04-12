@@ -16,7 +16,7 @@ export function isAuthenticated() {
 
 // Checks if current value of isLoggedIn in localStorage is true
 export function isLoggedIn() {
-    if (localStorage.hasOwnProperty("isLoggedIn") && (localStorage.getItem("isLoggedIn") === "true")) {
+    if (localStorage.hasOwnProperty("isLoggedIn") && (localStorage.getItem("isLoggedIn") === 'true')) {
         return true;
     } 
     return false;
@@ -35,7 +35,7 @@ export function getHoursPassed() {
 }
 
 export function signout(){
-    localStorage.setItem("isLoggedIn", "false")
+    localStorage.setItem("isLoggedIn", 'false')
     localStorage.removeItem("userEmail");
     localStorage.removeItem("site");
     localStorage.removeItem("time");

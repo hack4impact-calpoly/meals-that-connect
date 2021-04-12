@@ -7,7 +7,8 @@ import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../css/manager.css'
+import '../../css/manager.css';
+
 
 import * as html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
@@ -17,9 +18,25 @@ class SiteManagerHomepage extends Component {
         super(props);
         this.state = {
             totals: null,
-            routes: []
+            routes: [],
+            weekArr: []
          };
     }
+
+    updateWeek = (week) => {
+        console.log(week)
+        this.setState({weekArr: week})
+    }
+
+    // componentDidUpdate(){
+    //     let weekArr = localStorage.getItem("week")
+    //     console.log("in update");
+    //     console.log(this.state.weeks !== weekArr)
+    //     if (weekArr !== '' && (this.state.weeks !== weekArr)) {
+    //         this.setState({weeks: weekArr})
+    //         console.log(this.state.weeks !== weekArr)
+    //     }
+    // }
 
     async componentDidMount(){
         this.fetchMealTotals()
@@ -60,18 +77,18 @@ class SiteManagerHomepage extends Component {
     }
 
     render() {
-        let {totals, routes} = this.state
+        let {totals, routes, weekArr} = this.state
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
                 <div className="site-manager-container">
-                    <RoutesNavbar routes={this.state.routes}/>
+                    <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek}/>
                     <div>
-                        {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes}/></div> : 
+                        {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes} weekArr={weekArr}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
-                        <button className="print-meals" onClick={this.printDocument}>Print Meal Totals</button>
+                        <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
                         <PopupMealTotals />
                     </div>
                 </div>

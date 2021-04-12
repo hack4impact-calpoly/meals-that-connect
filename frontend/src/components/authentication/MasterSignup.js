@@ -68,7 +68,7 @@ class Signup extends Component {
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
-            if (errorCode == 'auth/email-already-in-use') {
+            if (errorCode === 'auth/email-already-in-use') {
                 alert('That email is taken. Try another.');
               } else {
                 alert(errorMessage);

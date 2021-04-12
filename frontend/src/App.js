@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 
 import NavBar from './components/navbar/NavbarWrapper'
 import Home from './components/homepage/Home'
@@ -25,12 +24,16 @@ import NoPermission from './components/NoPermission'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isAuthenticated } from './components/authentication/authenticationUtils.js';
+import { isAuthenticated, isLoggedIn } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
 
 class App extends Component {
-  
+  constructor(props) {
+        super(props);
+        this.state = { isLoggedIn: isLoggedIn};
+    }
+
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
     isAuthenticated();
@@ -50,6 +53,7 @@ class App extends Component {
               <PublicRoute path="/master-signup" component={MasterSignup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
+              <PublicRoute path="/no-permission" component={NoPermission}/>
               {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
 
