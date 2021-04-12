@@ -59,9 +59,9 @@ class RouteHomepage extends Component {
         let {routes, clients} = this.state
         return (
             <div style={{marginBottom: 40}}>
+            <RoutesNavbar routes={routes} fixed={true}/>
             <h1 className="site-manager-page-header">Routes Page</h1>
-            <div className="site-manager-container" style={{paddingTop: 100}}>
-                <RoutesNavbar routes={routes} fixed={true}/>
+            <div className="site-manager-container">
                 <div style={{paddingRight: '30px', paddingLeft: 350}}>
                     {routes.map((route, i) =>{
                         return (
