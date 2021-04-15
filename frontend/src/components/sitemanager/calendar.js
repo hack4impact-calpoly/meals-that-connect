@@ -47,6 +47,8 @@ export default class Example extends React.Component {
     }
     if (this.state.holidays.length === 0)
     {
+      //let day = new Date();
+      //let year = day.getFullYear();
       this.getHolidays(2021); // change year later
     }
   }
@@ -75,9 +77,10 @@ export default class Example extends React.Component {
     var thanksgiving = Holidays.thanksgiving(year);
     holidaysArr.push(thanksgiving);
 
-    //var thanksgivingObs = Holidays.thanksgiving(year);
-    //thanksgivingObs.setDate();
-    //holidaysArr.push(thanksgivingObs);
+    var thanksgivingDate = thanksgiving.getDate();
+    var thanksgivingObs = Holidays.thanksgiving(year);
+    thanksgivingObs.setDate(thanksgivingDate + 1);
+    holidaysArr.push(thanksgivingObs);
 
     var christmas = Holidays.christmas(year).observed;
     holidaysArr.push(christmas);
@@ -88,7 +91,7 @@ export default class Example extends React.Component {
     holidaysArr.push(newYearsObs);
 
     this.setState({ holidays: holidaysArr });
-    this.props.updateHoliday(holidaysArr)
+    this.props.updateHoliday(holidaysArr);
     //console.log(holidaysArr);
   }
 
@@ -98,7 +101,9 @@ export default class Example extends React.Component {
     localStorage.setItem("week", this.state.selectedDays);
     this.props.updateWeek(days)
 
-    this.getHolidays(2021);
+    let day = new Date();
+    let year = day.getFullYear();
+    this.getHolidays(year)
   };
 
   handleDayEnter = date => {

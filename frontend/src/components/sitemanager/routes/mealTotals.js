@@ -42,7 +42,7 @@ const Styles = styled.div`
   }
 `
 
-function MealTotals({ columns, data, meals }) {
+function MealTotals({ columns, data, props }) {
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -75,7 +75,7 @@ function MealTotals({ columns, data, meals }) {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
-                  return cellClass(cell) //returns a <td> element with a specific id depending on location for CSS purposes
+                  return cellClass(cell, props) //returns a <td> element with a specific id depending on location for CSS purposes
                 })}
               </tr>
             )
@@ -87,13 +87,6 @@ function MealTotals({ columns, data, meals }) {
 }
 
 const Table = (props) => {
-  console.log("in meals total")
-  //console.log(props.holidayArr)
-  //console.log(props.holidayArr.includes(getDate(0)))
-  //console.log(props.holidayArr)
-  let holidayDates = getHolidayDate();
-  console.log(holidayDates.includes(getDate(0)));
-
   let columns = [
     {
       Header: 'Meal Totals',
@@ -122,13 +115,8 @@ const Table = (props) => {
           Header: 'Monday',
           columns: [
             {
-              Header: getDate(0),
-              accessor: 'monday',
-              getProps:  (state, rowInfo) => ({
-                style: {
-                    backgroundColor: (rowInfo.row.monday === holidayDates.includes(getDate(0)) ? 'red' : null)
-                }
-            })
+              Header: getDate(props.weekArr, 0),
+              accessor: 'monday'
             }
           ]
         },
@@ -137,7 +125,7 @@ const Table = (props) => {
           // accessor: 'tuesday'
           columns: [
             {
-              Header: getDate(1),
+              Header: getDate(props.weekArr, 1),
               accessor: 'tuesday'
             }
           ]
@@ -147,7 +135,7 @@ const Table = (props) => {
           // accessor: 'wednesday'
           columns: [
             {
-              Header: getDate(2),
+              Header: getDate(props.weekArr, 2),
               accessor: 'wednesday'
             }
           ]
@@ -157,7 +145,7 @@ const Table = (props) => {
           // accessor: 'thursday'
           columns: [
             {
-              Header: getDate(3),
+              Header: getDate(props.weekArr, 3),
               accessor: 'thursday'
             }
           ]
@@ -167,63 +155,13 @@ const Table = (props) => {
           // accessor: 'friday'
           columns: [
             {
-              Header: getDate(4),
+              Header: getDate(props.weekArr, 4),
               accessor: 'friday'}
             ]
           },
         ],
       }
     ]
-
-  function getDate(tableDay) {
-    let weekArr = props.weekArr
-    let curr;
-    if (weekArr.length === 1)
-    {
-      curr = new Date();
-    }
-    else
-    {
-      curr = new Date(weekArr[0]);
-    }
-    let week = [];
-  
-    for (let i = 1; i <= 7; i++) {
-      let first = curr.getDate() - curr.getDay() + i;
-      let day = new Date(curr.setDate(first));
-      let month = day.getMonth() + 1;
-      let date = day.getDate();
-      let year = day.getFullYear();
-      let mdy = month + "/" + date + "/" + year;
-      week.push(mdy);
-    }
-    return week[tableDay];
-  }
-
-  function getHolidayDate() {
-    let holidayArr = props.holidayArr
-    let curr;
-    if (holidayArr.length === 1)
-    {
-      curr = new Date();
-    }
-    else
-    {
-      curr = new Date(holidayArr[0]);
-    }
-    let week = [];
-  
-    for (let i = 0; i < holidayArr.length; i++) {
-      //let first = curr.getDate() - curr.getDay() + i;
-      let day = new Date(holidayArr[i]);
-      let month = day.getMonth() + 1;
-      let date = day.getDate();
-      let year = day.getFullYear();
-      let mdy = month + "/" + date + "/" + year;
-      week.push(mdy);
-    }
-    return week;
-  }
 
   let routeList = []
   for (let i =0; i < props.routes.length; i++) {
@@ -267,16 +205,60 @@ const Table = (props) => {
 
   return (
     <Styles>
-      <MealTotals columns={columns} data={routeList}/>
+      <MealTotals columns={columns} data={routeList} props={props}/>
     </Styles>
   )
 }
 
-function cellClass(cell) {
+function getDate(weekArr, tableDay) {
+  //let weekArr = props.weekArr
+  let curr;
+  if (weekArr.length === 1)
+  {
+    curr = new Date();
+  }
+  else
+  {
+    curr = new Date(weekArr[0]);
+  }
+  let week = [];
+
+  for (let i = 1; i <= 7; i++) {
+    let first = curr.getDate() - curr.getDay() + i;
+    let day = new Date(curr.setDate(first));
+    let month = day.getMonth() + 1;
+    let date = day.getDate();
+    let year = day.getFullYear();
+    let mdy = month + "/" + date + "/" + year;
+    week.push(mdy);
+  }
+  return week[tableDay];
+}
+
+function getHolidayDate(holidayArr) {
+  //let holidayArr = props.holidayArr
+  let week = [];
+
+  for (let i = 0; i < holidayArr.length; i++) {
+    let day = new Date(holidayArr[i]);
+    let month = day.getMonth() + 1;
+    let date = day.getDate();
+    let year = day.getFullYear();
+    let mdy = month + "/" + date + "/" + year;
+    week.push(mdy);
+  }
+  return week;
+}
+
+function cellClass(cell, props) {
+  let holidayDates = getHolidayDate(props.holidayArr);
   const rowID = (+(cell['row']['id'])) % 3;
   if (cell['value'] !== " " && rowID === 2){
-    return <td id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
+  console.log(holidayDates.includes(cell['column'].Header));
+  console.log(holidayDates[2] == cell['column'].Header);
+  console.log(cell['column'].Header);
   if (cell['column']['id'] === "route"){
     if (cell['value'] === " " && rowID === 2){
       return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
@@ -289,7 +271,7 @@ function cellClass(cell) {
     }
   }
   else {
-    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
 }
 
