@@ -186,6 +186,8 @@ const Row = ({ row, index, moveRow, showModal }) => {
     preview(drop(dropRef))
     drag(dragRef)
 
+    console.log(showModal)
+
     return (
         <tr ref={dropRef} style={{ opacity }}>
             <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>

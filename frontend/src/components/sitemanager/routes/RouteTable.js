@@ -233,6 +233,7 @@ const RouteTable = (props) => {
     ],
     []
   )
+  console.log(props.showModal)
 
   return (
   <Styles height={CELL_HEIGHT}>
