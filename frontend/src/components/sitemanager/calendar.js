@@ -91,6 +91,7 @@ export default class Example extends React.Component {
     holidaysArr.push(newYearsObs);
 
     this.setState({ holidays: holidaysArr });
+    console.log(this.props)
     this.props.updateHoliday(holidaysArr);
     //console.log(holidaysArr);
   }

@@ -12,6 +12,7 @@ class RouteHomepage extends Component {
             clients: {},
             routes: [],
             showModal: false,
+            holidayArr: [],
             currentClient:  {
                 firstName: null,
                 lastName: null,
@@ -55,6 +56,11 @@ class RouteHomepage extends Component {
     
     componentWillMount() {
         Modal.setAppElement('body');
+    }
+
+    updateHoliday = (holidays) => {
+        console.log(holidays)
+        this.setState({holidayArr: holidays})
     }
 
     async fetchClients () {
@@ -114,7 +120,7 @@ class RouteHomepage extends Component {
         let currentClient = this.state.currentClient;
         return (
             <div style={{marginBottom: 40}}>
-                <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek}/>
+                <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <h1 className="site-manager-page-header">Routes Page</h1>
                 <div className="site-manager-container">
                     <div>
