@@ -1,7 +1,6 @@
 
 // This will check if user should remain signed in
 export function isAuthenticated() {
-    printLocalStorage()
     if (isLoggedIn()) {
         let hoursPassed = getHoursPassed();
         // Keeps users logged in for 24 hours
@@ -17,19 +16,11 @@ export function isAuthenticated() {
 
 // Checks if current value of isLoggedIn in localStorage is true
 export function isLoggedIn() {
-    if (localStorage.hasOwnProperty("isLoggedIn") && (localStorage.getItem("isLoggedIn") === "true")) {
+    if (localStorage.hasOwnProperty("isLoggedIn") && (localStorage.getItem("isLoggedIn") === 'true')) {
         return true;
     } 
     return false;
 }
-
-export function printLocalStorage() {
-    console.log("local storage");
-    for (let i = 0; i < localStorage.length; i++)   {
-        console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
-    }
-}
-
 // Return the number of hours since the user last logged in
 export function getHoursPassed() {
 	let hours = 0;
@@ -44,8 +35,17 @@ export function getHoursPassed() {
 }
 
 export function signout(){
-    localStorage.setItem("isLoggedIn", "false")
+    localStorage.setItem("isLoggedIn", 'false')
     localStorage.removeItem("userEmail");
     localStorage.removeItem("site");
     localStorage.removeItem("time");
+    localStorage.removeItem("userType");
+}
+
+export function hasPermission(requiredUser){
+    if (requiredUser === "none")
+    {
+        return true;
+    }
+    return localStorage.getItem("userType") === requiredUser
 }

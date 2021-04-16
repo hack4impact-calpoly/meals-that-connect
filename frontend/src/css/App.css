@@ -1,6 +1,6 @@
 .App {
-  background-color: #f2fff0;
-  min-height: 100vh;
+  background-color: white;
+  //min-height: 100vh;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -21,10 +21,11 @@
   align-items: center;
   color: black;
   padding: 0px 10%;
-  background-color: #f2fff0;
+  background-color: white;
+  z-index: 5;
 }
 .navbar h2{
-  margin-right: 600px;
+  margin-right: 340px;
   font-family: 'Mulish', sans-serif;
   font-weight: 400;
   color: black;

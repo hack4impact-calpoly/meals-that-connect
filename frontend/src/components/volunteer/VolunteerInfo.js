@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
-import '../css/VolunteerInfo.css'
-import '../css/Signup.css';
-import '../css/Login.css';
+import '../../css/VolunteerInfo.css'
+import '../../css/Signup.css';
+import '../../css/Login.css';
 import env from "react-dotenv";
 import { withRouter } from "react-router-dom";
 
@@ -51,9 +51,7 @@ class VolunteerInfo extends Component{
 	}
 
 	updateComments = (event) => {
-		this.handleChange(event);
-		this.updateInfo(event);
-		//console.log(this.state.personalData.notes)
+        this.setState({comments: event.target.value});
 	}
 
 	addDays = () => {
@@ -108,7 +106,7 @@ class VolunteerInfo extends Component{
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/volunteer");
+                _this.props.history.push("/");
             }
         })
 	}
@@ -119,20 +117,22 @@ class VolunteerInfo extends Component{
 		const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.state;
 
 		return(
-			<div className='VolunteerInfo-form'>
-				<h2 id="header"> Volunteer Additional Information </h2>
+			<div className='auth-form'>
+				<h2 id="title"> Additional Volunteer Information </h2>
 				
 				<form onSubmit={this.addInfo}>
-					<label for="phoneNumber"> Phone Number:* </label>
-					<br/>
-					<input type="text" id="phoneNumber" placeholder='Phone Number' onChange={this.updateInfo} size="50" style={{width: '500px'}} required/> 
+                	<div className= "input-container">
+                		<p id = "input">Phone Number * </p>
+					</div>
+					<input type="tel" id="phoneNumber" pattern="[0-9]{10}" placeholder='Phone Number' onChange={this.updateInfo} size="50" style={{width: '500px'}} required/> 
 
 					<br/>
 					<div className="days-display">
-						<label id="days-text">Select Days Available:* </label>
+                		<div className= "input-container">
+							<p id = "input">Select Days Available * </p>
+						</div>
 
 						<div className="days-row">
-
 							<label id="checkbox-display"> 
 								<input name="Monday"  
 								type="checkbox" 
@@ -176,22 +176,23 @@ class VolunteerInfo extends Component{
 
 
 						</div>
-						{this.state.notCheckedBox && <div className="checkbox-error">Select one of more days</div>}
+						{this.state.notCheckedBox && <div className="checkbox-error">Select one or more days</div>}
 					</div>
 
-					<div className="comments">
-						<label> Comments  (not required): </label>
-						<br/>
+					<div className="comments">	
+						<div className= "input-container">
+							<p id = "input">Additional Comments</p>
+						</div>
 						<textarea
-						id="notes"
-						name="comments"
-						value={this.state.comments}
-						onChange={this.updateComments}
-						rows={5}
-						cols={50}
+							id="notes"
+							className="comment-box"
+							value={this.state.comments}
+							onChange={this.updateComments}
+							placeholder="Please enter any additional information you would like to include."
+							rows={5}
+							cols={50}
 						/>
 						<br/>
-
 					</div>
 
 					{this.state.error && <div className="signup-error">Email not found</div>}
