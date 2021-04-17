@@ -1,15 +1,52 @@
+.Modal {
+    position: absolute;
+    top: 110px;
+    left: 380px;
+    right: 20px;
+    bottom: 30px;
+    background-color: white;
+    overflow: scroll;
+    border: 2px solid black;
+}
+
+.Overlay {
+    border-radius: 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:rgba(255,255,255,0.7);
+}
+
 #client-info-header {
     margin-top: 0px;
     padding-top: 0px;
     position: fixed;
     background-color: white;
     z-index: 99;
-    width: 100%;
+    width: 70%;
     height: 10%;
+}
+
+#client-fooddays {
+    display: flex;
+    flex-direction: row;
+}
+
+#client-frozendays {
+    display: flex;
+    flex-direction: row;
 }
 
 #client-info-body {
     padding-top: 110px;
+}
+
+#modal-content
+{
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .secondColumn-text {

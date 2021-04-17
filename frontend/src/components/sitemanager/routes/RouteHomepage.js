@@ -3,7 +3,7 @@ import RouteTable from './RouteTable';
 import env from "react-dotenv";
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
-import '../../../css/Modal.css';
+import "../../../css/Modal.css"
 
 class RouteHomepage extends Component {
     constructor(props) {
@@ -125,9 +125,9 @@ class RouteHomepage extends Component {
                                     <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}></RouteTable>
                                 </section>
                         );})}
-                    </div> 
-                    <Modal isOpen={this.state.showModal} contentLabel="Minimal Modal Example">
-                        <div>
+                    </div>
+                    <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
+                        <div id="modal-content">
                             <div id="client-info-header">
                                 <h1>Client Information</h1>
                                 <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Close Modal</button>
@@ -142,13 +142,11 @@ class RouteHomepage extends Component {
                                     <input type="text" value={currentClient["lastName"]} id="client-lastname" className="secondColumn-input"/><br/>
                                 </div>
                                 <label for="client-address">Address</label><br/>
-                                <input type="text" value={currentClient["address"]} id="client-address"/>
-                                <div>
-                                    <label for="client-mealnumber">Num. of Meals</label><br/>
-                                    <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber"/><br/>
-
-                                    <p>Food Days</p>
-
+                                <input type="text" value={currentClient["address"]} id="client-address"/><br/>
+                                <label for="client-mealnumber">Num. of Meals</label><br/>
+                                <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber"/><br/>
+                                <p>Food Days</p>
+                                <div id="client-fooddays">
                                     <label for="client-foodday-m">Monday</label><br/>
                                     <input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/><br/>
 
@@ -165,12 +163,12 @@ class RouteHomepage extends Component {
                                     <input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/><br/>
 
                                 </div>
-                                <div>
-                                    <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                                    <input type="number" value={currentClient["frozenNumber"]} id="client-frozenNumber"/><br/>
+                                <br/>
+                                <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
+                                <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber"/><br/>
 
-                                    <p>Frozen Days</p>
-
+                                <p>Frozen Days</p>
+                                <div id="client-frozendays">
                                     <label for="client-frozenday-m">Monday</label><br/>
                                     <input type="checkbox" checked={currentClient["frozenDay"]["M"]} id="client-frozenday-m"/><br/>
 
@@ -185,7 +183,6 @@ class RouteHomepage extends Component {
 
                                     <label for="client-frozenday-f">Friday</label><br/>
                                     <input type="checkbox" checked={currentClient["frozenDay"]["F"]} id="client-frozenday-f"/><br/>
-
                                 </div>
 
                                 <label for="client-phone">Phone Number</label><br/>

@@ -121,12 +121,12 @@ const Table = (props) => {
           accessor: 'firstName',
           width: REG_CELL_WIDTH,
           height: CELL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text", setData)
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
           },
           { Header: 'Last Name',
           accessor: 'lastName',
           width: REG_CELL_WIDTH,
-          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text", setData) 
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
           },
           { Header: 'Route',
           accessor: 'routeNumber',
