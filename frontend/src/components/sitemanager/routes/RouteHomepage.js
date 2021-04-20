@@ -12,7 +12,6 @@ class RouteHomepage extends Component {
             clients: {},
             routes: [],
             showModal: false,
-            holidayArr: [],
             currentClient:  {
                 firstName: null,
                 lastName: null,
@@ -114,14 +113,24 @@ class RouteHomepage extends Component {
     handleCloseModal = () => {
         this.setState({showModal: false});
     }
+    
+    formatDate = (date) => {
+        console.log(date)
+        var month = (1 + date.getMonth()).toString();
+        var day = date.getDate().toString();
+        return month + '/' + day;
+      }
 
     render() {
-        let {routes, clients} = this.state;
+        let {routes, clients, weekArr} = this.state;
         let currentClient = this.state.currentClient;
+        console.log(weekArr)
+        console.log(weekArr ? " true" : "false")
+
         return (
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
-                <h1 className="site-manager-page-header">Routes Page</h1>
+                <h1 className="site-manager-page-header">{weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"}</h1>
                 <div className="site-manager-container">
                     <div>
                         {routes.map((route, i) =>{
