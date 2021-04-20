@@ -253,12 +253,11 @@ function getHolidayDate(holidayArr) {
 function cellClass(cell, props) {
   let holidayDates = getHolidayDate(props.holidayArr);
   const rowID = (+(cell['row']['id'])) % 3;
+  
   if (cell['value'] !== " " && rowID === 2){
     return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
-  console.log(holidayDates.includes(cell['column'].Header));
-  console.log(holidayDates[2] == cell['column'].Header);
-  console.log(cell['column'].Header);
+  
   if (cell['column']['id'] === "route"){
     if (cell['value'] === " " && rowID === 2){
       return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>

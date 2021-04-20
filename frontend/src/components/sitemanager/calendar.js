@@ -4,7 +4,6 @@ import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import Holidays from '@date/holidays-us';
 import '../../css/Calendar.css';
-import holidays from '@date/holidays-us';
 
 function getWeekDays(weekStart) {
   const days = [weekStart];
@@ -47,14 +46,15 @@ export default class Example extends React.Component {
     }
     if (this.state.holidays.length === 0)
     {
-      //let day = new Date();
-      //let year = day.getFullYear();
-      this.getHolidays(2021); // change year later
+      let day = new Date();
+      let year = day.getFullYear();
+      this.getHolidays(year);
     }
   }
 
   getHolidays = year => {
     let holidaysArr = [];
+    var currentDay = new Date();
 
     var newYears = Holidays.newYearsDay(year);
     holidaysArr.push(newYears);
@@ -85,13 +85,24 @@ export default class Example extends React.Component {
     var christmas = Holidays.christmas(year).observed;
     holidaysArr.push(christmas);
 
-    // get new years date of next year and update it to be Dec. 31st of current year
+    // get new year's date of next year and update it to be Dec. 31st of current year
     var newYearsObs = Holidays.newYearsDay(year+1);
     newYearsObs.setDate(0);
     holidaysArr.push(newYearsObs);
 
+    // if current month is december add next year's January dates in the holiday array
+    //only 2 holidays in January observed by Meals That Connect
+    if (currentDay.getMonth() == christmas.getMonth()){
+      //show new year's day for next year on calendar
+      var nextNewYear = Holidays.newYearsDay(year+1);
+      holidaysArr.push(nextNewYear);
+
+      var nextYearMLK = Holidays.martinLutherKingDay(year+1);
+      holidaysArr.push(nextYearMLK);
+    }
+
     this.setState({ holidays: holidaysArr });
-    console.log(this.props)
+    //console.log(this.props)
     this.props.updateHoliday(holidaysArr);
     //console.log(holidaysArr);
   }
