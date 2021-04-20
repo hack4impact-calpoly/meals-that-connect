@@ -25,7 +25,7 @@ class routesOverview extends Component {
 
         return (
             <div id="route-sidebar" style={fixed ? {position: 'fixed', marginTop: 100, maxHeight: '85vh' } : {height: '100%'}}>
-                <Calendar updateWeek={this.props.updateWeek}/>
+                <Calendar updateWeek={this.props.updateWeek} updateHoliday={this.props.updateHoliday}/>
                 <h1 style={{width: 250}}><b>Routes</b></h1>
                 <hr></hr>
                 <nav className="route-links">

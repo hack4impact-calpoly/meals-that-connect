@@ -19,13 +19,19 @@ class SiteManagerHomepage extends Component {
         this.state = {
             totals: null,
             routes: [],
-            weekArr: []
+            weekArr: [],
+            holidayArr: []
          };
     }
 
     updateWeek = (week) => {
         console.log(week)
         this.setState({weekArr: week})
+    }
+
+    updateHoliday = (holidays) => {
+        console.log(holidays)
+        this.setState({holidayArr: holidays})
     }
 
     // componentDidUpdate(){
@@ -77,14 +83,14 @@ class SiteManagerHomepage extends Component {
     }
 
     render() {
-        let {totals, routes, weekArr} = this.state
+        let {totals, routes, weekArr, holidayArr} = this.state
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
                 <div className="site-manager-container">
-                    <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek}/>
+                    <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                     <div>
-                        {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes} weekArr={weekArr}/></div> : 
+                        {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
