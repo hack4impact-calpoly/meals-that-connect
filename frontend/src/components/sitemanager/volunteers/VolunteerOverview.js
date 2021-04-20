@@ -36,7 +36,10 @@ class VolunteerOverview extends Component {
                 <h1 className="site-manager-page-header">Volunteer Overview</h1>
                 <VolunteerNavbar/>
                 <div className="site-manager-container" style={{Left: 0}}>
-                    {this.state.loaded === true ? <VolunteerOverviewTable data={this.state.volunteerData}/> : 
+                    {this.state.loaded === true ? 
+                    <section style={{marginRight: 80, paddingRight: 50}}>
+                        <VolunteerOverviewTable data={this.state.volunteerData} style={{marginRight: '100px'}}/>
+                    </section> : 
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}
