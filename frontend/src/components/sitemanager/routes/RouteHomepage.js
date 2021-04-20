@@ -108,7 +108,7 @@ class RouteHomepage extends Component {
     }
 
     handleOpenModal = (currentClient) => {
-        this.setState({showModal: true, currentClient: currentClient});
+        //this.setState({showModal: true, currentClient: currentClient});
     }
     
     handleCloseModal = () => {
