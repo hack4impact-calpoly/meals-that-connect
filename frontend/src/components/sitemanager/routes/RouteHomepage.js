@@ -77,16 +77,22 @@ class RouteHomepage extends Component {
             let client = data[i]
             if (i > 0 && client.routeNumber !== prevRoute) {
                 clients[prevRoute] = routeData
-                routes.push(prevRoute)
+                // make sure null does not get addded to routes array
+                if (prevRoute !== null)
+                    routes.push(prevRoute)
                 routeData = []
             }
-            prevRoute = client.routeNumber
-            routeData.push(client)
+            // filters out clients with unassined route numbers
+            if (client.routeNumber !== "-1") {
+                prevRoute = client.routeNumber
+                routeData.push(client)
+            }
         }
         if (routeData.length > 0) {
             clients[prevRoute] = routeData
             routes.push(prevRoute)
         }
+        console.log(routes)
         this.setState({clients: clients, routes: routes}) 
     }
 

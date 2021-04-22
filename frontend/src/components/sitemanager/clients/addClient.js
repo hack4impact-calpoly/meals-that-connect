@@ -27,7 +27,7 @@ class AddClient extends Component {
                     NE: "",
                     email: "",
                     holidayFrozen: false,
-                    routeNumber: "",
+                    routeNumber: "-1",
                     site: ""
         }   
     }
@@ -127,8 +127,8 @@ class AddClient extends Component {
                     <label for="client-holidayfrozen">Holiday Frozen</label><br/>
                     <input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/>
 
-                    <label for="client-routenumber">Route Number*</label><br/>
-                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} required={true}/><br/>
+                    <label for="client-routenumber">Route Number</label><br/>
+                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
                     <label for="client-site">Site*</label><br/>
                     <input type="text" id="client-site" onChange={e => this.setState({site: e.target.value})} required={true}/><br/>

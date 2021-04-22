@@ -48,11 +48,16 @@ router.post('/siteTotals', async (req, res) => {
 
           if (i > 0 && client.routeNumber != prevRoute) {
               clients[prevRoute] = routeData
-              routes.push(prevRoute)
+              // make sure a null route does not get inserted into routes array
+              if (prevRoute !== null)
+                routes.push(prevRoute)
               routeData = []
           }
-          prevRoute = client.routeNumber
-          routeData.push(client)
+          // makes sure the -1 route's data does not get inserted into routeData
+          if (client.routeNumber !== "-1"){
+            prevRoute = client.routeNumber
+            routeData.push(client)
+          }
       }
       if (routeData.length > 0) {
           clients[prevRoute] = routeData
