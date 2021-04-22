@@ -93,13 +93,13 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
+      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} />
     )
   }
   else
   {
     return (
-        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
+        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value}/>
     )
   }
 
@@ -166,70 +166,6 @@ const RouteTable = (props) => {
       widith: REG_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
       },],},
-    {
-    Header: 'Expand for Contact Info ->',
-    accessor: 'expand',
-    Cell: () => (<div style={{width: 120}}></div>)
-    },
-    {
-    Header: 'Phone',
-    accessor: 'phoneNumber',
-    width: 150,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
-    },
-    {
-    Header: 'Emergency Contact',
-    accessor: 'emergencyContact',
-    width: REG_CELL_WIDTH,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-    },
-    {
-    Header: 'E. Contact Phone',
-    accessor: 'emergencyPhone',
-    width: 150,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "number")
-    },
-    {
-    Header: 'No Milk',
-    accessor: 'noMilk',
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
-    },
-    {
-    Header: 'Num. of Meals',
-    accessor: 'mealNumber',
-    width: REG_CELL_WIDTH,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-    },
-    {
-    Header: 'Special Instructions',
-    accessor: 'specialInstructions',
-    width: 400,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
-    },
-    {
-    Header: 'C2 Client',
-    accessor: 'clientC2',
-    width: REG_CELL_WIDTH,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
-    },
-    {
-    Header: 'N/E',
-    accessor: 'NE',
-    width: REG_CELL_WIDTH,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-    },
-    {
-    Header: 'Email Address',
-    accessor: 'email',
-    width: 400,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "email")
-    },
-    {
-    Header: 'Holiday Frozen',
-    accessor: 'holidayFrozen',
-    width: REG_CELL_WIDTH,
-    Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "checkbox")
-    }
     ],
     []
   )

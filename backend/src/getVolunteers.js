@@ -15,7 +15,7 @@ router.post('/addVolunteer', async (req, res) => {
   }
   var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
   volun.save()
-  console.log("succcessfully added client")
+  console.log("succcessfully added volunteer")
   res.status(200).send("success")
   }).catch(err => {
     console.log(err)

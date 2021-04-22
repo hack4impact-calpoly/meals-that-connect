@@ -9,6 +9,17 @@
     border: 2px solid black;
 }
 
+.Modal-client {
+    position: absolute;
+    top: 110px;
+    left: 20px;
+    right: 20px;
+    bottom: 30px;
+    background-color: white;
+    overflow: scroll;
+    border: 2px solid black;
+}
+
 .Overlay {
     border-radius: 25px;
     position: fixed;
@@ -22,25 +33,26 @@
 #client-info-header {
     margin-top: 0px;
     padding-top: 0px;
+    padding-bottom: 100px;
     position: fixed;
     background-color: white;
     z-index: 99;
     width: 70%;
     height: 10%;
-}
-
-#client-fooddays {
-    display: flex;
-    flex-direction: row;
-}
-
-#client-frozendays {
-    display: flex;
-    flex-direction: row;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    color: black;
 }
 
 #client-info-body {
     padding-top: 110px;
+}
+
+label{
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    color: black;
+    font-size: 22px
 }
 
 #modal-content
@@ -49,17 +61,28 @@
     margin-right: 10px;
 }
 
-.secondColumn-text {
-    margin-left: 497px;
-}
-
-.secondColumn-input {
-    margin-left: 10px;
-}
-
 input[type=text],
 input[type=tel],
 input[type=email],
 input[type=password] {
     width: 560px;
+}
+
+.add-table {
+    table-layout: fixed;
+    width: 50%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.add-table td, th {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 10px
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 570px 600px;
 }

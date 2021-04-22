@@ -97,7 +97,6 @@ class RouteHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
         this.setState({weekArr: week})
     }
 
@@ -130,70 +129,66 @@ class RouteHomepage extends Component {
                         <div id="modal-content">
                             <div id="client-info-header">
                                 <h1>Client Information</h1>
-                                <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Close Modal</button>
+                                <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Save and Exit</button>
                             </div>
                             <div id="client-info-body">
-                                <div>
-                                    <label for="client-firstname">First Name</label>
-                                    <label for="client-lastname" className="secondColumn-text">Last Name</label>
-                                </div>
-                                <div>
-                                    <input type="text" value={currentClient["firstName"]} id="client-firstname"/>
-                                    <input type="text" value={currentClient["lastName"]} id="client-lastname" className="secondColumn-input"/><br/>
+                                <div className="two-column">
+                                    <div><label for="client-firstname">First Name</label></div>
+                                    <div><label for="client-lastname">Last Name</label></div>
+                                    <div><input type="text" value={currentClient["firstName"]} id="client-firstname"/></div>
+                                    <div><input type="text" value={currentClient["lastName"]} id="client-lastname"/></div>
                                 </div>
                                 <label for="client-address">Address</label><br/>
-                                <input type="text" value={currentClient["address"]} id="client-address"/><br/>
+                                <input type="text" value={currentClient["address"]} id="client-address" style={{width: "1130px"}}/><br/>
                                 <label for="client-mealnumber">Num. of Meals</label><br/>
-                                <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber"/><br/>
-                                <p>Food Days</p>
-                                <div id="client-fooddays">
-                                    <label for="client-foodday-m">Monday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/><br/>
-
-                                    <label for="client-foodday-t">Tuesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t"/><br/>
-
-                                    <label for="client-foodday-w">Wednesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w"/><br/>
-
-                                    <label for="client-foodday-th">Thursday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th"/><br/>
-
-                                    <label for="client-foodday-f">Friday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/><br/>
-
-                                </div>
+                                <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber" style={{width: "1130px"}}/><br/>
+                                <label>Food Days</label>
+                                <table className="add-table">
+                                    <tr>
+                                        <th>Monday</th>
+                                        <th>Tuesday</th>
+                                        <th>Wednesday</th>
+                                        <th>Thursday</th>
+                                        <th>Friday</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/></td>
+                                        <td><input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t"/></td>
+                                        <td><input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w"/></td>
+                                        <td><input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th"/></td>
+                                        <td><input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/></td>
+                                    </tr>
+                                </table>
                                 <br/>
                                 <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                                <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber"/><br/>
+                                <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber" style={{width: "1130px"}}/><br/>
 
-                                <p>Frozen Days</p>
-                                <div id="client-frozendays">
-                                    <label for="client-frozenday-m">Monday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["M"]} id="client-frozenday-m"/><br/>
-
-                                    <label for="client-frozenday-t">Tuesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["T"]} id="client-frozenday-t"/><br/>
-
-                                    <label for="client-frozenday-w">Wednesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["W"]} id="client-frozenday-w"/><br/>
-
-                                    <label for="client-frozenday-th">Thursday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["Th"]} id="client-frozenday-th"/><br/>
-
-                                    <label for="client-frozenday-f">Friday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["F"]} id="client-frozenday-f"/><br/>
-                                </div>
+                                <label>Frozen Days</label>
+                                <table className="add-table">
+                                    <tr>
+                                        <th>Monday</th>
+                                        <th>Tuesday</th>
+                                        <th>Wednesday</th>
+                                        <th>Thursday</th>
+                                        <th>Friday</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" checked={currentClient["frozenDay"] === "M"} id="client-frozenday-m"/></td>
+                                        <td><input type="radio" checked={currentClient["frozenDay"] === "T"} id="client-frozenday-t"/></td>
+                                        <td><input type="radio" checked={currentClient["frozenDay"] === "W"} id="client-frozenday-w"/></td>
+                                        <td><input type="radio" checked={currentClient["frozenDay"] === "Th"} id="client-frozenday-th"/></td>
+                                        <td><input type="radio" checked={currentClient["frozenDay"] === "F"} id="client-frozenday-f"/></td>
+                                    </tr>
+                                </table>
 
                                 <label for="client-phone">Phone Number</label><br/>
-                                <input type="text" value={currentClient["phoneNumber"]} id="client-phone"/><br/>
-
-                                <label for="client-emergencycontact">Emergency Contact</label><br/>
-                                <input type="text" value={currentClient["emergencyContact"]} id="client-emergencycontact"/><br/>
-
-                                <label for="client-emergencyphone">Emergency Contact Phone</label><br/>
-                                <input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone"/><br/>
-
+                                <input type="text" value={currentClient["phoneNumber"]} id="client-phone" style={{width: "1130px"}}/><br/>
+                                <div className="two-column">
+                                    <div><label for="client-emergencycontact">Emergency Contact</label></div>
+                                    <div><label for="client-emergencyphone" className="secondColumn-text">Emergency Contact Phone</label></div>
+                                    <div><input type="text" value={currentClient["emergencyContact"]} id="client-emergencycontact"/></div>
+                                    <div><input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone" className="secondColumn-input"/></div>
+                                </div>
                                 <label for="client-nomilk">No Milk</label><br/>
                                 <input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk"/><br/>
 
