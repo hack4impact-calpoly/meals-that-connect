@@ -28,8 +28,7 @@ class AddClient extends Component {
                     email: "",
                     holidayFrozen: false,
                     routeNumber: "",
-                    site: "",
-                    index: ""
+                    site: ""
         }   
     }
 
@@ -133,9 +132,6 @@ class AddClient extends Component {
 
                     <label for="client-site">Site*</label><br/>
                     <input type="text" id="client-site" onChange={e => this.setState({site: e.target.value})} required={true}/><br/>
-
-                    <label for="client-index">Index*</label><br/>
-                    <input type="text" id="client-index" onChange={e => this.setState({index: e.target.value})} required={true}/><br/>
                     <br/>
                     <input type="submit"/>
                 </div>

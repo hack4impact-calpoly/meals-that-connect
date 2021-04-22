@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import env from "react-dotenv";
+import fire from '../../../fire.js';
 
 class AddVolunteer extends Component {
     constructor(props) {
@@ -37,6 +38,61 @@ class AddVolunteer extends Component {
             },
             body: JSON.stringify(this.state)
         })
+        this.firebase_signup(this.state.email, this.state.password)
+    }
+
+    firebase_signup = () => {
+        let email = this.state.email
+        let password = this.state.password
+        // console.log(email + " " + password)
+        fire.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in 
+            var user = userCredential.user;
+            // Send verification email
+            this.firebase_sendVerification(user);
+            // Send reset password
+            this.firebase_reset_password();
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if (errorCode == 'auth/email-already-in-use') {
+                alert('That email is taken. Try another.');
+              } else {
+                alert(errorMessage);
+              }
+              console.log(error);
+        });
+    }
+
+    firebase_sendVerification = (user) => {
+
+        user.sendEmailVerification().then(function() {
+            // Email sent.
+        }).catch(function(error) {
+            // An error happened.
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error);
+        });
+    }
+
+    firebase_reset_password = () => {
+        
+        var auth = fire.auth();
+        var emailAddress = this.state.email;
+
+        auth.sendPasswordResetEmail(emailAddress).then(function() {
+            // Email sent.
+            alert("Email has been sent. Please check your email.");
+        }).catch(function(error) {
+            // An error happened.
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error);
+        });
+    
     }
 
     render() {
