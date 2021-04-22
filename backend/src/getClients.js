@@ -12,14 +12,14 @@ router.post('/addClient', async (req, res) => {
      res.status(404).send("email already in use")     
   }
   else {
-  Client.countDocuments({site: site, routeNumber: routeNumber}, function(err, index) {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      console.log(index)
-      var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
-      client.save()
+    Client.countDocuments({site: site, routeNumber: routeNumber}, function(err, index) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        console.log(index)
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        client.save()
       }
     })
     console.log("succcessfully added client")
