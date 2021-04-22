@@ -15,10 +15,12 @@ router.post('/addVolunteer', async (req, res) => {
     console.log("email already in use")
      res.status(404).send("email already in use")     
   }
-  var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
-  volun.save()
-  console.log("succcessfully added volunteer")
-  res.status(200).send("success")
+  else {
+    var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
+    volun.save()
+    console.log("succcessfully added volunteer")
+    res.status(200).send("success")
+  }
   }).catch(err => {
     console.log(err)
     res.send(500).send("Internal server error")
