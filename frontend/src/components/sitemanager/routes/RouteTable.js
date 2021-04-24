@@ -225,7 +225,6 @@ const RouteTable = (props) => {
     ],
     []
   )
-  console.log(props.showModal)
 
   function editClient(client) {
     console.log("Editing client")

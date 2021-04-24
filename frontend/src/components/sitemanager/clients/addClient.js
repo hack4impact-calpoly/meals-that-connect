@@ -27,9 +27,8 @@ class AddClient extends Component {
                     NE: "",
                     email: "",
                     holidayFrozen: false,
-                    routeNumber: "",
-                    site: "SLO",
-                    index: ""
+                    routeNumber: "-1",
+                    site: ""
         }   
     }
 
@@ -127,18 +126,11 @@ class AddClient extends Component {
                     <label for="client-holidayfrozen">Holiday Frozen</label><br/>
                     <input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/>
 
-                    <label for="client-routenumber">Route Number*</label><br/>
-                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
+                    <label for="client-routenumber">Route Number</label><br/>
+                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
                     <label for="client-site">Site*</label><br/>
-                    <select onChange={e => this.setState({site: e.target.value})} required={true} className= "drop-down-site">
-                        <option value="SLO">SLO</option>
-                        <option value="Five Cities">Five Cities</option>
-                        <option value="Cambria">Cambria</option>
-                    </select>
-                    <br/>
-                    <label for="client-index">Index*</label><br/>
-                    <input type="text" id="client-index" onChange={e => this.setState({index: e.target.value})} required={true}/><br/>
+                    <input type="text" id="client-site" onChange={e => this.setState({site: e.target.value})} required={true}/><br/>
                     <br/>
                     <input type="submit"/>
                 </div>

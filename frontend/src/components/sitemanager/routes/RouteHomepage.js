@@ -57,6 +57,11 @@ class RouteHomepage extends Component {
         Modal.setAppElement('body');
     }
 
+    updateHoliday = (holidays) => {
+        console.log(holidays)
+        this.setState({holidayArr: holidays})
+    }
+
     async fetchClients () {
         let info = {
             site: "SLO",
@@ -77,16 +82,22 @@ class RouteHomepage extends Component {
             let client = data[i]
             if (i > 0 && client.routeNumber !== prevRoute) {
                 clients[prevRoute] = routeData
-                routes.push(prevRoute)
+                // make sure null does not get addded to routes array
+                if (prevRoute !== null)
+                    routes.push(prevRoute)
                 routeData = []
             }
-            prevRoute = client.routeNumber
-            routeData.push(client)
+            // filters out clients with unassined route numbers
+            if (client.routeNumber !== "-1") {
+                prevRoute = client.routeNumber
+                routeData.push(client)
+            }
         }
         if (routeData.length > 0) {
             clients[prevRoute] = routeData
             routes.push(prevRoute)
         }
+        console.log(routes)
         this.setState({clients: clients, routes: routes}) 
     }
 
@@ -107,14 +118,24 @@ class RouteHomepage extends Component {
     handleCloseModal = () => {
         this.setState({showModal: false});
     }
+    
+    formatDate = (date) => {
+        console.log(date)
+        var month = (1 + date.getMonth()).toString();
+        var day = date.getDate().toString();
+        return month + '/' + day;
+      }
 
     render() {
-        let {routes, clients} = this.state;
+        let {routes, clients, weekArr} = this.state;
         let currentClient = this.state.currentClient;
+        console.log(weekArr)
+        console.log(weekArr ? " true" : "false")
+
         return (
             <div style={{marginBottom: 40}}>
-                <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek}/>
-                <h1 className="site-manager-page-header">Routes Page</h1>
+                <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
+                <h1 className="site-manager-page-header">{weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"}</h1>
                 <div className="site-manager-container">
                     <div>
                         {routes.map((route, i) =>{
