@@ -46,6 +46,7 @@ table {
 `
 
 export const DraggableTable = ({ columns, data, setData, route, showModal }) => {
+    console.log(showModal)
     const getRowId = React.useCallback(row => {
         return row.index
     }, [])

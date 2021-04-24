@@ -1,23 +1,64 @@
+.Modal {
+    position: absolute;
+    top: 110px;
+    left: 380px;
+    right: 20px;
+    bottom: 30px;
+    background-color: white;
+    overflow: scroll;
+    border: 2px solid black;
+}
+
+.Modal-client {
+    position: absolute;
+    top: 110px;
+    left: 20px;
+    right: 20px;
+    bottom: 30px;
+    background-color: white;
+    overflow: scroll;
+    border: 2px solid black;
+}
+
+.Overlay {
+    border-radius: 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:rgba(255,255,255,0.7);
+}
+
 #client-info-header {
     margin-top: 0px;
     padding-top: 0px;
+    padding-bottom: 100px;
     position: fixed;
     background-color: white;
     z-index: 99;
-    width: 100%;
+    width: 70%;
     height: 10%;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    color: black;
 }
 
 #client-info-body {
     padding-top: 110px;
 }
 
-.secondColumn-text {
-    margin-left: 497px;
+label{
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    color: black;
+    font-size: 22px
 }
 
-.secondColumn-input {
+#modal-content
+{
     margin-left: 10px;
+    margin-right: 10px;
 }
 
 input[type=text],
@@ -25,4 +66,23 @@ input[type=tel],
 input[type=email],
 input[type=password] {
     width: 560px;
+}
+
+.add-table {
+    table-layout: fixed;
+    width: 50%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.add-table td, th {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 10px
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 570px 600px;
 }

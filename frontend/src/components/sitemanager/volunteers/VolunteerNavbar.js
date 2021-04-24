@@ -23,6 +23,10 @@ class VolunteerNavbar extends Component {
                     <Link to="/volunteer-hours">
                         <button type="button" className="route">Hours</button>
                     </Link><br/>
+
+                    <Link to="/add-volunteer">
+                        <button type="button" className="route">Add Volunteer</button>
+                    </Link><br/>
                 </nav>
             </div>
         );
