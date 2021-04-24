@@ -5,10 +5,12 @@ import '../../../css/volunteerTable.css'
 import env from "react-dotenv";
 
 const TEXT_TYPE = "type";
+const CELL_HEIGHT = 55;
+const BOOL_HEIGHT = 70;
 
 const Styles = styled.div`
  table {
-   margin: 20px 50px 50px 0px;
+   padding-right: 100;
    border-spacing: 0;
    border: 1px solid black;
    font-family: 'Mulish', sans-serif;
@@ -21,8 +23,10 @@ const Styles = styled.div`
    }
    th,
    td {
+     height: ${CELL_HEIGHT};
      border-bottom: 1px solid black;
      border-right: 1px solid black;
+     text-align: center;
      font-size: 20px;
 
       :last-child {
@@ -77,13 +81,13 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
   if (type === "checkbox")
   {
     return (
-        <span><input type={type} style={{width: width - 1.25}} checked={selected} onChange={e => updateCheckbox()}/></span>
+        <input type={type} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
     )
   }
   else
   {
     return (
-        <span><input type={type} style={{width: width - 1.25}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase()}/></span>
+        <input type={type} style={{width: width,height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase()}/>
     )
   }
 
@@ -97,66 +101,68 @@ const VolunteerOverviewData = (props) => {
       columns: [
           { Header: 'First Name',
           accessor: 'firstName',
-          Cell: (cellProperties) => EditableCell(cellProperties, 200, TEXT_TYPE, null)
+          width: 200,
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
-          Cell: (cellProperties) => EditableCell(cellProperties, 200, TEXT_TYPE, null)
+          width: 200,
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
           },
           { Header: 'Org.',
           accessor: 'site',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 99, TEXT_TYPE, null)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
           width: 300,
-          Cell: (cellProperties) => EditableCell(cellProperties, 300, "tel", null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 299, "tel", null)
           },
           { Header: 'Email',
           accessor: 'email',
-          width: 300,
-          Cell: row => <div style={{width: 299}}>{row.row.original.email}</div>
+          width: 350,
+          Cell: row => <div style={{width: 349}}>{row.row.original.email}</div>
           },
           { Header: 'Using Digital System?',
           accessor: 'digitalSystem',
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 90, "checkbox", null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 99, "checkbox", null)
           },
           { Header: 'M',
           accessor: 'monday',
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 90, "checkbox", 'M')
+          width: BOOL_HEIGHT,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M')
           },
           { Header: 'T',
           accessor: 'tuesday',
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 90, "checkbox", 'T')
+          width: BOOL_HEIGHT,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T')
           },
           { Header: 'W',
           accessor: 'wednesday',
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 90, "checkbox", 'W')
+          width: BOOL_HEIGHT,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W')
           },
           { Header: 'Th',
           accessor: 'thursday',
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 90, "checkbox", 'Th')
+          width: BOOL_HEIGHT,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th')
           },
           { Header: 'F',
           accessor: 'friday',
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 90, "checkbox", 'F')
+          width: BOOL_HEIGHT,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F')
           },
           { Header: 'Volunteer Certificate Signed?',
           accessor: 'completedOrientation',
           width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 120, "checkbox", null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null)
           },
           { Header: 'Role',
           accessor: 'role',
           width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 130, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 129, TEXT_TYPE, null)
           },
           { Header: 'Notes',
           accessor: 'notes',
@@ -173,7 +179,7 @@ const VolunteerOverviewData = (props) => {
   const data = React.useMemo(() => props.data, []);
 
   return (
-  <Styles>
+  <Styles height={CELL_HEIGHT}>
     <VolunteerOverviewTable columns={columns} data={data}/>
   </Styles>
   )
@@ -197,14 +203,6 @@ async function deleteVolunteer(cellProperties)
 }
 
 function VolunteerOverviewTable({ columns, data }) {
-  const defaultColumn = React.useMemo(
-    () => ({
-      minWidth: 10,
-      width: 200,
-      maxWidth: 300,
-    }),
-    []
-  );
 
   const {
     getTableProps,
@@ -214,7 +212,6 @@ function VolunteerOverviewTable({ columns, data }) {
     prepareRow} = useTable({
     columns,
     data,
-    defaultColumn,
     },
     useBlockLayout
     )
