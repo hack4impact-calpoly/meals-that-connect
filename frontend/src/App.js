@@ -28,6 +28,8 @@ import LogHours from './components/LogHours'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
+import Profile from './components/Profile'
+
 import { isAuthenticated } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
@@ -47,6 +49,7 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
+              <PublicRoute path="/profile" component={Profile}/>
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
