@@ -2,6 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
+import Holidays from '@date/holidays-us';
 import '../../css/Calendar.css';
 
 function getWeekDays(weekStart) {
@@ -32,7 +33,8 @@ export default class Example extends React.Component {
       super(props);
       this.state = {
           hoverRange: undefined,
-          selectedDays: []
+          selectedDays: [],
+          holidays: []
       }; 
     }
 
@@ -42,6 +44,67 @@ export default class Example extends React.Component {
     {
       this.handleDayChange(new Date());
     }
+    if (this.state.holidays.length === 0)
+    {
+      let day = new Date();
+      let year = day.getFullYear();
+      this.getHolidays(year);
+    }
+  }
+
+  getHolidays = year => {
+    let holidaysArr = [];
+    var currentDay = new Date();
+
+    var newYears = Holidays.newYearsDay(year);
+    holidaysArr.push(newYears);
+
+    var mlk = Holidays.martinLutherKingDay(year);
+    holidaysArr.push(mlk);
+
+    var memorial = Holidays.memorialDay(year);
+    holidaysArr.push(memorial);
+
+    var indp = Holidays.independenceDay(year);
+    holidaysArr.push(indp);
+
+    var labor = Holidays.laborDay(year);
+    holidaysArr.push(labor);
+
+    var veterans = Holidays.veteransDay(year);
+    holidaysArr.push(veterans);
+
+    var thanksgiving = Holidays.thanksgiving(year);
+    holidaysArr.push(thanksgiving);
+
+    var thanksgivingDate = thanksgiving.getDate();
+    var thanksgivingObs = Holidays.thanksgiving(year);
+    thanksgivingObs.setDate(thanksgivingDate + 1);
+    holidaysArr.push(thanksgivingObs);
+
+    var christmas = Holidays.christmas(year).observed;
+    holidaysArr.push(christmas);
+
+    // get new year's date of next year and update it to be Dec. 31st of current year
+    var newYearsObs = Holidays.newYearsDay(year+1);
+    newYearsObs.setDate(0);
+    holidaysArr.push(newYearsObs);
+
+    // if current month is december add next year's January dates in the holiday array
+    //only 2 holidays in January observed by Meals That Connect
+    if (currentDay.getMonth() == christmas.getMonth()){
+      //show new year's day for next year on calendar
+      var nextNewYear = Holidays.newYearsDay(year+1);
+      holidaysArr.push(nextNewYear);
+
+      var nextYearMLK = Holidays.martinLutherKingDay(year+1);
+      holidaysArr.push(nextYearMLK);
+    }
+
+    this.setState({ holidays: holidaysArr });
+    //console.log(this.props)
+    this.props.updateHoliday(holidaysArr);
+    //console.log(holidaysArr);
   }
 
   handleDayChange = date => {
@@ -49,6 +112,10 @@ export default class Example extends React.Component {
     this.setState({ selectedDays: days });
     localStorage.setItem("week", this.state.selectedDays);
     this.props.updateWeek(days)
+
+    let day = new Date();
+    let year = day.getFullYear();
+    this.getHolidays(year)
   };
 
   handleDayEnter = date => {
@@ -71,7 +138,7 @@ export default class Example extends React.Component {
 
   render() {
 
-    const { hoverRange, selectedDays } = this.state;
+    const { hoverRange, selectedDays, holidays } = this.state;
 
     const daysAreSelected = selectedDays.length > 0;
 
@@ -92,6 +159,7 @@ export default class Example extends React.Component {
         <DayPicker
           selectedDays={selectedDays}
           showOutsideDays
+          disabledDays={holidays}
           modifiers={modifiers}
           onDayClick={this.handleDayChange}
           onDayMouseEnter={this.handleDayEnter}

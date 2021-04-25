@@ -10,11 +10,10 @@ class VolunteerNavbar extends Component {
     }
 
     render() {
-        console.log("ere")
 
         return (
-            <div className="site-manager-sidebar" style={{marginTop: 30}}>
-                <h1 style={{width: 400}}><b>Volunteers</b></h1>
+            <div className="site-manager-sidebar" style={{margin: '10px 30px 0px 30px', marginRight: 10, width: 'auto'}}>
+                <h1 style={{padding: '10px 25px'}}><b>Volunteers</b></h1>
                 <hr></hr>
                 <nav className="route-links">
                     <Link to="/volunteer">
