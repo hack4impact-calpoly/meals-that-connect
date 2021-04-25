@@ -199,8 +199,6 @@ const RouteTable = (props) => {
       width: 180,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, 180, "dropdown")
       },],},
-<<<<<<< HEAD
-=======
 
     {
       Header: 'Additional Info',
@@ -224,7 +222,6 @@ const RouteTable = (props) => {
                 </svg></div>)
       },
     ],},
->>>>>>> origin/master
     ],
     []
   )
