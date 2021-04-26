@@ -1,11 +1,17 @@
 .logging-container {
     margin: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.log-input-box {
+    width: 500px;
 }
 
 .input-date {
     justify-content: left;
     text-align: left;
-    padding-right: 440px;
     margin-bottom: 10px;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
@@ -14,10 +20,15 @@
     color: #7E7C7C;
 }
 
+.log-input {
+    width: 100%;
+    background-color: #F5F5F5;
+}
+
 .input-hours {
     justify-content: left;
     text-align: left;
-    padding-right: 395px;
+    padding-top: 10px;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     font-size: 20px;

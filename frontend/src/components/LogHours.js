@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import LoggedHoursTable from "./LoggedHoursTable";
 import "../css/LogHours.css";
 import env from "react-dotenv";
+import Moment from 'moment';
 
 class LogHours extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ class LogHours extends Component {
         this.state = {
             volunteerID: localStorage.getItem("volunteerID"),
             log: [],
-            date: "",
+            date: '',
             hours : "",
         };
     }
@@ -19,17 +20,11 @@ class LogHours extends Component {
     };
 
     async componentDidMount(){
+        let date = new Date()
+        this.state.date = Moment(date).format('YYYY-MM-DD')
         let info = {
            volunteerID: this.state.volunteerID,
         }
-        // let response = await fetch(env.backendURL + 'hours/all', {
-        //    method: 'POST',
-        //    headers: {
-        //       'Content-Type': 'application/json'
-        //    },
-        //    body: JSON.stringify(info)
-        // })
-        // const data = await response.json();
 
         console.log(info)
 
@@ -59,6 +54,16 @@ class LogHours extends Component {
 
      }
 
+    deleteLog = (data) => {
+        let logs = this.state.log
+        let index = logs.indexOf(data)
+        console.log(data)
+        console.log(index)
+        this.setState({
+            log: this.state.log.filter((_, i) => i !== index)
+        });
+    }
+
     newLog = () => {
         const hourLog = {
             volunteerID: this.state.volunteerID,
@@ -83,20 +88,23 @@ class LogHours extends Component {
     }
 
     render() {
+        console.log(this.state.log)
         return (
             <div className="logging-container">
-                <br/>
-                <h1 style={{paddingTop: "100px"}}>Log Hours</h1>
-                <br/>
-                <p className= "input-date">Date</p>
-                <input type="text" id="date" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
-                <br/>
-                <p className= "input-hours">Hours</p>
-                <input type="text" id="hours" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
-                <br/>
-                <button id="submit-button" type="submit" onClick={this.newLog}>SUBMIT</button>
-                <br/>
-                <LoggedHoursTable data={this.state.log}/>
+                <form className="log-input-box" onSubmit={this.newLog}>
+                    <br/>
+                    <h1 style={{paddingTop: "100px"}}>Log Hours</h1>
+                    <br/>
+                    <p className= "input-date">Date</p>
+                    <input type="date" id="date" size="50" className="log-input" defaultValue={this.state.date} required={true} onChange={this.handleChange}/>
+                    <br/>
+                    <p className= "input-hours">Hours</p>
+                    <input type="number" id="hours" size="50" className="log-input" required={true} onChange={this.handleChange}/>
+                    <br/>
+                    <button id="submit-button" className="log-input"  type="submit">SUBMIT</button>
+                    <br/>
+                </form>
+                <LoggedHoursTable data={this.state.log} deleteLog={this.deleteLog}/>
             </div>
         );
     }

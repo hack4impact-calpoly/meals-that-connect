@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
+const Volunteer = require('../models/Volunteer');
 const Hours = require("../models/Hours")
 
 router.post('/edit', async (req, res) => {
@@ -19,33 +20,32 @@ router.post('/edit', async (req, res) => {
 })
 
 router.post('/add', async (req, res) => {
-    console.log('adding')
     const {volunteerID, date, hours} = req.body
-    let formattedDate = new Date(date);
-    console.log(formattedDate)
-    var doc = new Hours({volunteerID: volunteerID, formattedDate: formattedDate, home: hours, dinner: 0, signature: "no"});
-    doc.save()
-    res.send("Success")
-    // , function (err, newHourLog) {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    //     else {
-    //         temp.save()
-    //         console.log(newHourLog)
-    //         res.send(`Successful hours added for ${date}`)
-    //     }
-    // })
+    console.log(req.body)
+    Volunteer.findOne({'volunteerID': volunteerID}).then(function(result) {
+        if (!result) {
+            console.log('not a volunteer')
+        }
+        else {
+            var temp = new Hours({'volunteerID' : volunteerID, 'date': date, 'home': hours})
+            temp.save()
+            console.log('successfully added hours')
+        }
+    }).catch(err => {
+        console.log(err)
+        res.send(500).send("Internal server error")
+    })
 })
 
 router.post('/delete', async (req, res) => {
-    const {volunteerID, date} = req.body
-    Hours.deleteOne({volunteerID: volunteerID, date: date}, function (err, deleted) {
+    const {_id} = req.body
+    console.log(req.body)
+    Hours.deleteOne({_id: _id}, function (err, deleted) {
         if (err) {
             console.log(err)
         }
         else {
-            res.send(`Successful hour log for ${date} was deleted`)
+            res.send(`Successfully deleted hour log`)
         }
     })
 })
@@ -58,6 +58,7 @@ router.post('/all', async (req, res) => {
         res.send(err)
       }
       else {
+        hours = hours.sort((a, b) => (a.date < b.date) ? 1 : -1 )
         res.send(hours)
         console.log(hours)
       }
