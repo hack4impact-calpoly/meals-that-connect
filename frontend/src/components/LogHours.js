@@ -62,6 +62,7 @@ class LogHours extends Component {
         this.setState({
             log: this.state.log.filter((_, i) => i !== index)
         });
+        window.location.reload();
     }
 
     newLog = () => {
@@ -99,7 +100,7 @@ class LogHours extends Component {
                     <input type="date" id="date" size="50" className="log-input" defaultValue={this.state.date} required={true} onChange={this.handleChange}/>
                     <br/>
                     <p className= "input-hours">Hours</p>
-                    <input type="number" id="hours" size="50" className="log-input" required={true} onChange={this.handleChange}/>
+                    <input type="number" id="hours" size="50" className="log-input" step="0.01" required={true} onChange={this.handleChange}/>
                     <br/>
                     <button id="submit-button" className="log-input"  type="submit">SUBMIT</button>
                     <br/>

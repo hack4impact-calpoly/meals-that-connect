@@ -73,9 +73,8 @@ const EditableCell = (cellProperties, width) => {
       return 0
     }
     if (column == 'Date') {
-      let displayDate = Moment(value).format('YYYY-MM-DD')
       return (
-          <span><input style={{width: width - 1.25, textAlign: 'center'}} type="date" defaultValue={displayDate} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/></span>
+          <span><input style={{width: width - 1.25, textAlign: 'center'}} type="date" defaultValue={value.slice(0,10)} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(email, key, e.target.value, changedFlag)}/></span>
       )
     }
     else {
@@ -153,17 +152,17 @@ const Table = (props) => {
   )
 
 function deleteLog(data, props) {
-  // fetch(env.backendURL + 'hours/delete', {
-  //     method: 'POST',
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(data)
-  // })
-  // .catch(err => {
-  //     console.log("Error")
-  // })
-  props.deleteLog(data)
+  fetch(env.backendURL + 'hours/delete', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+  })
+  .catch(err => {
+      console.log("Error")
+  })
+  window.location.reload();
 }
 
   return (
