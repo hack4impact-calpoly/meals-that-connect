@@ -28,6 +28,7 @@ import PublicRoute from './PublicRoute';
 import { isAuthenticated, isLoggedIn } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
+import LogHours from './components/volunteer/LogHours';
 
 class App extends Component {
   constructor(props) {
