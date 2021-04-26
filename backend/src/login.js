@@ -42,7 +42,9 @@ router.post('/', async (req, res) => {
             if (user == "volunteer") {
                res.send(result)
             } 
-            res.send(result)
+            else {
+               res.send(result)
+            }
          } else {
             console.log("Invalid password")
                res.status(404).send("Invalid password")   

@@ -24,8 +24,12 @@ import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
+import LogHours from './components/volunteer/LogHours'
+
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+
+import Profile from './components/Profile'
 
 import { isAuthenticated, isLoggedIn } from './components/authentication/authenticationUtils.js';
 
@@ -50,6 +54,7 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
+              <PublicRoute path="/profile" component={Profile}/>
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
@@ -72,6 +77,7 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
               <PrivateRoute requiredUser="data-entry" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
