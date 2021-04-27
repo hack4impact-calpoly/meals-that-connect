@@ -190,7 +190,7 @@ const Table = (props) => {
 
     return (
         <Styles height="70px">
-            <DraggableTable columns={columns} data={props.data} setData={props.setData}/>
+            <DraggableTable columns={columns} data={props.data} setData={props.setData} showModal={props.showModal}/>
         </Styles>
     )
 }

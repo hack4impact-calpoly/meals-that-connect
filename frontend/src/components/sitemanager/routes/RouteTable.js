@@ -96,7 +96,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
+      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} />
     )
   }
   else if (inputType=="dropdown") {
@@ -131,7 +131,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   else
   {
     return (
-        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
+        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value}/>
     )
   }
 
