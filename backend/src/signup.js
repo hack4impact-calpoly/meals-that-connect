@@ -46,14 +46,13 @@ router.post('/', async (req, res) =>{
           res.status(404).send("email already in use")
        } 
        else {
-          const password = bcrypt.hashSync(req.body.password, 9);
           var doc;
           if (user == "volunteer") {
              var volunteerID = getID();
              const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
-             doc = new userType({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
+             doc = new userType({ volunteerID, firstName, lastName, email, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
           } else {
-             doc = new userType({ firstName, lastName, email, password, isAuthenticated, site })
+             doc = new userType({ firstName, lastName, email, isAuthenticated, site })
           }
           doc.save()
           console.log("successfully added user")
