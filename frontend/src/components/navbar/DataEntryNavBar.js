@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 
-class DataVolunteerNavBar extends Component {
+class DataEntryNavBar extends Component {
     render() {
         return (
             <div className = "navbar">
@@ -14,4 +14,4 @@ class DataVolunteerNavBar extends Component {
     }
 }
 
-export default DataVolunteerNavBar;
+export default DataEntryNavBar;

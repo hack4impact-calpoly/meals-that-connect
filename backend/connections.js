@@ -28,17 +28,20 @@ const URL2 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPass
 const URL3 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Hours?retryWrites=true&w=majority`;
 const URL4 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Meals?retryWrites=true&w=majority`;
 const URL5 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Orders?retryWrites=true&w=majority`;
+const URL6 = `mongodb+srv://${process.env.adminUsername}:${process.env.adminPassword}@cluster1.qtgqg.mongodb.net/Schedule?retryWrites=true&w=majority`;
 
 const userConnection = makeNewConnection(URL1);
 const clientConnection = makeNewConnection(URL2);
 const hoursConnection = makeNewConnection(URL3);
 const mealsConnection = makeNewConnection(URL4);
 const ordersConnection = makeNewConnection(URL5);
+const schedulesConnection = makeNewConnection(URL6);
 
 module.exports = {
     userConnection,
     clientConnection,
     hoursConnection,
     mealsConnection,
-    ordersConnection
+    ordersConnection,
+    schedulesConnection
 };

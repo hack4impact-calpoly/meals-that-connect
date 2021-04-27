@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import LoggedHoursTable from "./LoggedHoursTable";
 import "../../css/LogHours.css";
-import env from "react-dotenv";
 import Moment from 'moment';
 
 class LogHours extends Component {
@@ -28,7 +27,7 @@ class LogHours extends Component {
 
         console.log(info)
 
-        fetch(env.backendURL + 'hours/all', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'hours/all', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -72,7 +71,7 @@ class LogHours extends Component {
             hours: this.state.hours
         }
         console.log(hourLog)
-        fetch(env.backendURL + 'hours/add', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'hours/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

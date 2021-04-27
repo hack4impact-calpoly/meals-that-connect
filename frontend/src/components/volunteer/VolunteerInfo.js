@@ -2,7 +2,6 @@ import React, { Component, useState } from 'react';
 import '../../css/VolunteerInfo.css'
 import '../../css/Signup.css';
 import '../../css/Login.css';
-import env from "react-dotenv";
 import { withRouter } from "react-router-dom";
 
 
@@ -94,7 +93,7 @@ class VolunteerInfo extends Component{
 
 	sendVolunteerInfo = (info) => {
 		let _this = this
-        fetch(env.backendURL + 'volunteers/updateVolunteerInfo', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/updateVolunteerInfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

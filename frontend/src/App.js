@@ -27,7 +27,7 @@ import NoPermission from './components/NoPermission'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isAuthenticated, isLoggedIn } from './components/authentication/authenticationUtils.js';
+import { isAuthenticated, isLoggedIn, printStorage } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
 import LogHours from './components/volunteer/LogHours';
@@ -40,6 +40,7 @@ class App extends Component {
 
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
+    printStorage();
     isAuthenticated();
   }
 
@@ -58,7 +59,6 @@ class App extends Component {
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
               <PublicRoute path="/no-permission" component={NoPermission}/>
-              {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
 
               <PrivateRoute requiredUser="none" path="/signout"><Private /></PrivateRoute>

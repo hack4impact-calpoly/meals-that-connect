@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 
-import DataVolunteerNavBar from './DataVolunteerNavBar'
+import VolunteerNavBar from './VolunteerNavbar'
+import DataEntryNavBar from './DataEntryNavBar'
 import SiteManagerNavBar from './SiteManagerNavBar'
 
 class NavBar extends Component {
@@ -12,6 +13,7 @@ class NavBar extends Component {
     }
 
     render() {
+        console.log(this.state.userType)
         let navbar;
         if (this.state.userType === 'site-manager')
         {
@@ -19,21 +21,21 @@ class NavBar extends Component {
         }
         else if (this.state.userType === 'data-entry')
         {
-            navbar = <DataVolunteerNavBar />
+            navbar = <DataEntryNavBar />
         }
         else if (this.state.userType === 'volunteer')
         {
-            navbar = <DataVolunteerNavBar />
+            navbar = <VolunteerNavBar />
         }
 
         else {
-            navbar = <div className = "navbar">
-                        <h2>Meals that Connect</h2>
-                            <Link className="navbar-link" to="/">Home</Link>
-                            <Link className="navbar-link" to="/login">Login</Link>
-                            <Link className="navbar-link" to="/signup">Signup</Link>
-                            <Link className="navbar-link" to="/signout">Signout</Link>
-                    </div>
+            navbar = 
+            <div className = "navbar">
+                <h2>Meals that Connect</h2>
+                <Link className="navbar-link" to="/">Home</Link>
+                <Link className="navbar-link" to="/login">Login</Link>
+                <Link className="navbar-link" to="/signup">Signup</Link>
+            </div>
         }
 
         return (

@@ -1,5 +1,4 @@
 import React from 'react'
-import env from "react-dotenv"
 import { Styles, DraggableTable} from '../../table-components'
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
@@ -43,7 +42,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         data: newValue
       }
 
-      await fetch(env.backendURL + 'clients/update-routes', {
+      await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -66,7 +65,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         key: key,
         data: data
       }
-    await fetch(env.backendURL + 'clients/update-routes', {
+    await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -228,13 +227,8 @@ const RouteTable = (props) => {
 
   function editClient(client) {
     console.log("Editing client")
-    console.log(client)
-    const { history } = props;
-    console.log(history)
-    if (history) {
-        history.push('/edit-client');
-    }
-}
+    props.showModal(client)
+  }  
 
   return (
   <Styles height={CELL_HEIGHT}>
