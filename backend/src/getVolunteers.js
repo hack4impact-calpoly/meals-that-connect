@@ -54,7 +54,6 @@ router.post('/updateVolunteerInfo', async (req, res) => {
   })
 })
 
-
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body
   
