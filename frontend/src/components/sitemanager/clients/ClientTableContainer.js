@@ -84,6 +84,7 @@ class ClientTableContainer extends Component {
 
     render() {
         let currentClient = this.state.currentClient;
+      
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>

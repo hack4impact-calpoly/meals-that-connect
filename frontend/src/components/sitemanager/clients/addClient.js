@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import env from "react-dotenv";
+import env from "react-dotenv"
 import '../../../css/AddPersons.css';
 import { Redirect } from "react-router-dom";
+
 class AddClient extends Component {
     constructor(props) {
         super(props);
@@ -121,6 +122,7 @@ class AddClient extends Component {
                     <label for="client-specialinstructions">Special Instructions</label><br/>
                     <input type="text" id="client-specialinstructions" onChange={e => this.setState({specialInstructions: e.target.value})} style={{"width": "1320px"}}/><br/>
 
+
                     <label for="client-c2">C2 Client</label><br/>
                     <input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/>
 
@@ -145,6 +147,7 @@ class AddClient extends Component {
                     <br/>
                     <label for="client-index">Index*</label><br/>
                     <input type="text" id="client-index" onChange={e => this.setState({index: e.target.value})} required={true}/><br/>
+
                     <br/>
                     <input type="submit"/>
                 </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import env from "react-dotenv";
+import fire from '../../../fire.js';
 
 class AddVolunteer extends Component {
     constructor(props) {
@@ -45,6 +46,7 @@ class AddVolunteer extends Component {
             <form style={{"padding": "100px"}} onSubmit={() => this.addVolunteer()}>
                 <h1>Add Volunteer</h1>
                 <div id="volunteer-info-body">
+
                     <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
                         <div><label for="volunter-firstname">First Name</label></div>
                         <div><label for="volunteer-lastname" className="secondColumn-text">Last Name</label></div>
