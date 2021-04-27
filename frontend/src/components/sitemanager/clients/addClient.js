@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import env from "react-dotenv";
 import '../../../css/AddPersons.css';
+import { Redirect } from "react-router-dom";
 class AddClient extends Component {
     constructor(props) {
         super(props);
@@ -40,20 +41,25 @@ class AddClient extends Component {
             },
             body: JSON.stringify(this.state)
         })
+        this.props.history.push('/clients');
     }
 
     render() {
         console.log(this.state.site)
         return (
-            <form style={{"padding": "100px", "alignContent": "center"}} onSubmit={() => this.addClient()}>
+            <form style={{"padding": "100px"}} onSubmit={() => this.addClient()}>
                 <h1>Add Client</h1>
                 <h3>* = Required</h3>
                 <div>
-                    <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
-                        <div><label for="client-firstname">First Name*</label></div>
-                        <div><label for="client-lastname">Last Name*</label></div>
-                        <div><input type="text" id="client-firstname" onChange={e => this.setState({firstName: e.target.value})} required={true}/></div>
-                        <div><input type="text" id="client-lastname" onChange={e => this.setState({lastName: e.target.value})} required={true}/></div>
+                    <div style={{"display": "flex"}}>
+                        <div style={{"flex": "10%"}}>
+                            <label for="client-firstname">First Name*</label><br/>
+                            <input type="text" id="client-firstname" onChange={e => this.setState({firstName: e.target.value})} required={true}/>
+                        </div>
+                        <div style={{"flex": "10%"}}>
+                            <label for="client-lastname">Last Name*</label><br/>
+                            <input type="text" id="client-lastname" onChange={e => this.setState({lastName: e.target.value})} required={true}/>
+                        </div>
                     </div>
                     <label for="client-address">Address*</label><br/>
                     <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
