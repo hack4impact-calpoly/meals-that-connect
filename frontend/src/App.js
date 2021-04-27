@@ -10,12 +10,14 @@ import MasterSignup from './components/authentication/MasterSignup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/routes/RouteHomepage.js'
 import VolunteerHours from './components/sitemanager/volunteers/VolunteerHoursOverview'
+import AddVolunteer from "./components/sitemanager/volunteers/addVolunteer.js"
 import EmailVerification from "./components/authentication/EmailVerification.js"
 
 import VolunteerOverview from './components/sitemanager/volunteers/VolunteerOverview'
 import VolunteerInfo from './components/volunteer/VolunteerInfo'
 
 import ClientTableContainer from './components/sitemanager/clients/ClientTableContainer.js'
+import AddClient from "./components/sitemanager/clients/addClient.js"
 import EditClient from './components/sitemanager/clients/EditClient.js'
 
 import Private from './components/authentication/Private'
@@ -63,7 +65,9 @@ class App extends Component {
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><VolunteerOverview /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-volunteer"><AddVolunteer /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/clients"><ClientTableContainer /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-client"><AddClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>

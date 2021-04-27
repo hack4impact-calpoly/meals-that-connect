@@ -121,15 +121,16 @@ const Table = (props) => {
           accessor: 'firstName',
           width: REG_CELL_WIDTH,
           height: CELL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text", setData)
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
           },
           { Header: 'Last Name',
           accessor: 'lastName',
           width: REG_CELL_WIDTH,
-          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text", setData) 
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
           },
           { Header: 'Route',
-          accessor: 'routeNumber',
+          id: 'routeNumber',
+          accessor: (row) => (row.routeNumber !== "-1") ? row.routeNumber: '',
           width: 80,
           Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "text") 
           },
@@ -182,7 +183,7 @@ const Table = (props) => {
             history.push('/Client/' + client);
         }
     }
-
+    
     const data = React.useMemo(
         () => props.data, []
     )

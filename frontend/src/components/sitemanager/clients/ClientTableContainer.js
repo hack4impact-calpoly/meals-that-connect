@@ -3,6 +3,8 @@ import Clients from './Clients'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from "react-bootstrap/Spinner"
 import env from "react-dotenv";
+import {Link} from "react-router-dom";
+
 
 class ClientTableContainer extends Component {
     constructor(props) {
@@ -34,10 +36,12 @@ class ClientTableContainer extends Component {
     }
 
     render() {
-        console.log(this.state.clients)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
+                <Link to="/add-client">
+                    <button>Add Client</button>
+                </Link>
                 <div className="site-manager-container">
                     {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData}/> :
                     <div>

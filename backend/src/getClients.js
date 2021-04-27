@@ -4,6 +4,33 @@ const router = express.Router();
 
 const Client = require("../models/clients")
 
+router.post('/addClient', async (req, res) => {
+  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
+  Client.findOne({'email': email}).then(function(result) {
+  if (result) {
+    console.log("email already in use")
+     res.status(404).send("email already in use")     
+  }
+  else {
+    Client.countDocuments({site: site, routeNumber: routeNumber}, function(err, index) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        console.log(index)
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        client.save()
+      }
+    })
+    console.log("succcessfully added client")
+    res.status(200).send("success")
+  }
+  }).catch(err => {
+    console.log(err)
+    res.send(500).send("Internal server error")
+  })
+})
+
 router.post('/siteTotals', async (req, res) => {
   const {site} = req.body
   Client.find({site: site}, function (err, data) {
@@ -21,11 +48,16 @@ router.post('/siteTotals', async (req, res) => {
 
           if (i > 0 && client.routeNumber != prevRoute) {
               clients[prevRoute] = routeData
-              routes.push(prevRoute)
+              // make sure a null route does not get inserted into routes array
+              if (prevRoute !== null)
+                routes.push(prevRoute)
               routeData = []
           }
-          prevRoute = client.routeNumber
-          routeData.push(client)
+          // makes sure the -1 route's data does not get inserted into routeData
+          if (client.routeNumber !== "-1"){
+            prevRoute = client.routeNumber
+            routeData.push(client)
+          }
       }
       if (routeData.length > 0) {
           clients[prevRoute] = routeData

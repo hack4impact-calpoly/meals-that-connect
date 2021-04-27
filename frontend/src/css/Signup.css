@@ -91,7 +91,8 @@ p{
 input[type=text],
 input[type=tel],
 input[type=email],
-input[type=password] {
+input[type=password],
+input[type=number] {
     font-family: 'Quicksand', sans-serif;
     height: 60px;
 }
@@ -99,7 +100,8 @@ input[type=password] {
 input[type=text]:focus,
 input[type=tel]:focus,
 input[type=email]:focus,
-input[type=password]:focus {
+input[type=password]:focus,
+input[type=number]:focus {
     border-width:0px;
     border:none;
     background-color: #D3D3D3;
