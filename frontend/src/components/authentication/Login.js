@@ -155,8 +155,8 @@ class Login extends Component {
 
     storeUser = (user) => {
         const date = new Date();
-        if (this.state.userType === "volunteer") {
-           localStorage.setItem("volunteerID", this.state.volunteerID);
+        if (this.state.userType == "volunteer") {
+           localStorage.setItem("volunteerID", user.volunteerID);
         }
         localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userType", this.state.userType);
