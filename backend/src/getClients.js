@@ -5,20 +5,52 @@ const router = express.Router();
 const Client = require("../models/clients")
 
 router.post('/addClient', async (req, res) => {
-  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index} = req.body
-  Client.findOne({'email': email}).then(function(result) {
-  if (result) {
-    console.log("email already in use")
-     res.sstatus(404).send("email already in use")     
-  }
-  var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+  const { firstName, 
+          lastName, 
+          address, 
+          foodDays, 
+          frozenNumber, 
+          frozenDay, 
+          phoneNumber, 
+          emergencyNumber, 
+          emergencyContact, 
+          emergencyPhone, 
+          noMilk, 
+          mealNumber, 
+          specialInstructions, 
+          clientC2, 
+          NE, 
+          email, 
+          holidayFrozen, 
+          routeNumber, 
+          site, 
+          index} = req.body
+  var client = new Client({ firstName,
+                            lastName, 
+                            address, 
+                            foodDays, 
+                            frozenNumber,
+                            frozenDay, 
+                            phoneNumber, 
+                            emergencyNumber, 
+                            emergencyContact, 
+                            emergencyPhone, 
+                            noMilk, 
+                            mealNumber, 
+                            specialInstructions, 
+                            clientC2, 
+                            NE, 
+                            email, 
+                            holidayFrozen, 
+                            routeNumber, 
+                            site, 
+                            index})
   client.save()
+  .catch(err => {
+                  console.log(err)
+                  res.send(500).send("Internal server error")})
   console.log("succcessfully added client")
   res.status(200).send("success")
-  }).catch(err => {
-    console.log(err)
-    res.send(500).send("Internal server error")
-  })
 })
 
 router.post('/siteTotals', async (req, res) => {
