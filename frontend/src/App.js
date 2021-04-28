@@ -54,7 +54,6 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
-              <PublicRoute path="/profile" component={Profile}/>
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
@@ -64,7 +63,8 @@ class App extends Component {
               <PublicRoute path="/no-permission" component={NoPermission}/>
 
 
-              <PrivateRoute requiredUser="none" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="none" path="/profile" component={Profile}/>
+              <PrivateRoute requiredUser="none" path="/signout" component={Private}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><VolunteerOverview /></PrivateRoute>
@@ -73,11 +73,8 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" exact path = "/add-client"><AddClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
-              <PrivateRoute requiredUser="data-entry" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
 

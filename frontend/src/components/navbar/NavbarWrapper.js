@@ -44,18 +44,6 @@ class NavBar extends Component {
             </div>
         );
     }
-
-    // render() {
-    //     return (
-    //         <div className = "navbar">
-    //             <h2>Meals that Connect</h2>
-    //                 <Link className="navbar-link" to="/">Home</Link>
-    //                 <Link className="navbar-link" to="/login">Login</Link>
-    //                 <Link className="navbar-link" to="/signup">Signup</Link>
-    //                 <Link className="navbar-link" to="/signout">Signout</Link>
-    //         </div>
-    //     );
-    // }
 }
 
 export default NavBar;
