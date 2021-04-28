@@ -23,7 +23,8 @@ router.post('/email-taken', async (req, res) =>{
 });
 
 router.post('/', async (req, res) => {
-   const {email, password, user} = req.body
+   const {email, user} = req.body
+   
    let userType = getUser(user)
    if (userType == null) {
       res.status(404).send("Invalid user type") 
@@ -35,18 +36,11 @@ router.post('/', async (req, res) => {
             res.status(404).send("Invalid email")
       }
       else {
-         let userPassword = result.password
-         const valid = bcrypt.compareSync(password, userPassword);
-         if (valid) {
             console.log("login successful")
             if (user == "volunteer") {
                res.send(result)
             } 
             res.send(result)
-         } else {
-            console.log("Invalid password")
-               res.status(404).send("Invalid password")   
-           }
      }
    })
 });

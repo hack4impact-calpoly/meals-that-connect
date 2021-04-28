@@ -2,8 +2,27 @@ const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
+const bcrypt = require('bcrypt')
 const Volunteer = require('../models/Volunteer')
 const Hours = require("../models/Hours")
+
+router.post('/addVolunteer', async (req, res) => {
+  const {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
+  var volunteerID = getID();
+  Volunteer.findOne({'email': email}).then(function(result) {
+  if (result) {
+    console.log("email already in use")
+     res.sstatus(404).send("email already in use")     
+  }
+  var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
+  volun.save()
+  console.log("succcessfully added volunteer")
+  res.status(200).send("success")
+  }).catch(err => {
+    console.log(err)
+    res.send(500).send("Internal server error")
+  })
+})
 
 router.post('/volunteerSite', async (req, res) => {
   const {site} = req.body
@@ -38,7 +57,7 @@ router.post('/siteVolunHours', async (req, res) => {
 router.post('/updateVolunteerInfo', async (req, res) => {
   const { phoneNumber, email, days, notes } = req.body
 
-  let user = await Volunteer.findOne({"email": email})
+  //let user = await Volunteer.findOne({"email": email})
 
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
@@ -107,6 +126,7 @@ async function getVolunteersBySite(siteName) {
     }
   })
 }
+
 //rewrite this funcion
 async function getVolunteerHours(site) {
     var volunteerList = await getVolunteersBySite(site)
@@ -135,6 +155,11 @@ async function updateVolunteer(email, phoneNumber, days, notes) {
       {$set: {phoneNumber: phoneNumber, availability: days, notes: notes }}
       )
       console.log("set")
+}
+
+// Generates random string ID. Very low probability of duplicate IDs
+function getID() {
+  return '_' + Math.random().toString(36).substr(2, 9);
 }
 
 module.exports = router;

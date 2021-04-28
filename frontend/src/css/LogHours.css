@@ -1,0 +1,59 @@
+.logging-container {
+    margin: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.log-input-box {
+    width: 500px;
+}
+
+.input-date {
+    justify-content: left;
+    text-align: left;
+    margin-bottom: 10px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+
+.log-input {
+    width: 100%;
+    background-color: #F5F5F5;
+}
+
+.input-hours {
+    justify-content: left;
+    text-align: left;
+    padding-top: 10px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #7E7C7C;
+}
+
+#submit-button {
+    display: block;
+    margin-bottom: 30px;
+    overflow: hidden;
+    padding: 12px 210px;
+    border: none;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 2px;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+
+#submit-button:hover, #submit-button button-fade:focus, #submit-button button-fade:active {
+    background-color: #2098D1;
+    color: white;
+}

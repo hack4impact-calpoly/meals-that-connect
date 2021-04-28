@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const {mealsConnection} = require('../connections')
 
 const mealSchema = new mongoose.Schema({
-   volunteerID: {type: String, required: true},
+   clientID: {type: String, required: true},
    site: {type: String, required: true},
    routeNumber: {type: String, required: true},
    startDate: {type: Date, required: true},
@@ -15,13 +15,7 @@ const mealSchema = new mongoose.Schema({
       F: {type: Boolean, required: true}
    },
    frozenNumber: {type: Number, required: true, default: 0},
-   frozenDay: {
-      M: Boolean,
-      T: Boolean,
-      W: Boolean,
-      Th: Boolean,
-      F: Boolean
-   }
+   frozenDay: {type: String, required: false}
 })
 
 const Meals = mealsConnection.model("meals", mealSchema)

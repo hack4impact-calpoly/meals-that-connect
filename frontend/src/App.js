@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 
-import NavBar from './components/NavBar'
+import NavBar from './components/navbar/NavbarWrapper'
 import Home from './components/homepage/Home'
 import Login from './components/authentication/Login'
-
-import SiteManagerNavBar from './components/sitemanager/SiteManagerNavBar'
-import DataVolunteerNavBar from './components/DataVolunteerNavBar'
 
 import Signup from './components/authentication/Signup'
 import MasterSignup from './components/authentication/MasterSignup'
 import HomePageWrapper from './components/HomepageWrapper'
-import RouteHomePage from './components/sitemanager/RouteHomepage.js'
-import VolunteerHours from './components/VolunteerHoursOverview'
+import RouteHomePage from './components/sitemanager/routes/RouteHomepage.js'
+import VolunteerHours from './components/sitemanager/volunteers/VolunteerHoursOverview'
+import AddVolunteer from "./components/sitemanager/volunteers/addVolunteer.js"
 import EmailVerification from "./components/authentication/EmailVerification.js"
 
-import VolunteerOverview from './components/VolunteerOverview'
-import VolunteerInfo from './components/VolunteerInfo'
+import VolunteerOverview from './components/sitemanager/volunteers/VolunteerOverview'
+import VolunteerInfo from './components/volunteer/VolunteerInfo'
+
+import ClientTableContainer from './components/sitemanager/clients/ClientTableContainer.js'
+import AddClient from "./components/sitemanager/clients/addClient.js"
+import EditClient from './components/sitemanager/clients/EditClient.js'
 
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
@@ -30,14 +31,20 @@ import PublicRoute from './PublicRoute';
 
 import Profile from './components/Profile'
 
-import { isAuthenticated } from './components/authentication/authenticationUtils.js';
+import { isAuthenticated, isLoggedIn, printStorage } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
+import LogHours from './components/volunteer/LogHours';
 
 class App extends Component {
-  
+  constructor(props) {
+        super(props);
+        this.state = { isLoggedIn: isLoggedIn};
+    }
+
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
+    printStorage();
     isAuthenticated();
   }
 
@@ -56,21 +63,24 @@ class App extends Component {
               <PublicRoute path="/master-signup" component={MasterSignup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
-              <PublicRoute exact path="/log-hours" component={LogHours}/>
-              {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
+              <PublicRoute path="/no-permission" component={NoPermission}/>
 
 
-              <PrivateRoute requiredUser="none" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="none" exact path="/" component={HomePageWrapper}/>
+              <PrivateRoute requiredUser="none" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
-              <PrivateRoute requiredUser="site-manager" exact path = "/routes"><SiteManagerNavBar /><RouteHomePage /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><SiteManagerNavBar /><VolunteerOverview /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><SiteManagerNavBar /><VolunteerHours /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" path="/signout"><SiteManagerNavBar /><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><DataVolunteerNavBar /><VolunteerInfo /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="data-entry" path="/signout"><DataVolunteerNavBar/><Private /></PrivateRoute>
-
+              <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><VolunteerOverview /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-volunteer"><AddVolunteer /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/clients"><ClientTableContainer /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-client"><AddClient /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="data-entry" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
+              
 
           </Switch>
       </Router>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../../css/Signup.css';
-import env from "react-dotenv";
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import fire from '../../fire.js';
 
@@ -68,7 +67,7 @@ class Signup extends Component {
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
-            if (errorCode == 'auth/email-already-in-use') {
+            if (errorCode === 'auth/email-already-in-use') {
                 alert('That email is taken. Try another.');
               } else {
                 alert(errorMessage);
@@ -119,7 +118,7 @@ class Signup extends Component {
     
     mongo_signup = (user) => {
         let _this = this
-        fetch(env.backendURL + 'signup/master', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'signup/master', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

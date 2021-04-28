@@ -6,7 +6,7 @@
 .pnp.js
 
 # firebase
-frontend/src/fire.js
+frontend/.env
 
 # testing
 /coverage
@@ -31,3 +31,4 @@ yarn-debug.log*
 yarn-error.log*
 
 backend/.env
+backend/src/.getClients.js.swp

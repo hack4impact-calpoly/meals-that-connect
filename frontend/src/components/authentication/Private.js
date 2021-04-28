@@ -13,9 +13,11 @@ class Private extends Component {
 		signout()
     this.setState({ RedirectLoggedUser: true });
     fire.auth().signOut().then(() => {
+      window.location.reload(false);
       // Sign-out successful.
     }).catch((error) => {
       // An error happened.
+      console.log(error);
     });
 	}
 
@@ -28,13 +30,14 @@ class Private extends Component {
         if (RedirectLoggedUser === true) {
           return (
             <Redirect to='/' />
+            
           )
         }
 
         return (
             <div className="Private" style={{marginTop: '200px'}}>
-            <p> Sign out button for testing. </p> 
-            <button onClick={this.signOut}> Sign out </button>
+              <p> Sign out button for testing. </p> 
+              <button onClick={this.signOut}> Sign out </button>
             </div>
         );
     }
