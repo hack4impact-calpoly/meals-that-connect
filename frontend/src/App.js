@@ -74,11 +74,9 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" exact path = "/add-client"><AddClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
-<<<<<<< HEAD
+              
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule"><VolunteerSchedule /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
-=======
->>>>>>> master
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
