@@ -1,5 +1,4 @@
 import React from 'react'
-import env from "react-dotenv"
 import { Styles, DraggableTable} from '../../table-components'
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
@@ -43,7 +42,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         data: newValue
       }
 
-      await fetch(env.backendURL + 'clients/update-routes', {
+      await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -66,7 +65,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         key: key,
         data: data
       }
-    await fetch(env.backendURL + 'clients/update-routes', {
+    await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -96,7 +95,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])} />
+      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} />
     )
   }
   else if (inputType=="dropdown") {
@@ -131,7 +130,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   else
   {
     return (
-        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
+        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value}/>
     )
   }
 
@@ -228,13 +227,8 @@ const RouteTable = (props) => {
 
   function editClient(client) {
     console.log("Editing client")
-    console.log(client)
-    const { history } = props;
-    console.log(history)
-    if (history) {
-        history.push('/edit-client');
-    }
-}
+    props.showModal(client)
+  }  
 
   return (
   <Styles height={CELL_HEIGHT}>

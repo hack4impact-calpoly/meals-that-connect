@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import env from "react-dotenv";
 
 class DataEntryHome extends Component {
     constructor(props) {

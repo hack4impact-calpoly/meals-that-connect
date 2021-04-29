@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable, useBlockLayout } from 'react-table'
 import '../../../css/volunteerTable.css'
-import env from "react-dotenv";
 
 const TEXT_TYPE = "type";
 const CELL_HEIGHT = 55;
@@ -192,7 +191,7 @@ async function deleteVolunteer(cellProperties)
     email: email,
   }
 
-  await fetch(env.backendURL + 'volunteers/volunteerDelete', {
+  await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/volunteerDelete', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'

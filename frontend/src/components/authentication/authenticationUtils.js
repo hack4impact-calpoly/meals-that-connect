@@ -14,6 +14,24 @@ export function isAuthenticated() {
     return false;
 }
 
+export function printStorage() {
+    // let keys = Object.keys(localStorage)
+    // let i = keys.length;
+
+    // while ( i-- ) {
+    //     console.log(keys[i] + ": " + localStorage.getItem(keys[i]));
+    // }
+    var archive = [],
+        keys = Object.keys(localStorage),
+        i = 0, key;
+
+    for (; key = keys[i]; i++) {
+        archive.push( key + '=' + localStorage.getItem(key));
+    }
+    console.log(archive)
+
+}
+
 // Checks if current value of isLoggedIn in localStorage is true
 export function isLoggedIn() {
     if (localStorage.hasOwnProperty("isLoggedIn") && (localStorage.getItem("isLoggedIn") === 'true')) {
@@ -36,9 +54,12 @@ export function getHoursPassed() {
 
 export function signout(){
     localStorage.setItem("isLoggedIn", 'false')
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem("email");
     localStorage.removeItem("site");
     localStorage.removeItem("time");
+    localStorage.removeItem("week");
+    localStorage.removeItem("token");
+    localStorage.removeItem("volunteerID");
     localStorage.removeItem("userType");
 }
 

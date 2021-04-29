@@ -10,6 +10,7 @@ import MasterSignup from './components/authentication/MasterSignup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/routes/RouteHomepage.js'
 import VolunteerHours from './components/sitemanager/volunteers/VolunteerHoursOverview'
+import AddVolunteer from "./components/sitemanager/volunteers/addVolunteer.js"
 import EmailVerification from "./components/authentication/EmailVerification.js"
 
 import VolunteerOverview from './components/sitemanager/volunteers/VolunteerOverview'
@@ -17,18 +18,22 @@ import VolunteerSchedule from './components/sitemanager/volunteers/VolunteerSche
 import VolunteerInfo from './components/volunteer/VolunteerInfo'
 
 import ClientTableContainer from './components/sitemanager/clients/ClientTableContainer.js'
+import AddClient from "./components/sitemanager/clients/addClient.js"
 import EditClient from './components/sitemanager/clients/EditClient.js'
 
 import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
+import LogHours from './components/volunteer/LogHours'
+
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isAuthenticated, isLoggedIn } from './components/authentication/authenticationUtils.js';
+import { isAuthenticated, isLoggedIn, printStorage } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
+import Profile from './components/Profile';
 
 class App extends Component {
   constructor(props) {
@@ -38,6 +43,7 @@ class App extends Component {
 
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
+    printStorage();
     isAuthenticated();
   }
 
@@ -56,21 +62,25 @@ class App extends Component {
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
               <PublicRoute path="/no-permission" component={NoPermission}/>
-              {/* <PublicRoute requiredUser="none" exact path="/email-verification" component={EmailVerification}/> */}
 
 
-              <PrivateRoute requiredUser="none" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="none" path="/profile" component={Profile}/>
+              <PrivateRoute requiredUser="none" path="/signout" component={Private}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><VolunteerOverview /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-volunteer"><AddVolunteer /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/clients"><ClientTableContainer /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-client"><AddClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
+<<<<<<< HEAD
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule"><VolunteerSchedule /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
+=======
+>>>>>>> master
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" path="/signout"><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="data-entry" path="/signout"><Private /></PrivateRoute>
+              <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
 

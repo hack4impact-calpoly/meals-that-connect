@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/Login.css';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
-import env from "react-dotenv";
 import fire from '../../fire.js';
 
 class Login extends Component {
@@ -104,7 +103,7 @@ class Login extends Component {
 
     mongo_login = (user) => {
         let _this = this
-        fetch(env.backendURL + 'login', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -126,6 +125,7 @@ class Login extends Component {
             }
             else {
                 this.props.history.push("/");
+                window.location.reload(false);
             }
         })
         .catch(err => {
@@ -136,7 +136,7 @@ class Login extends Component {
     
     volunteerInfoCheck = (user) => {
         let _this = this
-        fetch(env.backendURL + 'volunteers/volunteerComplete', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/volunteerComplete', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -155,8 +155,8 @@ class Login extends Component {
 
     storeUser = (user) => {
         const date = new Date();
-        if (this.state.userType === "volunteer") {
-           localStorage.setItem("volunteerID", this.state.volunteerID);
+        if (this.state.userType == "volunteer") {
+           localStorage.setItem("volunteerID", user.volunteerID);
         }
         localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userType", this.state.userType);

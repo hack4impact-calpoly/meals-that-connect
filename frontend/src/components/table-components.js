@@ -6,7 +6,6 @@ import { useTable } from 'react-table'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
-import env from "react-dotenv"
 
 const DND_ITEM_TYPE = 'client'
 
@@ -91,7 +90,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
             ],
         })
   
-        fetch(env.backendURL + 'clients/update-client-routes', {
+        fetch(process.process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -195,7 +194,7 @@ const Row = ({ row, index, moveRow, showModal }) => {
             </td>
             
             {row.cells.map(cell => {
-                return <td onClick={() => showModal(row["original"])}>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
+                return <td >{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
             })}
         </tr>
     )

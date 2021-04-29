@@ -1,3 +1,3 @@
 window.env = {
-  "backendURL": "http://localhost:3001/"
+  "REACT_APP_SERVER_URL": "http://localhost:3001/"
 };
