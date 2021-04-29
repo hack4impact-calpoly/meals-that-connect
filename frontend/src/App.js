@@ -13,6 +13,7 @@ import VolunteerHours from './components/sitemanager/volunteers/VolunteerHoursOv
 import EmailVerification from "./components/authentication/EmailVerification.js"
 
 import VolunteerOverview from './components/sitemanager/volunteers/VolunteerOverview'
+import VolunteerSchedule from './components/sitemanager/volunteers/VolunteerSchedule'
 import VolunteerInfo from './components/volunteer/VolunteerInfo'
 
 import ClientTableContainer from './components/sitemanager/clients/ClientTableContainer.js'
@@ -65,6 +66,7 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" exact path="/clients"><ClientTableContainer /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule"><VolunteerSchedule /></PrivateRoute>
               <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
               <PrivateRoute requiredUser="volunteer" path="/signout"><Private /></PrivateRoute>
