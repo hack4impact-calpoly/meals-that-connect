@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const bcrypt = require('bcrypt');
-
 const Volunteer = require('../models/volunteer')
 const SiteManager = require('../models/siteManager')
 const DataEntry = require('../models/dataEntry')
