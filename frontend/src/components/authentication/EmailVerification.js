@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/EmailVerification.css';
 import { Link } from 'react-router-dom';
-import fire from '../../fire.js';
 
 class EmailVerification extends Component { 
 
