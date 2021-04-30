@@ -3,8 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const bcrypt = require('bcrypt')
-const Volunteer = require('../models/Volunteer')
-const Hours = require("../models/Hours")
+const Volunteer = require('../models/volunteer')
+const Hours = require("../models/hours")
 
 router.post('/addVolunteer', async (req, res) => {
   const {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  

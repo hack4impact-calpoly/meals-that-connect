@@ -3,9 +3,9 @@ const router = express.Router();
 
 const bcrypt = require('bcrypt')
 
-const SiteManager = require('../models/SiteManager');
-const Volunteer = require('../models/Volunteer');
-const DataEntry = require('../models/DataEntry');
+const SiteManager = require('../models/siteManager');
+const Volunteer = require('../models/volunteer');
+const DataEntry = require('../models/dataEntry');
 
 router.post('/email-taken', async (req, res) =>{
    const {email, user} = req.body
