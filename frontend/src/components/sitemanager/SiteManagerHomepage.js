@@ -94,8 +94,15 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+                        <div className = "confirmation-buttons" style={{ display:'flex'}}>
+                            <h3>Confirm Total For:</h3>
+                            <PopupMealTotals day={0}/>
+                            <PopupMealTotals day={1}/>
+                            <PopupMealTotals day={2}/>
+                            <PopupMealTotals day={3}/>
+                            <PopupMealTotals day={4}/>
+                        </div>
                         <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
-                        <PopupMealTotals />
                     </div>
                 </div>
             </div>
