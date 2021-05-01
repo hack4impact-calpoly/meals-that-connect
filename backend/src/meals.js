@@ -14,11 +14,10 @@ router.post('/', async (req, res) => {
    
    var meal;
 
-   meal = new Meal({'clientID': client.volunteerID, 'site': client.site,
+   meal = new Meal({'clientID': client._id, 'site': client.site,
                    'routeNumber': client.routeNumber, 'startDate': date,
                    'mealNumber': client.mealNumber, 'foodDays': client.foodDays, 
                    'frozenNumber': client.frozenNumber, 'frozenDay': client.frozenDay})
- 
    meal.save();
    console.log("meal successfully added");
    res.send("meal successfully added");

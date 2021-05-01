@@ -99,17 +99,17 @@ router.post('/site', async (req, res) => {
   })
 })
 
-router.get('/all', async (req, res) => {
-  Client.find({}, function (err, clients) {
+router.post('/id', async (req, res) => {
+  const {_id} = req.body
+  Client.findOne({_id: _id}, function (err, client) {
     if (err) {
       console.log(err)
     }
     else {
-      res.send(clients)
+      res.send(client)
     }
   })
 })
-
 
 router.post('/update-routes', async (req, res) => {
    const {id, key, data} = req.body
@@ -145,6 +145,48 @@ router.post('/update-client-routes', async (req, res) => {
     })
   }
 
+  res.send("Information updated");
+});
+
+router.post('/update-client', async (req, res) => {
+  const { id, 
+          firstName, 
+          lastName, 
+          address,   
+          phoneNumber, 
+          emergencyContact, 
+          emergencyPhone,   
+          specialInstructions, 
+          clientC2, 
+          NE, 
+          email,  
+          routeNumber, 
+          site,
+          index} = req.body
+
+  Client.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              address: address,
+              phoneNumber: phoneNumber,
+              emergencyContact: emergencyContact,
+              emergencyPhone: emergencyPhone,
+              specialInstructions: specialInstructions,
+              clientC2: clientC2,
+              NE: NE,
+              email: email,
+              routeNumber: routeNumber,
+              site: site,
+              index: index})
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
   res.send("Information updated");
 });
 
