@@ -1,5 +1,4 @@
 import React from 'react'
-import env from "react-dotenv"
 import { Styles, DraggableTable} from '../../table-components'
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
@@ -16,12 +15,10 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   // We need to keep and update the state of the cell normally
   var useStateCall = 0;
 
-  if (foodOrFrozen != null)
-  {
+  if (foodOrFrozen != null) {
     useStateCall = cellProperties["original"][foodOrFrozen][day];
   }
-  else
-  {
+  else {
     useStateCall = cellProperties["value"];
   }
 
@@ -43,7 +40,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         data: newValue
       }
 
-      await fetch(env.backendURL + 'clients/update-routes', {
+      await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -66,7 +63,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         key: key,
         data: data
       }
-    await fetch(env.backendURL + 'clients/update-routes', {
+    await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -87,6 +84,20 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
     }
   }
   
+  const updateSelect = async (clientID, newVal) => {
+    const updateData = {
+        id: clientID,
+        key: "frozenDay",
+        data: newVal
+      }
+    await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+    })
+  }
 
   /*
     check if value is a boolean
@@ -96,10 +107,13 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} />
+      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])}/>
     )
   }
-  else if (inputType=="dropdown") {
+  else if (inputType === "dropdown") {
+    if(value.length <= 0) {
+      value = "None"
+    }
     const options = [
       { value: 'None', label: 'None' },
       { value: 'M', label: 'M' },
@@ -125,13 +139,18 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
       }),
     }
     return (
-      <Select options={options} styles={customStyles} placeholder="Select"/>
+      <Select 
+        options={options} 
+        styles={customStyles} 
+        placeholder="Select" 
+        defaultValue={{value: value, label: value}} 
+        onChange={e => updateSelect(cellProperties["clientID"], e.value)}/>
     )
   }
   else
   {
     return (
-        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value}/>
+        <input type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
     )
   }
 
@@ -216,7 +235,7 @@ const RouteTable = (props) => {
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "checkbox")
       },
       { Header: 'More Details',
-        Cell: row => (<div style={{textAlign: 'center'}} onClick={() => editClient(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+        Cell: row => (<div style={{textAlign: 'center'}} onClick={() => editClient(row.row.original._id)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                 </svg></div>)
@@ -226,15 +245,9 @@ const RouteTable = (props) => {
     []
   )
 
-  function editClient(client) {
-    console.log("Editing client")
-    console.log(client)
-    const { history } = props;
-    console.log(history)
-    if (history) {
-        history.push('/edit-client');
-    }
-}
+  function editClient(id) {
+    props.showModal(id)
+  }  
 
   return (
   <Styles height={CELL_HEIGHT}>

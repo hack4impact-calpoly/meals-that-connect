@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import MealTotals from './routes/mealTotals';
 import RoutesNavbar from './routes/RoutesNavbar';
 import PopupMealTotals from './routes/PopupMealTotals';
-import env from "react-dotenv";
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
@@ -49,10 +48,11 @@ class SiteManagerHomepage extends Component {
     }
 
     async fetchMealTotals () {
+        let site = localStorage.getItem("site")
         let info = {
-            site: "SLO",
+            site: site,
         }
-        let response = await fetch(env.backendURL + 'clients/siteTotals', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

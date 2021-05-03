@@ -5,52 +5,31 @@ const router = express.Router();
 const Client = require("../models/clients")
 
 router.post('/addClient', async (req, res) => {
-  const { firstName, 
-          lastName, 
-          address, 
-          foodDays, 
-          frozenNumber, 
-          frozenDay, 
-          phoneNumber, 
-          emergencyNumber, 
-          emergencyContact, 
-          emergencyPhone, 
-          noMilk, 
-          mealNumber, 
-          specialInstructions, 
-          clientC2, 
-          NE, 
-          email, 
-          holidayFrozen, 
-          routeNumber, 
-          site, 
-          index} = req.body
-  var client = new Client({ firstName,
-                            lastName, 
-                            address, 
-                            foodDays, 
-                            frozenNumber,
-                            frozenDay, 
-                            phoneNumber, 
-                            emergencyNumber, 
-                            emergencyContact, 
-                            emergencyPhone, 
-                            noMilk, 
-                            mealNumber, 
-                            specialInstructions, 
-                            clientC2, 
-                            NE, 
-                            email, 
-                            holidayFrozen, 
-                            routeNumber, 
-                            site, 
-                            index})
-  client.save()
-  .catch(err => {
-                  console.log(err)
-                  res.send(500).send("Internal server error")})
-  console.log("succcessfully added client")
-  res.status(200).send("success")
+  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
+  console.log("Adding client")
+  Client.findOne({'email': email}).then(function(result) {
+  if (result) {
+    console.log("email already in use")
+    res.status(404).send("email already in use")     
+  }
+  else {
+    Client.countDocuments({site: site, routeNumber: routeNumber}, function(err, index) {
+      if (err) {
+        console.log(err)
+        res.send(500).send("Internal server error")
+      }
+      else {
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        client.save()
+        console.log("succcessfully added client")
+        res.status(200).send("success")
+      }
+    })
+  }
+  }).catch(err => {
+    console.log(err)
+    res.send(500).send("Internal server error")
+  })
 })
 
 router.post('/siteTotals', async (req, res) => {
@@ -120,17 +99,17 @@ router.post('/site', async (req, res) => {
   })
 })
 
-router.get('/all', async (req, res) => {
-  Client.find({}, function (err, clients) {
+router.post('/id', async (req, res) => {
+  const {_id} = req.body
+  Client.findOne({_id: _id}, function (err, client) {
     if (err) {
       console.log(err)
     }
     else {
-      res.send(clients)
+      res.send(client)
     }
   })
 })
-
 
 router.post('/update-routes', async (req, res) => {
    const {id, key, data} = req.body
@@ -166,6 +145,48 @@ router.post('/update-client-routes', async (req, res) => {
     })
   }
 
+  res.send("Information updated");
+});
+
+router.post('/update-client', async (req, res) => {
+  const { id, 
+          firstName, 
+          lastName, 
+          address,   
+          phoneNumber, 
+          emergencyContact, 
+          emergencyPhone,   
+          specialInstructions, 
+          clientC2, 
+          NE, 
+          email,  
+          routeNumber, 
+          site,
+          index} = req.body
+
+  Client.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              address: address,
+              phoneNumber: phoneNumber,
+              emergencyContact: emergencyContact,
+              emergencyPhone: emergencyPhone,
+              specialInstructions: specialInstructions,
+              clientC2: clientC2,
+              NE: NE,
+              email: email,
+              routeNumber: routeNumber,
+              site: site,
+              index: index})
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
   res.send("Information updated");
 });
 

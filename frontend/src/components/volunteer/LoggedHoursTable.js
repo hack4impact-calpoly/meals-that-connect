@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import env from "react-dotenv";
-import Moment from 'moment';
 
 const Styles = styled.div`
   margin-left: 30px;
@@ -61,7 +59,7 @@ const EditableCell = (cellProperties, width) => {
         key: key,
         value: value
       }
-      await fetch(env.backendURL + 'hours/edit', {
+      await fetch(process.env.REACT_APP_SERVER_URL + 'hours/edit', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -150,7 +148,7 @@ const Table = (props) => {
   )
 
 function deleteLog(data, props) {
-  fetch(env.backendURL + 'hours/delete', {
+  fetch(process.env.REACT_APP_SERVER_URL + 'hours/delete', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'

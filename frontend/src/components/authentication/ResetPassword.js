@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import '../../css/ResetPassword.css';
 import '../../css/Login.css';
 import fire from '../../fire.js';
-import env from "react-dotenv";
 
 class ResetPassword extends Component{
 	constructor(props){

@@ -19,7 +19,6 @@
     overflow: scroll;
     border: 2px solid black;
 }
-
 .Overlay {
     border-radius: 25px;
     position: fixed;
@@ -31,9 +30,8 @@
 }
 
 #client-info-header {
-    margin-top: 0px;
-    padding-top: 0px;
-    padding-bottom: 100px;
+    padding-bottom: 110px;
+    padding-left: 10px;
     position: fixed;
     background-color: white;
     z-index: 99;
@@ -44,8 +42,20 @@
     color: black;
 }
 
+#client-fooddays {
+    display: flex;
+    flex-direction: row;
+}
+
+#client-frozendays {
+    display: flex;
+    flex-direction: row;
+}
+
 #client-info-body {
     padding-top: 110px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 label{
@@ -53,12 +63,6 @@ label{
     font-weight: 400;
     color: black;
     font-size: 22px
-}
-
-#modal-content
-{
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 input[type=text],

@@ -63,7 +63,7 @@
   },
   "react-dotenv": {
     "whitelist": [
-      "backendURL"
+      "REACT_APP_SERVER_URL"
     ]
   }
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Clients from './Clients'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from "react-bootstrap/Spinner"
-import env from "react-dotenv";
 import {Link} from "react-router-dom";
 import Modal from 'react-modal';
 
@@ -52,9 +51,9 @@ class ClientTableContainer extends Component {
 
     async componentDidMount(){
        let info = {
-          site: "SLO",
+          site: localStorage.getItem("site"),
        }
-       let response = await fetch(env.backendURL + 'clients/site', {
+       let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/site', {
           method: 'POST',
           headers: {
              'Content-Type': 'application/json'
@@ -83,7 +82,9 @@ class ClientTableContainer extends Component {
     }
 
     render() {
+        console.log(this.state.clients)
         let currentClient = this.state.currentClient;
+      
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>

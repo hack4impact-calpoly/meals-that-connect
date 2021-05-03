@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 
-class DataVolunteerNavBar extends Component {
+class DataEntryNavBar extends Component {
     render() {
         return (
             <div className = "navbar">
                 <h2>Meals that Connect</h2>
-                    <Link className="navbar-link" to="/signout">
+                    <Link className="navbar-link" to="/profile">
                         <img src = "https://static.thenounproject.com/png/3070444-200.png" style={{height: '35px', marginLeft : '300px'}}/>
                     </Link>
             </div>
@@ -14,4 +14,4 @@ class DataVolunteerNavBar extends Component {
     }
 }
 
-export default DataVolunteerNavBar;
+export default DataEntryNavBar;

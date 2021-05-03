@@ -1,0 +1,27 @@
+.profile-container {
+    margin-top: 100px;
+}
+
+#profile-info {
+    display: flex;
+    justify-content: space-around;
+}
+
+#profile-text-fields > h2 {
+    align-items: flex-end;
+    margin: 40px;
+}
+
+#profile-editable-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#firstName, #lastName, #site, #email, #phone-number, #availability {
+    margin: 10px;
+}
+
+#email:hover {
+    cursor:not-allowed
+ }
