@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import env from "react-dotenv";
 import SiteManagerHomepage from './sitemanager/SiteManagerHomepage.js'
-import DataEntryHome from './dataEntryHome.js'
-import LogHours from './LogHours.js'
-import Home from './homepage/Home'
+import DataEntryHome from './data-entry/dataEntryHome.js'
+import LogHours from './volunteer/LogHours.js'
 
 
 class HomepageWrapper extends Component {
     constructor(props) {
         super(props);
-        this.state = { userType: localStorage.getItem('userType')};
+        this.state = {
+            isLoggedIn: localStorage.getItem('isLoggedIn'), 
+            userType: localStorage.getItem('userType')
+        };
     }
 
     render() {
-        let homePage;
+        let homePage, navbar;
+        
         if (this.state.userType === 'site-manager')
         {
             homePage = <SiteManagerHomepage />

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VolunteerOverviewTable from './VolunteerOverviewTable'
+import VolunteerNavbar from './VolunteerNavbar'
 import env from "react-dotenv";
 
 class VolunteerOverview extends Component {
@@ -31,10 +32,14 @@ class VolunteerOverview extends Component {
 
     render() {
         return (
-            <div className="site-manager-page">
+            <div >
                 <h1 className="site-manager-page-header">Volunteer Overview</h1>
-                <div className="site-manager-container2">
-                    {this.state.loaded === true ? <VolunteerOverviewTable data={this.state.volunteerData}/> : 
+                <VolunteerNavbar/>
+                <div className="site-manager-container" style={{Left: 0}}>
+                    {this.state.loaded === true ? 
+                    <section style={{marginRight: 80, paddingRight: 50}}>
+                        <VolunteerOverviewTable data={this.state.volunteerData} style={{marginRight: '100px'}}/>
+                    </section> : 
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}

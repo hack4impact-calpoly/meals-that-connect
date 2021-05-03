@@ -13,13 +13,7 @@ const clientSchema = new mongoose.Schema({
       F: {type: Boolean, required: true}
    },
    frozenNumber: {type: Number, required: true, default: 0},
-   frozenDay: {
-      M: Boolean,
-      T: Boolean,
-      W: Boolean,
-      Th: Boolean,
-      F: Boolean
-   },
+   frozenDay: {type: String, required: false},
    phoneNumber: {type: String, required: true},
    emergencyContact: String,
    emergencyPhone: String,
@@ -31,7 +25,8 @@ const clientSchema = new mongoose.Schema({
    email: String,
    holidayFrozen: {type: Boolean, required: true, default: false},
    routeNumber: {type: String, required: true},
-   site: {type: String, required: true}
+   site: {type: String, required: true},
+   index: {type: Number, required: true}
 
 })
 

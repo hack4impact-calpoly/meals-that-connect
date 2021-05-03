@@ -29,28 +29,6 @@ class Signup extends Component {
          };
     }
 
-    firebase_signup = (email, password) => {
-        fire.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            // Signed in 
-            var user = userCredential.user;
-            // ...
-        })
-        .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // ..
-        });
-    }
-
-    storeUser = () => {
-        localStorage.setItem("userEmail", this.state.email);
-        localStorage.setItem("userType", this.state.userType);
-        localStorage.setItem("site", "SLO");
-        localStorage.setItem("time", new Date());
-        localStorage.setItem("isLoggedIn", true);
-    }
-    
     // updates personal data
     handleChange = (event) => {
         let personalData = this.state.personalData;
@@ -85,8 +63,57 @@ class Signup extends Component {
         }
     }
 
-    addUser = (event) => {
-        event.preventDefault();
+    signup = (e) => {
+        e.preventDefault()
+        if (this.state.passwordValidated === true) {
+            let userType = this.state.userType;
+            if (userType === "site-manager" || userType === "data-entry" || userType === "volunteer"){
+                this.firebase_signup(this.state.email, this.state.password);
+            }
+            else {
+                this.setState({emptyUser: true});
+            }
+        }
+    }
+
+    firebase_signup = () => {
+        let {email, password} = this.state.personalData
+        // console.log(email + " " + password)
+        fire.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in 
+            var user = userCredential.user;
+            // Send verification email
+            this.firebase_sendVerification(user);
+            // Add user to MongoDB
+            this.addUser();
+
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if (errorCode == 'auth/email-already-in-use') {
+                alert('That email is taken. Try another.');
+              } else {
+                alert(errorMessage);
+              }
+              console.log(error);
+        });
+    }
+
+    firebase_sendVerification = (user) => {
+
+        user.sendEmailVerification().then(function() {
+            // Email sent.
+        }).catch(function(error) {
+            // An error happened.
+            var errorMessage = error.message;
+            alert(errorMessage);
+            console.log(error);
+        });
+    }
+
+    addUser = () => {
         if (this.state.passwordValidated === true) {
             if (this.state.userType === "site-manager") {
                 this.addSiteManager(this.state.personalData);
@@ -114,7 +141,7 @@ class Signup extends Component {
             user: "site-manager"
         }
 
-        this.signup(newSiteManager)
+        this.mongo_signup(newSiteManager)
     }
 
     addDataEntry = (personalData) => {
@@ -128,7 +155,7 @@ class Signup extends Component {
             user: "data-entry"
         }
 
-        this.signup(newDataEntry)
+        this.mongo_signup(newDataEntry)
     }
 
     addVolunteer = (personalData, volunteerData) => {
@@ -148,12 +175,10 @@ class Signup extends Component {
             availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
         
         }
-        this.signup(newVolunteer)
+        this.mongo_signup(newVolunteer)
     }
-
     
-    signup = (user) => {
-        this.firebase_signup(user.email, user.password)
+    mongo_signup = (user) => {
         let _this = this
         fetch(env.backendURL + 'signup', {
             method: 'POST',
@@ -167,13 +192,7 @@ class Signup extends Component {
                 _this.setState({error: true})
             }
             else {
-                _this.storeUser()
-                if (this.state.userType === "volunteer"){
-                    _this.props.history.push("/volunteer-additional-info");
-                }
-                else{
-                  _this.props.history.push("/");
-                }
+                _this.props.history.push("/email-verification");
             }
         })
     }
@@ -182,7 +201,7 @@ class Signup extends Component {
         return (
             <div className="auth-form">
                 <h1 id="title">SIGN UP</h1>
-                <form onSubmit={this.addUser}>
+                <form onSubmit={this.signup}>
                 <div id="cta-type">
                     <div id="site-manager">
                         <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
@@ -197,6 +216,16 @@ class Signup extends Component {
                         <label for="volunteerID">Volunteer</label>
                     </div>
                 </div>
+
+                <div className= "drop-down-site">
+                    <p id= "select-site">Select site:</p>
+                    <select style={{width: '150px'}} id= "site" value={this.state.value} onChange={this.handleChange}>
+                        <option value="SLO">SLO</option>
+                        <option value="Five cities">Five cities</option>
+                        <option value="Cambria">Cambria</option>
+                    </select>
+                </div>
+
                 <div className= "input-name">
                     <p id="first-name">First Name</p>
                     <p id="last-name">Last Name</p>

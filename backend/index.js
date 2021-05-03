@@ -14,14 +14,18 @@ var signup = require('./src/signup')
 var clients = require('./src/getClients')
 var tables = require('./src/volunteerTables')
 var volunteer = require('./src/getVolunteers')
+var meals = require('./src/meals')
 var hours = require('./src/hourLog')
+var orders = require('./src/getOrderTotals')
 
 app.use('/login', login)
 app.use('/signup', signup)
 app.use('/clients', clients)
 app.use('/tables', tables)
 app.use('/volunteers', volunteer)
+app.use('/meals', meals)
 app.use('/hours', hours)
+app.use('/orders', orders)
 
 app.get('/', (req, res) => {
     res.send('Hi from Meals that Connect!')

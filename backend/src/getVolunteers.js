@@ -30,7 +30,7 @@ router.get('/allVolunteers', async (req, res) => {
 
 router.post('/siteVolunHours', async (req, res) => {
   const {site} = req.body
-  totals = await getVolunteerHours(site)
+  var totals = await getVolunteerHours(site)
   res.send(totals)
 })
 
@@ -38,7 +38,7 @@ router.post('/siteVolunHours', async (req, res) => {
 router.post('/updateVolunteerInfo', async (req, res) => {
   const { phoneNumber, email, days, notes } = req.body
 
-  let user = await Volunteer.findOne({"email": email})
+  //let user = await Volunteer.findOne({"email": email})
 
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
@@ -60,7 +60,7 @@ router.post('/volunteerComplete', async(req, res) => {
   
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
-      console.log(volunteer)
+      //console.log(volunteer)
       res.status(404).send("email not valid")
     }
     else {
@@ -69,13 +69,34 @@ router.post('/volunteerComplete', async(req, res) => {
         console.log("Info completed")
       }
       else {
-        res.status(404).send("not completedInfo")
+        res.status(300).send("not completedInfo")
         console.log("not completedInfo")
       }
     }
   })
 })
 
+router.post('/volunteerDelete', async(req, res) => {
+  const { email } = req.body
+
+  Volunteer.deleteOne({"email": email})
+    .then(function(volunteer) {
+      if (!volunteer) {
+        console.log(volunteer)
+        res.status(404).send("email not valid")
+      }
+      else {
+        if (volunteer.phoneNumber !== "0") {
+          res.status(200).send("Info completed")
+          console.log("Info completed")
+        }
+        else {
+          res.status(404).send("not completedInfo")
+          console.log("not completedInfo")
+        }
+      }
+    })
+})
 
 async function getVolunteersBySite(siteName) {
   return await Volunteer.find({site: siteName}, function (err, volunteers) {
@@ -88,17 +109,19 @@ async function getVolunteersBySite(siteName) {
   })
 }
 
+//rewrite this funcion
 async function getVolunteerHours(site) {
-    volunteerList = await getVolunteersBySite(site)
-    totals = []
+    var volunteerList = await getVolunteersBySite(site)
+    var totals = []
     for (var index in volunteerList) {
-      first = volunteerList[index].firstName
-      last = volunteerList[index].lastName
-      VolunteerHours = await Hours.find({firstName: first, lastName: last}, function (err, hrs)
+      var first = volunteerList[index].firstName
+      var last = volunteerList[index].lastName
+      await Hours.find({firstName: first, lastName: last}, function (err, hrs)
       {
         if (err)
         {
-          console.log(err)}
+          console.log(err)
+        }
         else
         {
           totals.push({firstName: first, lastName: last, hours: hrs})

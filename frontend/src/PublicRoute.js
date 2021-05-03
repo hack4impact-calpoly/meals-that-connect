@@ -4,7 +4,6 @@ import { Route, Redirect } from 'react-router-dom';
 import { isLoggedIn } from './components/authentication/authenticationUtils.js';
 
 const PublicRoute = ({component: Component, authenticated, ...rest}) => {
-	console.log(isLoggedIn())
     return (
         <Route {...rest} render={props => (
             isLoggedIn() 
