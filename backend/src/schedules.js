@@ -33,7 +33,7 @@ router.post('/get', async (req, res) => {
                 route_names.forEach(route => {
                     if (!(route in existing_routes)){
                         updated = true
-                        existing_routes[route] = [ [], [], [], [], [] ]
+                        existing_routes[route] = [ [""], [""], [""], [""], [""] ]
                     }
                 })  
                 if (updated) {
@@ -56,12 +56,12 @@ router.post('/get', async (req, res) => {
             getRoutes(site).then((route_names) => {
                 let routes = {}
                 route_names.forEach(route => {
-                    let data = [ [], [], [], [], [] ]
+                    let data = [ [""], [""], [""], [""], [""] ]
                     routes[route] = data
                 })       
-                mealPrep = [ [], [], [], [], [] ]
-                staff = [ [], [], [], [], [] ]
-                computer = [ [], [], [], [], [] ]
+                mealPrep = [ [""], [""], [""], [""], [""] ]
+                staff = [ [""], [""], [""], [""], [""] ]
+                computer = [ [""], [""], [""], [""], [""] ]
                 var new_schedule = Schedule({site, startDate, routes, mealPrep, staff, computer})
                 new_schedule.save()
                 console.log("Schedule successfully created")

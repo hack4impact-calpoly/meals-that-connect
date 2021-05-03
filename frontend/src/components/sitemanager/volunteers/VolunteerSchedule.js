@@ -10,34 +10,54 @@ class VolunteerSchedule extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           volunteerData: [100, 100, 100],
-           loaded: true //original: false
+            loaded: false, //original: false,
+            week: [],
+            holidays: [],
+            routes: [],
+            mealPrep: [],
+            staff: [],
+            computer: []
         };
     }
 
-    // async componentDidMount(){
-    //    let info = {
-    //       site: "SLO",
-    //    }
-    //    let response = await fetch(env.backendURL + 'volunteers/siteVolunHours', {
-    //       method: 'POST',
-    //       headers: {
-    //          'Content-Type': 'application/json'
-    //       },
-    //       body: JSON.stringify(info)
-    //    })
-    //    const data = await response.json();
+    updateWeek = (week) => {
+        console.log(week)
+        this.setState({weekArr: week})
+    }
 
-    //    this.setState({volunteerData: data, loaded: true})
-    // }
+    updateHoliday = (holidays) => {
+        console.log(holidays)
+        this.setState({holidayArr: holidays})
+    }
 
+    async componentDidMount(){
+        let info = {
+        site: localStorage.getItem("site"),
+        startDate: new Date() // HEELPPPP: task --- figureout how to get start date!
+    }
+    let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    })
+    const data = await response.json();
+    
+    this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, staff: data.staff, computer: data.computer})
+    }
+
+    ///{this.state.scheduleData ? <VolunteersScheduleTable routes={routes} weekArr={weekArr} holidaysArr={holidayArr} routes={routes} mealPrep={mealPrep} staff={staff} computer={computer}/> :
     render() {
+        let {loaded, routes, weekArr, holidayArr, mealPrep, staff, computer} = this.state
+        console.log(mealPrep)
+        console.log(routes)
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
-                <VolunteerNavbar/>
+                <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                    {this.state.loaded === true ? <VolunteersScheduleTable data={this.state.volunteerData}/> :
+                {this.state.loaded ? <VolunteersScheduleTable routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} staff={staff} computer={computer}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}

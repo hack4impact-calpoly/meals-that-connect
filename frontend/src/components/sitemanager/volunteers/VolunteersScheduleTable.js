@@ -1,621 +1,285 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import env from "react-dotenv";
-
-const TEXT_TYPE = "type";
+import "../../../css/totalMeals.css"
+import holidays from '@date/holidays-us'
 
 const Styles = styled.div`
- table {
-   margin: 10px 30px 30px 10px;
-   border-spacing: 0;
-   border: 1px solid black;
-   background-color: #f2fff0;
-   font-family: 'Mulish', sans-serif;
-   tr {
-     :last-child {
-       td {
-         border-bottom: 0;
-       }
-     }
-   }
-   th,
-   td {
-     padding: 0.5rem;
-     border-bottom: 1px solid black;
-     border-right: 1px solid black;
-     font-size: 20px;
-
-     :last-child {
-       border-right: 0;
-     }
-   }
-   th {
-     background: #D4D4D4;
-     color: black;
-     fontWeight: bold;
-   }
- }
+  table {
+    margin-left:-8px;
+    border-spacing: 0;
+    width: 100%; 
+    border: solid 2px #142850;
+    tr {  
+      :last-child {
+        td {
+          border-bottom: 1;
+          flex-direc  
+        }
+      }
+    }
+    th {
+        background: #b7f8ac;
+        color: black;
+        border: solid 1px #142850;
+        textAlign: column.textAlign;
+        fontWeight: bold;
+        text-align: center;
+        minWidth: 80px;
+        padding: 3px 20px;
+        font-size: 24px;
+    }
+    td {
+        padding: 3px 20px;
+        border: solid 1px gray;
+        background: white;
+        overflow: auto;
+        font-size: 22px;
+      :last-child {
+        border-right: 0;
+      }
+    }
+  }
 `
 
-const EditableCell = (cellProperties, width) => {
-    var changedFlag = false;
-    const firstName = cellProperties["firstName"];
-    const lastName = cellProperties["lastName"];
-    const key = cellProperties["column"]["id"];
-    const [value, setValue] = React.useState(cellProperties["value"]);
-    
-    const handleChange = (targetValue) => {
-    setValue(targetValue);
-  }
-
-//   const updateDatabase = async (firstNameD, lastNameD, keyD, valueD, changed) => {
-//     if (changed !== false) {
-//       console.log("yup")
-//       const updateData = {
-//         firstName: firstNameD,
-//         lastName: lastNameD,
-//         key: keyD,
-//         value: valueD
-//       }
-//       await fetch(env.backendURL + 'volunteers/insertURL', {
-//           method: 'POST',
-//           headers: {
-//               'Content-Type': 'application/json'
-//           },
-//           body: JSON.stringify(updateData)
-//       })
-//     }
-//     return 0
-//   }
-
-  return (
-      <span><input style={{width: width +20, margin: '-5px'}} value={value} onChange={e => handleChange(e.target.value)} /></span>
-  )
-};
-
-const VolunteersScheduleTable = (props) => {
-  const columns = React.useMemo(
-    () => [
-    {
-        Header: '',
-        accessor: 'signature',
-        Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.signature.toString()}</div> ),
-        Cell: (cellProperties) => EditableCell(cellProperties, 100),
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekOneMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(0)}</div> ),
-                accessor: 'weekOneMonDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekOneMonName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    }
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekOneTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(1)}</div> ),
-                accessor: 'weekOneTueDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekOneTueName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekOneWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(2)}</div> ),
-                accessor: 'weekOneWedDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekOneWedName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekOneThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(3)}</div> ),
-                accessor: 'weekOneThuDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekOneThuName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekOneFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(4)}</div> ),
-                accessor: 'weekOneFriDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekOneFriName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekTwoMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(7)}</div> ),
-                accessor: 'weekTwoMonDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekTwoMonName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekTwoTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(8)}</div> ),
-                accessor: 'weekTwoTueDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekTwoTueName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekTwoWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(9)}</div> ),
-                accessor: 'weekTwoWedDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekTwoWedName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekTwoThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(10)}</div> ),
-                accessor: 'weekTwoThuDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekTwoThuName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekTwoFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(11)}</div> ),
-                accessor: 'weekTwoFriDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekTwoFriName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekThreeMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(14)}</div> ),
-                accessor: 'weekThreeMonDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekThreeMonName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekThreeTue',
-        columns: [
-           {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(15)}</div> ),
-                accessor: 'weekThreeTueDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekThreeTueName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekThreeWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(16)}</div> ),
-                accessor: 'weekThreeWedDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekThreeWedName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekThreeThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(17)}</div> ),
-                accessor: 'weekThreeThuDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekThreeThursName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekThreeFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(18)}</div> ),
-                accessor: 'weekThreeFriDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekThreeFriName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekFourMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(21)}</div> ),
-                accessor: 'weekFourMonDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFourMonName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekFourTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(22)}</div> ),
-                accessor: 'weekFourTueDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFourTueName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekFourWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(23)}</div> ),
-                accessor: 'weekFourWedDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFourWedName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekFourThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(24)}</div> ),
-                accessor: 'weekFourThuDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFourThurName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekFourFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(25)}</div> ),
-                accessor: 'weekFourFriDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFourFriName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekFiveMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(28)}</div> ),
-                accessor: 'weekFiveMonDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFiveMonName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekFiveTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(29)}</div> ),
-                accessor: 'weekFiveTueDate',
-                columns: [
-                    {
-                        Header: 'Name',
-                        accessor: 'weekFiveTueName',
-                        width: 100,
-                        Cell: (cellProperties) => EditableCell(cellProperties, 100, TEXT_TYPE, null),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekFiveWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(30)}</div> ),
-                accessor: 'weekFiveWedDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekFiveThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(31)}</div> ),
-                accessor: 'weekFiveThuDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveThuHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekFiveFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(32)}</div> ),
-                accessor: 'weekFiveFriDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    ],
-    [] 
-  )
-   
-  const data = React.useMemo(() => props.data, [])
-  
-  return (
-  <Styles>
-    <RouteTable columns={columns} data={data}/>
-  </Styles>
-  )
-}
-
-function RouteTable({ columns, data }) {
+function VolunteersScheduleTable ({ columns, data, props }) {
+  // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow} = useTable({
+    prepareRow,
+  } = useTable({
     columns,
-    data,
-    })
+    data
+  })
 
   // Render the UI for your table
   return (
-  <table {...getTableProps()}>
-    <thead>
-      {headerGroups.map(headerGroup => (
-        <tr {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map(column => (
-            <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+    <div id='tables'>
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              ))}
+            </tr>
           ))}
-        </tr>
-      ))}
-    </thead>
-    <tbody {...getTableBodyProps()}>
-      {rows.map(row => {
-        prepareRow(row)
-        return (
-          <tr {...row.getRowProps()}>
-            {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {firstName: row["original"]["firstName"], value: cell["value"], lastName: row["original"]["lastName"], value: cell["value"]})}</td>
-            })}
-          </tr>
-        )
-      })}
-    </tbody>
-  </table>
- )
+        </thead>
+
+        <tbody {...getTableBodyProps()}>
+          {rows.map(row => {
+            prepareRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return cellClass(cell, props) //returns a <td> element with a specific id depending on location for CSS purposes
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
-function getDate(tableDay) {
-    let curr = new Date();
-    let firstDay = new Date(curr.getFullYear(), curr.getMonth(), 1).getDay();
-    let lastDay = new Date(curr.getFullYear(), curr.getMonth()+1, 0).getDate()
-    let dates = [];
+const Table = (props) => {
+  let columns = [
+    {
+      Header: 'Meal Totals',
+      columns: [
+        {
+          Header: ' ',
+          accessor: 'route',
+          columns: [
+            {
+              Header: 'Route',
+              accessor: 'route'
+            }
+          ]
+        },
+        {
+          Header: 'Monday',
+          columns: [
+            {
+              Header: getDate(props.weekArr, 0),
+              accessor: 'monday'
+            }
+          ]
+        },
+        {
+          Header: 'Tuesday',
+          // accessor: 'tuesday'
+          columns: [
+            {
+              Header: getDate(props.weekArr, 1),
+              accessor: 'tuesday'
+            }
+          ]
+        },
+        {
+          Header: 'Wednesday',
+          // accessor: 'wednesday'
+          columns: [
+            {
+              Header: getDate(props.weekArr, 2),
+              accessor: 'wednesday'
+            }
+          ]
+        },
+        {
+          Header: 'Thursday',
+          // accessor: 'thursday'
+          columns: [
+            {
+              Header: getDate(props.weekArr, 3),
+              accessor: 'thursday'
+            }
+          ]
+        },
+        {
+          Header: 'Friday',
+          // accessor: 'friday'
+          columns: [
+            {
+              Header: getDate(props.weekArr, 4),
+              accessor: 'friday'}
+            ]
+          },
+        ],
+      }
+    ]
 
-    for (let i = 0; i < firstDay - 1; i++) {
-        dates.push(' ');
-    }
+  // list contains objects with volunteer information for each day
+  let routeList = []
+
+  //routes is an Object
+  let routesLength = Object.keys(props.routes).length
+  let routesValues = Object.values(props.routes)
   
-    for (let i = firstDay; i <= lastDay; i++) {
-        dates.push(i);
+  // get routes volunteers
+  for (let i =0; i < routesLength; i++) {
+    console.log("here")
+    var routeNum = Object.keys(props.routes)[i]
+    // Get frozen data for each route
+    let routeData = {
+      route: routeNum,
+      monday: routesValues[i][0],
+      tuesday: routesValues[i][1],
+      wednesday: routesValues[i][2],
+      thursday: routesValues[i][3],
+      friday: routesValues[i][4]
     }
-
-    for (let i = dates.length - 1; i <= 35; i++) {
-        dates.push(' ');
-    }
-
-    return dates[tableDay];
+    routeList.push(routeData)
   }
 
-export default VolunteersScheduleTable;
+  // get mealPrep volunteers
+  console.log(props.mealPrep)
+  let meal = props.mealPrep
+  let mealPrepData = {
+    route: "Meal Prep",
+    monday: meal[0],
+    tuesday: meal[1],
+    wednesday: meal[2],
+    thursday: meal[3],
+    friday: meal[4]
+  }
+  routeList.push(mealPrepData)
+
+  // get computer volunteers
+  console.log(props.computer)
+  let computer = props.computer
+  let computerData = {
+    route: "Computer",
+    monday: computer[0],
+    tuesday: computer[1],
+    wednesday: computer[2],
+    thursday: computer[3],
+    friday: computer[4]
+  }
+  routeList.push(computerData)
+
+  // get staff volunteers
+  console.log(props.staff)
+  let staff = props.staff
+  let staffData = {
+    route: "Staff",
+    monday: staff[0],
+    tuesday: staff[1],
+    wednesday: staff[2],
+    thursday: staff[3],
+    friday: staff[4]
+  }
+  routeList.push(staffData)
+
+  const data = React.useMemo(() => routeList, [] )
+  console.log(props.routes)
+  return (
+    <Styles>
+      <VolunteersScheduleTable  columns={columns} data={routeList} props={props}/>
+    </Styles>
+  )
+}
+
+function getDate(weekArr, tableDay) {
+  console.log("getting week days");
+  let curr;
+
+  if (weekArr.length === 1)
+  {
+    curr = new Date();
+  }
+  else
+  {
+    curr = new Date(weekArr[0]);
+  }
+  let week = [];
+
+  for (let i = 1; i <= 7; i++) {
+    let first = curr.getDate() - curr.getDay() + i;
+    let day = new Date(curr.setDate(first));
+    let month = day.getMonth() + 1;
+    let date = day.getDate();
+    let year = day.getFullYear();
+    let mdy = month + "/" + date + "/" + year;
+    week.push(mdy);
+  }
+  return week[tableDay];
+}
+
+function getHolidayDate(holidayArr) {
+  //let holidayArr = props.holidayArr
+  let week = [];
+
+  for (let i = 0; i < holidayArr.length; i++) {
+    let day = new Date(holidayArr[i]);
+    let month = day.getMonth() + 1;
+    let date = day.getDate();
+    let year = day.getFullYear();
+    let mdy = month + "/" + date + "/" + year;
+    week.push(mdy);
+  }
+  return week;
+}
+
+function cellClass(cell, props) {
+  // console.log("cell")
+  // console.log(cell);
+  let holidayDates = getHolidayDate(props.holidayArr);
+  
+  // if (cell['value'] !== " " && rowID === 2){
+  //   return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+  // }
+  
+  if (cell['column']['id'] === "route"){
+      return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+  }
+  else {
+    return <td id="last-cell-route" style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+  }
+}
+
+export default Table;
