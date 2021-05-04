@@ -24,8 +24,6 @@ import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
-import LogHours from './components/LogHours'
-
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
@@ -56,7 +54,7 @@ class App extends Component {
       <Router>
           <NavBar/>
           <Switch>
-              <PublicRoute path="/profile" component={Profile}/>
+              {/* <PublicRoute path="/Profile" component={Profile}/> */}
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
@@ -65,7 +63,7 @@ class App extends Component {
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
               <PublicRoute path="/no-permission" component={NoPermission}/>
 
-
+              <PrivateRoute requiredUser="none" path="/Profile"><Profile /></PrivateRoute>
               <PrivateRoute requiredUser="none" path="/signout"><Private /></PrivateRoute>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
               <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
