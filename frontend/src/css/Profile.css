@@ -44,6 +44,10 @@ p {
     color: #7E7C7C;
 }
 
+input[type=email]:focus {
+    background-color: #F5F5F5;
+}
+
 .input-firstName, .input-lastName, .input-availability {
     padding-right: 600px;
 }

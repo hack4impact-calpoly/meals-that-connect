@@ -24,19 +24,11 @@ import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
-<<<<<<< HEAD
 import LogHours from './components/volunteer/LogHours'
 
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-=======
-import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute';
-
-import Profile from './components/Profile'
-
->>>>>>> 823ba9ac349e68c20c660c22fbb080ab69e65b4b
 import { isAuthenticated, isLoggedIn, printStorage } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
