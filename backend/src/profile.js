@@ -5,7 +5,19 @@ const SiteManager = require('../models/siteManager');
 const Volunteer = require('../models/volunteer');
 const DataEntry = require('../models/dataEntry');
 
-router.post('/site-managerProfile', async (req, res) => {
+router.get('/SiteManager', async (req, res) => {
+    const {email, site} = req.body
+    SiteManager.find({email: email, site: site}, function (err, volunteer) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        res.send(volunteer)
+      }
+    })
+})
+
+router.post('/updateSiteManagerProfile', async (req, res) => {
     const { firstName, lastName, email, site } = req.body
 
     let user = await SiteManager.findOne({"email": email})
@@ -23,7 +35,19 @@ router.post('/site-managerProfile', async (req, res) => {
     })
 })
 
-router.post('/volunteerProfile', async (req, res) => {
+router.get('/volunteer', async (req, res) => {
+    const {email, site} = req.body
+    Volunteer.find({email: email, site: site}, function (err, volunteer) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        res.send(volunteer)
+      }
+    })
+})
+
+router.post('/updateVolunteerProfile', async (req, res) => {
     const { firstName, lastName, email, site, phoneNumber, availability } = req.body
 
     let user = await Volunteer.findOne({"email": email})
@@ -41,7 +65,19 @@ router.post('/volunteerProfile', async (req, res) => {
     })
 })
 
-router.post('/data-entryProfile', async (req, res) => {
+router.get('/dataEntry', async (req, res) => {
+    const {email, site} = req.body
+    DataEntry.find({email: email, site: site}, function (err, volunteer) {
+      if (err) {
+        console.log(err)
+      }
+      else {
+        res.send(volunteer)
+      }
+    })
+})
+
+router.post('/updateDataEntryProfile', async (req, res) => {
     const { firstName, lastName, email, site } = req.body
 
     let user = await DataEntry.findOne({"email": email})
