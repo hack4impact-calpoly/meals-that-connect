@@ -11,19 +11,15 @@ class PopupOrderSuccess extends Component {
 
     render()
     {
-        const {showSuccess} = this.props.show
-        return <>
-        {showSuccess && <Popup>
-            {close => (
+        return(
+    
                 <div>
-                    <p id="popup">Successfully submitted order!</p>
-                    <div id = "popup-div">
-                        <button type="button" className="popup-button-cancel"  onClick={() => {close();}}>Close</button>
+                    <p>Successfully submitted order!</p>
+                    <div>
+                        <button type="button" className="popup-button-cancel">Close</button>
                     </div>
                 </div>
-            )}
-        </Popup>}
-        </>;
+        );
     }
 }
 
