@@ -23,6 +23,22 @@ router.post('/addVolunteer', async (req, res) => {
   })
 })
 
+router.post('/delete', async (req, res) => {
+  const { id } = req.body
+  Volunteer.deleteOne({_id: id}).then(function(result) {
+    if (result) {
+      console.log("Deleted volunteer")
+      res.status(200).send("Deleted")   
+      return   
+    }
+    else {
+      res.send(500).send("Failed to delete")
+    }
+    }).catch(err => {
+      res.send(500).send("Failed to delete")
+  })
+})
+
 router.post('/volunteerSite', async (req, res) => {
   const {site} = req.body
   Volunteer.find({site: site}, function (err, volunteer) {
@@ -71,7 +87,6 @@ router.post('/updateVolunteerInfo', async (req, res) => {
     }
   })
 })
-
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body
