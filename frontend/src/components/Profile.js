@@ -33,7 +33,6 @@ class Profile extends Component {
     }
 
     handleChange = (e) => {
-        console.log(e.target)
         this.setState({ [e.target.id]: e.target.value });
     };
 
@@ -71,7 +70,6 @@ class Profile extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        console.log(data)
         
         if (type === "volunteer") {
             this.setState( { 
@@ -175,7 +173,6 @@ class Profile extends Component {
 
         let { hideCancel, driver, kitchenStaff, notes } = this.state
         let { M, T, W, Th, F } = this.state.availability
-        console.log(this.state)
 
         return (
             <div className='profile-container'>
