@@ -234,7 +234,7 @@ class Signup extends Component {
                     <input type="text" id="lastName"  className="user-name" style={{width: '245px'}} onChange={this.handleChange} size="25" required/>
                 </div>
                 <p id = "input">Email</p>
-                <input type="email" className="account-info" id="email" size="50" style={{width: '500px'}} onChange={this.handleChange} required/>
+                <input type="email" className="account-info" id="signup-email" size="50" style={{width: '500px'}} onChange={this.handleChange} required/>
                 <p id = "input">Password</p>
                 <input type="password" className="account-info" id="password" style={{width: '500px'}} onChange={this.handleChange} 
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Must contain at least one number, one uppercase, and one lowercase letter, and at least 6 or more characters long"
