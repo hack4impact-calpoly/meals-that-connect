@@ -22,7 +22,7 @@ class DeleteCVPopup extends Component {
                     <p id="popup">Are you sure you'd like to remove <b>{this.props.person["firstName"]}  {this.props.person["lastName"]}</b>? </p>
                     <div id = "popup-div">
                         <button type="button" className="popup-button-cancel"  onClick={() => {close();}}>Cancel</button>
-                        <button type="button" className="popup-button-submit" onClick= {() => {remove(this.props.person, this.props.type); close();}}>Submit</button>
+                        <button type="button" className="popup-button-submit" onClick= {() => {remove(this.props.person, this.props.type); close();}}>Remove</button>
                     </div>
                 </div>
             )}
@@ -33,32 +33,33 @@ class DeleteCVPopup extends Component {
 }
 
 async function remove(person, type)
-      { 
-        const current = person
-        const currID = current["_id"]
-        const updateData = {
-          id: currID
-        }
-        if(type == "client")
-        {
-            await fetch(process.env.REACT_APP_SERVER_URL + 'clients/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
-            })
-        }   
-        else if(type == "volunteer")
-        {
-            await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
-            })
-        }   
-      }
+    { 
+    const current = person
+    const currID = current["_id"]
+    const updateData = {
+        id: currID
+    }
+    if(type == "client")
+    {
+        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+        })
+    }   
+    else if(type == "volunteer")
+    {
+        await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+        })
+    }
+    window.location.reload(false); 
+}
 
 export default DeleteCVPopup;
