@@ -199,7 +199,7 @@ class Login extends Component {
                     </div>
                 </div>
                 <p className= "input-email">Email</p>
-                <input type="text" id="login-email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
+                <input type="text" id="email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
                 <br/>
                 <p className= "input-password">Password</p>
                 <div className = "link">
