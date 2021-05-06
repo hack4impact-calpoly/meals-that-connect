@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import RouteTable from './RouteTable';
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
-import "../../../css/Modal.css"
+import '../../../css/Modal.css';
+
+const moment = require('moment')
 
 class RouteHomepage extends Component {
     constructor(props) {
@@ -60,12 +62,17 @@ class RouteHomepage extends Component {
         console.log(holidays)
         this.setState({holidayArr: holidays})
     }
-
     async fetchClients () {
+        var currWeek = moment();
+        if (typeof this.state.weekArr !== 'undefined') {
+            currWeek = this.state.weekArr[1];
+        }
+        console.log(currWeek)
         let info = {
             site: localStorage.getItem("site"),
+            week: currWeek
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/site', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/site', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -96,7 +103,6 @@ class RouteHomepage extends Component {
             clients[prevRoute] = routeData
             routes.push(prevRoute)
         }
-        console.log(routes)
         this.setState({clients: clients, routes: routes}) 
     }
 
@@ -108,11 +114,13 @@ class RouteHomepage extends Component {
 
     updateWeek = (week) => {
         this.setState({weekArr: week})
+        this.fetchClients()
     }
 
     handleOpenModal = (currentClient) => {
         this.setState({showModal: true, currentClient: currentClient});
     }
+
     
     handleCloseModal = () => {
         this.setState({showModal: false});
@@ -144,72 +152,78 @@ class RouteHomepage extends Component {
                                     <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}></RouteTable>
                                 </section>
                         );})}
-                    </div>
-                    <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
-                        <div id="modal-content">
+                    </div> 
+                    <Modal isOpen={this.state.showModal} contentLabel="Minimal Modal Example">
+                        <div>
                             <div id="client-info-header">
                                 <h1>Client Information</h1>
-                                <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Save and Exit</button>
+                                <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Close Modal</button>
                             </div>
                             <div id="client-info-body">
-                                <div className="two-column">
-                                    <div><label for="client-firstname">First Name</label></div>
-                                    <div><label for="client-lastname">Last Name</label></div>
-                                    <div><input type="text" value={currentClient["firstName"]} id="client-firstname"/></div>
-                                    <div><input type="text" value={currentClient["lastName"]} id="client-lastname"/></div>
+                                <div>
+                                    <label for="client-firstname">First Name</label>
+                                    <label for="client-lastname" className="secondColumn-text">Last Name</label>
+                                </div>
+                                <div>
+                                    <input type="text" value={currentClient["firstName"]} id="client-firstname"/>
+                                    <input type="text" value={currentClient["lastName"]} id="client-lastname" className="secondColumn-input"/><br/>
                                 </div>
                                 <label for="client-address">Address</label><br/>
+                                <input type="text" value={currentClient["address"]} id="client-address"/>
+                                <div>
+                                    <label for="client-mealnumber">Num. of Meals</label><br/>
+                                    <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber"/><br/>
 
-                                <input type="text" value={currentClient["address"]} id="client-address" style={{width: "1130px"}}/><br/>
-                                <label for="client-mealnumber">Num. of Meals</label><br/>
-                                <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber" style={{width: "1130px"}}/><br/>
-                                <label>Food Days</label>
-                                <table className="add-table">
-                                    <tr>
-                                        <th>Monday</th>
-                                        <th>Tuesday</th>
-                                        <th>Wednesday</th>
-                                        <th>Thursday</th>
-                                        <th>Friday</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/></td>
-                                        <td><input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t"/></td>
-                                        <td><input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w"/></td>
-                                        <td><input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th"/></td>
-                                        <td><input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/></td>
-                                    </tr>
-                                </table>
-                                <br/>
-                                <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                                <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber" style={{width: "1130px"}}/><br/>
+                                    <p>Food Days</p>
 
-                                <label>Frozen Days</label>
-                                <table className="add-table">
-                                    <tr>
-                                        <th>Monday</th>
-                                        <th>Tuesday</th>
-                                        <th>Wednesday</th>
-                                        <th>Thursday</th>
-                                        <th>Friday</th>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="radio" checked={currentClient["frozenDay"] === "M"} id="client-frozenday-m"/></td>
-                                        <td><input type="radio" checked={currentClient["frozenDay"] === "T"} id="client-frozenday-t"/></td>
-                                        <td><input type="radio" checked={currentClient["frozenDay"] === "W"} id="client-frozenday-w"/></td>
-                                        <td><input type="radio" checked={currentClient["frozenDay"] === "Th"} id="client-frozenday-th"/></td>
-                                        <td><input type="radio" checked={currentClient["frozenDay"] === "F"} id="client-frozenday-f"/></td>
-                                    </tr>
-                                </table>
+                                    <label for="client-foodday-m">Monday</label><br/>
+                                    <input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/><br/>
+
+                                    <label for="client-foodday-t">Tuesday</label><br/>
+                                    <input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t"/><br/>
+
+                                    <label for="client-foodday-w">Wednesday</label><br/>
+                                    <input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w"/><br/>
+
+                                    <label for="client-foodday-th">Thursday</label><br/>
+                                    <input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th"/><br/>
+
+                                    <label for="client-foodday-f">Friday</label><br/>
+                                    <input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/><br/>
+
+                                </div>
+                                <div>
+                                    <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
+                                    <input type="number" value={currentClient["frozenNumber"]} id="client-frozenNumber"/><br/>
+
+                                    <p>Frozen Days</p>
+
+                                    <label for="client-frozenday-m">Monday</label><br/>
+                                    <input type="checkbox" checked={currentClient["frozenDay"]["M"]} id="client-frozenday-m"/><br/>
+
+                                    <label for="client-frozenday-t">Tuesday</label><br/>
+                                    <input type="checkbox" checked={currentClient["frozenDay"]["T"]} id="client-frozenday-t"/><br/>
+
+                                    <label for="client-frozenday-w">Wednesday</label><br/>
+                                    <input type="checkbox" checked={currentClient["frozenDay"]["W"]} id="client-frozenday-w"/><br/>
+
+                                    <label for="client-frozenday-th">Thursday</label><br/>
+                                    <input type="checkbox" checked={currentClient["frozenDay"]["Th"]} id="client-frozenday-th"/><br/>
+
+                                    <label for="client-frozenday-f">Friday</label><br/>
+                                    <input type="checkbox" checked={currentClient["frozenDay"]["F"]} id="client-frozenday-f"/><br/>
+
+                                </div>
 
                                 <label for="client-phone">Phone Number</label><br/>
-                                <input type="text" value={currentClient["phoneNumber"]} id="client-phone" style={{width: "1130px"}}/><br/>
-                                <div className="two-column">
-                                    <div><label for="client-emergencycontact">Emergency Contact</label></div>
-                                    <div><label for="client-emergencyphone" className="secondColumn-text">Emergency Contact Phone</label></div>
-                                    <div><input type="text" value={currentClient["emergencyContact"]} id="client-emergencycontact"/></div>
-                                    <div><input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone" className="secondColumn-input"/></div>
-                                </div>
+                                <input type="text" value={currentClient["phoneNumber"]} id="client-phone"/><br/>
+
+                                <label for="client-emergencycontact">Emergency Contact</label><br/>
+                                <input type="text" value={currentClient["emergencyContact"]} id="client-emergencycontact"/><br/>
+
+                                <label for="client-emergencyphone">Emergency Contact Phone</label><br/>
+                                <input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone"/><br/>
+
                                 <label for="client-nomilk">No Milk</label><br/>
                                 <input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk"/><br/>
 
@@ -230,20 +244,6 @@ class RouteHomepage extends Component {
                             </div>
                         </div>
                     </Modal>
-{/* 
-            <div style={{marginBottom: 40}}>
-            <RoutesNavbar routes={routes} fixed={true}/>
-            <h1 className="site-manager-page-header">Routes Page</h1>
-            <div className="site-manager-container">
-                <div >
-                    {routes.map((route, i) =>{
-                        return (
-                            <section style={{marginRight: 80, paddingLeft: 280}}>
-                                <a id={String(route)}></a>
-                                <RouteTable routenum={route} data={clients[route]} setData={this.setData}></RouteTable>
-                            </section>
-                    );})}
-                    </div> */}
                 </div>
             </div>
            

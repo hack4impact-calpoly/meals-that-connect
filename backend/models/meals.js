@@ -6,6 +6,10 @@ const mealSchema = new mongoose.Schema({
    site: {type: String, required: true},
    routeNumber: {type: String, required: true},
    startDate: {type: Date, required: true},
+
+   firstName: {type: String, required: true},
+   lastName: {type: String, required: true},
+   address: {type: String, required: true},
    mealNumber: {type: Number, required: true, default: 1},
    foodDays: {
       M: {type: Boolean, required: true},
@@ -15,7 +19,10 @@ const mealSchema = new mongoose.Schema({
       F: {type: Boolean, required: true}
    },
    frozenNumber: {type: Number, required: true, default: 0},
-   frozenDay: {type: String, required: false}
+   frozenDay: {type: String, required: false},
+   noMilk: {type: Boolean, required: true, default: false},
+   holidayFrozen: {type: Boolean, required: true, default: false},
+   index: {type: Number, required: true},
 })
 
 const Meals = mealsConnection.model("meals", mealSchema)

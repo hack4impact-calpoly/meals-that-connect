@@ -12,6 +12,8 @@ import '../../css/manager.css';
 import * as html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
+const moment = require('moment')
+
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +27,9 @@ class SiteManagerHomepage extends Component {
 
     updateWeek = (week) => {
         console.log(week)
+        console.log("here")
         this.setState({weekArr: week})
+        this.fetchMealTotals()
     }
 
     updateHoliday = (holidays) => {
@@ -33,26 +37,20 @@ class SiteManagerHomepage extends Component {
         this.setState({holidayArr: holidays})
     }
 
-    // componentDidUpdate(){
-    //     let weekArr = localStorage.getItem("week")
-    //     console.log("in update");
-    //     console.log(this.state.weeks !== weekArr)
-    //     if (weekArr !== '' && (this.state.weeks !== weekArr)) {
-    //         this.setState({weeks: weekArr})
-    //         console.log(this.state.weeks !== weekArr)
-    //     }
-    // }
-
     async componentDidMount(){
         this.fetchMealTotals()
     }
 
     async fetchMealTotals () {
-        let site = localStorage.getItem("site")
-        let info = {
-            site: site,
+        var currWeek = moment();
+        if (typeof this.state.weekArr !== 'undefined') {
+            currWeek = this.state.weekArr;
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/siteTotals', {
+        let info = {
+            site: "SLO",
+            week: currWeek
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
