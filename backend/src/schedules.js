@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
-const Schedule = require('../models/Schedule')
-const Volunteer = require('../models/Volunteer')
-const Hours = require("../models/Hours")
+const Schedule = require('../models/schedule')
+const Volunteer = require('../models/volunteer')
+const Hours = require("../models/hours")
 const Client = require("../models/clients")
 
 router.post('/update', async (req, res) => {

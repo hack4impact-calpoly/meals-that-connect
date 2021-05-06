@@ -98,9 +98,9 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
       <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} />
     )
   }
-  else if (inputType=="dropdown") {
+  else if (inputType=="dropdown1") {
     const options = [
-      { value: 'None', label: 'None' },
+      { value: 'Default', label: 'Default' },
       { value: 'M', label: 'M' },
       { value: 'T', label: 'T' },
       { value: 'W', label: 'W' },
@@ -124,7 +124,33 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
       }),
     }
     return (
-      <Select options={options} styles={customStyles} placeholder="Select"/>
+      <Select options={options} styles={customStyles} placeholder="Default"/>
+    )
+  }
+  else if (inputType=="dropdown2") {
+    const options = [
+      { value: '0', label: '0' },
+      { value: '2', label: '2' },
+      { value: '7', label: '7' }
+    ]
+    const customStyles = {
+      control: (provided, state) => ({
+        ...provided,
+        border: 'none',
+      }),
+      singleValue: (provided, state) => {
+        const padding = 3;
+    
+        return { ...provided,  padding };
+      },
+      input: (provided, state) => ({
+        ...provided,
+        padding: 0,
+        margin: 0,
+      }),
+    }
+    return (
+      <Select options={options} styles={customStyles} defaultValue='O' placeholder="0"/>
     )
   }
   else
@@ -153,6 +179,11 @@ const RouteTable = (props) => {
       width: REG_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
       },
+      { Header: 'Address',
+      accessor: 'address',
+      width: 180,
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 180, "text") 
+      },
       { Header: 'M',
       accessor: 'foodDaysM',
       width: BOOL_CELL_WIDTH,
@@ -178,26 +209,17 @@ const RouteTable = (props) => {
       width: BOOL_CELL_WIDTH,
       Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
       },
-      {
-      Header: 'Num. of Meals',
-      accessor: 'mealNumber',
-      width: REG_CELL_WIDTH,
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
-      },
-      ],},
-    {
-    Header: 'Frozen Days',
-    columns: [
       { Header: 'Frozen',
       accessor: 'frozenNumber',
       width: 80,
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "number")
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "dropdown2")
       },
       { Header: 'Frozen Day',
       accessor: 'frozenDay',
-      width: 180,
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 180, "dropdown")
-      },],},
+      width: 120,
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 120, "dropdown1")
+      },
+      ],},
 
     {
       Header: 'Additional Info',
@@ -209,12 +231,13 @@ const RouteTable = (props) => {
       Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "checkbox")
       },
       {
-      Header: 'Holiday Frozen',
+      Header: 'H. Frozen',
       accessor: 'holidayFrozen',
-      width: 150,
-      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 150, "checkbox")
+      width: 100,
+      Cell: (cellProperties) => EditableCell(cellProperties, null, null, 100, "checkbox")
       },
-      { Header: 'More Details',
+      { Header: 'Edit Details',
+        width: 120,
         Cell: row => (<div style={{textAlign: 'center'}} onClick={() => editClient(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>

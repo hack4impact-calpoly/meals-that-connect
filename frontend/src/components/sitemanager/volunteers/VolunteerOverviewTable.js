@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable, useBlockLayout } from 'react-table'
 import '../../../css/volunteerTable.css'
+import DeleteCVPopup from '../DeleteCVPopup.js'
 
 const TEXT_TYPE = "type";
 const CELL_HEIGHT = 55;
@@ -168,7 +169,10 @@ const VolunteerOverviewData = (props) => {
           width: 270,
           Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null)
           },
-          
+          { Header: 'Remove Volunteer',
+          width: 100,
+          Cell: row => (<DeleteCVPopup person={row.row.original} type={"volunteer"}/>)
+          },
       ],},
       
       ],
