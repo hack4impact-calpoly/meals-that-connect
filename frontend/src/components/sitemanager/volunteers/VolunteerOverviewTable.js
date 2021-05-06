@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable, useBlockLayout } from 'react-table'
+import { useTable, useBlockLayout, useFilters } from 'react-table'
 import '../../../css/volunteerTable.css'
+import { ColumnFilter } from '../columnFilter';
 
 const TEXT_TYPE = "type";
 const CELL_HEIGHT = 55;
@@ -98,73 +99,96 @@ const VolunteerOverviewData = (props) => {
       {
       Header: 'Volunteer Overview',
       columns: [
+          { Header: 'Volunteer ID',
+          accessor: 'volunteerID',
+          Filter: ColumnFilter,
+          filter: true,
+          width: 200,
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
+          },
           { Header: 'First Name',
           accessor: 'firstName',
+          Filter: ColumnFilter,
+          filter: true,
           width: 200,
           Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
+          Filter: ColumnFilter,
+          filter: true,
           width: 200,
           Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
           },
           { Header: 'Org.',
           accessor: 'site',
+          filter: false,
           width: 100,
           Cell: (cellProperties) => EditableCell(cellProperties, 99, TEXT_TYPE, null)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
+          filter: false,
           width: 300,
           Cell: (cellProperties) => EditableCell(cellProperties, 299, "tel", null)
           },
           { Header: 'Email',
           accessor: 'email',
+          filter: false,
           width: 350,
           Cell: row => <div style={{width: 349}}>{row.row.original.email}</div>
           },
           { Header: 'Using Digital System?',
           accessor: 'digitalSystem',
+          filter: false,
           width: 100,
           Cell: (cellProperties) => EditableCell(cellProperties, 99, "checkbox", null)
           },
           { Header: 'M',
           accessor: 'monday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M')
           },
           { Header: 'T',
           accessor: 'tuesday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T')
           },
           { Header: 'W',
           accessor: 'wednesday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W')
           },
           { Header: 'Th',
           accessor: 'thursday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th')
           },
           { Header: 'F',
           accessor: 'friday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F')
           },
           { Header: 'Volunteer Certificate Signed?',
           accessor: 'completedOrientation',
+          filter: false,
           width: 130,
           Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null)
           },
           { Header: 'Role',
           accessor: 'role',
+          filter: false,
           width: 130,
           Cell: (cellProperties) => EditableCell(cellProperties, 129, TEXT_TYPE, null)
           },
           { Header: 'Notes',
           accessor: 'notes',
+          filter: false,
           width: 270,
           Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null)
           },
@@ -212,7 +236,8 @@ function VolunteerOverviewTable({ columns, data }) {
     columns,
     data,
     },
-    useBlockLayout
+    useFilters,
+    useBlockLayout,
     )
 
   // Render the UI for your table
@@ -222,7 +247,9 @@ function VolunteerOverviewTable({ columns, data }) {
       {headerGroups.map(headerGroup => (
         <tr {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map(column => (
-            <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+            <th {...column.getHeaderProps()}>{column.render('Header')}
+                <div>{(column.canFilter && column.filter === true) ? column.render('Filter') : null}</div>
+            </th>
           ))}
         </tr>
       ))}
