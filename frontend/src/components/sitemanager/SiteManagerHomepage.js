@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Modal from 'react-modal';
 import MealTotals from './routes/mealTotals';
 import RoutesNavbar from './routes/RoutesNavbar';
 import PopupMealTotals from './routes/PopupMealTotals';
@@ -16,6 +17,7 @@ class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showModal: false,
             totals: null,
             routes: [],
             weekArr: [],
@@ -82,8 +84,17 @@ class SiteManagerHomepage extends Component {
         ;
     }
 
+    handleOpenModal = () => {
+        this.setState({showModal: true});
+    }
+    
+    handleCloseModal = () => {
+        this.setState({showModal: false});
+    }
+
     render() {
         let {totals, routes, weekArr, holidayArr} = this.state
+        console.log(weekArr)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
@@ -96,14 +107,20 @@ class SiteManagerHomepage extends Component {
                         </div>}
                         <div className = "confirmation-buttons" style={{ display:'flex'}}>
                             <h3>Confirm Total For:</h3>
-                            <PopupMealTotals day={0}/>
-                            <PopupMealTotals day={1}/>
-                            <PopupMealTotals day={2}/>
-                            <PopupMealTotals day={3}/>
-                            <PopupMealTotals day={4}/>
+                            <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/>
                         </div>
                         <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
                     </div>
+                    <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
+                        <div id="order-modal-header">
+                            <h1>Successfully Submitted Order!</h1>
+                            <button onClick={this.handleCloseModal} id="order-modal-button">Close</button>
+                        </div>
+                    </Modal>
                 </div>
             </div>
         );
