@@ -149,6 +149,60 @@ router.post('/update-client-routes', async (req, res) => {
 });
 
 router.post('/update-client', async (req, res) => {
+  const { firstName,
+          lastName,
+          address,
+          foodDays,
+          frozenNumber,
+          frozenDay,
+          phoneNumber,
+          emergencyContact,
+          emergencyPhone,
+          noMilk,
+          mealNumber,
+          specialInstructions,
+          clientC2,
+          NE,
+          email,
+          holidayFrozen,
+          routeNumber,
+          site,
+          index,
+          id} = req.body
+
+  Client.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              address: address,
+              foodDays: foodDays,
+              frozenNumber: frozenNumber,
+              frozenDay: frozenDay,
+              phoneNumber: phoneNumber,
+              emergencyContact: emergencyContact,
+              emergencyPhone: emergencyPhone,
+              noMilk: noMilk,
+              mealNumber: mealNumber,
+              specialInstructions: specialInstructions,
+              clientC2: clientC2,
+              NE: NE,
+              email: email,
+              holidayFrozen: holidayFrozen,
+              routeNumber: routeNumber,
+              site: site,
+              index: index})
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
+  res.send("Information updated");
+});
+
+router.post('/update-client-constant-route', async (req, res) => {
   const { id, 
           firstName, 
           lastName, 
@@ -192,12 +246,18 @@ router.post('/update-client', async (req, res) => {
 
 function getRouteTotals(clientList) {
     var days = ["M", "T", "W", "Th", "F"]
-    var frozenTotal = [0,0,0,0,0];
-    var mealTotal = [0,0,0,0,0];
+    var whiteBagTotal = [0, 0, 0, 0, 0]
+    var frozenTotal = [0, 0, 0, 0, 0];
+    var mealTotal = [0, 0, 0, 0, 0];
     for (var index in clientList) {
       for (var day in days) {
         if (clientList[index].foodDays[days[day]]) {
-          mealTotal[day] += clientList[index].mealNumber
+          if(clientList[index].noMilk == false) {
+            mealTotal[day] += clientList[index].mealNumber
+          }
+          else {
+            whiteBagTotal[day] += clientList[index].mealNumber
+          }
         }
                 
         if (clientList[index].frozenDay == days[day]){
@@ -205,7 +265,7 @@ function getRouteTotals(clientList) {
         }
       }
     }
-    var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal}
+    var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal, "whitebag": whiteBagTotal}
     return routeTotals
   }
 

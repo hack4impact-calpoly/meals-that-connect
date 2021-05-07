@@ -21,7 +21,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   else {
     useStateCall = cellProperties["value"];
   }
-
+  console.log(cellProperties);
   var [value, setValue] = React.useState(useStateCall);
   var [selected, setSelected] = React.useState(value);
 
@@ -107,7 +107,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["clientID"])}/>
+      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={() => updateCheckbox(cellProperties["clientID"])}/>
     )
   }
   else if (inputType === "dropdown") {

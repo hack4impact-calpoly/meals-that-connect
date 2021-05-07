@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select'
-import "../../css/Modal.css"
+import "../../../css/Modal.css"
 
 class ModalContent extends Component {
     constructor(props) {
@@ -36,7 +36,6 @@ class ModalContent extends Component {
     }
 
     handleChangeMoreInfo = (name, value) => {
-        console.log("moreInfo")
         if(name ==="foodDays"){
             let foodDays = this.state.foodDays
             foodDays[value] = !(this.state.foodDays[value])
@@ -108,7 +107,16 @@ class ModalContent extends Component {
                             id="client-address" 
                             style={{width: "1130px"}}
                             onChange={e =>  this.handleChangeMoreInfo("address", e.target.value)}/><br/>
+                        <label for="client-route">Route Number</label><br/>
+
+                        <input 
+                            type="text" 
+                            value={currentClient["routeNumber"]} 
+                            id="client-route" 
+                            style={{width: "1130px"}}
+                            onChange={e =>  this.handleChangeMoreInfo("routeNumber", e.target.value)}/><br/>
                         <label for="client-mealnumber">Num. of Meals</label><br/>
+
                         <input 
                             type="text" 
                             value={currentClient["mealNumber"]} 

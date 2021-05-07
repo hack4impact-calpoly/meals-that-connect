@@ -24,12 +24,10 @@ class SiteManagerHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
         this.setState({weekArr: week})
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
@@ -61,6 +59,7 @@ class SiteManagerHomepage extends Component {
         })
         const data = await response.json();
         this.setState({totals: data.meals, routes: data.routes})
+        console.log(this.state.totals)
     }
 
     printDocument() {

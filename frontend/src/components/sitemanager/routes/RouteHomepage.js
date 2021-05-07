@@ -12,7 +12,6 @@ class RouteHomepage extends Component {
             clients: {},
             routes: [],
             showModal: false,
-            firstName: "",
             currentClient:  {
                 firstName: null,
                 lastName: null,
@@ -116,7 +115,7 @@ class RouteHomepage extends Component {
             body: JSON.stringify(clientID)
         })
         let client = await response.json()
-        this.setState({firstName: client.firstName, currentClient: client, showModal: true})
+        this.setState({currentClient: client, showModal: true})
     }
     
     handleCloseModal = () => {
@@ -151,7 +150,7 @@ class RouteHomepage extends Component {
             index: newClient.index,
         }
         /*Update Constant Fields*/
-        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client', {
+        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-constant-route', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
