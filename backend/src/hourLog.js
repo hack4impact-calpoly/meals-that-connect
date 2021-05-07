@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
-const Volunteer = require('../models/Volunteer');
-const Hours = require("../models/Hours")
+const Volunteer = require('../models/volunteer');
+const Hours = require("../models/hours")
 
 router.post('/edit', async (req, res) => {
     console.log(req.body)

@@ -32,6 +32,22 @@ router.post('/addClient', async (req, res) => {
   })
 })
 
+router.post('/delete', async (req, res) => {
+  const { id } = req.body
+  Client.deleteOne({_id: id}).then(function(result) {
+    if (result) {
+      console.log("Deleted client")
+      res.status(200).send("Deleted")   
+      return   
+    }
+    else {
+      res.send(500).send("Failed to delete")
+    }
+    }).catch(err => {
+      res.send(500).send("Failed to delete")
+  })
+})
+
 router.post('/siteTotals', async (req, res) => {
   const {site} = req.body
   Client.find({site: site}, function (err, data) {

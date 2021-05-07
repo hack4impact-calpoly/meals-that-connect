@@ -82,6 +82,10 @@ class ClientTableContainer extends Component {
         let client = await response.json()
         this.setState({currentClient: client, showModal: true})
     }
+    refreshData = (client) =>
+    {
+        this.setState({clients: this.state.clients})
+    }
     
     handleCloseModal = () => {
         this.setState({showModal: false});
@@ -133,7 +137,7 @@ class ClientTableContainer extends Component {
                     <button>Add Client</button>
                 </Link>
                 <div className="site-manager-container">
-                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal}/> :
+                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}

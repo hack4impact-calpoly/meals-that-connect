@@ -1,8 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require("cors");
-require('dotenv').config()
-
 
 const app = express();
 app.use(cors());
@@ -18,6 +16,7 @@ var meals = require('./src/meals')
 var hours = require('./src/hourLog')
 var orders = require('./src/getOrderTotals')
 var schedules = require('./src/schedules')
+var profile = require('./src/profile')
 
 app.use('/login', login)
 app.use('/signup', signup)
@@ -28,6 +27,7 @@ app.use('/meals', meals)
 app.use('/hours', hours)
 app.use('/orders', orders)
 app.use('/schedules', schedules)
+app.use('/profile', profile)
 
 app.get('/', (req, res) => {
     res.send('Hi from Meals that Connect!')
