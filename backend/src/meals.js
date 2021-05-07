@@ -21,10 +21,12 @@ router.post('/', async (req, res) => {
       'site': client.site,
       'routeNumber': client.routeNumber, 
       'startDate': date,
-      'mealNumber': client.mealNumber, 
       'foodDays': client.foodDays, 
+      'mealNumber': client.mealNumber, 
       'frozenNumber': client.frozenNumber, 
       'frozenDay': client.frozenDay,
+      'noMilk': client.noMilk, 
+      'holidayFrozen': client.holidayFrozen,
       'index': client.index})
  
    meal.save();
@@ -40,11 +42,11 @@ router.post('/siteTotals', async (req, res) => {
       console.log(err)
     }
     else {
-      console.log(week)
-      console.log((moment(week)).week())
+      // console.log(week)
+      // console.log((moment(week)).week())
       data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : -1 )
       data = data.filter(function (client) {return (moment(client.startDate)).week() === (moment(week)).week()})
-      console.log(data)
+      // console.log(data)
       let meals = {}
       let prevRoute = null
       let routeData = []
@@ -85,9 +87,8 @@ router.post('/routeSite', async (req, res) => {
 
 router.post('/site', async (req, res) => {
   const {site, week} = req.body
-  console.log("here")
-  console.log(site)
-  console.log(week)
+  // console.log(site)
+  // console.log(week)
   Meal.find({site: site, index: {$exists:true}}, function (err, clients) {
     if (err) {
       console.log(err)
@@ -95,9 +96,9 @@ router.post('/site', async (req, res) => {
     else {
       clients = clients.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
       clients = clients.filter(function (client) {return (moment(client.startDate)).week() === (moment(week)).week()})
-      console.log(clients)
-      console.log(week)
-      console.log((moment(week)).week())
+      // console.log(clients)
+      // console.log(week)
+      // console.log((moment(week)).week())
       for (let i = 0; i < clients.length; i++) {
         clients[i].index = i
       }
@@ -172,5 +173,28 @@ function getRouteTotals(clientList) {
     var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal}
     return routeTotals
   }
+
+  router.post('/get-clients', async (req, res) => {
+    const {site} = req.body
+    Client.find({site: site}, function (err, clients) {
+      if (err) { 
+        console.log(err) 
+        res.send("Invalid site")
+      }
+      else {
+        output = {}
+        clients.forEach(client => {
+          let ID = client._id
+          let clientOutput = {
+            firstName: client.firstName,
+            lastName: client.lastName,
+            address: client.address,
+          }
+          output[ID] = clientOutput
+        })
+        res.send(output)
+      }
+    })
+  });
 
 module.exports = router;

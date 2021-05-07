@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RouteTable from './RouteTable';
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
+import { getWeekArr } from '../calendar'
 import '../../../css/Modal.css';
 
 const moment = require('moment')
@@ -52,6 +53,7 @@ class RouteHomepage extends Component {
 
     async componentDidMount(){
         await this.fetchClients()
+        this.fetchRoutes()
     }
     
     componentWillMount() {
@@ -62,15 +64,15 @@ class RouteHomepage extends Component {
         console.log(holidays)
         this.setState({holidayArr: holidays})
     }
-    async fetchClients () {
-        var currWeek = moment();
+
+    async fetchRoutes () {
+        var mondayDate = getWeekArr(new Date)[1]
         if (typeof this.state.weekArr !== 'undefined') {
-            currWeek = this.state.weekArr[1];
+            mondayDate = this.state.weekArr[1];
         }
-        console.log(currWeek)
         let info = {
             site: localStorage.getItem("site"),
-            week: currWeek
+            week: mondayDate
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/site', {
             method: 'POST',
@@ -86,6 +88,7 @@ class RouteHomepage extends Component {
         let routes = []
         for (let i = 0; i < data.length; i++) {
             let client = data[i]
+            console.log(client)
             if (i > 0 && client.routeNumber !== prevRoute) {
                 clients[prevRoute] = routeData
                 // make sure null does not get addded to routes array
@@ -96,6 +99,19 @@ class RouteHomepage extends Component {
             // filters out clients with unassined route numbers
             if (client.routeNumber !== "-1") {
                 prevRoute = client.routeNumber
+                // console.log(this.state.clientData)
+                // console.log(client.clientID)
+                let clientData = this.state.clientData[client.clientID]
+                if (typeof clientData !== 'undefined') {
+                    client.firstName = clientData.firstName
+                    client.lastName = clientData.lastName
+                    client.address = clientData.address
+                } 
+                else {
+                    client.firstName = "Test"
+                    client.lastName = "Test"
+                    client.address = "Test"
+                }
                 routeData.push(client)
             }
         }
@@ -104,6 +120,22 @@ class RouteHomepage extends Component {
             routes.push(prevRoute)
         }
         this.setState({clients: clients, routes: routes}) 
+    }
+
+    async fetchClients () {
+
+        let info = {
+            site: localStorage.getItem("site")
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/get-clients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        })
+        const data = await response.json();
+        this.setState({clientData: data}) 
     }
 
     setData = (data, route) => {
@@ -126,8 +158,7 @@ class RouteHomepage extends Component {
         this.setState({showModal: false});
     }
     
-    formatDate = (date) => {
-        console.log(date)
+    formatDate = (date) => { 
         var month = (1 + date.getMonth()).toString();
         var day = date.getDate().toString();
         return month + '/' + day;
@@ -137,7 +168,7 @@ class RouteHomepage extends Component {
         let {routes, clients, weekArr} = this.state;
         let currentClient = this.state.currentClient;
         console.log(weekArr)
-        console.log(weekArr ? " true" : "false")
+        console.log(this.state)
 
         return (
             <div style={{marginBottom: 40}}>

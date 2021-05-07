@@ -23,13 +23,13 @@ class SiteManagerHomepage extends Component {
             totals: null,
             routes: [],
             weekArr: [],
-            holidayArr: []
+            holidayArr: [],
+            clients: {},
          };
     }
 
     updateWeek = (week) => {
         console.log(week)
-        console.log("here")
         this.setState({weekArr: week})
         this.fetchMealTotals()
     }
