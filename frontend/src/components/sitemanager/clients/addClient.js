@@ -50,7 +50,6 @@ class AddClient extends Component {
     }
 
     render() {
-        console.log(this.state.site)
         return (
             <form style={{"padding": "100px"}} onSubmit={this.addClient}>
                 <h1>Add Client</h1>
