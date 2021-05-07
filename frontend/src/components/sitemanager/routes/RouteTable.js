@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
 
 const FOOD_DAYS = "foodDays";
-const FROZEN_DAYS = "frozenDay";
 const BOOL_CELL_WIDTH = 50;
 const REG_CELL_WIDTH = 130;
 const CELL_HEIGHT = 60;
@@ -21,7 +20,6 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   else {
     useStateCall = cellProperties["value"];
   }
-  console.log(cellProperties);
   var [value, setValue] = React.useState(useStateCall);
   var [selected, setSelected] = React.useState(value);
 
@@ -110,12 +108,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
       <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={() => updateCheckbox(cellProperties["clientID"])}/>
     )
   }
-  else if (inputType === "dropdown") {
-    if(value.length <= 0) {
-      value = "None"
-    }
-  }
-  else if (inputType=="dropdown1") {
+  else if (inputType ==="dropdown1") {
     const options = [
       { value: 'Default', label: 'Default' },
       { value: 'M', label: 'M' },
@@ -149,7 +142,7 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
         onChange={e => updateSelect(cellProperties["clientID"], e.value)}/>
     )
   }
-  else if (inputType=="dropdown2") {
+  else if (inputType ==="dropdown2") {
     const options = [
       { value: '0', label: '0' },
       { value: '2', label: '2' },

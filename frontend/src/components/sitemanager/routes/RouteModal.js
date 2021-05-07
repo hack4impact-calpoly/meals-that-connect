@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import Select from 'react-select'
 import "../../../css/Modal.css"
 
+const constantFields = ["firstName", "lastName", "address", "phoneNumber", "emergencyContact", "emergencyPhone", "speicalInstructions", "clientC2", "NE", "email"]
+
 class ModalContent extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            constantFlag: 0,
+            weeklyFlag: 0,
             firstName: this.props.currentClient.firstName,
             lastName: this.props.currentClient.lastName,
             address: this.props.currentClient.address,
@@ -36,6 +40,7 @@ class ModalContent extends Component {
     }
 
     handleChangeMoreInfo = (name, value) => {
+        this.updatePropFlag(name)
         if(name ==="foodDays"){
             let foodDays = this.state.foodDays
             foodDays[value] = !(this.state.foodDays[value])
@@ -43,6 +48,15 @@ class ModalContent extends Component {
         }
         else {
             this.setState({[name]: value})
+        }
+    }
+
+    updatePropFlag = (name) => {
+        if(constantFields.includes(name)) {
+            this.setState({constantFlag: 1})
+        }
+        else {
+            this.setState({weeklyFlag: 1})
         }
     }
 
@@ -79,7 +93,7 @@ class ModalContent extends Component {
                     <div id="client-info-header" style={{position: "fixed"}}>
                         <h1>Client Information</h1>
                         <button 
-                            onClick={() => this.props.submit(this.state, new Date())} 
+                            onClick={() => this.props.submit(this.state, new Date(), this.state.constantFlag, this.state.weeklyFlag)} 
                             style={{fontSize: "18px"}} 
                             >Exit and SAVE</button>
                         <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px"}}>{"Exit and DON'T SAVE"}</button>
