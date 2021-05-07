@@ -1,93 +1,142 @@
-
-.site-manager-page{
-    margin-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.site-manager-page {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .site-manager-page-header {
-    margin-bottom: 20px;
-    margin-top: 120px;
+  margin-bottom: 20px;
+  margin-top: 120px;
 }
 
 .site-manager-container {
-    display: flex;
-    flex-direction: row;
-    padding: 10px 25px;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 25px;
 }
 .print-meals {
-    margin-top: 20px;
-    //background-color: #b7f8ac;
+  margin-top: 20px;
+  background-color: #b7f8ac;
 }
 
-.site-manager-container input{
-    padding: 10px;
-    border: none;
-    background: none;
-    width: 100%;
+.site-manager-container input {
+  padding: 10px;
+  border: none;
+  background: none;
+  width: 100%;
 }
 
-.site-manager-container input:hover{
-    padding: 10px;
-    border: none;
-    cursor: pointer;
+.site-manager-container input:hover {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
 }
 
 .site-manager-container input:focus {
-    outline: none !important;
-    background: white;
-    cursor: default;
-    box-shadow: 0 0 15px #719ECE;
+  outline: none !important;
+  background: white;
+  cursor: default;
+  box-shadow: 0 0 15px #719ece;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-#popup { 
-    overflow: hidden;
-    text-align: center;
-    border: none;
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    margin: 5px;
+#popup {
+  overflow: hidden;
+  text-align: center;
+  border: none;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  margin: 10px;
 }
-#popup-div
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#popup-div button { 
-    overflow: hidden;
-    padding: 12px 28px;
-    border: none;
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-property: color, background-color;
-    transition-property: color, background-color;
-    margin: 5px;
-    width: 150px;
+#popup-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.popup-button-cancel:hover, .popup-button-cancel button-fade:focus, .popup-button-cancel button-fade:active {
-    background-color: #ff4000;
-    color: white;
-    cursor: pointer;
+#popup-div button {
+  overflow: hidden;
+  padding: 12px 28px;
+  border: none;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+  margin: 10px;
+  width: 150px;
 }
 
-.popup-button-submit:hover, .popup-button-submit button-fade:focus, .popup-button-submit button-fade:active {
-    background-color: #00b000;
-    color: white;
-    cursor: pointer;
+.popup-button-cancel:hover,
+.popup-button-cancel button-fade:focus,
+.popup-button-cancel button-fade:active {
+  background-color: #ff4000;
+  color: white;
+  cursor: pointer;
+}
+
+.popup-button-submit:hover,
+.popup-button-submit button-fade:focus,
+.popup-button-submit button-fade:active {
+  background-color: #00b000;
+  color: white;
+  cursor: pointer;
+}
+
+/**************modal css*****************/
+
+.order-modal {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: 20vw;
+  left: 40vw;
+  background-color: white;
+  border: 2px solid black;
+}
+
+#order-modal-header {
+  overflow: hidden;
+  text-align: center;
+  border: none;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  margin: 20px;
+}
+
+#order-modal-header button {
+  overflow: hidden;
+  padding: 12px 28px;
+  border: none;
+  font-family: "Mulish", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+  margin: 10px;
+  width: 150px;
+}
+
+#order-modal-button:hover,
+#order-modal-button button-fade:focus,
+#order-modal-button button-fade:active {
+  background-color: #2098d1;
+  color: white;
+  cursor: pointer;
 }

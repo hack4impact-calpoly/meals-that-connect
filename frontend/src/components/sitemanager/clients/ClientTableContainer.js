@@ -73,6 +73,11 @@ class ClientTableContainer extends Component {
         this.setState({clients: data})
     }
 
+    refreshData = (client) =>
+    {
+        this.setState({clients: this.state.clients})
+    }
+
     handleOpenModal = (currentClient) => {
         this.setState({showModal: true, currentClient: currentClient});
     }
@@ -92,7 +97,7 @@ class ClientTableContainer extends Component {
                     <button>Add Client</button>
                 </Link>
                 <div className="site-manager-container">
-                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal}/> :
+                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}
