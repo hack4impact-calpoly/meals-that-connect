@@ -188,9 +188,9 @@ const Table = (props) => {
         []
       )
 
-      function editClient(client) {
+      function editClient(id) {
         console.log("Editing client")
-        props.showModal(client)
+        props.showModal(id)
       } 
     
     const data = React.useMemo(

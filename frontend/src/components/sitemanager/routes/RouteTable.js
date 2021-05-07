@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
 
 const FOOD_DAYS = "foodDays";
-const FROZEN_DAYS = "frozenDay";
 const BOOL_CELL_WIDTH = 50;
 const REG_CELL_WIDTH = 130;
 const CELL_HEIGHT = 60;
@@ -15,15 +14,12 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   // We need to keep and update the state of the cell normally
   var useStateCall = 0;
 
-  if (foodOrFrozen != null)
-  {
+  if (foodOrFrozen != null) {
     useStateCall = cellProperties["original"][foodOrFrozen][day];
   }
-  else
-  {
+  else {
     useStateCall = cellProperties["value"];
   }
-
   var [value, setValue] = React.useState(useStateCall);
   var [selected, setSelected] = React.useState(value);
 
@@ -86,6 +82,20 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
     }
   }
   
+  const updateSelect = async (clientID, newVal) => {
+    const updateData = {
+        id: clientID,
+        key: "frozenDay",
+        data: newVal
+      }
+    await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+    })
+  }
 
   /*
     check if value is a boolean
@@ -95,10 +105,10 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   if (value === true || value === false)
   {
     return (
-      <input readonly="readonly" type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} />
+      <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={selected} onChange={() => updateCheckbox(cellProperties["clientID"])}/>
     )
   }
-  else if (inputType=="dropdown1") {
+  else if (inputType ==="dropdown1") {
     const options = [
       { value: 'Default', label: 'Default' },
       { value: 'M', label: 'M' },
@@ -124,10 +134,15 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
       }),
     }
     return (
-      <Select options={options} styles={customStyles} placeholder="Default"/>
+      <Select 
+        options={options} 
+        styles={customStyles} 
+        placeholder="Select" 
+        defaultValue={{value: value, label: value}} 
+        onChange={e => updateSelect(cellProperties["clientID"], e.value)}/>
     )
   }
-  else if (inputType=="dropdown2") {
+  else if (inputType ==="dropdown2") {
     const options = [
       { value: '0', label: '0' },
       { value: '2', label: '2' },
@@ -156,12 +171,10 @@ const EditableCell = (cellProperties, foodOrFrozen, day, width, inputType) => {
   else
   {
     return (
-        <input readonly="readonly" type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value}/>
+        <input type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(e.target.value, cellProperties["value"], cellProperties["clientID"])}/>
     )
   }
-
 }
-
 const RouteTable = (props) => {
   const columns = React.useMemo(
     () => [
@@ -248,9 +261,8 @@ const RouteTable = (props) => {
     []
   )
 
-  function editClient(client) {
-    console.log("Editing client")
-    props.showModal(client)
+  function editClient(id) {
+    props.showModal(id)
   }  
 
   return (
