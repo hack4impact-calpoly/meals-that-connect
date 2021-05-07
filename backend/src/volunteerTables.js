@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Volunteer = require("../models/Volunteer")
-const Hours = require("../models/Hours")
+const Volunteer = require("../models/volunteer")
+const Hours = require("../models/hours")
 
 // Takes in a volunteer's email and the corresponding category that is being
 // updated and updates the database

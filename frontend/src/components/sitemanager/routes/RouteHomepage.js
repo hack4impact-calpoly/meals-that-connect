@@ -12,7 +12,6 @@ class RouteHomepage extends Component {
             clients: {},
             routes: [],
             showModal: false,
-            firstName: "",
             currentClient:  {
                 firstName: null,
                 lastName: null,
@@ -116,14 +115,14 @@ class RouteHomepage extends Component {
             body: JSON.stringify(clientID)
         })
         let client = await response.json()
-        this.setState({firstName: client.firstName, currentClient: client, showModal: true})
+        this.setState({currentClient: client, showModal: true})
     }
     
     handleCloseModal = () => {
         this.setState({showModal: false});
     }
     
-    submit = async (newClient, date) => {
+    submit = async (newClient, date, constantFlag, weeklyFlag) => {
         let updateWeekly = {
             date: date,
             client: newClient
@@ -151,21 +150,26 @@ class RouteHomepage extends Component {
             index: newClient.index,
         }
         /*Update Constant Fields*/
-        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateConstant)
-        })
+        if(constantFlag === 1) {
+            await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-constant-route', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateConstant)
+            })
+        }
+
         /*Update Weekly Fields*/
-        await fetch(process.env.REACT_APP_SERVER_URL + 'meals/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateWeekly)
-        })
+        if(weeklyFlag === 1) {
+            await fetch(process.env.REACT_APP_SERVER_URL + 'meals/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateWeekly)
+            })
+        }
         window.location.reload()
     }
 
@@ -173,7 +177,7 @@ class RouteHomepage extends Component {
         var month = (1 + date.getMonth()).toString();
         var day = date.getDate().toString();
         return month + '/' + day;
-      }
+    }
 
     render() {
         let {routes, clients, weekArr} = this.state;

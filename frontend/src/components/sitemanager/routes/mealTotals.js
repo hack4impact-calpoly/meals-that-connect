@@ -179,12 +179,12 @@ const Table = (props) => {
     // Get white bag data for each route, placeholder for now
     let whiteBagData = {
       route: routeNum,
-      info: "-", 
-      monday: "-", 
-      tuesday: "-",
-      wednesday: "-",
-      thursday: "-",
-      friday: "-",
+      info: "White Bags", 
+      monday: props.data[i]['whitebag'][0], 
+      tuesday: props.data[i]['whitebag'][0],
+      wednesday: props.data[i]['whitebag'][0],
+      thursday: props.data[i]['whitebag'][0],
+      friday: props.data[i]['whitebag'][0],
     }
     // Get meal data for each route
     let mealData = {

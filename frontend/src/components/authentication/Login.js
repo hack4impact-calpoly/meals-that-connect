@@ -61,6 +61,7 @@ class Login extends Component {
 
     login = (e) => {
         e.preventDefault();
+        console.log("here")
 
         if (this.state.userType === "") {
             this.setState({emptyUser: true})

@@ -20,8 +20,8 @@ jobs:
     - id: backend-deployment
       uses: Zimboboys/express-deployment-aws@v0.1.0
       with:
-        s3-bucket: 'example-api-deployment'
-        stack-name: 'example-api-deployment-stack'
+        s3-bucket: 'meals-that-connect-deployment'
+        stack-name: 'meals-that-connect-deployment-stack'
       env:
         ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}

@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Spinner from "react-bootstrap/Spinner"
 import {Link} from "react-router-dom";
 import Modal from 'react-modal';
-
+import ClientModal from './ClientModal';
 
 class ClientTableContainer extends Component {
     constructor(props) {
@@ -25,13 +25,7 @@ class ClientTableContainer extends Component {
                     F: null
                 },
                 frozenNumber: null,
-                frozenDay: {
-                    M: null,
-                    T: null,
-                    W: null,
-                    Th: null,
-                    F: null
-                },
+                frozenDay: null,
                 phoneNumber: null,
                 emergencyContact: null,
                 emergencyPhone: null,
@@ -44,7 +38,8 @@ class ClientTableContainer extends Component {
                 holidayFrozen: null,
                 routeNumber: null,
                 site: null,
-                index: null
+                index: null,
+                _id: null
             }
         }
     }
@@ -73,18 +68,68 @@ class ClientTableContainer extends Component {
         this.setState({clients: data})
     }
 
-    handleOpenModal = (currentClient) => {
-        this.setState({showModal: true, currentClient: currentClient});
+    handleOpenModal = async (id) => {
+        let clientID = {
+            _id: id
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(clientID)
+        })
+        let client = await response.json()
+        this.setState({currentClient: client, showModal: true})
+    }
+    refreshData = (client) =>
+    {
+        this.setState({clients: this.state.clients})
     }
     
     handleCloseModal = () => {
         this.setState({showModal: false});
     }
 
-    render() {
-        console.log(this.state.clients)
-        let currentClient = this.state.currentClient;
-      
+    submit = async (newClient, date) => {
+        let updateWeekly = {
+            date: date,
+            client: newClient
+        }
+        let updateConstant = {
+            id: newClient._id,
+            firstName: newClient.firstName,
+            lastName: newClient.lastName,
+            address: newClient.address,
+            foodDays: newClient.foodDays,
+            frozenNumber: newClient.frozenNumber,
+            frozenDay: newClient.frozenDay,
+            phoneNumber: newClient.phoneNumber,
+            emergencyContact: newClient.emergencyContact,
+            emergencyPhone: newClient.emergencyPhone,
+            noMilk: newClient.noMilk,
+            mealNumber: newClient.mealNumber,
+            specialInstructions: newClient.specialInstructions,
+            clientC2: newClient.clientC2,
+            NE: newClient.NE,
+            email: newClient.email,
+            holidayFrozen: newClient.holidayFrozen,
+            routeNumber: newClient.routeNumber,
+            site: newClient.site,
+            index: newClient.index,
+        }
+        /*Update Constant Fields*/
+        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateConstant)
+        })
+        window.location.reload()
+    }
+
+    render() { 
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
@@ -92,94 +137,16 @@ class ClientTableContainer extends Component {
                     <button>Add Client</button>
                 </Link>
                 <div className="site-manager-container">
-                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal}/> :
+                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}
                 </div>
                 <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal-client" overlayClassName="Overlay">
-                    <div id="modal-content">
-                        <div id="client-info-header">
-                            <h1>Client Information</h1>
-                            <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Save and Exit</button>
-                        </div>
-                        <div id="client-info-body">
-                            <div className="two-column">
-                                <div><label for="client-firstname">First Name</label></div>
-                                <div><label for="client-lastname">Last Name</label></div>
-                                <div><input type="text" value={currentClient["firstName"]} id="client-firstname"/></div>
-                                <div><input type="text" value={currentClient["lastName"]} id="client-lastname"/></div>
-                            </div>
-                            <label for="client-address">Address</label><br/>
-                            <input type="text" value={currentClient["address"]} id="client-address" style={{width: "1130px"}}/><br/>
-                            <label for="client-mealnumber">Num. of Meals</label><br/>
-                            <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber" style={{width: "1130px"}}/><br/>
-                            <label>Food Days</label>
-                            <table className="add-table">
-                                <tr>
-                                    <th>Monday</th>
-                                    <th>Tuesday</th>
-                                    <th>Wednesday</th>
-                                    <th>Thursday</th>
-                                    <th>Friday</th>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t"/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w"/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th"/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/></td>
-                                </tr>
-                            </table>
-                            <br/>
-                            <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                            <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber" style={{width: "1130px"}}/><br/>
-
-                            <label>Frozen Days</label>
-                            <table className="add-table">
-                                <tr>
-                                    <th>Monday</th>
-                                    <th>Tuesday</th>
-                                    <th>Wednesday</th>
-                                    <th>Thursday</th>
-                                    <th>Friday</th>
-                                </tr>
-                                <tr>
-                                    <td><input type="radio" checked={currentClient["frozenDay"] === "M"} id="client-frozenday-m"/></td>
-                                    <td><input type="radio" checked={currentClient["frozenDay"] === "T"} id="client-frozenday-t"/></td>
-                                    <td><input type="radio" checked={currentClient["frozenDay"] === "W"} id="client-frozenday-w"/></td>
-                                    <td><input type="radio" checked={currentClient["frozenDay"] === "Th"} id="client-frozenday-th"/></td>
-                                    <td><input type="radio" checked={currentClient["frozenDay"] === "F"} id="client-frozenday-f"/></td>
-                                </tr>
-                            </table>
-
-                            <label for="client-phone">Phone Number</label><br/>
-                            <input type="text" value={currentClient["phoneNumber"]} id="client-phone" style={{width: "1130px"}}/><br/>
-                            <div className="two-column">
-                                <div><label for="client-emergencycontact">Emergency Contact</label></div>
-                                <div><label for="client-emergencyphone" className="secondColumn-text">Emergency Contact Phone</label></div>
-                                <div><input type="text" value={currentClient["emergencyContact"]} id="client-emergencycontact"/></div>
-                                <div><input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone" className="secondColumn-input"/></div>
-                            </div>
-                            <label for="client-nomilk">No Milk</label><br/>
-                            <input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk"/><br/>
-
-                            <label for="client-specialinstructions">Special Instructions</label><br/>
-                            <input type="text" value={currentClient["specialInstructions"]} id="client-specialinstructions"/><br/>
-
-                            <label for="client-c2">C2 Client</label><br/>
-                            <input type="checkbox" checked={currentClient["clientC2"]} id="client-c2"/><br/>
-
-                            <label for="client-ne">N/E</label><br/>
-                            <input type="text" value={currentClient["NE"]} id="client-ne"/><br/>
-
-                            <label for="client-email">Email Address</label><br/>
-                            <input type="text" value={currentClient["email"]} id="client-email"/><br/>
-
-                            <label for="client-holidayfrozen">Holiday Frozen</label><br/>
-                            <input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen"/><br/>
-                        </div>
-                    </div>
+                    <ClientModal
+                        currentClient={this.state.currentClient}
+                        submit={this.submit}
+                        handleCloseModal={this.handleCloseModal}/>
                 </Modal>
             </div>
         );
