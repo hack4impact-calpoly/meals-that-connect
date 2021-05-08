@@ -75,40 +75,25 @@ function updateValues (value, type, props, dayIndex){
 
 function EditableCell (cellProperties, width, props) {
     var changedFlag = false;
-    //console.log(cellProperties)
 
     const startDate = props.weekArr[1]; // index 1 is monday
     const site = localStorage.getItem("site");
     const type = cellProperties['row']['original']['route']; // route # or meal prep or staff or computer
-    const key = cellProperties["row"]["id"];
-    const val = cellProperties["value"]
-    //console.log(type);
-    //console.log(cellProperties['column']['id'])
-    console.log(val);
-    console.log(cellProperties)
-
-    const [value, setValue] = React.useState(val);
-    //let value = val;
-    //const [value, setValue] = React.useState(val);
-    console.log(value);
-
-    // const DoSome = (targetValue) => {
-    //   useEffect(() => ( setValue(targetValue), ""));
-    // }
+    //const key = cellProperties["row"]["id"];
+    const val = cellProperties["value"] // value stored in backend
+   
+    const [value, setValue] = React.useState(val); 
     
     const HandleChange = (targetValue) => {
-     // useEffect(() => ( setValue(targetValue), ""));
       console.log('handle change')
       const today = 0;
       changedFlag = true;
 
       setValue(targetValue);
-      //DoSome(targetValue);
-
-      //value = value + targetValue
       
       console.log(type)
 
+      // also update backend
       if (cellProperties['column']['id'] == 'monday')
           updateValues(targetValue, type, props, 0);
       else if (cellProperties['column']['id'] == 'tuesday')
@@ -122,11 +107,13 @@ function EditableCell (cellProperties, width, props) {
       
     }
 
+    // make sure that value is set without waiting for useState, so correct information shows up
+    React.useEffect(() => {
+      setValue(val)
+    }, [val])
+
   const updateDatabase = async (siteD, startDateD) => {
-    // console.log(changed)
-    // if (changed !== false) {
       console.log("yup")
-      //console.log(props.routes)
 
       const updateData = {
         site: siteD,
