@@ -11,8 +11,8 @@ class VolunteerSchedule extends Component {
         super(props);
         this.state = {
             loaded: false, //original: false,
-            week: [],
-            holidays: [],
+            weekArr: [],
+            holidaysArr: [],
             routes: [],
             mealPrep: [],
             staff: [],
@@ -22,7 +22,8 @@ class VolunteerSchedule extends Component {
 
     updateWeek = (week) => {
         console.log(week)
-        this.setState({weekArr: week})
+        this.state.weekArr = week;
+        this.fetchSchedule();
     }
 
     updateHoliday = (holidays) => {
@@ -30,10 +31,25 @@ class VolunteerSchedule extends Component {
         this.setState({holidayArr: holidays})
     }
 
-    async componentDidMount(){
+    getMonday = (d) => {
+        d = new Date(d); // turns passed in string into date
+        var day = d.getDay(), // current date
+            diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday; take the difference to find monday
+        return new Date(d.setDate(diff));
+      }
+      
+
+    async componentWillMount(){
+        this.state.weekArr[1] = this.getMonday(new Date());
+        console.log("mount")
+        this.fetchSchedule();
+    }
+
+    async fetchSchedule(){
+        
         let info = {
         site: localStorage.getItem("site"),
-        startDate: new Date() // HEELPPPP: task --- figureout how to get start date!
+        startDate: this.state.weekArr[1] //new Date("May 3, 2021"), // HEELPPPP: task --- figureout how to get start date!
     }
     let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
         method: 'POST',
@@ -47,14 +63,14 @@ class VolunteerSchedule extends Component {
     this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, staff: data.staff, computer: data.computer})
     }
 
-    ///{this.state.scheduleData ? <VolunteersScheduleTable routes={routes} weekArr={weekArr} holidaysArr={holidayArr} routes={routes} mealPrep={mealPrep} staff={staff} computer={computer}/> :
     render() {
+        console.log("schedule overview week array and routes")
         let {loaded, routes, weekArr, holidayArr, mealPrep, staff, computer} = this.state
-        console.log(mealPrep)
-        console.log(routes)
+        console.log(weekArr[1])
+        console.log(routes[4])
         return (
             <div >
-                <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
+                <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
                 {this.state.loaded ? <VolunteersScheduleTable routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} staff={staff} computer={computer}/> :

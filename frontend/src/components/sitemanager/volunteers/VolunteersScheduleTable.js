@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import "../../../css/totalMeals.css"
+import "../../../css/volunteerScheduleTable.css"
 import holidays from '@date/holidays-us'
 
 const Styles = styled.div`
   table {
-    margin-left:-8px;
+    margin-left:5px;
     border-spacing: 0;
     width: 100%; 
     border: solid 2px #142850;
@@ -41,6 +41,116 @@ const Styles = styled.div`
     }
   }
 `
+
+function updateValues (value, type, props, dayIndex){
+  console.log('here')
+  console.log(type)
+  let val = []
+  val.push(value)
+  if (type == 'Staff') //update staff volunteer info
+      props.staff[dayIndex] = val;
+  else if (type == 'Computer') //update computer volunteer info
+      props.computer[dayIndex] = val;
+  else if (type == "Meal Prep") //update meal Prep volunteer info
+      props.mealPrep[dayIndex] = val;
+  else { //update route volunteer info
+    let routesLength = Object.keys(props.routes).length
+    let routesValues = Object.values(props.routes)
+    
+    // get routes volunteers
+    for (let i =0; i < routesLength; i++) {
+      //console.log("here")
+      var routeNum = Object.keys(props.routes)[i]
+      console.log(routeNum)
+      //console.log("type" + type)
+      
+      if (routeNum == type){
+        routesValues[i][dayIndex] = val;
+        break;
+      }
+    }
+    console.log(Object.values(props.routes))
+  }
+}
+
+function EditableCell (cellProperties, width, props) {
+    var changedFlag = false;
+    //console.log(cellProperties)
+
+    const startDate = props.weekArr[1]; // index 1 is monday
+    const site = localStorage.getItem("site");
+    const type = cellProperties['row']['original']['route']; // route # or meal prep or staff or computer
+    const key = cellProperties["row"]["id"];
+    const val = cellProperties["value"]
+    //console.log(type);
+    //console.log(cellProperties['column']['id'])
+    console.log(val);
+    console.log(cellProperties)
+
+    const [value, setValue] = React.useState(val);
+    //let value = val;
+    //const [value, setValue] = React.useState(val);
+    console.log(value);
+
+    // const DoSome = (targetValue) => {
+    //   useEffect(() => ( setValue(targetValue), ""));
+    // }
+    
+    const HandleChange = (targetValue) => {
+     // useEffect(() => ( setValue(targetValue), ""));
+      console.log('handle change')
+      const today = 0;
+      changedFlag = true;
+
+      setValue(targetValue);
+      //DoSome(targetValue);
+
+      //value = value + targetValue
+      
+      console.log(type)
+
+      if (cellProperties['column']['id'] == 'monday')
+          updateValues(targetValue, type, props, 0);
+      else if (cellProperties['column']['id'] == 'tuesday')
+          updateValues(targetValue, type, props, 1);
+      else if (cellProperties['column']['id'] == 'wednesday')
+          updateValues(targetValue, type, props, 2);
+      else if (cellProperties['column']['id'] == 'thursday')
+          updateValues(targetValue, type, props, 3);
+      else if (cellProperties['column']['id'] == 'friday')
+          updateValues(targetValue, type, props, 4);
+      
+    }
+
+  const updateDatabase = async (siteD, startDateD) => {
+    // console.log(changed)
+    // if (changed !== false) {
+      console.log("yup")
+      //console.log(props.routes)
+
+      const updateData = {
+        site: siteD,
+        startDate: startDateD,
+        routes: props.routes,
+        mealPrep: props.mealPrep,
+        staff: props.staff,
+        computer: props.computer
+      }
+      await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/update', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+      })
+    //}
+    return 0
+  }
+
+  return (
+      <span><input key="input-cell" type="text" style={{width: width +100, margin: '-5px'}} value={value && value} onChange={e => HandleChange(e.target.value)} onBlur={e => updateDatabase(site, startDate)}/></span>
+  )
+};
 
 function VolunteersScheduleTable ({ columns, data, props }) {
   // Use the state and functions returned from useTable to build your UI
@@ -89,7 +199,7 @@ function VolunteersScheduleTable ({ columns, data, props }) {
 const Table = (props) => {
   let columns = [
     {
-      Header: 'Meal Totals',
+      Header: 'Volunteer Schedule',
       columns: [
         {
           Header: ' ',
@@ -106,7 +216,8 @@ const Table = (props) => {
           columns: [
             {
               Header: getDate(props.weekArr, 0),
-              accessor: 'monday'
+              accessor: 'monday',
+
             }
           ]
         },
@@ -153,17 +264,19 @@ const Table = (props) => {
       }
     ]
 
+  console.log(props)
   // list contains objects with volunteer information for each day
   let routeList = []
 
   //routes is an Object
   let routesLength = Object.keys(props.routes).length
   let routesValues = Object.values(props.routes)
-  
+
   // get routes volunteers
   for (let i =0; i < routesLength; i++) {
-    console.log("here")
+    //console.log("here")
     var routeNum = Object.keys(props.routes)[i]
+
     // Get frozen data for each route
     let routeData = {
       route: routeNum,
@@ -177,7 +290,7 @@ const Table = (props) => {
   }
 
   // get mealPrep volunteers
-  console.log(props.mealPrep)
+  //console.log(props.mealPrep)
   let meal = props.mealPrep
   let mealPrepData = {
     route: "Meal Prep",
@@ -190,7 +303,7 @@ const Table = (props) => {
   routeList.push(mealPrepData)
 
   // get computer volunteers
-  console.log(props.computer)
+  //console.log(props.computer)
   let computer = props.computer
   let computerData = {
     route: "Computer",
@@ -203,7 +316,7 @@ const Table = (props) => {
   routeList.push(computerData)
 
   // get staff volunteers
-  console.log(props.staff)
+  //console.log(props.staff)
   let staff = props.staff
   let staffData = {
     route: "Staff",
@@ -213,10 +326,11 @@ const Table = (props) => {
     thursday: staff[3],
     friday: staff[4]
   }
+  console.log("staff fri: " + staff[4])
   routeList.push(staffData)
 
   const data = React.useMemo(() => routeList, [] )
-  console.log(props.routes)
+  //console.log(props.routes)
   return (
     <Styles>
       <VolunteersScheduleTable  columns={columns} data={routeList} props={props}/>
@@ -225,8 +339,9 @@ const Table = (props) => {
 }
 
 function getDate(weekArr, tableDay) {
-  console.log("getting week days");
+  //console.log("getting week days");
   let curr;
+  //console.log(weekArr)
 
   if (weekArr.length === 1)
   {
@@ -266,19 +381,14 @@ function getHolidayDate(holidayArr) {
 }
 
 function cellClass(cell, props) {
-  // console.log("cell")
-  // console.log(cell);
   let holidayDates = getHolidayDate(props.holidayArr);
-  
-  // if (cell['value'] !== " " && rowID === 2){
-  //   return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
-  // }
-  
+
   if (cell['column']['id'] === "route"){
       return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
   else {
-    return <td id="last-cell-route" style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    // return <td id="last-cell-route" {...EditableCell({...cell.getCellProps()}, 20)}>{cell.render('Cell')}</td>
+    return <td id="last-cell-route" style={{width: 500}}>{EditableCell(cell, 60, props)}</td>
   }
 }
 
