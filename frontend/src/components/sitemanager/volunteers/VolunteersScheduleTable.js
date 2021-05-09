@@ -53,6 +53,14 @@ function updateValues (value, type, props, dayIndex){
       props.computer[dayIndex] = val;
   else if (type == "Meal Prep") //update meal Prep volunteer info
       props.mealPrep[dayIndex] = val;
+  else if (type == "Meal Prep 2") //update meal Prep volunteer info
+      props.mealPrep2[dayIndex] = val;
+  else if (type == "Meal Prep 3") //update meal Prep volunteer info
+      props.mealPrep3[dayIndex] = val;
+  else if (type == "Meal Prep 4") //update meal Prep volunteer info
+      props.mealPrep4[dayIndex] = val;
+  else if (type == "Meal Prep 5") //update meal Prep volunteer info
+      props.mealPrep5[dayIndex] = val;
   else { //update route volunteer info
     let routesLength = Object.keys(props.routes).length
     let routesValues = Object.values(props.routes)
@@ -93,7 +101,7 @@ function EditableCell (cellProperties, width, props) {
       
       console.log(type)
 
-      // also update backend
+      // also update backend with the correct value
       if (cellProperties['column']['id'] == 'monday')
           updateValues(targetValue, type, props, 0);
       else if (cellProperties['column']['id'] == 'tuesday')
@@ -114,12 +122,17 @@ function EditableCell (cellProperties, width, props) {
 
   const updateDatabase = async (siteD, startDateD) => {
       console.log("yup")
+      console.log(props.mealPrep3)
 
       const updateData = {
         site: siteD,
         startDate: startDateD,
         routes: props.routes,
         mealPrep: props.mealPrep,
+        mealPrep2: props.mealPrep2,
+        mealPrep3: props.mealPrep3,
+        mealPrep4: props.mealPrep4,
+        mealPrep5: props.mealPrep5,
         staff: props.staff,
         computer: props.computer
       }
@@ -251,6 +264,7 @@ const Table = (props) => {
       }
     ]
 
+  console.log("props")
   console.log(props)
   // list contains objects with volunteer information for each day
   let routeList = []
@@ -288,6 +302,50 @@ const Table = (props) => {
     friday: meal[4]
   }
   routeList.push(mealPrepData)
+
+  let meal2 = props.mealPrep2
+  let mealPrepData2 = {
+    route: "Meal Prep 2",
+    monday: meal2[0],
+    tuesday: meal2[1],
+    wednesday: meal2[2],
+    thursday: meal2[3],
+    friday: meal2[4]
+  }
+  routeList.push(mealPrepData2)
+
+  let meal3 = props.mealPrep3
+  let mealPrepData3 = {
+    route: "Meal Prep 3",
+    monday: meal3[0],
+    tuesday: meal3[1],
+    wednesday: meal3[2],
+    thursday: meal3[3],
+    friday: meal3[4]
+  }
+  routeList.push(mealPrepData3)
+
+  let meal4 = props.mealPrep4
+  let mealPrepData4 = {
+    route: "Meal Prep 4",
+    monday: meal4[0],
+    tuesday: meal4[1],
+    wednesday: meal4[2],
+    thursday: meal4[3],
+    friday: meal4[4]
+  }
+  routeList.push(mealPrepData4)
+
+  let meal5 = props.mealPrep5
+  let mealPrepData5 = {
+    route: "Meal Prep 5",
+    monday: meal5[0],
+    tuesday: meal5[1],
+    wednesday: meal5[2],
+    thursday: meal5[3],
+    friday: meal5[4]
+  }
+  routeList.push(mealPrepData5)
 
   // get computer volunteers
   //console.log(props.computer)

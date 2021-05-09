@@ -15,6 +15,10 @@ class VolunteerSchedule extends Component {
             holidaysArr: [],
             routes: [],
             mealPrep: [],
+            mealPrep2: [],
+            mealPrep3: [],
+            mealPrep4: [],
+            mealPrep5: [],
             staff: [],
             computer: []
         };
@@ -59,21 +63,23 @@ class VolunteerSchedule extends Component {
         body: JSON.stringify(info)
     })
     const data = await response.json();
+    console.log("data")
+    console.log(data)
     
-    this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, staff: data.staff, computer: data.computer})
+    this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, mealPrep2: data.mealPrep2, mealPrep3: data.mealPrep3, mealPrep4: data.mealPrep4, mealPrep5: data.mealPrep5, staff: data.staff, computer: data.computer})
     }
 
     render() {
         console.log("schedule overview week array and routes")
-        let {loaded, routes, weekArr, holidayArr, mealPrep, staff, computer} = this.state
-        console.log(weekArr[1])
-        console.log(routes[4])
+        let {loaded, routes, weekArr, holidayArr, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer} = this.state
+        //console.log(weekArr[1])
+        //console.log(routes[4])
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                {this.state.loaded ? <VolunteersScheduleTable routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} staff={staff} computer={computer}/> :
+                {this.state.loaded ? <VolunteersScheduleTable routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} staff={staff} computer={computer}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}

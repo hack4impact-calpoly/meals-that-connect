@@ -9,12 +9,12 @@ const Hours = require("../models/Hours")
 const Client = require("../models/clients")
 
 router.post('/update', async (req, res) => {
-    let {site, startDate, routes, mealPrep, staff, computer} = req.body
+    let {site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer} = req.body
     console.log("update backend")
     startDate = moment(startDate).format('YYYY-MM-DD');
     //console.log(startDate)
     console.log(routes)
-    Schedule.updateOne({'site': site, 'startDate': startDate}, {site, startDate, routes, mealPrep, staff, computer}).then(function(schedule) {
+    Schedule.updateOne({'site': site, 'startDate': startDate}, {site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer}).then(function(schedule) {
         if (!schedule) {
             res.status(404).send("Error in updating schedule");
         } else {
@@ -69,9 +69,13 @@ router.post('/get', async (req, res) => {
                     routes[route] = data
                 })       
                 mealPrep = [ [""], [""], [""], [""], [""] ]
+                mealPrep2 = [ [""], [""], [""], [""], [""] ]
+                mealPrep3 = [ [""], [""], [""], [""], [""] ]
+                mealPrep4 = [ [""], [""], [""], [""], [""] ]
+                mealPrep5 = [ [""], [""], [""], [""], [""] ]
                 staff = [ [""], [""], [""], [""], [""] ]
                 computer = [ [""], [""], [""], [""], [""] ]
-                var new_schedule = Schedule({site, startDate, routes, mealPrep, staff, computer})
+                var new_schedule = Schedule({site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer})
                 new_schedule.save()
                 console.log("Schedule successfully created")
                 res.status(200).send(new_schedule)
