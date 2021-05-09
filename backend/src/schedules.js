@@ -10,10 +10,9 @@ const Client = require("../models/clients")
 
 router.post('/update', async (req, res) => {
     let {site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer} = req.body
-    console.log("update backend")
+    //console.log("update backend")
     startDate = moment(startDate).format('YYYY-MM-DD');
-    //console.log(startDate)
-    console.log(routes)
+    
     Schedule.updateOne({'site': site, 'startDate': startDate}, {site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer}).then(function(schedule) {
         if (!schedule) {
             res.status(404).send("Error in updating schedule");
@@ -31,9 +30,8 @@ router.post('/update', async (req, res) => {
 router.post('/get', async (req, res) => {
     let {site, startDate} = req.body
     startDate = moment(startDate).format('YYYY-MM-DD');
-    ///console.log(startDate);
+
     Schedule.findOne({'site': site, 'startDate': startDate}).then(async function(result) {
-        console.log(result);
         if (result) {
             existing_routes = result.routes
             getRoutes(site).then((route_names) => {
@@ -50,7 +48,6 @@ router.post('/get', async (req, res) => {
                             res.send("Error in updating schedule");
                         } else {
                             console.log("schedule updated")
-                            console.log(result)
                             res.status(200).send(result) 
                         }
                     })

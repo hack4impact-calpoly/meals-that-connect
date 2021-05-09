@@ -43,8 +43,6 @@ const Styles = styled.div`
 `
 
 function updateValues (value, type, props, dayIndex){
-  console.log('here')
-  console.log(type)
   let val = []
   val.push(value)
   if (type == 'Staff') //update staff volunteer info
@@ -67,17 +65,14 @@ function updateValues (value, type, props, dayIndex){
     
     // get routes volunteers
     for (let i =0; i < routesLength; i++) {
-      //console.log("here")
+      
       var routeNum = Object.keys(props.routes)[i]
-      console.log(routeNum)
-      //console.log("type" + type)
       
       if (routeNum == type){
         routesValues[i][dayIndex] = val;
         break;
       }
     }
-    console.log(Object.values(props.routes))
   }
 }
 
@@ -264,8 +259,6 @@ const Table = (props) => {
       }
     ]
 
-  console.log("props")
-  console.log(props)
   // list contains objects with volunteer information for each day
   let routeList = []
 
@@ -275,7 +268,7 @@ const Table = (props) => {
 
   // get routes volunteers
   for (let i =0; i < routesLength; i++) {
-    //console.log("here")
+
     var routeNum = Object.keys(props.routes)[i]
 
     // Get frozen data for each route
@@ -291,7 +284,6 @@ const Table = (props) => {
   }
 
   // get mealPrep volunteers
-  //console.log(props.mealPrep)
   let meal = props.mealPrep
   let mealPrepData = {
     route: "Meal Prep",
@@ -348,7 +340,6 @@ const Table = (props) => {
   routeList.push(mealPrepData5)
 
   // get computer volunteers
-  //console.log(props.computer)
   let computer = props.computer
   let computerData = {
     route: "Computer",
@@ -361,7 +352,6 @@ const Table = (props) => {
   routeList.push(computerData)
 
   // get staff volunteers
-  //console.log(props.staff)
   let staff = props.staff
   let staffData = {
     route: "Staff",
@@ -371,11 +361,9 @@ const Table = (props) => {
     thursday: staff[3],
     friday: staff[4]
   }
-  console.log("staff fri: " + staff[4])
   routeList.push(staffData)
 
   const data = React.useMemo(() => routeList, [] )
-  //console.log(props.routes)
   return (
     <Styles>
       <VolunteersScheduleTable  columns={columns} data={routeList} props={props}/>
@@ -384,9 +372,7 @@ const Table = (props) => {
 }
 
 function getDate(weekArr, tableDay) {
-  //console.log("getting week days");
   let curr;
-  //console.log(weekArr)
 
   if (weekArr.length === 1)
   {
