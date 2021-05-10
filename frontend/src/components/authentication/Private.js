@@ -13,6 +13,7 @@ class Private extends Component {
 		signout()
     this.setState({ RedirectLoggedUser: true });
     fire.auth().signOut().then(() => {
+      window.location.reload(false);
       // Sign-out successful.
     }).catch((error) => {
       // An error happened.

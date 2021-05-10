@@ -1,6 +1,6 @@
 import React from 'react'
 import { Styles, DraggableTable } from '../../table-components'
-import env from "react-dotenv"
+import { ColumnFilter } from '../columnFilter'
 
 const FOOD_DAYS = "foodDays";
 const FROZEN_DAYS = "frozenDay";
@@ -35,7 +35,14 @@ const Table = (props) => {
         const updateDatabase = async (cell, newValue, originalValue, clientID) => {
           if (newValue !== originalValue)
           {
+
             const key = cellProperties["column"]["id"]
+
+            if (key == "routeNumber" && newValue === "") {
+              console.log("Updating route number")
+              newValue = "-1"
+            }
+
             const updateData = {
               id: clientID,
               key: key,
@@ -43,15 +50,17 @@ const Table = (props) => {
             }
 
             if (key == "routeNumber") {
-                console.log(cellProperties)
                 let index = cellProperties["row"]['index']
                 let newData = cellProperties["data"]
                 newData[index]['routeNumber'] = newValue
+                if (newValue == "") {
+                  newData[index]['routeNumber'] = "-1"
+                }
                 console.log("Resetting index for row: " + index)
                 setData(newData)
             }
       
-            await fetch(env.backendURL + 'clients/update-routes', {
+            await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -74,7 +83,7 @@ const Table = (props) => {
               key: key,
               data: data
             }
-          await fetch(env.backendURL + 'clients/update-routes', {
+          await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -115,52 +124,72 @@ const Table = (props) => {
       
       }
 
+
     const columns = React.useMemo(
         () => [
+          { Header: 'Wellsky ID',
+          accessor: 'wellskyID',
+          Filter: ColumnFilter,
+          filter: true,
+          width: REG_CELL_WIDTH,
+          height: CELL_HEIGHT,
+          Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
+          },
           { Header: 'First Name',
           accessor: 'firstName',
+          Filter: ColumnFilter,
+          filter: true,
           width: REG_CELL_WIDTH,
           height: CELL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text")
           },
           { Header: 'Last Name',
           accessor: 'lastName',
+          Filter: ColumnFilter,
+          filter: true,
           width: REG_CELL_WIDTH,
           Cell: (cellProperties) => EditableCell(cellProperties, null, null, REG_CELL_WIDTH, "text") 
           },
           { Header: 'Route',
           id: 'routeNumber',
+          filter: false,
           accessor: (row) => (row.routeNumber !== "-1") ? row.routeNumber: '',
           width: 80,
           Cell: (cellProperties) => EditableCell(cellProperties, null, null, 80, "text") 
           },
           { Header: 'Address',
           accessor: 'address',
+          filter: false,
           width: 400,
           Cell: (cellProperties) => EditableCell(cellProperties, null, null, 400, "text")
           },
           { Header: 'M',
           accessor: 'foodDaysM',
+          filter: false,
           width: BOOL_CELL_WIDTH,
           Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "M", BOOL_CELL_WIDTH, "checkbox")
           },
           { Header: 'T',
           accessor: 'foodDaysT',
+          filter: false,
           width: BOOL_CELL_WIDTH,
           Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "T", BOOL_CELL_WIDTH, "checkbox")
           },
           { Header: 'W',
           accessor: 'foodDaysW',
+          filter: false,
           width: BOOL_CELL_WIDTH,
           Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "W", BOOL_CELL_WIDTH, "checkbox")
           },
           { Header: 'Th',
           accessor: 'foodDaysTh',
+          filter: false,
           width: BOOL_CELL_WIDTH,
           Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "Th", BOOL_CELL_WIDTH, "checkbox")
           },
           { Header: 'F',
           accessor: 'foodDaysF',
+          filter: false,
           width: BOOL_CELL_WIDTH,
           Cell: (cellProperties) => EditableCell(cellProperties, FOOD_DAYS, "F", BOOL_CELL_WIDTH, "checkbox")
           },
@@ -175,14 +204,10 @@ const Table = (props) => {
         []
       )
 
-    function editClient(client) {
+      function editClient(client) {
         console.log("Editing client")
-        console.log(client)
-        const { history } = props;
-        if (history) {
-            history.push('/Client/' + client);
-        }
-    }
+        props.showModal(client)
+      } 
     
     const data = React.useMemo(
         () => props.data, []

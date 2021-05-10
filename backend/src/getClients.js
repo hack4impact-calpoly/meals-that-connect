@@ -5,52 +5,47 @@ const router = express.Router();
 const Client = require("../models/clients")
 
 router.post('/addClient', async (req, res) => {
-  const { firstName, 
-          lastName, 
-          address, 
-          foodDays, 
-          frozenNumber, 
-          frozenDay, 
-          phoneNumber, 
-          emergencyNumber, 
-          emergencyContact, 
-          emergencyPhone, 
-          noMilk, 
-          mealNumber, 
-          specialInstructions, 
-          clientC2, 
-          NE, 
-          email, 
-          holidayFrozen, 
-          routeNumber, 
-          site, 
-          index} = req.body
-  var client = new Client({ firstName,
-                            lastName, 
-                            address, 
-                            foodDays, 
-                            frozenNumber,
-                            frozenDay, 
-                            phoneNumber, 
-                            emergencyNumber, 
-                            emergencyContact, 
-                            emergencyPhone, 
-                            noMilk, 
-                            mealNumber, 
-                            specialInstructions, 
-                            clientC2, 
-                            NE, 
-                            email, 
-                            holidayFrozen, 
-                            routeNumber, 
-                            site, 
-                            index})
-  client.save()
-  .catch(err => {
-                  console.log(err)
-                  res.send(500).send("Internal server error")})
-  console.log("succcessfully added client")
-  res.status(200).send("success")
+  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
+  console.log("Adding client")
+  Client.findOne({'email': email}).then(function(result) {
+  if (result) {
+    console.log("email already in use")
+    res.status(404).send("email already in use")     
+  }
+  else {
+    Client.countDocuments({site: site, routeNumber: routeNumber}, function(err, index) {
+      if (err) {
+        console.log(err)
+        res.send(500).send("Internal server error")
+      }
+      else {
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        client.save()
+        console.log("succcessfully added client")
+        res.status(200).send("success")
+      }
+    })
+  }
+  }).catch(err => {
+    console.log(err)
+    res.send(500).send("Internal server error")
+  })
+})
+
+router.post('/delete', async (req, res) => {
+  const { id } = req.body
+  Client.deleteOne({_id: id}).then(function(result) {
+    if (result) {
+      console.log("Deleted client")
+      res.status(200).send("Deleted")   
+      return   
+    }
+    else {
+      res.send(500).send("Failed to delete")
+    }
+    }).catch(err => {
+      res.send(500).send("Failed to delete")
+  })
 })
 
 router.post('/siteTotals', async (req, res) => {

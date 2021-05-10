@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RouteTable from './RouteTable';
-import env from "react-dotenv";
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
 import "../../../css/Modal.css"
@@ -64,9 +63,9 @@ class RouteHomepage extends Component {
 
     async fetchClients () {
         let info = {
-            site: "SLO",
+            site: localStorage.getItem("site"),
         }
-        let response = await fetch(env.backendURL + 'clients/site', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/site', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -112,7 +111,7 @@ class RouteHomepage extends Component {
     }
 
     handleOpenModal = (currentClient) => {
-        //this.setState({showModal: true, currentClient: currentClient});
+        this.setState({showModal: true, currentClient: currentClient});
     }
     
     handleCloseModal = () => {
@@ -160,6 +159,7 @@ class RouteHomepage extends Component {
                                     <div><input type="text" value={currentClient["lastName"]} id="client-lastname"/></div>
                                 </div>
                                 <label for="client-address">Address</label><br/>
+
                                 <input type="text" value={currentClient["address"]} id="client-address" style={{width: "1130px"}}/><br/>
                                 <label for="client-mealnumber">Num. of Meals</label><br/>
                                 <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber" style={{width: "1130px"}}/><br/>

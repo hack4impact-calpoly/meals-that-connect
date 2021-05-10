@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import env from "react-dotenv";
 import '../../../css/AddPersons.css';
-import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+
 class AddClient extends Component {
     constructor(props) {
         super(props);
@@ -29,25 +29,30 @@ class AddClient extends Component {
                     email: "",
                     holidayFrozen: false,
                     routeNumber: "-1",
-                    site: ""
+                    site: localStorage.getItem("site"),
+                    index: ""
         }   
     }
 
-    async addClient(event){
-        await fetch(env.backendURL + 'clients/addClient', {
+    addClient = (e) => {
+        e.preventDefault()
+        fetch(process.env.REACT_APP_SERVER_URL + 'clients/addClient', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.state)
+        }).then((res) => {
+            console.log("Successfully added client")
+            this.props.history.push('/clients');
         })
-        this.props.history.push('/clients');
+        
     }
 
     render() {
         console.log(this.state.site)
         return (
-            <form style={{"padding": "100px"}} onSubmit={() => this.addClient()}>
+            <form style={{"padding": "100px"}} onSubmit={this.addClient}>
                 <h1>Add Client</h1>
                 <h3>* = Required</h3>
                 <div>
@@ -120,14 +125,15 @@ class AddClient extends Component {
                     <label for="client-specialinstructions">Special Instructions</label><br/>
                     <input type="text" id="client-specialinstructions" onChange={e => this.setState({specialInstructions: e.target.value})} style={{"width": "1320px"}}/><br/>
 
+
                     <label for="client-c2">C2 Client</label><br/>
                     <input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/>
 
                     <label for="client-ne">N/E</label><br/>
                     <input type="text" id="client-ne" onChange={e => this.setState({NE: e.target.value})} style={{"width": "1320px"}}/><br/>
 
-                    <label for="client-email">Email Address</label><br/>
-                    <input type="email" id="client-email" onChange={e => this.setState({email: e.target.value})} style={{"width": "1320px"}}/><br/>
+                    <label for="client-email">Email Address*</label><br/>
+                    <input type="email" id="client-email" onChange={e => this.setState({email: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
 
                     <label for="client-holidayfrozen">Holiday Frozen</label><br/>
                     <input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/>
@@ -135,14 +141,13 @@ class AddClient extends Component {
                     <label for="client-routenumber">Route Number</label><br/>
                     <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
-                    <label for="client-site">Site*</label><br/>
-                    <input type="text" id="client-site" onChange={e => this.setState({site: e.target.value})} required={true}/><br/>
                     <br/>
-                    <input type="submit"/>
+
+                    <button type="submit">Submit</button>
                 </div>
             </form>
         );
     }
 }
 
-export default AddClient;
+export default withRouter(AddClient);

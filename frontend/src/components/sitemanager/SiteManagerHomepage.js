@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import MealTotals from './routes/mealTotals';
 import RoutesNavbar from './routes/RoutesNavbar';
 import PopupMealTotals from './routes/PopupMealTotals';
-import env from "react-dotenv";
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
@@ -49,10 +48,11 @@ class SiteManagerHomepage extends Component {
     }
 
     async fetchMealTotals () {
+        let site = localStorage.getItem("site")
         let info = {
-            site: "SLO",
+            site: site,
         }
-        let response = await fetch(env.backendURL + 'clients/siteTotals', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -94,8 +94,15 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+                        <div className = "confirmation-buttons" style={{ display:'flex'}}>
+                            <h3>Confirm Total For:</h3>
+                            <PopupMealTotals day={0}/>
+                            <PopupMealTotals day={1}/>
+                            <PopupMealTotals day={2}/>
+                            <PopupMealTotals day={3}/>
+                            <PopupMealTotals day={4}/>
+                        </div>
                         <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
-                        <PopupMealTotals />
                     </div>
                 </div>
             </div>

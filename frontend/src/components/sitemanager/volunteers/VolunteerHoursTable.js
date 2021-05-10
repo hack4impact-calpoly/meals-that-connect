@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import env from "react-dotenv";
 
 const Styles = styled.div`
  table {
@@ -56,7 +55,7 @@ const EditableCell = (cellProperties, width) => {
         key: keyD,
         value: valueD
       }
-      await fetch(env.backendURL + 'volunteers/insertURL', {
+      await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/insertURL', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'

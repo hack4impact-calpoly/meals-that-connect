@@ -2,11 +2,10 @@
 
 import React from 'react';
 import styled from 'styled-components'
-import { useTable } from 'react-table'
+import { useTable, useFilters} from 'react-table'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
-import env from "react-dotenv"
 
 const DND_ITEM_TYPE = 'client'
 
@@ -46,7 +45,6 @@ table {
 `
 
 export const DraggableTable = ({ columns, data, setData, route, showModal }) => {
-    console.log(showModal)
     const getRowId = React.useCallback(row => {
         return row.index
     }, [])
@@ -62,6 +60,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
         columns,
         getRowId,
     },
+        useFilters,
     )
   
     const moveRow = (dragIndex, hoverIndex) => {
@@ -92,7 +91,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
             ],
         })
   
-        fetch(env.backendURL + 'clients/update-client-routes', {
+        fetch(process.process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -118,7 +117,9 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             <th></th>
                             {headerGroup.headers.map(column => (
-                                <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}
+                                    <div>{(column.canFilter && column.filter === true) ? column.render('Filter') : null}</div>
+                                </th>
                             ))}
                         </tr>
                     ))}
@@ -196,7 +197,7 @@ const Row = ({ row, index, moveRow, showModal }) => {
             </td>
             
             {row.cells.map(cell => {
-                return <td onClick={() => showModal(row["original"])}>{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
+                return <td >{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
             })}
         </tr>
     )

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import env from "react-dotenv";
 
 class NoPermission extends Component {
     constructor(props) {

@@ -3,7 +3,6 @@ import Spinner from "react-bootstrap/Spinner"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VolunteerOverviewTable from './VolunteerOverviewTable'
 import VolunteerNavbar from './VolunteerNavbar'
-import env from "react-dotenv";
 
 class VolunteerOverview extends Component {
     constructor(props) {
@@ -16,9 +15,9 @@ class VolunteerOverview extends Component {
 
     async componentDidMount(){
         let info = {
-            site: "SLO",
+            site: localStorage.getItem("site"),
         }
-        let response = await fetch(env.backendURL + 'volunteers/volunteerSite', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/volunteerSite', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

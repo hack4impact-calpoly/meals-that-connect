@@ -19,7 +19,6 @@
     overflow: scroll;
     border: 2px solid black;
 }
-
 .Overlay {
     border-radius: 25px;
     position: fixed;
@@ -42,6 +41,16 @@
     font-family: 'Mulish', sans-serif;
     font-weight: 400;
     color: black;
+}
+
+#client-fooddays {
+    display: flex;
+    flex-direction: row;
+}
+
+#client-frozendays {
+    display: flex;
+    flex-direction: row;
 }
 
 #client-info-body {
