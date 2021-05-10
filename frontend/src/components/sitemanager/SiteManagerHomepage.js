@@ -40,15 +40,16 @@ class SiteManagerHomepage extends Component {
         this.setState({holidayArr: holidays})
     }
 
-    // async componentDidMount(){
-    //     this.fetchMealTotals()
-    // }
+    async componentDidMount(){
+        await this.fetchMealTotals()
+    }
 
     async fetchMealTotals () {
-        var mondayDate = getWeekArr(new Date)[1]
-        if (this.state.weekArr.len > 0) {
-            mondayDate = this.state.weekArr[1];
+        // var mondayDate = getWeekArr(new Date)[1]
+        if (this.state.weekArr.len === 0) {
+            return
         }
+        let mondayDate = this.state.weekArr[1];
         console.log(mondayDate)
         let info = {
             site: "SLO",

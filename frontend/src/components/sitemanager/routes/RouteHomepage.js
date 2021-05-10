@@ -88,7 +88,6 @@ class RouteHomepage extends Component {
         console.log("Handling change")
         let data = this.state.clients[route][index]
         data[key] = value
-        console.log(data)
         this.setState({})
         this.setState({})
     }
@@ -97,7 +96,6 @@ class RouteHomepage extends Component {
         console.log("Handling select change")
         let data = this.state.clients[route][index]
         data[key] = value
-        console.log(data)
         this.setState({})
         this.updateDatabase(data.startDate, data.clientID, key, value)
     }
@@ -112,7 +110,6 @@ class RouteHomepage extends Component {
         else {
             data[key] = value
         }
-        console.log(data)
         this.setState({})
         this.updateDatabase(data.startDate, data.clientID, key, value)
     }
@@ -134,8 +131,6 @@ class RouteHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week[1])
-        // console.log(this.state.weekArr[1])
         this.setState({weekArr: week})
         this.fetchRoutes()
     }
@@ -223,7 +218,6 @@ class RouteHomepage extends Component {
     render() {
         let {routes, clients, weekArr} = this.state;
         let title = weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"
-        console.log(this.state)
         return (
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>

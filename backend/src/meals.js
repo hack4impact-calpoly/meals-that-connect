@@ -13,7 +13,6 @@ router.post('/update-field', async (req, res) => {
 
     var query = {}
     query[key] = value;
-    console.log(req.body)
 
     Meal.updateOne({clientID: clientID, startDate: date}, query).then(function(updated) {
         if (!updated) {
@@ -34,9 +33,6 @@ router.post('/update-data', async (req, res) => {
             holidayFrozen, 
           } = req.body
     date = formatDate(date)
-
-    console.log(req.body)
-    console.log(date)
 
     Meal.updateOne({_id: id}, 
               { foodDays: foodDays,
@@ -105,7 +101,6 @@ async function existsMeal(client, week) {
 
 router.post('/siteTotals', (req, res) => {
     let {site, week} = req.body
-    console.log(req.body)
     let currMonday = formatDate(getMonday(new Date()))
     console.log("calling site totals")
     week = formatDate(week)
