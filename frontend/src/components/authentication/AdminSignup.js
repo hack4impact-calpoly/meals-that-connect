@@ -12,6 +12,7 @@ class Signup extends Component {
             passwordValidated: true,
             isAuthenticated: false,
             personalData: { //shared across all users
+                code: "",
                 firstName: "",
                 lastName: "",
                 email: "",
@@ -90,12 +91,12 @@ class Signup extends Component {
 
     addUser = () => {
         if (this.state.passwordValidated === true) {
-            this.addMasterUser(this.state.personalData, this.state.volunteerData);
+            this.addAdminUser(this.state.personalData, this.state.volunteerData);
         }
     }
 
-    addMasterUser = (personalData, volunteerData) => {
-        const newMasterUser = {
+    addAdminUser = (personalData, volunteerData) => {
+        const newAdminUser = {
             firstName: personalData["firstName"],
             lastName: personalData["lastName"],
             email: personalData["email"],
@@ -106,19 +107,20 @@ class Signup extends Component {
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
             user: "volunteer",
+            code: personalData.code,
 
             phoneNumber: "0",
             availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
         
         }
-        this.mongo_signup(newMasterUser)
+        this.mongo_signup(newAdminUser)
     }
 
 
     
     mongo_signup = (user) => {
         let _this = this
-        fetch(process.env.REACT_APP_SERVER_URL + 'signup/master', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'signup/admin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -138,11 +140,11 @@ class Signup extends Component {
     render() {
         return (
             <div className="auth-form">
-                <h1 id="title">H4I DEVELOPER SIGN UP</h1>
+                <h1 id="title">ADMIN SIGN UP</h1>
                 <form onSubmit={this.signup}>
 
                 <div className= "drop-down-site">
-                    <p id= "select-site">Select site:</p>
+                    <p id= "select-site">Select default site:</p>
                     <select style={{width: '150px'}} id= "site" value={this.state.value} onChange={this.handleChange}>
                         <option value="SLO">SLO</option>
                         <option value="Five cities">Five cities</option>
@@ -168,6 +170,9 @@ class Signup extends Component {
                 <label id="pass-label" for="password">(Must contain at least one number, one uppercase, and one lowercase <br/>letter, and at least 6 or more characters long)</label>
                 <p id = "input">Confirm Password</p>
                 <input type="password" className="account-info" id="password-confirm" size="50" style={{width: '500px'}} onChange={this.validatePassword}  required/>
+                <br/>
+                <p id = "input">Admin Code</p>
+                <input type="text" className="account-info" id="code" size="50" style={{width: '500px'}} onChange={this.handleChange}  required/>
                 <br/>
                 <section>
                     {this.state.passwordValidated === false &&

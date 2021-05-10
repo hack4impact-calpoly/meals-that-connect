@@ -216,6 +216,7 @@ class RouteHomepage extends Component {
     }
 
     render() {
+        console.log(this.state)
         let {routes, clients, weekArr} = this.state;
         let title = weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"
         return (

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import '../css/Profile.css';
-import env from "react-dotenv";
 import { signout } from './authentication/authenticationUtils';
 import fire from './../fire.js';
 import { Redirect } from 'react-router-dom';
+import Select from 'react-select'
 
 class Profile extends Component {
 
@@ -144,7 +144,10 @@ class Profile extends Component {
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/profile");
+                console.log("setting user type")
+                localStorage.setItem("userType", userType)
+                window.location.reload()
+                // _this.props.history.push("/profile");
             }
         })
 	};
@@ -161,7 +164,12 @@ class Profile extends Component {
         });
 	}
 
+    handleSelect = (e) => {
+        this.state.userType = e.value
+    }
+
     render() {
+        console.log(this.state)
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page
@@ -171,13 +179,56 @@ class Profile extends Component {
           )
         }
 
-        let { hideCancel, driver, kitchenStaff, notes } = this.state
+        let { hideCancel, driver, kitchenStaff, notes, userType } = this.state
         let { M, T, W, Th, F } = this.state.availability
+        let options = [
+            { value: 'site-manager', label: 'site-manager' },
+            { value: 'data-entry', label: 'data-entry' },
+            { value: 'volunteer', label: 'volunteer' }
+        ]
+
+        const customStyles = {
+            option: (provided, state) => ({
+              ...provided,
+              fontSize: 24,
+            }),
+            control:(provided, state) => ({
+                // none of react-select's styles are passed to <Control />
+                ...provided,
+                fontSize: 24,
+                padding: '0px 10px',
+                marginBottom: 10,
+              }), 
+              valueContainer:(provided, state) => ({
+                // none of react-select's styles are passed to <Control />
+                ...provided,
+                padding: '0px 10px',
+                margin: 0,
+                height: 70,
+              }), 
+            singleValue: (provided, state) => {
+              const opacity = state.isDisabled ? 0.5 : 1;
+              const transition = 'opacity 300ms';
+          
+              return { ...provided, opacity, transition };
+            }
+          }
+          
 
         return (
             <div className='profile-container'>
                 <h1>{this.state.firstName.toUpperCase()} {this.state.lastName.toUpperCase()}'S PROFILE</h1>
                 <div id='profile-editable-fields'>
+                    <p className='input-firstName'>User Type</p>
+                    {hideCancel ? <input type="text" id='phoneNumber' size="50" style={{width: '720px'}} defaultValue={userType} readOnly={true}/> :
+                    <div style={{width: 300}}>
+                        <Select 
+                            options={options} 
+                            placeholder="User Type" 
+                            styles={customStyles}
+                            defaultValue={{value: userType, label: userType}} 
+                            onChange={this.handleSelect}/>
+                    </div>}
                     <p className='input-firstName'>First Name</p>
                     <input type="text" id='firstName' size="50" style={{width: '720px'}} defaultValue={this.state.firstName} onChange={this.handleChange} readOnly={this.state.readOnly}/>
                     <p className='input-lastName'>Last Name</p>

@@ -6,7 +6,7 @@ import Home from './components/homepage/Home'
 import Login from './components/authentication/Login'
 
 import Signup from './components/authentication/Signup'
-import MasterSignup from './components/authentication/MasterSignup'
+import AdminSignup from './components/authentication/AdminSignup'
 import HomePageWrapper from './components/HomepageWrapper'
 import RouteHomePage from './components/sitemanager/routes/RouteHomepage.js'
 import VolunteerHours from './components/sitemanager/volunteers/VolunteerHoursOverview'
@@ -58,7 +58,7 @@ class App extends Component {
               <PublicRoute path="/login" component={Login}/>
               <PublicRoute path="/login/:user" component={Login}/>
               <PublicRoute path="/signup" component={Signup}/>
-              <PublicRoute path="/master-signup" component={MasterSignup}/>
+              <PublicRoute path="/admin-signup" component={AdminSignup}/>
               <PublicRoute path="/reset-password" exact component={ResetPassword} />              
               <PublicRoute exact path="/email-verification" component={EmailVerification}/>
               <PublicRoute path="/no-permission" component={NoPermission}/>

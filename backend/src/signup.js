@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
 const bcrypt = require('bcryptjs')
+require('dotenv').config()
 
 const SiteManager = require('../models/siteManager');
 const Volunteer = require('../models/volunteer');
@@ -22,13 +22,13 @@ router.post('/email-taken', async (req, res) =>{
    });
 });
 
-router.get('/delete', async (req, res) =>{
-   var myquery = { 'firstName': "Emily" };
-   SiteManager.deleteMany(myquery, function(err, obj) {
-      if (err) throw err;
-      console.log(obj);
-   });
-});
+// router.get('/delete', async (req, res) =>{
+//    var myquery = { 'firstName': "Emily" };
+//    SiteManager.deleteMany(myquery, function(err, obj) {
+//       if (err) throw err;
+//       console.log(obj);
+//    });
+// });
 
 router.post('/', async (req, res) =>{
     const {firstName, lastName, email, isAuthenticated, site, user} = req.body
@@ -50,9 +50,10 @@ router.post('/', async (req, res) =>{
           if (user == "volunteer") {
              var volunteerID = getID();
              const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
-             doc = new userType({ volunteerID, firstName, lastName, email, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
+             doc = new userType({ volunteerID, firstName, lastName, email, driver, kitchenStaff, 
+                     isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, admin: false })
           } else {
-             doc = new userType({ firstName, lastName, email, isAuthenticated, site })
+             doc = new userType({ firstName, lastName, email, isAuthenticated, site, admin: false })
           }
           doc.save()
           console.log("successfully added user")
@@ -64,9 +65,12 @@ router.post('/', async (req, res) =>{
     })
  });
 
- router.post('/master', async (req, res) =>{
-   const {firstName, lastName, email, isAuthenticated, site, user} = req.body
+ router.post('/admin', async (req, res) =>{
+   const {firstName, lastName, email, isAuthenticated, site, user, code} = req.body
    const password = bcrypt.hashSync(req.body.password, 9);
+   if (code !== process.env.ADMIN_CODE) {
+      res.status(404).send("Invalid code")
+   }
  
    Volunteer.findOne({'email': email}).then(function(result) {
       if (result) {
@@ -76,13 +80,14 @@ router.post('/', async (req, res) =>{
       else {
          var volunteerID = getID();
          const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
-         var doc = new Volunteer({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability })
+         var doc = new Volunteer({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, admin: true })
          doc.save()
          console.log("successfully added volunteer")
       }
    }).catch(err => {
       console.log(err)
       res.send(500).send("Internal server error")
+      return;
    })
 
    SiteManager.findOne({'email': email}).then(function(result) {
@@ -91,7 +96,7 @@ router.post('/', async (req, res) =>{
          res.status(404).send("email already in use")
       } 
       else {
-         var doc = new SiteManager({ firstName, lastName, email, password, isAuthenticated, site })
+         var doc = new SiteManager({ firstName, lastName, email, password, isAuthenticated, site, admin: true })
          doc.save()
          console.log("successfully added site manager")
       }
@@ -104,9 +109,10 @@ router.post('/', async (req, res) =>{
       if (result) {
          console.log("email already in use")
          res.status(404).send("email already in use")
+         return;
       } 
       else {
-         var doc = new DataEntry({ firstName, lastName, email, password, isAuthenticated, site })
+         var doc = new DataEntry({ firstName, lastName, email, password, isAuthenticated, site, admin: true })
          doc.save()
          console.log("successfully added data entry")
          res.status(200).send("success")
