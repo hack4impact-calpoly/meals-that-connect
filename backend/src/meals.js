@@ -7,73 +7,160 @@ const moment = require('moment')
 const Meal = require("../models/meals")
 const Client = require("../models/clients")
 
-// Takes in the given data (Monday of the week) and
-// the client and posts/updates the entry in the database
-// to the correct data and preferences of the client.
+// Given a meal field and a value, update the client's meal data for the specified week
+router.post('/update-field', async (req, res) => {
+    const {date, clientID, key, value} = req.body
 
-router.post('/', async (req, res) => {
-   const {date, client} = req.body
-   
-   var meal;
+    var query = {}
+    query[key] = value;
+    console.log(req.body)
 
-   meal = new Meal({
-      'clientID': client._id, 
-      'site': client.site,
-      'routeNumber': client.routeNumber, 
-      'startDate': date,
-      'foodDays': client.foodDays, 
-      'mealNumber': client.mealNumber, 
-      'frozenNumber': client.frozenNumber, 
-      'frozenDay': client.frozenDay,
-      'noMilk': client.noMilk, 
-      'holidayFrozen': client.holidayFrozen,
-      'index': client.index})
- 
-   meal.save();
-   console.log("meal successfully added");
-   res.send("meal successfully added");
-
+    Meal.updateOne({clientID: clientID, startDate: date}, query).then(function(updated) {
+        if (!updated) {
+            console.log("Error in updating meal");
+        }
+    })
+    console.log("meal successfully updated");
+    res.send("meal successfully updated");
 });
 
-router.post('/siteTotals', async (req, res) => {
-  const {site, week} = req.body
-  Meal.find({site: site}, function (err, data) {
-    if (err) {
-      console.log(err)
+router.post('/update-data', async (req, res) => {
+    let {   id, 
+            date, 
+            foodDays,   
+            frozenNumber, 
+            frozenDay, 
+            noMilk,   
+            holidayFrozen, 
+          } = req.body
+    date = formatDate(date)
+
+    console.log(req.body)
+    console.log(date)
+
+    Meal.updateOne({_id: id}, 
+              { foodDays: foodDays,
+                frozenNumber: frozenNumber,
+                frozenDay: frozenDay,
+                noMilk: noMilk,
+                holidayFrozen: holidayFrozen})
+      .then(function(result) {
+          if (!result) {
+            console.log("Error in updating info");
+            res.send("Error in updating info");
+            return;
+          } else {
+            console.log("Meal information updated");
+            }
+      })
+    res.send("Information updated");
+  });
+
+// Takes in the given data (Monday of the week) and the client 
+// Updates the meal with the client data if it exists, 
+// Or creates a new meal with the client data if nonexistant 
+async function existsMeal(client, week) {
+    let output;
+    await Meal.findOne({clientID: client._id, startDate: week}, function(err, meal) {
+        if (meal == null) {
+            console.log("Meal not found, creating new meal")
+            var mealData = {
+                'clientID': client._id, 
+                'site': client.site,
+                'routeNumber': client.routeNumber, 
+                'startDate': week,
+            
+                'firstName': client.firstName,
+                'lastName': client.lastName,
+                'address': client.address,
+            
+                'foodDays': client.foodDays, 
+                'frozenNumber': client.frozenNumber, 
+                'frozenDay': client.frozenDay,
+                'noMilk': client.noMilk, 
+                'holidayFrozen': client.holidayFrozen,
+            
+                'routeNumber': client.routeNumber,
+                'index': client.index 
+            }
+            meal = new Meal(mealData)
+            meal.save()
+            output = mealData
+        }
+        else {
+            meal.routeNumber = client.routeNumber
+            meal.firstName = client.firstName
+            meal.lastName = client.lastName
+            meal.address = client.address
+            Meal.updateOne({clientID: client._id, startDate: week}, meal).then(function(updated) {
+                if (!updated) {
+                    console.log("Error in updating meal");
+                }
+            })
+            output = meal
+        }  
+    })
+    return output
+}
+
+router.post('/siteTotals', (req, res) => {
+    let {site, week} = req.body
+    console.log(req.body)
+    let currMonday = formatDate(getMonday(new Date()))
+    console.log("calling site totals")
+    week = formatDate(week)
+    if (currMonday > week) {
+        Meal.find({site: site}, function (err, data) {
+        if (err) {
+            console.log(err)
+            res.status(404).send("error")
+        }
+        else {
+            let mealData = sortFormatMeals(data)
+            let mealTotals = []
+            for (let i = 0; i < routes.length; i++) {
+            mealTotals.push(getRouteTotals(mealData.meals[mealData.routes[i]]))
+            }  
+            res.send({"meals": mealTotals, "routes": routes})
+        }
+        })
     }
     else {
-      // console.log(week)
-      // console.log((moment(week)).week())
-      data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : -1 )
-      data = data.filter(function (client) {return (moment(client.startDate)).week() === (moment(week)).week()})
-      // console.log(data)
-      let meals = {}
-      let prevRoute = null
-      let routeData = []
-      let routes = []
-      for (let i = 0; i < data.length; i++) {
-          let client = data[i]
-
-          if (i > 0 && client.routeNumber != prevRoute) {
-              meals[prevRoute] = routeData
-              routes.push(prevRoute)
-              routeData = []
-          }
-          prevRoute = client.routeNumber
-          routeData.push(client)
-      }
-      if (routeData.length > 0) {
-          meals[prevRoute] = routeData
-          routes.push(prevRoute)
-      }
-      let mealTotals = []
-      for (let i = 0; i < routes.length; i++) {
-        mealTotals.push(getRouteTotals(meals[routes[i]]))
-      }  
-      res.send({"meals": mealTotals, "routes": routes})
+        Client.find({site: site}, async function (err, clients) {
+            if (err) {
+                console.log(err)
+                res.status(404).send("error")
+            }
+            else {
+                data = []
+                for (let i = 0; i < clients.length; i++) {
+                    existsMeal(clients[i], week).then(meal => {
+                        data.push(meal)
+                        if (data.length == clients.length) {
+                            let {routes, meals} = sortFormatMeals(data)
+                            let mealTotals = []
+                            for (let i = 0; i < routes.length; i++) {
+                            mealTotals.push(getRouteTotals(meals[routes[i]]))
+                            }  
+                            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
+                        }
+                    })
+                }
+            }
+        })
     }
-  })
 })
+
+function getMonday(d) {
+    d = new Date(d);
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6:1); 
+    return new Date(d.setDate(diff));
+  }
+  
+  function formatDate(date) {
+    return (moment(date).format("YYYY-MM-DD"));
+  }
 
 router.post('/routeSite', async (req, res) => {
   const {routeNumber, site} = req.body
@@ -85,10 +172,31 @@ router.post('/routeSite', async (req, res) => {
   })
 })
 
+function sortFormatMeals(data) {
+  data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : -1 )
+  let meals = {}
+  let prevRoute = null
+  let routeData = []
+  let routes = []
+  for (let i = 0; i < data.length; i++) {
+      let client = data[i]
+      if (i > 0 && client.routeNumber != prevRoute) {
+          meals[prevRoute] = routeData
+          routes.push(prevRoute)
+          routeData = []
+      }
+      prevRoute = client.routeNumber
+      routeData.push(client)
+  }
+  if (routeData.length > 0) {
+      meals[prevRoute] = routeData
+      routes.push(prevRoute)
+  }
+  return {"meals": meals, "routes": routes}
+}
+
 router.post('/site', async (req, res) => {
   const {site, week} = req.body
-  // console.log(site)
-  // console.log(week)
   Meal.find({site: site, index: {$exists:true}}, function (err, clients) {
     if (err) {
       console.log(err)
@@ -96,9 +204,6 @@ router.post('/site', async (req, res) => {
     else {
       clients = clients.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
       clients = clients.filter(function (client) {return (moment(client.startDate)).week() === (moment(week)).week()})
-      // console.log(clients)
-      // console.log(week)
-      // console.log((moment(week)).week())
       for (let i = 0; i < clients.length; i++) {
         clients[i].index = i
       }
@@ -119,7 +224,7 @@ router.get('/all', async (req, res) => {
 })
 
 router.post('/update-routes', async (req, res) => {
-   const {id, key, data} = req.body
+   const {id, key, data,} = req.body
 
    var query = {}
    query[key] = data;
@@ -130,7 +235,7 @@ router.post('/update-routes', async (req, res) => {
           console.log("Error in updating info");
           res.send("Error in updating info");
         } else {
-          console.log("Information updated");
+          console.log("Meal information updated");
           res.send("Information updated");
           }
     })
@@ -156,23 +261,29 @@ router.post('/update-client-routes', async (req, res) => {
 });
 
 function getRouteTotals(clientList) {
-    var days = ["M", "T", "W", "Th", "F"]
-    var frozenTotal = [0,0,0,0,0];
-    var mealTotal = [0,0,0,0,0];
-    for (var index in clientList) {
-      for (var day in days) {
-        if (clientList[index].foodDays[days[day]]) {
-          mealTotal[day] += clientList[index].mealNumber
+  var days = ["M", "T", "W", "Th", "F"]
+  var whiteBagTotal = [0, 0, 0, 0, 0]
+  var frozenTotal = [0, 0, 0, 0, 0];
+  var mealTotal = [0, 0, 0, 0, 0];
+  for (var index in clientList) {
+    for (var day in days) {
+      if (clientList[index].foodDays[days[day]]) {
+        if(clientList[index].noMilk == false) {
+          mealTotal[day] += 1
         }
-                
-        if (clientList[index].frozenDay == days[day]){
-          frozenTotal[day] += clientList[index].frozenNumber
+        else {
+          whiteBagTotal[day] += 1
         }
       }
+              
+      if (clientList[index].frozenDay == days[day]){
+        frozenTotal[day] += clientList[index].frozenNumber
+      }
     }
-    var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal}
-    return routeTotals
   }
+  var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal, "whitebag": whiteBagTotal}
+  return routeTotals
+}
 
   router.post('/get-clients', async (req, res) => {
     const {site} = req.body

@@ -6,6 +6,7 @@ import PopupMealTotals from './routes/PopupMealTotals';
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
+import { getWeekArr } from './calendar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/manager.css';
 
@@ -29,28 +30,29 @@ class SiteManagerHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
-        this.setState({weekArr: week})
+        console.log("Updating week")
+        this.state.weekArr = week
+        // this.setState({weekArr: week})
         this.fetchMealTotals()
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
-    async componentDidMount(){
-        this.fetchMealTotals()
-    }
+    // async componentDidMount(){
+    //     this.fetchMealTotals()
+    // }
 
     async fetchMealTotals () {
-        var currWeek = moment();
-        if (typeof this.state.weekArr !== 'undefined') {
-            currWeek = this.state.weekArr;
+        var mondayDate = getWeekArr(new Date)[1]
+        if (this.state.weekArr.len > 0) {
+            mondayDate = this.state.weekArr[1];
         }
+        console.log(mondayDate)
         let info = {
             site: "SLO",
-            week: currWeek
+            week: mondayDate
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
@@ -60,7 +62,8 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        this.setState({totals: data.meals, routes: data.routes})
+        this.setState({totals: data.totals, routes: data.routes})
+        console.log(this.state.totals)
     }
 
     printDocument() {
@@ -92,7 +95,6 @@ class SiteManagerHomepage extends Component {
 
     render() {
         let {totals, routes, weekArr, holidayArr} = this.state
-        console.log(weekArr)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
@@ -103,8 +105,8 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
-                        <div className = "confirmation-buttons" style={{ display:'flex'}}>
-                            <h3>Confirm Total For:</h3>
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
+                            <h3>Confirm Total For: </h3>
                             <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/>
                             <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/>
                             <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/>

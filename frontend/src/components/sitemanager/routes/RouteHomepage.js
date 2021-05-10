@@ -3,7 +3,9 @@ import RouteTable from './RouteTable';
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
 import { getWeekArr } from '../calendar'
+import ModalContent from './RouteModal';
 import '../../../css/Modal.css';
+import { weekdaysMin } from 'moment';
 
 const moment = require('moment')
 
@@ -26,18 +28,11 @@ class RouteHomepage extends Component {
                     F: null
                 },
                 frozenNumber: null,
-                frozenDay: {
-                    M: null,
-                    T: null,
-                    W: null,
-                    Th: null,
-                    F: null
-                },
+                frozenDay: null,
                 phoneNumber: null,
                 emergencyContact: null,
                 emergencyPhone: null,
                 noMilk: null,
-                mealNumber: null,
                 specialInstructions: null,
                 clientC2: null,
                 NE: null,
@@ -45,23 +40,21 @@ class RouteHomepage extends Component {
                 holidayFrozen: null,
                 routeNumber: null,
                 site: null,
-                index: null
-
+                index: null,
+                _id: null
             }   
         };
     }
 
-    async componentDidMount(){
-        await this.fetchClients()
-        this.fetchRoutes()
-    }
+    // async componentDidMount(){
+    //     await this.fetchRoutes()
+    // }
     
     componentWillMount() {
         Modal.setAppElement('body');
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
@@ -74,7 +67,7 @@ class RouteHomepage extends Component {
             site: localStorage.getItem("site"),
             week: mondayDate
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/site', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,60 +75,7 @@ class RouteHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        let clients = {}
-        let prevRoute = null
-        let routeData = []
-        let routes = []
-        for (let i = 0; i < data.length; i++) {
-            let client = data[i]
-            console.log(client)
-            if (i > 0 && client.routeNumber !== prevRoute) {
-                clients[prevRoute] = routeData
-                // make sure null does not get addded to routes array
-                if (prevRoute !== null)
-                    routes.push(prevRoute)
-                routeData = []
-            }
-            // filters out clients with unassined route numbers
-            if (client.routeNumber !== "-1") {
-                prevRoute = client.routeNumber
-                // console.log(this.state.clientData)
-                // console.log(client.clientID)
-                let clientData = this.state.clientData[client.clientID]
-                if (typeof clientData !== 'undefined') {
-                    client.firstName = clientData.firstName
-                    client.lastName = clientData.lastName
-                    client.address = clientData.address
-                } 
-                else {
-                    client.firstName = "Test"
-                    client.lastName = "Test"
-                    client.address = "Test"
-                }
-                routeData.push(client)
-            }
-        }
-        if (routeData.length > 0) {
-            clients[prevRoute] = routeData
-            routes.push(prevRoute)
-        }
-        this.setState({clients: clients, routes: routes}) 
-    }
-
-    async fetchClients () {
-
-        let info = {
-            site: localStorage.getItem("site")
-        }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/get-clients', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(info)
-        })
-        const data = await response.json();
-        this.setState({clientData: data}) 
+        this.setState({clients: data.meals, routes: data.routes}) 
     }
 
     setData = (data, route) => {
@@ -144,13 +84,83 @@ class RouteHomepage extends Component {
         this.setState({clients: newClients})
     }
 
-    updateWeek = (week) => {
-        this.setState({weekArr: week})
-        this.fetchClients()
+    handleChange = (route, key, value, index) => {
+        console.log("Handling change")
+        let data = this.state.clients[route][index]
+        data[key] = value
+        console.log(data)
+        this.setState({})
+        this.setState({})
     }
 
-    handleOpenModal = (currentClient) => {
-        this.setState({showModal: true, currentClient: currentClient});
+    handleSelect = (route, key, value, index) => {
+        console.log("Handling select change")
+        let data = this.state.clients[route][index]
+        data[key] = value
+        console.log(data)
+        this.setState({})
+        this.updateDatabase(data.startDate, data.clientID, key, value)
+    }
+
+    handleBoolChange = (route, key, value, day, index) => {
+        console.log("Handling checkbox change")
+        let data = this.state.clients[route][index]
+        if (day !== null) {
+            data[key][day] = value
+            value = data[key]
+        }
+        else {
+            data[key] = value
+        }
+        console.log(data)
+        this.setState({})
+        this.updateDatabase(data.startDate, data.clientID, key, value)
+    }
+
+    updateDatabase = (date, clientID, key, value) => {
+        const updateData = {
+            date: date,
+            clientID: clientID, 
+            key: key, 
+            value: value
+        }
+        fetch(process.env.REACT_APP_SERVER_URL + 'meals/update-field', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        })
+    }
+
+    updateWeek = (week) => {
+        console.log(week[1])
+        // console.log(this.state.weekArr[1])
+        this.setState({weekArr: week})
+        this.fetchRoutes()
+    }
+
+    handleOpenModal = async (client) => {
+        let data = {
+            _id: client.clientID
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        let clientData = await response.json()
+        client.phoneNumber = clientData.phoneNumber
+        client.emergencyContact = clientData.emergencyContact
+        client.emergencyPhone = clientData.emergencyPhone
+        client.specialInstructions = clientData.specialInstructions
+        client.clientC2 = clientData.clientC2
+        client.clientID = clientData._id
+        client.NE = clientData.NE
+        client.email = clientData.email
+        this.setState({currentClient: client, showModal: true})
     }
 
     
@@ -158,122 +168,82 @@ class RouteHomepage extends Component {
         this.setState({showModal: false});
     }
     
-    formatDate = (date) => { 
+    submit = async (newClient) => {
+        let updateWeekly = {
+            date: this.state.weekArr[1],
+            id: newClient._id,
+            foodDays: newClient.foodDays,
+            frozenNumber: newClient.frozenNumber,
+            frozenDay: newClient.frozenDay,
+            noMilk: newClient.noMilk,
+            holidayFrozen: newClient.holidayFrozen,
+        }
+        let updateConstant = {
+            id: newClient.clientID,
+            firstName: newClient.firstName,
+            lastName: newClient.lastName,
+            address: newClient.address,
+            phoneNumber: newClient.phoneNumber,
+            emergencyContact: newClient.emergencyContact,
+            emergencyPhone: newClient.emergencyPhone,
+            specialInstructions: newClient.specialInstructions,
+            NE: newClient.NE,
+            email: newClient.email,
+            clientC2: newClient.clientC2,
+        }
+
+        /*Update Constant Fields in Client Database*/
+        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateConstant)
+        })
+
+        /*Update Weekly Fields in Meals Database*/
+        await fetch(process.env.REACT_APP_SERVER_URL + 'meals/update-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateWeekly)
+        })
+
+        window.location.reload()
+        // this.setState({showModal: false});
+    }
+
+    formatDate = (date) => {
         var month = (1 + date.getMonth()).toString();
         var day = date.getDate().toString();
         return month + '/' + day;
-      }
+    }
 
     render() {
         let {routes, clients, weekArr} = this.state;
-        let currentClient = this.state.currentClient;
-        console.log(weekArr)
+        let title = weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"
         console.log(this.state)
-
         return (
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
-                <h1 className="site-manager-page-header">{weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"}</h1>
+                <h1 className="site-manager-page-header">{title}</h1>
                 <div className="site-manager-container">
                     <div>
                         {routes.map((route, i) =>{
                             return (
                                 <section style={{marginRight: 80, paddingLeft: 320}}>
                                     <a id={String(route)}></a>
-                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}></RouteTable>
+                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}
+                                        handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
                                 </section>
                         );})}
-                    </div> 
-                    <Modal isOpen={this.state.showModal} contentLabel="Minimal Modal Example">
-                        <div>
-                            <div id="client-info-header">
-                                <h1>Client Information</h1>
-                                <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Close Modal</button>
-                            </div>
-                            <div id="client-info-body">
-                                <div>
-                                    <label for="client-firstname">First Name</label>
-                                    <label for="client-lastname" className="secondColumn-text">Last Name</label>
-                                </div>
-                                <div>
-                                    <input type="text" value={currentClient["firstName"]} id="client-firstname"/>
-                                    <input type="text" value={currentClient["lastName"]} id="client-lastname" className="secondColumn-input"/><br/>
-                                </div>
-                                <label for="client-address">Address</label><br/>
-                                <input type="text" value={currentClient["address"]} id="client-address"/>
-                                <div>
-                                    <label for="client-mealnumber">Num. of Meals</label><br/>
-                                    <input type="text" value={currentClient["mealNumber"]} id="client-mealnumber"/><br/>
-
-                                    <p>Food Days</p>
-
-                                    <label for="client-foodday-m">Monday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m"/><br/>
-
-                                    <label for="client-foodday-t">Tuesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t"/><br/>
-
-                                    <label for="client-foodday-w">Wednesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w"/><br/>
-
-                                    <label for="client-foodday-th">Thursday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th"/><br/>
-
-                                    <label for="client-foodday-f">Friday</label><br/>
-                                    <input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f"/><br/>
-
-                                </div>
-                                <div>
-                                    <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                                    <input type="number" value={currentClient["frozenNumber"]} id="client-frozenNumber"/><br/>
-
-                                    <p>Frozen Days</p>
-
-                                    <label for="client-frozenday-m">Monday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["M"]} id="client-frozenday-m"/><br/>
-
-                                    <label for="client-frozenday-t">Tuesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["T"]} id="client-frozenday-t"/><br/>
-
-                                    <label for="client-frozenday-w">Wednesday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["W"]} id="client-frozenday-w"/><br/>
-
-                                    <label for="client-frozenday-th">Thursday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["Th"]} id="client-frozenday-th"/><br/>
-
-                                    <label for="client-frozenday-f">Friday</label><br/>
-                                    <input type="checkbox" checked={currentClient["frozenDay"]["F"]} id="client-frozenday-f"/><br/>
-
-                                </div>
-
-                                <label for="client-phone">Phone Number</label><br/>
-                                <input type="text" value={currentClient["phoneNumber"]} id="client-phone"/><br/>
-
-                                <label for="client-emergencycontact">Emergency Contact</label><br/>
-                                <input type="text" value={currentClient["emergencyContact"]} id="client-emergencycontact"/><br/>
-
-                                <label for="client-emergencyphone">Emergency Contact Phone</label><br/>
-                                <input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone"/><br/>
-
-                                <label for="client-nomilk">No Milk</label><br/>
-                                <input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk"/><br/>
-
-                                <label for="client-specialinstructions">Special Instructions</label><br/>
-                                <input type="text" value={currentClient["specialInstructions"]} id="client-specialinstructions"/><br/>
-
-                                <label for="client-c2">C2 Client</label><br/>
-                                <input type="checkbox" checked={currentClient["clientC2"]} id="client-c2"/><br/>
-
-                                <label for="client-ne">N/E</label><br/>
-                                <input type="text" value={currentClient["NE"]} id="client-ne"/><br/>
-
-                                <label for="client-email">Email Address</label><br/>
-                                <input type="text" value={currentClient["email"]} id="client-email"/><br/>
-
-                                <label for="client-holidayfrozen">Holiday Frozen</label><br/>
-                                <input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen"/><br/>
-                            </div>
-                        </div>
+                    </div>
+                    <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
+                        <ModalContent 
+                            currentClient={this.state.currentClient} 
+                            submit={this.submit} 
+                            handleCloseModal={this.handleCloseModal}/>
                     </Modal>
                 </div>
             </div>

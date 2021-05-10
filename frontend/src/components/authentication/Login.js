@@ -126,6 +126,7 @@ class Login extends Component {
                 this.volunteerInfoCheck(data)
             }
             else {
+                
                 this.props.history.push("/");
                 window.location.reload(false);
             }
@@ -155,7 +156,7 @@ class Login extends Component {
         })
     }
 
-    storeUser = (user) => {
+    storeUser = async (user) => {
         const date = new Date();
         if (this.state.userType == "volunteer") {
            localStorage.setItem("volunteerID", user.volunteerID);
