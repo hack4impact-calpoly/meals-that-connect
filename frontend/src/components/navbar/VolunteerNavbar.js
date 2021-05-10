@@ -8,7 +8,7 @@ class VolunteerNavBar extends Component {
                 <h2>Meals that Connect</h2>
                     <Link className="navbar-link" to="/" style={{marginLeft : '100px'}}>Home</Link>
                     <Link className="navbar-link" to="/profile">
-                        <img src = "https://static.thenounproject.com/png/3070444-200.png" style={{height: '35px', marginLeft : '10px'}}/>
+                        <img src = "https://static.thenounproject.com/png/3070444-200.png" style={{height: '35px'}}/>
                     </Link>
             </div>
         );

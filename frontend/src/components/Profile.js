@@ -4,6 +4,7 @@ import { signout } from './authentication/authenticationUtils';
 import fire from './../fire.js';
 import { Redirect } from 'react-router-dom';
 import Select from 'react-select'
+import { printStorage } from './authentication/authenticationUtils.js';
 
 class Profile extends Component {
 
@@ -25,10 +26,12 @@ class Profile extends Component {
             notes: '',
             driver: false,
             kitchenStaff: false,
+            originalUser: localStorage.getItem('userType'),
             userType: localStorage.getItem('userType'),
             readOnly: true,
             hideCancel: true,
             RedirectLoggedUser: false,
+            admin: false,
         };
     }
 
@@ -55,6 +58,7 @@ class Profile extends Component {
     };
 
     async fetchUserData () {
+        console.log("Fetching user data")
         let email = localStorage.getItem('userEmail')
         let type = this.state.userType
         let info = {
@@ -82,6 +86,7 @@ class Profile extends Component {
                 kitchenStaff: data.kitchenStaff,
                 driver: data.driver,
                 notes: data.notes,
+                admin: data.admin,
             })
         }
         else {
@@ -89,6 +94,7 @@ class Profile extends Component {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 site: data.site,
+                admin: data.admin,
                 email: email,
             })
         }
@@ -114,15 +120,15 @@ class Profile extends Component {
         window.location.reload(false);
     };
 
-    updateProfile = () => {
+    updateProfile = async () => {
 		let _this = this
 
         let {firstName, lastName, phoneNumber, availability, userType, 
-             email, driver, kitchenStaff, notes} = this.state
+             email, driver, kitchenStaff, notes, originalUser} = this.state
 
         let profile = {
             email: email,
-            userType: userType,
+            userType: originalUser,
             firstName: firstName,
             lastName: lastName, 
             notes: notes,
@@ -132,7 +138,8 @@ class Profile extends Component {
             kitchenStaff: kitchenStaff
         }
 
-        fetch(process.env.REACT_APP_SERVER_URL + 'profile/update', {
+
+        await fetch(process.env.REACT_APP_SERVER_URL + 'profile/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -140,14 +147,13 @@ class Profile extends Component {
             body: JSON.stringify(profile)
         })
         .then((res) => {
+            console.log(res)
             if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
-                console.log("setting user type")
                 localStorage.setItem("userType", userType)
                 window.location.reload()
-                // _this.props.history.push("/profile");
             }
         })
 	};
@@ -179,7 +185,7 @@ class Profile extends Component {
           )
         }
 
-        let { hideCancel, driver, kitchenStaff, notes, userType } = this.state
+        let { hideCancel, driver, kitchenStaff, notes, userType, admin } = this.state
         let { M, T, W, Th, F } = this.state.availability
         let options = [
             { value: 'site-manager', label: 'site-manager' },
@@ -219,16 +225,16 @@ class Profile extends Component {
             <div className='profile-container'>
                 <h1>{this.state.firstName.toUpperCase()} {this.state.lastName.toUpperCase()}'S PROFILE</h1>
                 <div id='profile-editable-fields'>
-                    <p className='input-firstName'>User Type</p>
-                    {hideCancel ? <input type="text" id='phoneNumber' size="50" style={{width: '720px'}} defaultValue={userType} readOnly={true}/> :
-                    <div style={{width: 300}}>
+                    {admin && <p className='input-firstName'>User Type</p>}
+                    {admin && (hideCancel ? <input type="text" id='phoneNumber' size="50" style={{width: '720px'}} defaultValue={userType} readOnly={true}/> :
+                    <div style={{width: 300, marginLeft: userType === "volunteer" ? 130 : 0}}>
                         <Select 
                             options={options} 
                             placeholder="User Type" 
                             styles={customStyles}
                             defaultValue={{value: userType, label: userType}} 
                             onChange={this.handleSelect}/>
-                    </div>}
+                    </div>)}
                     <p className='input-firstName'>First Name</p>
                     <input type="text" id='firstName' size="50" style={{width: '720px'}} defaultValue={this.state.firstName} onChange={this.handleChange} readOnly={this.state.readOnly}/>
                     <p className='input-lastName'>Last Name</p>
