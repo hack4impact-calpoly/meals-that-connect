@@ -6,6 +6,10 @@ const scheduleSchema = new mongoose.Schema({
     startDate: {type: Date, required: true},
     routes: {type: mongoose.Schema.Types.Mixed, required: true},
     mealPrep: {type: Array, required: true, default: []},
+    mealPrep2: {type: Array, required: true, default: []},
+    mealPrep3: {type: Array, required: true, default: []},
+    mealPrep4: {type: Array, required: true, default: []},
+    mealPrep5: {type: Array, required: true, default: []},
     staff: {type: Array, required: true, default: []},
     computer: {type: Array, required: true, default: []},
 })
