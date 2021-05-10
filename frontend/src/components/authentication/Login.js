@@ -81,7 +81,6 @@ class Login extends Component {
         fire.auth().signInWithEmailAndPassword(user.email, user.password)
         .then(userCredential => {
             var firebase_user = userCredential.user;
-            console.log(firebase_user)
             this.firebase_checkEmailVerif(firebase_user, user);
         })
         .catch((error) => {
@@ -104,6 +103,7 @@ class Login extends Component {
 
     mongo_login = (user) => {
         let _this = this
+        console.log("comes here")
         fetch(process.env.REACT_APP_SERVER_URL + 'login', {
             method: 'POST',
             headers: {
@@ -112,6 +112,7 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
+            console.log(res)
             if (res.status === 404) {
                 _this.setState({error: true})
             }
@@ -125,6 +126,7 @@ class Login extends Component {
                 this.volunteerInfoCheck(data)
             }
             else {
+                
                 this.props.history.push("/");
                 window.location.reload(false);
             }
@@ -154,7 +156,7 @@ class Login extends Component {
         })
     }
 
-    storeUser = (user) => {
+    storeUser = async (user) => {
         const date = new Date();
         if (this.state.userType == "volunteer") {
            localStorage.setItem("volunteerID", user.volunteerID);

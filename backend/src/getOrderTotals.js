@@ -10,6 +10,7 @@ const Meals = require('../models/meals');
 // and returns the total (both frozen and regular meals) of all the routes of that day
 
 router.post('/mealTotal', async (req, res) => {
+  console.log("getting meal total")
    const {site, foodDay} = req.body
    Meals.find({site: site}, function (err, data) {
      if (err) {
@@ -20,9 +21,9 @@ router.post('/mealTotal', async (req, res) => {
       let frozen = 0;
       for (let i = 0; i < data.length; i++) { // look through each meal object
         let meal = data[i]
-        if (meal.foodDays[foodDay] == true) // if ordered food for that day --> add mealNumber
+        if (meal.foodDays[foodDay] == true) // if ordered food for that day --> add 1
         {
-          brownBag += meal.mealNumber
+          brownBag += 1
         }
         if (foodDay == meal.frozenDay)   // if req.date == frozenDay --> add frozenNumber
           frozen += meal.frozenNumber

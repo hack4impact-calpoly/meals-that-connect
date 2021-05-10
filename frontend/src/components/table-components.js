@@ -91,7 +91,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
             ],
         })
   
-        fetch(process.process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
