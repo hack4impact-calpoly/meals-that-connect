@@ -22,7 +22,6 @@ class AddClient extends Component {
                     emergencyContact: "",
                     emergencyPhone: "",
                     noMilk: false,
-                    mealNumber: "",
                     specialInstructions: "",
                     clientC2: false,
                     NE: "",
@@ -67,8 +66,6 @@ class AddClient extends Component {
                     </div>
                     <label for="client-address">Address*</label><br/>
                     <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
-                    <label for="client-mealnumber">Num. of Meals*</label><br/>
-                    <input type="number" id="client-mealnumber" onChange={e => this.setState({mealNumber: e.target.value})} required={true}/><br/>
                     <label>Food Days*</label>
                     <table style={{marginLeft: "auto", marginRight: "auto"}} className="add-table">
                         <tr>

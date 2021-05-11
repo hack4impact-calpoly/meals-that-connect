@@ -5,7 +5,7 @@ const router = express.Router();
 const Client = require("../models/clients")
 
 router.post('/addClient', async (req, res) => {
-  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
+  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
   console.log("Adding client")
   Client.findOne({'email': email}).then(function(result) {
   if (result) {
@@ -19,7 +19,7 @@ router.post('/addClient', async (req, res) => {
         res.send(500).send("Internal server error")
       }
       else {
-        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
         client.save()
         console.log("succcessfully added client")
         res.status(200).send("success")
@@ -116,6 +116,7 @@ router.post('/site', async (req, res) => {
 })
 
 router.post('/id', async (req, res) => {
+  console.log("getting client")
   const {_id} = req.body
   Client.findOne({_id: _id}, function (err, client) {
     if (err) {
@@ -175,7 +176,6 @@ router.post('/update-client', async (req, res) => {
           emergencyContact,
           emergencyPhone,
           noMilk,
-          mealNumber,
           specialInstructions,
           clientC2,
           NE,
@@ -197,7 +197,6 @@ router.post('/update-client', async (req, res) => {
               emergencyContact: emergencyContact,
               emergencyPhone: emergencyPhone,
               noMilk: noMilk,
-              mealNumber: mealNumber,
               specialInstructions: specialInstructions,
               clientC2: clientC2,
               NE: NE,
@@ -218,7 +217,7 @@ router.post('/update-client', async (req, res) => {
   res.send("Information updated");
 });
 
-router.post('/update-client-constant-route', async (req, res) => {
+router.post('/update-data', async (req, res) => {
   const { id, 
           firstName, 
           lastName, 
@@ -229,10 +228,11 @@ router.post('/update-client-constant-route', async (req, res) => {
           specialInstructions, 
           clientC2, 
           NE, 
-          email,  
-          routeNumber, 
-          site,
-          index} = req.body
+          email, 
+        } = req.body
+
+  console.log(req.body)
+  console.log(id)
 
   Client.updateOne({'_id': id}, 
             { firstName: firstName,
@@ -244,17 +244,14 @@ router.post('/update-client-constant-route', async (req, res) => {
               specialInstructions: specialInstructions,
               clientC2: clientC2,
               NE: NE,
-              email: email,
-              routeNumber: routeNumber,
-              site: site,
-              index: index})
+              email: email})
     .then(function(result) {
         if (!result) {
           console.log("Error in updating info");
           res.send("Error in updating info");
           return;
         } else {
-          console.log("Information updated");
+          console.log("Client information updated");
           }
     })
   res.send("Information updated");
@@ -269,10 +266,10 @@ function getRouteTotals(clientList) {
       for (var day in days) {
         if (clientList[index].foodDays[days[day]]) {
           if(clientList[index].noMilk == false) {
-            mealTotal[day] += clientList[index].mealNumber
+            mealTotal[day] += 1
           }
           else {
-            whiteBagTotal[day] += clientList[index].mealNumber
+            whiteBagTotal[day] += 1
           }
         }
                 

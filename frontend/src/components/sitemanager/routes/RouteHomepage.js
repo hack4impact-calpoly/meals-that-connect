@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import RouteTable from './RouteTable';
 import Modal from 'react-modal';
 import RoutesNavbar from './RoutesNavbar';
+import { getWeekArr } from '../calendar'
 import ModalContent from './RouteModal';
-import "../../../css/Modal.css"
+import '../../../css/Modal.css';
+import { weekdaysMin } from 'moment';
+
+const moment = require('moment')
 
 class RouteHomepage extends Component {
     constructor(props) {
@@ -29,7 +33,6 @@ class RouteHomepage extends Component {
                 emergencyContact: null,
                 emergencyPhone: null,
                 noMilk: null,
-                mealNumber: null,
                 specialInstructions: null,
                 clientC2: null,
                 NE: null,
@@ -43,9 +46,9 @@ class RouteHomepage extends Component {
         };
     }
 
-    async componentDidMount(){
-        await this.fetchClients()
-    }
+    // async componentDidMount(){
+    //     await this.fetchRoutes()
+    // }
     
     componentWillMount() {
         Modal.setAppElement('body');
@@ -55,11 +58,16 @@ class RouteHomepage extends Component {
         this.setState({holidayArr: holidays})
     }
 
-    async fetchClients () {
+    async fetchRoutes () {
+        var mondayDate = getWeekArr(new Date)[1]
+        if (typeof this.state.weekArr !== 'undefined') {
+            mondayDate = this.state.weekArr[1];
+        }
         let info = {
             site: localStorage.getItem("site"),
+            week: mondayDate
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/site', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -67,30 +75,7 @@ class RouteHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        let clients = {}
-        let prevRoute = null
-        let routeData = []
-        let routes = []
-        for (let i = 0; i < data.length; i++) {
-            let client = data[i]
-            if (i > 0 && client.routeNumber !== prevRoute) {
-                clients[prevRoute] = routeData
-                // make sure null does not get addded to routes array
-                if (prevRoute !== null)
-                    routes.push(prevRoute)
-                routeData = []
-            }
-            // filters out clients with unassined route numbers
-            if (client.routeNumber !== "-1") {
-                prevRoute = client.routeNumber
-                routeData.push(client)
-            }
-        }
-        if (routeData.length > 0) {
-            clients[prevRoute] = routeData
-            routes.push(prevRoute)
-        }
-        this.setState({clients: clients, routes: routes}) 
+        this.setState({clients: data.meals, routes: data.routes}) 
     }
 
     setData = (data, route) => {
@@ -99,78 +84,129 @@ class RouteHomepage extends Component {
         this.setState({clients: newClients})
     }
 
-    updateWeek = (week) => {
-        this.setState({weekArr: week})
+    handleChange = (route, key, value, index) => {
+        console.log("Handling change")
+        let data = this.state.clients[route][index]
+        data[key] = value
+        this.setState({})
+        this.setState({})
     }
 
-    handleOpenModal = async (id) => {
-        let clientID = {
-            _id: id
+    handleSelect = (route, key, value, index) => {
+        console.log("Handling select change")
+        let data = this.state.clients[route][index]
+        data[key] = value
+        this.setState({})
+        this.updateDatabase(data.startDate, data.clientID, key, value)
+    }
+
+    handleBoolChange = (route, key, value, day, index) => {
+        console.log("Handling checkbox change")
+        let data = this.state.clients[route][index]
+        if (day !== null) {
+            data[key][day] = value
+            value = data[key]
+        }
+        else {
+            data[key] = value
+        }
+        this.setState({})
+        this.updateDatabase(data.startDate, data.clientID, key, value)
+    }
+
+    updateDatabase = (date, clientID, key, value) => {
+        const updateData = {
+            date: date,
+            clientID: clientID, 
+            key: key, 
+            value: value
+        }
+        fetch(process.env.REACT_APP_SERVER_URL + 'meals/update-field', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        })
+    }
+
+    updateWeek = (week) => {
+        this.setState({weekArr: week})
+        this.fetchRoutes()
+    }
+
+    handleOpenModal = async (client) => {
+        let data = {
+            _id: client.clientID
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/id', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(clientID)
+            body: JSON.stringify(data)
         })
-        let client = await response.json()
+        let clientData = await response.json()
+        client.phoneNumber = clientData.phoneNumber
+        client.emergencyContact = clientData.emergencyContact
+        client.emergencyPhone = clientData.emergencyPhone
+        client.specialInstructions = clientData.specialInstructions
+        client.clientC2 = clientData.clientC2
+        client.clientID = clientData._id
+        client.NE = clientData.NE
+        client.email = clientData.email
         this.setState({currentClient: client, showModal: true})
     }
+
     
     handleCloseModal = () => {
         this.setState({showModal: false});
     }
     
-    submit = async (newClient, date, constantFlag, weeklyFlag) => {
+    submit = async (newClient) => {
         let updateWeekly = {
-            date: date,
-            client: newClient
-        }
-        let updateConstant = {
+            date: this.state.weekArr[1],
             id: newClient._id,
-            firstName: newClient.firstName,
-            lastName: newClient.lastName,
-            address: newClient.address,
             foodDays: newClient.foodDays,
             frozenNumber: newClient.frozenNumber,
             frozenDay: newClient.frozenDay,
+            noMilk: newClient.noMilk,
+            holidayFrozen: newClient.holidayFrozen,
+        }
+        let updateConstant = {
+            id: newClient.clientID,
+            firstName: newClient.firstName,
+            lastName: newClient.lastName,
+            address: newClient.address,
             phoneNumber: newClient.phoneNumber,
             emergencyContact: newClient.emergencyContact,
             emergencyPhone: newClient.emergencyPhone,
-            noMilk: newClient.noMilk,
-            mealNumber: newClient.mealNumber,
             specialInstructions: newClient.specialInstructions,
-            clientC2: newClient.clientC2,
             NE: newClient.NE,
             email: newClient.email,
-            holidayFrozen: newClient.holidayFrozen,
-            routeNumber: newClient.routeNumber,
-            site: newClient.site,
-            index: newClient.index,
-        }
-        /*Update Constant Fields*/
-        if(constantFlag === 1) {
-            await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-constant-route', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updateConstant)
-            })
+            clientC2: newClient.clientC2,
         }
 
-        /*Update Weekly Fields*/
-        if(weeklyFlag === 1) {
-            await fetch(process.env.REACT_APP_SERVER_URL + 'meals/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updateWeekly)
-            })
-        }
+        /*Update Constant Fields in Client Database*/
+        await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateConstant)
+        })
+
+        /*Update Weekly Fields in Meals Database*/
+        await fetch(process.env.REACT_APP_SERVER_URL + 'meals/update-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateWeekly)
+        })
+
         window.location.reload()
+        // this.setState({showModal: false});
     }
 
     formatDate = (date) => {
@@ -180,6 +216,7 @@ class RouteHomepage extends Component {
     }
 
     render() {
+        console.log(this.state)
         let {routes, clients, weekArr} = this.state;
         let title = weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"
         return (
@@ -192,7 +229,8 @@ class RouteHomepage extends Component {
                             return (
                                 <section style={{marginRight: 80, paddingLeft: 320}}>
                                     <a id={String(route)}></a>
-                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}></RouteTable>
+                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}
+                                        handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
                                 </section>
                         );})}
                     </div>

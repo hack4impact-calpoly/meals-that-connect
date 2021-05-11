@@ -26,7 +26,6 @@ class ModalContent extends Component {
             emergencyContact: this.props.currentClient.emergencyContact,
             emergencyPhone: this.props.currentClient.emergencyPhone,
             noMilk: this.props.currentClient.noMilk,
-            mealNumber: this.props.currentClient.mealNumber,
             specialInstructions: this.props.currentClient.specialInstructions,
             clientC2: this.props.currentClient.clientC2,
             NE: this.props.currentClient.NE,
@@ -35,7 +34,8 @@ class ModalContent extends Component {
             routeNumber: this.props.currentClient.routeNumber,
             site: this.props.currentClient.site,
             index: this.props.currentClient.index,
-            _id: this.props.currentClient._id
+            _id: this.props.currentClient._id,
+            clientID: this.props.currentClient.clientID
          }
     }
 
@@ -93,10 +93,10 @@ class ModalContent extends Component {
                     <div id="client-info-header" style={{position: "fixed"}}>
                         <h1>Client Information</h1>
                         <button 
-                            onClick={() => this.props.submit(this.state, new Date(), this.state.constantFlag, this.state.weeklyFlag)} 
+                            onClick={() => this.props.submit(this.state)} 
                             style={{fontSize: "18px"}} 
                             >Exit and SAVE</button>
-                        <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px"}}>{"Exit and DON'T SAVE"}</button>
+                        <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px", marginBottom: 20}}>{"Exit and DON'T SAVE"}</button>
                     </div>
                     <div id="client-info-body">
                         <div className="two-column">
@@ -121,13 +121,6 @@ class ModalContent extends Component {
                             id="client-address" 
                             style={{width: "1130px"}}
                             onChange={e =>  this.handleChangeMoreInfo("address", e.target.value)}/><br/>
-                        <label for="client-mealnumber">Num. of Meals</label><br/>
-                        <input 
-                            type="text" 
-                            value={currentClient["mealNumber"]} 
-                            id="client-mealnumber" 
-                            style={{width: "1130px"}}
-                            onChange={e =>  this.handleChangeMoreInfo("mealNumber", e.target.value)}/><br/>
                         <label>Food Days</label>
                         <table className="add-table">
                             <tbody>
@@ -184,7 +177,7 @@ class ModalContent extends Component {
                                     <th>Holiday Frozen</th>
                                 </tr>
                                 <tr>
-                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("clientC2", !currentClient.noMilk)}/></td>
+                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("noMilk", !currentClient.noMilk)}/></td>
                                     <td><input type="checkbox" checked={currentClient["clientC2"]} id="client-c2" onChange={e =>  this.handleChangeMoreInfo("clientC2", !currentClient.clientC2)}/></td>
                                     <td><input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen" onChange={e => this.handleChangeMoreInfo("holidayFrozen", !currentClient.holidayFrozen)}/></td>
                                 </tr>

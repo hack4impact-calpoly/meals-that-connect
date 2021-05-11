@@ -64,6 +64,7 @@ export function signout(){
 }
 
 export function hasPermission(requiredUser){
+    console.log(requiredUser)
     if (requiredUser === "none")
     {
         return true;

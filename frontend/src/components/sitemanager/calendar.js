@@ -17,6 +17,10 @@ function getWeekDays(weekStart) {
   return days;
 }
 
+export function getWeekArr(date) {
+  return getWeekDays(getWeekRange(date).from)
+};
+
 function getWeekRange(date) {
   return {
     from: moment(date)

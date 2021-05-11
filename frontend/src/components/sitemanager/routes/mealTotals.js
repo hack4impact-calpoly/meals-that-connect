@@ -10,14 +10,6 @@ const Styles = styled.div`
     border-spacing: 0;
     width: 100%; 
     border: solid 2px #142850;
-    tr {  
-      :last-child {
-        td {
-          border-bottom: 1;
-          flex-direc  
-        }
-      }
-    }
     th {
         background: #b7f8ac;
         color: black;
@@ -182,10 +174,10 @@ const Table = (props) => {
       route: routeNum,
       info: "White Bags", 
       monday: props.data[i]['whitebag'][0], 
-      tuesday: props.data[i]['whitebag'][0],
-      wednesday: props.data[i]['whitebag'][0],
-      thursday: props.data[i]['whitebag'][0],
-      friday: props.data[i]['whitebag'][0],
+      tuesday: props.data[i]['whitebag'][1],
+      wednesday: props.data[i]['whitebag'][2],
+      thursday: props.data[i]['whitebag'][3],
+      friday: props.data[i]['whitebag'][4],
     }
     // Get meal data for each route
     let mealData = {
@@ -254,8 +246,6 @@ function getHolidayDate(holidayArr) {
 function cellClass(cell, props) {
   let holidayDates = getHolidayDate(props.holidayArr);
   const rowID = (+(cell['row']['id'])) % 3;
-  console.log(cell.column.Header)
-  console.log(cell.column.Header === "Meals")
   let width = cell.column.Header === "Meals" ? 200 : 'auto'
   
   if (cell['value'] !== " " && rowID === 2){

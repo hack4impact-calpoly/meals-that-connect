@@ -22,7 +22,6 @@ class ModalContent extends Component {
             emergencyContact: this.props.currentClient.emergencyContact,
             emergencyPhone: this.props.currentClient.emergencyPhone,
             noMilk: this.props.currentClient.noMilk,
-            mealNumber: this.props.currentClient.mealNumber,
             specialInstructions: this.props.currentClient.specialInstructions,
             clientC2: this.props.currentClient.clientC2,
             NE: this.props.currentClient.NE,
@@ -115,14 +114,6 @@ class ModalContent extends Component {
                             id="client-route" 
                             style={{width: "1130px"}}
                             onChange={e =>  this.handleChangeMoreInfo("routeNumber", e.target.value)}/><br/>
-                        <label for="client-mealnumber">Num. of Meals</label><br/>
-
-                        <input 
-                            type="text" 
-                            value={currentClient["mealNumber"]} 
-                            id="client-mealnumber" 
-                            style={{width: "1130px"}}
-                            onChange={e =>  this.handleChangeMoreInfo("mealNumber", e.target.value)}/><br/>
                         <label>Food Days</label>
                         <table className="add-table">
                             <tbody>
