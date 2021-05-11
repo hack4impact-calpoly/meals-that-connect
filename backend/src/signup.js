@@ -111,12 +111,12 @@ async function newAdminUser(data, password, userType) {
       res.status(404).send("email already in use")
       return
    }
-   created = await newAdminUser(req.body, password, SiteManager)
+   created = await newAdminUser(req.body, password, DataEntry)
    if (!created) { 
       res.status(404).send("email already in use")
       return
    }
-   created = await newAdminUser(req.body, password, DataEntry)
+   created = await newAdminUser(req.body, password, SiteManager)
    if (!created) { 
       res.status(404).send("email already in use")
       return
