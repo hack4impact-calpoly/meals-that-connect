@@ -80,6 +80,7 @@ router.post('/', async (req, res) =>{
       if (result) {
          console.log("email already in use")
          res.status(404).send("email already in use")
+         return;
       } 
       else {
          var volunteerID = getID();
@@ -99,6 +100,7 @@ router.post('/', async (req, res) =>{
       if (result) {
          console.log("email already in use")
          res.status(404).send("email already in use")
+         return;
       } 
       else {
          var doc = new SiteManager({ firstName, lastName, email, password, isAuthenticated, site, admin: true })
@@ -108,6 +110,7 @@ router.post('/', async (req, res) =>{
    }).catch(err => {
       console.log(err)
       res.send(500).send("Internal server error")
+      return;
    })
 
    DataEntry.findOne({'email': email}).then(function(result) {
