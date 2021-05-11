@@ -247,7 +247,7 @@ class Profile extends Component {
                     <input type="text" id='phoneNumber' size="50" style={{width: '720px'}} defaultValue={this.state.phoneNumber} onChange={this.handleChange} readOnly={this.state.readOnly} hidden={(this.state.userType == 'volunteer') ? false : true}/>
                     
                     <p className='input-phoneNumber' hidden={(this.state.userType == 'volunteer') ? false : true}>Volunteer Roles</p>
-                    <div className="volunteerType">
+                    <div className="volunteerType" hidden={(this.state.userType == 'volunteer') ? false : true}>
                         <input type="checkbox" id="driver" checked={driver} onChange={this.updateType}/>
                         <label for="driver" id="driver-text">Driver</label>
                         <input type="checkbox" id="kitchenStaff" checked={kitchenStaff} onChange={this.updateType}/>
