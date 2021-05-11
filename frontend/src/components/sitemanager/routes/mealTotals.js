@@ -10,14 +10,6 @@ const Styles = styled.div`
     border-spacing: 0;
     width: 100%; 
     border: solid 2px #142850;
-    tr {  
-      :last-child {
-        td {
-          border-bottom: 1;
-          flex-direc  
-        }
-      }
-    }
     th {
         background: #b7f8ac;
         color: black;

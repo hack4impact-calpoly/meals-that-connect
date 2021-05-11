@@ -81,7 +81,6 @@ class SiteManagerHomepage extends Component {
             const pdf = new jsPDF();
             pdf.addImage(canvas, 'JPEG', 2, 10, 180, 220);
             pdf.output('dataurlnewwindow');
-            pdf.save("download.pdf");
         })
         ;
     }

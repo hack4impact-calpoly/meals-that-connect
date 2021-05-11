@@ -21,7 +21,6 @@ import ClientTableContainer from './components/sitemanager/clients/ClientTableCo
 import AddClient from "./components/sitemanager/clients/addClient.js"
 import EditClient from './components/sitemanager/clients/EditClient.js'
 
-import Private from './components/authentication/Private'
 import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
@@ -65,19 +64,17 @@ class App extends Component {
 
 
               <PrivateRoute requiredUser="none" path="/profile" component={Profile}/>
-              <PrivateRoute requiredUser="none" path="/signout" component={Private}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
-              <PrivateRoute requiredUser="site-manager" exact path = "/routes"><RouteHomePage /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer"><VolunteerOverview /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path = "/add-volunteer"><AddVolunteer /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/clients"><ClientTableContainer /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path = "/add-client"><AddClient /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/edit-client"><EditClient /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours"><VolunteerHours /></PrivateRoute>
-              
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule"><VolunteerSchedule /></PrivateRoute>
-              <PrivateRoute requiredUser="site-manager" path="/signout"><Private /></PrivateRoute>
-              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info"><VolunteerInfo /></PrivateRoute>
+
+              <PrivateRoute requiredUser="site-manager" exact path = "/routes" component={RouteHomePage}/>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-volunteer" component={AddVolunteer}/>
+              <PrivateRoute requiredUser="site-manager" exact path="/clients" component={ClientTableContainer}/>
+              <PrivateRoute requiredUser="site-manager" exact path = "/add-client" component={AddClient}/>
+              <PrivateRoute requiredUser="site-manager" exact path="/edit-client" component={EditClient}/>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
+              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule" component={VolunteerSchedule}/>
+              <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
               <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
