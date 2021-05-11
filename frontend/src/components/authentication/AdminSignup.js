@@ -128,15 +128,15 @@ class Signup extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
-            if (res.status === 404) {
-                res.text().then(msg => {
-                    console.log(msg)
+            res.text().then(msg => {
+                console.log(msg)
+                if (res.status === 404) {
                     _this.setState({error: true, errorMessage: msg})
-                })
-            }
-            else {
-                _this.props.history.push("/email-verification");
-            }
+                }
+                else {
+                    _this.props.history.push("/email-verification");
+                }
+            })
         })
     }
 

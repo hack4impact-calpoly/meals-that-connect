@@ -76,7 +76,7 @@ router.post('/', async (req, res) =>{
       return;
    }
  
-   Volunteer.findOne({'email': email}).then(function(result) {
+   await Volunteer.findOne({'email': email}).then(function(result) {
       if (result) {
          console.log("email already in use")
          res.status(404).send("email already in use")
@@ -96,7 +96,7 @@ router.post('/', async (req, res) =>{
       return;
    })
 
-   SiteManager.findOne({'email': email}).then(function(result) {
+   await SiteManager.findOne({'email': email}).then(function(result) {
       if (result) {
          console.log("email already in use")
          res.status(404).send("email already in use")
@@ -104,7 +104,7 @@ router.post('/', async (req, res) =>{
       } 
       else {
          var doc = new SiteManager({ firstName, lastName, email, password, isAuthenticated, site, admin: true })
-         doc.save()
+         doc.save().then(result => {console.log(result)})
          console.log("successfully added site manager")
       }
    }).catch(err => {
@@ -121,7 +121,7 @@ router.post('/', async (req, res) =>{
       } 
       else {
          var doc = new DataEntry({ firstName, lastName, email, password, isAuthenticated, site, admin: true })
-         doc.save()
+         doc.save().then(result => {console.log(result)})
          console.log("successfully added data entry")
          res.status(200).send("success")
       }
