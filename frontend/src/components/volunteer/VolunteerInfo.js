@@ -72,23 +72,11 @@ class VolunteerInfo extends Component{
 	}
 
 	addInfo = (event) => {
-		const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.state;
-		//check if one box is checked
-  		const error = [Monday, Tuesday, Wednesday, Thursday, Friday].filter((v) => v).length < 1;
-  		console.log(error)
-
-  		if (error === true) {
-  			this.setState({notCheckedBox: true})
-  		}
-  		else {
-			//make sure this works correctly!
-			this.addDays();
-
-			console.log(this.state.personalData)
-			this.sendVolunteerInfo(this.state.personalData)
-  		}
-
 		event.preventDefault();
+
+		this.addDays();
+		this.sendVolunteerInfo(this.state.personalData)
+
 	}
 
 	sendVolunteerInfo = (info) => {
@@ -105,7 +93,7 @@ class VolunteerInfo extends Component{
                 _this.setState({error: true})
             }
             else {
-                _this.props.history.push("/");
+                window.location.reload(true);
             }
         })
 	}

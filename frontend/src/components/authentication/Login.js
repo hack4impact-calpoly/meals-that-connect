@@ -126,8 +126,6 @@ class Login extends Component {
                 this.volunteerInfoCheck(data)
             }
             else {
-                
-                this.props.history.push("/");
                 window.location.reload(false);
             }
         })
@@ -151,7 +149,7 @@ class Login extends Component {
                 _this.props.history.push("/volunteer-additional-info");
             }
             else {
-                _this.props.history.push("/");
+                window.location.reload(false);
             }
         })
     }
