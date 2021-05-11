@@ -93,7 +93,8 @@ class VolunteerInfo extends Component{
                 _this.setState({error: true})
             }
             else {
-                window.location.reload(true);
+                _this.props.history.push("/");
+                window.location.reload(false);
             }
         })
 	}
