@@ -129,7 +129,10 @@ class Signup extends Component {
         })
         .then((res) => {
             if (res.status === 404) {
-                _this.setState({error: true})
+                res.text().then(msg => {
+                    console.log(msg)
+                    _this.setState({error: true, errorMessage: msg})
+                })
             }
             else {
                 _this.props.history.push("/email-verification");
@@ -182,7 +185,7 @@ class Signup extends Component {
                     }
                 </section>
                 {this.state.emptyUser && <div className="signup-error">Select the type of user</div>}
-                {this.state.error && <div className="signup-error">Email taken</div>}
+                {this.state.error && <div className="signup-error">{this.state.errorMessage}</div>}
                 <input id = "signup-button" type="submit" value="CREATE ACCOUNT"/>
                 </form>
             </div>

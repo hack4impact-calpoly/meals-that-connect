@@ -39,6 +39,7 @@ router.post('/', async (req, res) =>{
     console.log(userType)
     if (userType == null) {
        res.status(404).send("Invalid user type") 
+       return;
     }
   
     userType.findOne({'email': email}).then(function(result) {
@@ -71,6 +72,8 @@ router.post('/', async (req, res) =>{
    const password = bcrypt.hashSync(req.body.password, 9);
    if (code !== process.env.ADMIN_CODE) {
       res.status(404).send("Invalid code")
+      console.log("Invalid code")
+      return;
    }
  
    Volunteer.findOne({'email': email}).then(function(result) {
