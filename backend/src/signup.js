@@ -32,6 +32,7 @@ router.post('/email-taken', async (req, res) =>{
 
 router.post('/', async (req, res) =>{
     const {firstName, lastName, email, isAuthenticated, site, user} = req.body
+    const password = bcrypt.hashSync(req.body.password, 9);
  
     let userType = getUser(user);
     console.log(user)
@@ -50,10 +51,10 @@ router.post('/', async (req, res) =>{
           if (user == "volunteer") {
              var volunteerID = getID();
              const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
-             doc = new userType({ volunteerID, firstName, lastName, email, driver, kitchenStaff, 
+             doc = new userType({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, 
                      isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, admin: false })
           } else {
-             doc = new userType({ firstName, lastName, email, isAuthenticated, site, admin: false })
+             doc = new userType({ firstName, lastName, email, password, isAuthenticated, site, admin: false })
           }
           doc.save()
           console.log("successfully added user")
@@ -80,7 +81,8 @@ router.post('/', async (req, res) =>{
       else {
          var volunteerID = getID();
          const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
-         var doc = new Volunteer({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, admin: true })
+         var doc = new Volunteer({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, 
+            isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, admin: true })
          doc.save()
          console.log("successfully added volunteer")
       }
