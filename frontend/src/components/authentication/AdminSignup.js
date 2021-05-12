@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/Signup.css';
-import { Route, Redirect, Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import fire from '../../fire.js';
 
 class Signup extends Component {
