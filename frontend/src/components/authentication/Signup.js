@@ -137,7 +137,8 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "site-manager"
+            user: "site-manager",
+            admin: false
         }
 
         this.mongo_signup(newSiteManager)
@@ -151,7 +152,8 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "data-entry"
+            user: "data-entry",
+            admin: false
         }
 
         this.mongo_signup(newDataEntry)
@@ -169,10 +171,9 @@ class Signup extends Component {
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
             user: "volunteer",
-
             phoneNumber: "0",
             availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
-        
+            admin: false,
         }
         this.mongo_signup(newVolunteer)
     }

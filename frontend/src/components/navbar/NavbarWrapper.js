@@ -13,7 +13,6 @@ class NavBar extends Component {
     }
 
     render() {
-        console.log(this.state.userType)
         let navbar;
         if (this.state.userType === 'site-manager')
         {
