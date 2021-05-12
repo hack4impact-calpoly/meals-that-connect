@@ -203,7 +203,7 @@ const Table = (props) => {
   )
 }
 
-function getDate(weekArr, tableDay) {
+export function getDate(weekArr, tableDay) {
   //let weekArr = props.weekArr
   let curr;
   if (weekArr.length === 1)
