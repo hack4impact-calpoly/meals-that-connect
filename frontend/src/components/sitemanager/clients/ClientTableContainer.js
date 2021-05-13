@@ -132,7 +132,7 @@ class ClientTableContainer extends Component {
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
                 <Link to="/add-client">
-                    <button>Add Client</button>
+                    <button className="generic-button">Add Client</button>
                 </Link>
                 <div className="site-manager-container">
                     {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :

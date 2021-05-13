@@ -61,7 +61,7 @@ class PopupMealTotals extends Component {
         return(
         <div>
         <Popup trigger = {
-            <button type="button" className="route" style={{width: 150, height: 50}}>{getWeekday(this.props.day)}</button>
+            <button type="button" className="route" style={{width: 165}}>{getWeekday(this.props.day)}</button>
             } modal>
             {close => (
                 <div>
