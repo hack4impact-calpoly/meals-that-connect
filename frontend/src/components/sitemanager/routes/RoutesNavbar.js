@@ -13,7 +13,7 @@ class routesOverview extends Component {
 
     scrollWidthOffset = (el) => {
         const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
-        const yOffset = -100; 
+        const yOffset = -150; 
         window.scrollTo({ top: yCoordinate + yOffset }); 
     }
 
@@ -23,7 +23,7 @@ class routesOverview extends Component {
         let scroll = this.scrollWidthOffset
 
         return (
-            <div id="route-sidebar" style={fixed ? {position: 'fixed', marginTop: 100, maxHeight: '85vh' } : {height: '100%'}}>
+            <div id="route-sidebar" style={fixed ? {position: 'fixed', marginTop: 150, maxHeight: '85vh' } : {height: '100%'}}>
                 <Calendar updateWeek={this.props.updateWeek} updateHoliday={this.props.updateHoliday}/>
                 <h1 style={{width: 250}}><b>Routes</b></h1>
                 <hr></hr>

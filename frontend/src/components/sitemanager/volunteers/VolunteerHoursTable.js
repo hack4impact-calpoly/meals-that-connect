@@ -5,10 +5,9 @@ import { getDate} from '../routes/mealTotals'
 
 const Styles = styled.div`
  table {
-   margin: 10px 30px 30px 10px;
+   margin: 0px 30px 30px 10px;
    border-spacing: 0;
    border: 1px solid black;
-   background-color: #f2fff0;
    font-family: 'Mulish', sans-serif;
    tr {
      :last-child {
@@ -29,7 +28,7 @@ const Styles = styled.div`
      }
    }
    th {
-     background: #D4D4D4;
+     background: #BDD3D2;
      color: black;
      fontWeight: bold;
    }

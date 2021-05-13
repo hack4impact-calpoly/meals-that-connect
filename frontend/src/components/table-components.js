@@ -37,7 +37,7 @@ table {
   }
   th {
     height: 40px;
-    background: #D4D4D4;
+    background: #BDD3D2;
     color: black;
     fontWeight: bold;
   }

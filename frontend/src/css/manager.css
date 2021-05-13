@@ -7,7 +7,7 @@
 
 .site-manager-page-header {
   margin-bottom: 20px;
-  margin-top: 120px;
+  margin-top: 150px;
 }
 
 .site-manager-container {
@@ -61,28 +61,19 @@ input::-webkit-inner-spin-button {
   align-items: center;
 }
 
-#button-div button,
-input {
-  overflow: hidden;
-  padding: 12px 28px;
-  border: none;
-  font-family: "Mulish", sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -webkit-transition-property: color, background-color;
-  transition-property: color, background-color;
-  margin: 10px;
-  width: 150px;
+#button-div button {
+  margin-right: 20px;
+}
+
+.button-cancel {
+  background-color: #0D2E46;
+  color: white;
 }
 
 .button-cancel:hover,
 .button-cancel button-fade:focus,
 .button-cancel button-fade:active {
-  background-color: #ff4000;
+  background-color: #BDD3D2;
   color: white;
   cursor: pointer;
 }
@@ -90,8 +81,8 @@ input {
 .button-submit:hover,
 .button-submit button-fade:focus,
 .button-submit button-fade:active {
-  background-color: #00b000;
-  color: white;
+  background-color: #BDD3D2;
+  color: black;
   cursor: pointer;
 }
 

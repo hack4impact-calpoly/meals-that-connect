@@ -139,8 +139,8 @@ class AddClient extends Component {
 
                     <br/>
                     <div id="button-div">
-                    <button type="button" className="button-cancel" onClick={()=> this.props.history.push("/clients")}>Cancel</button>
-                    <button type="submit" className="button-submit">Submit</button>
+                    <button type="button" className="generic-button" onClick={()=> this.props.history.push("/clients")}>Cancel</button>
+                    <button type="submit" className="generic-button">Submit</button>
                     </div>
                 </div>
             </form>

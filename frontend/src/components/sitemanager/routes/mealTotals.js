@@ -11,7 +11,7 @@ const Styles = styled.div`
     width: 100%; 
     border: solid 2px #142850;
     th {
-        background: #b7f8ac;
+        background: #BDD3D2;
         color: black;
         border: solid 1px #142850;
         textAlign: column.textAlign;
