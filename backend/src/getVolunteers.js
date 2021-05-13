@@ -23,6 +23,19 @@ router.post('/addVolunteer', async (req, res) => {
   })
 })
 
+router.post('/id', async (req, res) => {
+  console.log("getting volunteer")
+  const {_id} = req.body
+  Volunteer.findOne({_id: _id}, function (err, volunteer) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.send(volunteer)
+    }
+  })
+})
+
 router.post('/delete', async (req, res) => {
   const { id } = req.body
   Volunteer.deleteOne({_id: id}).then(function(result) {
@@ -87,6 +100,39 @@ router.post('/updateVolunteerInfo', async (req, res) => {
     }
   })
 })
+
+router.post('/update-volunteer', async (req, res) => {
+  const { firstName,
+          lastName,
+          availability,
+          phoneNumber,
+          site,
+          notes,
+          digitalSystem,
+          completedOrientation,
+          id} = req.body
+
+  Volunteer.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              availability: availability,
+              phoneNumber: phoneNumber,
+              site: site,
+              notes: notes,
+              digitalSystem: digitalSystem,
+              completedOrientation: completedOrientation
+            })
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
+  res.send("Information updated");
+});
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body

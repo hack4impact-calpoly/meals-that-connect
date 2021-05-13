@@ -100,38 +100,25 @@ const VolunteerOverviewData = (props) => {
       {
       Header: 'Volunteer Overview',
       columns: [
-          { Header: 'Volunteer ID',
-          accessor: 'volunteerID',
-          Filter: ColumnFilter,
-          filter: true,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
-          },
           { Header: 'First Name',
           accessor: 'firstName',
           Filter: ColumnFilter,
           filter: true,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 149, TEXT_TYPE, null)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
           Filter: ColumnFilter,
           filter: true,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
-          },
-          { Header: 'Org.',
-          accessor: 'site',
-          filter: false,
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 99, TEXT_TYPE, null)
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 149, TEXT_TYPE, null)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
           filter: false,
-          width: 300,
-          Cell: (cellProperties) => EditableCell(cellProperties, 299, "tel", null)
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 149, "tel", null)
           },
           { Header: 'Email',
           accessor: 'email',
@@ -175,23 +162,12 @@ const VolunteerOverviewData = (props) => {
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F')
           },
-          { Header: 'Volunteer Certificate Signed?',
-          accessor: 'completedOrientation',
-          filter: false,
-          width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null)
-          },
-          { Header: 'Role',
-          accessor: 'role',
-          filter: false,
-          width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, TEXT_TYPE, null)
-          },
-          { Header: 'Notes',
-          accessor: 'notes',
-          filter: false,
-          width: 270,
-          Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null)
+          { Header: 'More Details',
+            width: 100,
+            Cell: row => (<div style={{textAlign: 'center', width: 100, cursor: 'pointer'}} onClick={() => editVolunteer(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg></div>)
           },
           { Header: 'Remove Volunteer',
           width: 100,
@@ -202,12 +178,17 @@ const VolunteerOverviewData = (props) => {
       ],
       []
   )
+
+  function editVolunteer(id) {
+    console.log("Editing volunteer")
+    props.showModal(id)
+  } 
   
   const data = React.useMemo(() => props.data, []);
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <VolunteerOverviewTable columns={columns} data={data}/>
+    <VolunteerOverviewTable columns={columns} data={data} showModal={props.showModal}/>
   </Styles>
   )
 }
