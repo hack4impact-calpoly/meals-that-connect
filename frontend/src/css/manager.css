@@ -61,8 +61,7 @@ input::-webkit-inner-spin-button {
   align-items: center;
 }
 
-#button-div button,
-input {
+#button-div button {
   overflow: hidden;
   padding: 12px 28px;
   border: none;
