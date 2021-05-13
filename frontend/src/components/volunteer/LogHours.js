@@ -88,6 +88,11 @@ class LogHours extends Component {
     }
 
     render() {
+        let noHours = null;
+        if(this.state.log.length === 0)
+        {
+            noHours = <h2>No hours logged so far</h2>
+        }
         console.log(this.state.log)
         return (
             <div className="logging-container">
@@ -105,6 +110,8 @@ class LogHours extends Component {
                     <br/>
                 </form>
                 <LoggedHoursTable data={this.state.log} deleteLog={this.deleteLog}/>
+                <br></br>
+                {noHours}
             </div>
         );
     }
