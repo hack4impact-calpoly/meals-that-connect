@@ -126,7 +126,8 @@ class Login extends Component {
                 this.volunteerInfoCheck(data)
             }
             else {
-                _this.props.history.push("/");
+                window.location.reload(true);
+                // _this.props.history.push("/");
             }
         })
         .catch(err => {
@@ -149,6 +150,7 @@ class Login extends Component {
                 _this.props.history.push("/volunteer-additional-info");
             }
             else {
+                _this.props.history.push("/");
                 window.location.reload(false);
             }
         })

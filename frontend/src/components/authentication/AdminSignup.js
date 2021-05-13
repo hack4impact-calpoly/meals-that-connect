@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/Signup.css';
-import { Route, Redirect, Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import fire from '../../fire.js';
 
 class Signup extends Component {
@@ -48,21 +48,35 @@ class Signup extends Component {
         }
     }
 
+    validAdminCode = () => {
+        const adminCode = this.state.personalData["code"];
+        if (adminCode !== process.env.REACT_APP_ADMIN_CODE) {
+            this.setState({error: true, errorMessage: "Invalid admin code"});
+            return false
+        }
+        else {
+            this.setState({error: false});
+            return true
+        }
+    }
+
     signup = (e) => {
         e.preventDefault()
         if (this.state.passwordValidated === true) {
-            this.firebase_signup(this.state.email, this.state.password);
+            if (this.validAdminCode()) {
+                this.firebase_signup(this.state.email, this.state.password);
+            }
         }
     }
 
     firebase_signup = () => {
+        let _this = this
         let {email, password} = this.state.personalData
-        // console.log(email + " " + password)
         fire.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             var user = userCredential.user;
             this.firebase_sendVerification(user);
-            this.addUser();
+            this.addAdminUser(_this.state.personalData, _this.state.volunteerData);
 
         })
         .catch((error) => {
@@ -78,66 +92,64 @@ class Signup extends Component {
     }
 
     firebase_sendVerification = (user) => {
-
-        user.sendEmailVerification().then(function() {
-            // Email sent.
-        }).catch(function(error) {
-            // An error happened.
+        user.sendEmailVerification().then(function(){})
+        .catch(function(error) {
             var errorMessage = error.message;
             alert(errorMessage);
             console.log(error);
         });
     }
 
-    addUser = () => {
-        if (this.state.passwordValidated === true) {
-            this.addAdminUser(this.state.personalData, this.state.volunteerData);
-        }
-    }
+    addAdminUser = async (personalData, volunteerData) => {
+        let newAdminUser
+        let userTypes = ["site-manager", "volunteer", "data-entry"]
+        for (let i = 0; i < 3; i++) {
+            let userType = userTypes[i]
+            newAdminUser = {
+                firstName: personalData["firstName"],
+                lastName: personalData["lastName"],
+                email: personalData["email"],
+                password: personalData["password"],
+                site: personalData["site"],
+                driver: volunteerData["driver"],
+                kitchenStaff: volunteerData["kitchenStaff"],
+                isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
+                isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
+                user: userType,
+                code: personalData.code,
+                phoneNumber: "0",
+                availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
+                admin: true,
+            }
 
-    addAdminUser = (personalData, volunteerData) => {
-        const newAdminUser = {
-            firstName: personalData["firstName"],
-            lastName: personalData["lastName"],
-            email: personalData["email"],
-            password: personalData["password"],
-            site: personalData["site"],
-            driver: volunteerData["driver"],
-            kitchenStaff: volunteerData["kitchenStaff"],
-            isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
-            isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
-            user: "volunteer",
-            code: personalData.code,
-
-            phoneNumber: "0",
-            availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
-        
+            let success = await this.mongo_signup(newAdminUser)
+            if (!success) {
+                this.setState({error: true, errorMessage: "Email already in use"});
+                return false;
+            }
         }
-        this.mongo_signup(newAdminUser)
+
+        this.props.history.push("/email-verification");
     }
 
 
     
-    mongo_signup = (user) => {
-        let _this = this
-        fetch(process.env.REACT_APP_SERVER_URL + 'signup/admin', {
+    mongo_signup = async (user) => {
+
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
         })
-        .then((res) => {
-            res.text().then(msg => {
-                console.log(msg)
-                if (res.status === 404) {
-                    _this.setState({error: true, errorMessage: msg})
-                }
-                else {
-                    _this.props.history.push("/email-verification");
-                }
-            })
-        })
+        const msg = await response.text();
+        if (msg === "success") {
+            return true
+        }
+        else {
+            return false
+        }
     }
 
     render() {
