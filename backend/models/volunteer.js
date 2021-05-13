@@ -22,7 +22,8 @@ const volunteerSchema = new mongoose.Schema({
    },
    notes: String,
    digitalSystem: Boolean,
-   completedOrientation: Boolean
+   completedOrientation: Boolean,
+   admin: {type: Boolean, required: true, default: false}
 })
 
 const Volunteer = userConnection.model("volunteers", volunteerSchema)

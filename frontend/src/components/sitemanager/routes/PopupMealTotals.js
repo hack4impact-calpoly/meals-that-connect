@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Popup from "reactjs-popup";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../css/manager.css'
-import PopupOrderSuccess from './PopupOrderSuccess';
 
 class PopupMealTotals extends Component {
     constructor(props) {
@@ -14,6 +13,7 @@ class PopupMealTotals extends Component {
     {
         let day = getFoodDay(this.props.day);
         this.fetchTotalMeals(day);
+        this.props.showModal()
     }
 
     async fetchTotalMeals (day) {
@@ -36,7 +36,7 @@ class PopupMealTotals extends Component {
 
     async addOrder(){
         let site = localStorage.getItem("site")
-        let date = getDateObj(this.props.day)
+        let date = getDateObj(this.props.weekArr, this.props.day)
         let info = {
             site: site,
             date: date,
@@ -53,7 +53,6 @@ class PopupMealTotals extends Component {
         })
         const data = await response.json();
         this.setState({brownBag: data.brownBag, frozen: data.frozen, showSuccess: true})
-        //this.props.history.push("/orderSuccess")
     }
 
 
@@ -61,18 +60,17 @@ class PopupMealTotals extends Component {
     {
         return(
         <div>
-        <PopupOrderSuccess show={this.state.showSuccess}/>
         <Popup trigger = {
             <button type="button" className="route" style={{width: 150, height: 50}}>{getWeekday(this.props.day)}</button>
             } modal>
             {close => (
                 <div>
-                    <p id="popup">Are you sure you'd like to submit your meal orders for <b>{getDate(this.props.day)}</b>? 
+                    <p id="popup">Are you sure you'd like to submit your meal orders for <b>{getDate(this.props.weekArr, this.props.day)}</b>? 
                         They will be shared with the kitchen staff once you submit. 
-                        You'll still be able to go back and resubmit the order until <b>{getDeadline(this.props.day)}</b>.</p>
+                        You'll still be able to go back and resubmit the order until <b>{getDeadline(this.props.weekArr, this.props.day)}</b>.</p>
                     <div id = "popup-div">
                         <button type="button" className="popup-button-cancel"  onClick={() => {close();}}>Cancel</button>
-                        <button type="button" className="popup-button-submit" onClick= {() => {this.submitActions();}}>Submit</button>
+                        <button type="button" className="popup-button-submit" onClick= {() => {this.submitActions(); close();}}>Submit</button>
                     </div>
                 </div>
             )}
@@ -105,8 +103,16 @@ function getWeekday(day){
     return d;
 }
 
-function getDateObj(tableDay){
-    let curr = new Date();
+function getDateObj(weekArr, tableDay){
+    let curr;
+    if (weekArr.length === 1)
+    {
+      curr = new Date();
+    }
+    else
+    {
+      curr = new Date(weekArr[0]);
+    }
     let week = [];
   
     for (let i = 1; i <= 7; i++) {
@@ -118,8 +124,16 @@ function getDateObj(tableDay){
     return week[tableDay];
 }
 
-function getDate(tableDay) {
-    let curr = new Date();
+function getDate(weekArr, tableDay) {
+    let curr;
+    if (weekArr.length === 1)
+    {
+      curr = new Date();
+    }
+    else
+    {
+      curr = new Date(weekArr[0]);
+    }
     let week = [];
   
     for (let i = 1; i <= 7; i++) {
@@ -131,12 +145,19 @@ function getDate(tableDay) {
       let mdy = month + "/" + date + "/" + year;
       week.push(mdy);
     }
-  
     return week[tableDay];
-}
+  }
 
-function getDeadline(tableDay) {
-    let curr = new Date();
+function getDeadline(weekArr, tableDay) {
+    let curr;
+    if (weekArr.length === 1)
+    {
+      curr = new Date();
+    }
+    else
+    {
+      curr = new Date(weekArr[0]);
+    }
     let week = [];
     for (let i = 1; i <= 7; i++) {
       let first = curr.getDate() - curr.getDay() + i;

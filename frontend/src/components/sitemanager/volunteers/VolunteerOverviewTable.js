@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable, useBlockLayout } from 'react-table'
+import { useTable, useBlockLayout, useFilters } from 'react-table'
 import '../../../css/volunteerTable.css'
+import { ColumnFilter } from '../columnFilter';
+import DeleteCVPopup from '../DeleteCVPopup.js'
 
 const TEXT_TYPE = "type";
 const CELL_HEIGHT = 55;
@@ -37,6 +39,7 @@ const Styles = styled.div`
       background: #D4D4D4;
       color: black;
       fontWeight: bold;
+      border: 1px solid black;
     }
   }
 `
@@ -100,86 +103,93 @@ const VolunteerOverviewData = (props) => {
       columns: [
           { Header: 'First Name',
           accessor: 'firstName',
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
+          Filter: ColumnFilter,
+          filter: true,
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 149, TEXT_TYPE, null)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
-          },
-          { Header: 'Org.',
-          accessor: 'site',
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 99, TEXT_TYPE, null)
+          Filter: ColumnFilter,
+          filter: true,
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 149, TEXT_TYPE, null)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
-          width: 300,
-          Cell: (cellProperties) => EditableCell(cellProperties, 299, "tel", null)
+          filter: false,
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 149, "tel", null)
           },
           { Header: 'Email',
           accessor: 'email',
+          filter: false,
           width: 350,
           Cell: row => <div style={{width: 349}}>{row.row.original.email}</div>
           },
           { Header: 'Using Digital System?',
           accessor: 'digitalSystem',
+          filter: false,
           width: 100,
           Cell: (cellProperties) => EditableCell(cellProperties, 99, "checkbox", null)
           },
           { Header: 'M',
           accessor: 'monday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M')
           },
           { Header: 'T',
           accessor: 'tuesday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T')
           },
           { Header: 'W',
           accessor: 'wednesday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W')
           },
           { Header: 'Th',
           accessor: 'thursday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th')
           },
           { Header: 'F',
           accessor: 'friday',
+          filter: false,
           width: BOOL_HEIGHT,
           Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F')
           },
-          { Header: 'Volunteer Certificate Signed?',
-          accessor: 'completedOrientation',
-          width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null)
+          { Header: 'More Details',
+            width: 100,
+            Cell: row => (<div style={{paddingTop: '12px', width: 100, cursor: 'pointer'}} onClick={() => editVolunteer(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg></div>)
           },
-          { Header: 'Role',
-          accessor: 'role',
-          width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, TEXT_TYPE, null)
+          { Header: 'Remove Volunteer',
+          width: 100,
+          Cell: row => (<DeleteCVPopup person={row.row.original} type={"volunteer"}/>)
           },
-          { Header: 'Notes',
-          accessor: 'notes',
-          width: 270,
-          Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null)
-          },
-          
       ],},
       
       ],
       []
   )
+
+  function editVolunteer(id) {
+    console.log("Editing volunteer")
+    props.showModal(id)
+  } 
   
   const data = React.useMemo(() => props.data, []);
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <VolunteerOverviewTable columns={columns} data={data}/>
+    <VolunteerOverviewTable columns={columns} data={data} showModal={props.showModal}/>
   </Styles>
   )
 }
@@ -212,7 +222,8 @@ function VolunteerOverviewTable({ columns, data }) {
     columns,
     data,
     },
-    useBlockLayout
+    useFilters,
+    useBlockLayout,
     )
 
   // Render the UI for your table
@@ -222,7 +233,9 @@ function VolunteerOverviewTable({ columns, data }) {
       {headerGroups.map(headerGroup => (
         <tr {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map(column => (
-            <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+            <th {...column.getHeaderProps()}>{column.render('Header')}
+                <div>{(column.canFilter && column.filter === true) ? column.render('Filter') : null}</div>
+            </th>
           ))}
         </tr>
       ))}

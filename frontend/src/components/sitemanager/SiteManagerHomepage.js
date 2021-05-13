@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import Modal from 'react-modal';
 import MealTotals from './routes/mealTotals';
 import RoutesNavbar from './routes/RoutesNavbar';
 import PopupMealTotals from './routes/PopupMealTotals';
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
+import { getWeekArr } from './calendar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/manager.css';
 
@@ -12,47 +14,48 @@ import '../../css/manager.css';
 import * as html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
+const moment = require('moment')
+
 class SiteManagerHomepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showModal: false,
             totals: null,
             routes: [],
             weekArr: [],
-            holidayArr: []
+            holidayArr: [],
+            clients: {},
          };
     }
 
     updateWeek = (week) => {
-        console.log(week)
-        this.setState({weekArr: week})
-    }
-
-    updateHoliday = (holidays) => {
-        console.log(holidays)
-        this.setState({holidayArr: holidays})
-    }
-
-    // componentDidUpdate(){
-    //     let weekArr = localStorage.getItem("week")
-    //     console.log("in update");
-    //     console.log(this.state.weeks !== weekArr)
-    //     if (weekArr !== '' && (this.state.weeks !== weekArr)) {
-    //         this.setState({weeks: weekArr})
-    //         console.log(this.state.weeks !== weekArr)
-    //     }
-    // }
-
-    async componentDidMount(){
+        console.log("Updating week")
+        this.state.weekArr = week
+        // this.setState({weekArr: week})
         this.fetchMealTotals()
     }
 
+    updateHoliday = (holidays) => {
+        this.setState({holidayArr: holidays})
+    }
+
+    async componentDidMount(){
+        await this.fetchMealTotals()
+    }
+
     async fetchMealTotals () {
-        let site = localStorage.getItem("site")
-        let info = {
-            site: site,
+        // var mondayDate = getWeekArr(new Date)[1]
+        if (this.state.weekArr.len === 0) {
+            return
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/siteTotals', {
+        let mondayDate = this.state.weekArr[1];
+        console.log(mondayDate)
+        let info = {
+            site: "SLO",
+            week: mondayDate
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,7 +63,8 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        this.setState({totals: data.meals, routes: data.routes})
+        this.setState({totals: data.totals, routes: data.routes})
+        console.log(this.state.totals)
     }
 
     printDocument() {
@@ -77,9 +81,16 @@ class SiteManagerHomepage extends Component {
             const pdf = new jsPDF();
             pdf.addImage(canvas, 'JPEG', 2, 10, 180, 220);
             pdf.output('dataurlnewwindow');
-            pdf.save("download.pdf");
         })
         ;
+    }
+
+    handleOpenModal = () => {
+        this.setState({showModal: true});
+    }
+    
+    handleCloseModal = () => {
+        this.setState({showModal: false});
     }
 
     render() {
@@ -94,16 +105,22 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
-                        <div className = "confirmation-buttons" style={{ display:'flex'}}>
-                            <h3>Confirm Total For:</h3>
-                            <PopupMealTotals day={0}/>
-                            <PopupMealTotals day={1}/>
-                            <PopupMealTotals day={2}/>
-                            <PopupMealTotals day={3}/>
-                            <PopupMealTotals day={4}/>
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
+                            <h3>Confirm Total For: </h3>
+                            <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/>
+                            <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/>
                         </div>
                         <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
                     </div>
+                    <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
+                        <div id="order-modal-header">
+                            <h1>Successfully Submitted Order!</h1>
+                            <button onClick={this.handleCloseModal} id="order-modal-button">Close</button>
+                        </div>
+                    </Modal>
                 </div>
             </div>
         );

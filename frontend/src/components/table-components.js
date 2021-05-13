@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components'
-import { useTable } from 'react-table'
+import { useTable, useFilters} from 'react-table'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
@@ -60,6 +60,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
         columns,
         getRowId,
     },
+        useFilters,
     )
   
     const moveRow = (dragIndex, hoverIndex) => {
@@ -90,7 +91,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
             ],
         })
   
-        fetch(process.process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -116,7 +117,9 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             <th></th>
                             {headerGroup.headers.map(column => (
-                                <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}
+                                    <div>{(column.canFilter && column.filter === true) ? column.render('Filter') : null}</div>
+                                </th>
                             ))}
                         </tr>
                     ))}

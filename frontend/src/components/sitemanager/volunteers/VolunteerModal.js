@@ -1,112 +1,124 @@
 import React, {Component} from 'react';
 import Modal from 'react-modal';
-import styled from 'styled-components'
+import "../../../css/Modal.css";
 
-class ClientModal extends Component {
+class VolunteerModalContent extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            showModal: true,
-            currentClient: this.props.currentClient };
+            firstName: this.props.currentVolunteer.firstName,
+            lastName: this.props.currentVolunteer.lastName,
+            availability: {
+                M: this.props.currentVolunteer.availability.M,
+                T: this.props.currentVolunteer.availability.T,
+                W: this.props.currentVolunteer.availability.W,
+                Th: this.props.currentVolunteer.availability.Th,
+                F: this.props.currentVolunteer.availability.F,
+            },
+            phoneNumber: this.props.currentVolunteer.phoneNumber,
+            site: this.props.currentVolunteer.site,
+            notes: this.props.currentVolunteer.notes,
+            digitalSystem: this.props.currentVolunteer.digitalSystem,
+            completedOrientation: this.props.currentVolunteer.completedOrientation,
+            _id: this.props.currentVolunteer._id
+        };
     }
 
-    handleCloseModal = () => {
-        this.setState({showModal: false});
+    handleChangeMoreInfo = (name, value) => {
+        if(name ==="availability"){
+            let availability = this.state.availability
+            availability[value] = !(this.state.availability[value])
+            this.setState({availability: availability})
+        }
+        else {
+            this.setState({[name]: value})
+        }
     }
 
     render() {
-        console.log(this.state.showModal)
+        const options = [
+            { value: 'None', label: 'None' },
+            { value: 'M', label: 'M' },
+            { value: 'T', label: 'T' },
+            { value: 'W', label: 'W' },
+            { value: 'Th', label: 'Th' },
+            { value: 'F', label: 'F' }
+        ]
+        const customStyles = {
+            control: (provided, state) => ({
+                ...provided,
+                border: '2px solid grey',
+                width: '250px'
+            }),
+            singleValue: (provided, state) => {
+                const padding = 3;
+            
+                return { ...provided,  padding, width: '250px' };
+            },
+            input: (provided, state) => ({
+                ...provided,
+                padding: 0,
+                width: '250px'
+            }),
+        }
+        let currentVolunteer = this.state;
         return (
-            <Modal isOpen={this.state.showModal} contentLabel="Minimal Modal Example" onRequestClose={this.props.closeModal} className="Modal" overlayClassName="Overlay">
+            <div style={{marginBottom: 40}}>
                 <div id="modal-content">
-                    <div id="client-info-header">
-                        <h1>Client Information</h1>
-                        <button onClick={this.handleCloseModal} style={{position: "fixed"}}>Close Modal</button>
+                    <div id="client-info-header" style={{position: "fixed"}}>
+                        <h1>Volunteer Information</h1>
+                        <button 
+                            onClick={() => this.props.submit(this.state)} 
+                            style={{fontSize: "18px"}} 
+                            >Exit and SAVE</button>
+                        <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px"}}>{"Exit and DON'T SAVE"}</button>
                     </div>
                     <div id="client-info-body">
-                        <div>
-                            <label for="client-firstname">First Name</label>
-                            <label for="client-lastname" className="secondColumn-text">Last Name</label>
+                        <div className="two-column">
+                            <div><label for="client-firstname">First Name</label></div>
+                            <div><label for="client-lastname">Last Name</label></div>
+                            <div><input 
+                                    type="text" 
+                                    value={currentVolunteer.firstName} 
+                                    id="client-firstname" 
+                                    onChange={e =>  this.handleChangeMoreInfo("firstName", e.target.value)}/></div>
+                            <div><input 
+                                    type="text" 
+                                    value={currentVolunteer.lastName} 
+                                    id="client-lastname"
+                                    onChange={e =>  this.handleChangeMoreInfo("lastName", e.target.value)}/></div>
                         </div>
-                        <div>
-                            <input type="text" value={this.state.currentClient["firstName"]} id="client-firstname"/>
-                            <input type="text" value={this.state.currentClient["lastName"]} id="client-lastname" className="secondColumn-input"/><br/>
-                        </div>
-                        <label for="client-address">Address</label><br/>
-                        <input type="text" value={this.state.currentClient["address"]} id="client-address"/><br/>
-                        <label for="client-mealnumber">Num. of Meals</label><br/>
-                        <input type="text" value={this.state.currentClient["mealNumber"]} id="client-mealnumber"/><br/>
-                        <p>Food Days</p>
-                        <div id="client-fooddays">
-                            <label for="client-foodday-m">Monday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["foodDays"]["M"]} id="client-foodday-m"/><br/>
-
-                            <label for="client-foodday-t">Tuesday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["foodDays"]["T"]} id="client-foodday-t"/><br/>
-
-                            <label for="client-foodday-w">Wednesday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["foodDays"]["W"]} id="client-foodday-w"/><br/>
-
-                            <label for="client-foodday-th">Thursday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["foodDays"]["Th"]} id="client-foodday-th"/><br/>
-
-                            <label for="client-foodday-f">Friday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["foodDays"]["F"]} id="client-foodday-f"/><br/>
-
-                        </div>
+                        
+                        
+                        <label>Availability</label>
+                        <table className="add-table">
+                            <tbody>
+                                <tr>
+                                    <th>Monday</th>
+                                    <th>Tuesday</th>
+                                    <th>Wednesday</th>
+                                    <th>Thursday</th>
+                                    <th>Friday</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" checked={currentVolunteer["availability"]["M"]} id="client-foodday-m" onChange={e =>  this.handleChangeMoreInfo("availability", "M")}/></td>
+                                    <td><input type="checkbox" checked={currentVolunteer["availability"]["T"]} id="client-foodday-t" onChange={e =>  this.handleChangeMoreInfo("availability", "T")}/></td>
+                                    <td><input type="checkbox" checked={currentVolunteer["availability"]["W"]} id="client-foodday-w" onChange={e =>  this.handleChangeMoreInfo("availability", "W")}/></td>
+                                    <td><input type="checkbox" checked={currentVolunteer["availability"]["Th"]} id="client-foodday-th" onChange={e =>  this.handleChangeMoreInfo("availability", "Th")}/></td>
+                                    <td><input type="checkbox" checked={currentVolunteer["availability"]["F"]} id="client-foodday-f" onChange={e =>  this.handleChangeMoreInfo("availability", "F")}/></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <br/>
-                        <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                        <input type="text" value={this.state.currentClient["frozenNumber"]} id="client-frozenNumber"/><br/>
-
-                        <p>Frozen Days</p>
-                        <div id="client-frozendays">
-                            <label for="client-frozenday-m">Monday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["frozenDay"]["M"]} id="client-frozenday-m"/><br/>
-
-                            <label for="client-frozenday-t">Tuesday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["frozenDay"]["T"]} id="client-frozenday-t"/><br/>
-
-                            <label for="client-frozenday-w">Wednesday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["frozenDay"]["W"]} id="client-frozenday-w"/><br/>
-
-                            <label for="client-frozenday-th">Thursday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["frozenDay"]["Th"]} id="client-frozenday-th"/><br/>
-
-                            <label for="client-frozenday-f">Friday</label><br/>
-                            <input type="checkbox" checked={this.state.currentClient["frozenDay"]["F"]} id="client-frozenday-f"/><br/>
-                        </div>
 
                         <label for="client-phone">Phone Number</label><br/>
-                        <input type="text" value={this.state.currentClient["phoneNumber"]} id="client-phone"/><br/>
-
-                        <label for="client-emergencycontact">Emergency Contact</label><br/>
-                        <input type="text" value={this.state.currentClient["emergencyContact"]} id="client-emergencycontact"/><br/>
-
-                        <label for="client-emergencyphone">Emergency Contact Phone</label><br/>
-                        <input type="text" value={this.state.currentClient["emergencyPhone"]} id="client-emergencyphone"/><br/>
-
-                        <label for="client-nomilk">No Milk</label><br/>
-                        <input type="checkbox" checked={this.state.currentClient["noMilk"]} id="client-nomilk"/><br/>
-
-                        <label for="client-specialinstructions">Special Instructions</label><br/>
-                        <input type="text" value={this.state.currentClient["specialInstructions"]} id="client-specialinstructions"/><br/>
-
-                        <label for="client-c2">C2 Client</label><br/>
-                        <input type="checkbox" checked={this.state.currentClient["clientC2"]} id="client-c2"/><br/>
-
-                        <label for="client-ne">N/E</label><br/>
-                        <input type="text" value={this.state.currentClient["NE"]} id="client-ne"/><br/>
-
-                        <label for="client-email">Email Address</label><br/>
-                        <input type="text" value={this.state.currentClient["email"]} id="client-email"/><br/>
-
-                        <label for="client-holidayfrozen">Holiday Frozen</label><br/>
-                        <input type="checkbox" checked={this.state.currentClient["holidayFrozen"]} id="client-holidayfrozen"/><br/>
+                        <input type="text" value={currentVolunteer["phoneNumber"]} id="client-phone" style={{width: "1130px"}} onChange={e =>  this.handleChangeMoreInfo("phoneNumber", e.target.value)}/><br/>
+                        
                     </div>
                 </div>
-            </Modal>
+            </div>
         );
     }
 }
 
-export default ClientModal;
+export default VolunteerModalContent;

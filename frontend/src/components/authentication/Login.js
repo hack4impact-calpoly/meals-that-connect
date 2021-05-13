@@ -61,6 +61,7 @@ class Login extends Component {
 
     login = (e) => {
         e.preventDefault();
+        console.log("here")
 
         if (this.state.userType === "") {
             this.setState({emptyUser: true})
@@ -80,7 +81,6 @@ class Login extends Component {
         fire.auth().signInWithEmailAndPassword(user.email, user.password)
         .then(userCredential => {
             var firebase_user = userCredential.user;
-            console.log(firebase_user)
             this.firebase_checkEmailVerif(firebase_user, user);
         })
         .catch((error) => {
@@ -103,6 +103,7 @@ class Login extends Component {
 
     mongo_login = (user) => {
         let _this = this
+        console.log("comes here")
         fetch(process.env.REACT_APP_SERVER_URL + 'login', {
             method: 'POST',
             headers: {
@@ -111,6 +112,7 @@ class Login extends Component {
             body: JSON.stringify(user)
         })
         .then((res) => {
+            console.log(res)
             if (res.status === 404) {
                 _this.setState({error: true})
             }
@@ -124,8 +126,7 @@ class Login extends Component {
                 this.volunteerInfoCheck(data)
             }
             else {
-                this.props.history.push("/");
-                window.location.reload(false);
+                _this.props.history.push("/");
             }
         })
         .catch(err => {
@@ -148,12 +149,13 @@ class Login extends Component {
                 _this.props.history.push("/volunteer-additional-info");
             }
             else {
-                _this.props.history.push("/");
+                window.location.reload(false);
             }
         })
     }
 
-    storeUser = (user) => {
+    storeUser = async (user) => {
+        console.log(user)
         const date = new Date();
         if (this.state.userType == "volunteer") {
            localStorage.setItem("volunteerID", user.volunteerID);
@@ -198,7 +200,7 @@ class Login extends Component {
                     </div>
                 </div>
                 <p className= "input-email">Email</p>
-                <input type="text" id="login-email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
+                <input type="text" id="email" size="50" style={{width: '500px'}} onChange={this.handleChange}/>
                 <br/>
                 <p className= "input-password">Password</p>
                 <div className = "link">
