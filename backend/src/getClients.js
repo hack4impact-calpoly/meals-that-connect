@@ -5,7 +5,7 @@ const router = express.Router();
 const Client = require("../models/clients")
 
 router.post('/addClient', async (req, res) => {
-  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
+  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
   console.log("Adding client")
   Client.findOne({'email': email}).then(function(result) {
   if (result) {
@@ -19,7 +19,7 @@ router.post('/addClient', async (req, res) => {
         res.send(500).send("Internal server error")
       }
       else {
-        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, mealNumber, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
         client.save()
         console.log("succcessfully added client")
         res.status(200).send("success")
@@ -115,17 +115,18 @@ router.post('/site', async (req, res) => {
   })
 })
 
-router.get('/all', async (req, res) => {
-  Client.find({}, function (err, clients) {
+router.post('/id', async (req, res) => {
+  console.log("getting client")
+  const {_id} = req.body
+  Client.findOne({_id: _id}, function (err, client) {
     if (err) {
       console.log(err)
     }
     else {
-      res.send(clients)
+      res.send(client)
     }
   })
 })
-
 
 router.post('/update-routes', async (req, res) => {
    const {id, key, data} = req.body
@@ -164,14 +165,112 @@ router.post('/update-client-routes', async (req, res) => {
   res.send("Information updated");
 });
 
+router.post('/update-client', async (req, res) => {
+  const { firstName,
+          lastName,
+          address,
+          foodDays,
+          frozenNumber,
+          frozenDay,
+          phoneNumber,
+          emergencyContact,
+          emergencyPhone,
+          noMilk,
+          specialInstructions,
+          clientC2,
+          NE,
+          email,
+          holidayFrozen,
+          routeNumber,
+          site,
+          index,
+          id} = req.body
+
+  Client.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              address: address,
+              foodDays: foodDays,
+              frozenNumber: frozenNumber,
+              frozenDay: frozenDay,
+              phoneNumber: phoneNumber,
+              emergencyContact: emergencyContact,
+              emergencyPhone: emergencyPhone,
+              noMilk: noMilk,
+              specialInstructions: specialInstructions,
+              clientC2: clientC2,
+              NE: NE,
+              email: email,
+              holidayFrozen: holidayFrozen,
+              routeNumber: routeNumber,
+              site: site,
+              index: index})
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
+  res.send("Information updated");
+});
+
+router.post('/update-data', async (req, res) => {
+  const { id, 
+          firstName, 
+          lastName, 
+          address,   
+          phoneNumber, 
+          emergencyContact, 
+          emergencyPhone,   
+          specialInstructions, 
+          clientC2, 
+          NE, 
+          email, 
+        } = req.body
+
+  console.log(req.body)
+  console.log(id)
+
+  Client.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              address: address,
+              phoneNumber: phoneNumber,
+              emergencyContact: emergencyContact,
+              emergencyPhone: emergencyPhone,
+              specialInstructions: specialInstructions,
+              clientC2: clientC2,
+              NE: NE,
+              email: email})
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Client information updated");
+          }
+    })
+  res.send("Information updated");
+});
+
 function getRouteTotals(clientList) {
     var days = ["M", "T", "W", "Th", "F"]
-    var frozenTotal = [0,0,0,0,0];
-    var mealTotal = [0,0,0,0,0];
+    var whiteBagTotal = [0, 0, 0, 0, 0]
+    var frozenTotal = [0, 0, 0, 0, 0];
+    var mealTotal = [0, 0, 0, 0, 0];
     for (var index in clientList) {
       for (var day in days) {
         if (clientList[index].foodDays[days[day]]) {
-          mealTotal[day] += clientList[index].mealNumber
+          if(clientList[index].noMilk == false) {
+            mealTotal[day] += 1
+          }
+          else {
+            whiteBagTotal[day] += 1
+          }
         }
                 
         if (clientList[index].frozenDay == days[day]){
@@ -179,7 +278,7 @@ function getRouteTotals(clientList) {
         }
       }
     }
-    var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal}
+    var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal, "whitebag": whiteBagTotal}
     return routeTotals
   }
 

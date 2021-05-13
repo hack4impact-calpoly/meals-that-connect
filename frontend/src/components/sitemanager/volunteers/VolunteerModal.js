@@ -34,8 +34,6 @@ class ClientModal extends Component {
                         </div>
                         <label for="client-address">Address</label><br/>
                         <input type="text" value={this.state.currentClient["address"]} id="client-address"/><br/>
-                        <label for="client-mealnumber">Num. of Meals</label><br/>
-                        <input type="text" value={this.state.currentClient["mealNumber"]} id="client-mealnumber"/><br/>
                         <p>Food Days</p>
                         <div id="client-fooddays">
                             <label for="client-foodday-m">Monday</label><br/>

@@ -6,12 +6,15 @@ import PopupMealTotals from './routes/PopupMealTotals';
 import 'reactjs-popup/dist/index.css';
 
 import Spinner from "react-bootstrap/Spinner"
+import { getWeekArr } from './calendar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/manager.css';
 
 
 import * as html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+
+const moment = require('moment')
 
 class SiteManagerHomepage extends Component {
     constructor(props) {
@@ -21,40 +24,38 @@ class SiteManagerHomepage extends Component {
             totals: null,
             routes: [],
             weekArr: [],
-            holidayArr: []
+            holidayArr: [],
+            clients: {},
          };
     }
 
     updateWeek = (week) => {
-        console.log(week)
-        this.setState({weekArr: week})
-    }
-
-    updateHoliday = (holidays) => {
-        console.log(holidays)
-        this.setState({holidayArr: holidays})
-    }
-
-    // componentDidUpdate(){
-    //     let weekArr = localStorage.getItem("week")
-    //     console.log("in update");
-    //     console.log(this.state.weeks !== weekArr)
-    //     if (weekArr !== '' && (this.state.weeks !== weekArr)) {
-    //         this.setState({weeks: weekArr})
-    //         console.log(this.state.weeks !== weekArr)
-    //     }
-    // }
-
-    async componentDidMount(){
+        console.log("Updating week")
+        this.state.weekArr = week
+        // this.setState({weekArr: week})
         this.fetchMealTotals()
     }
 
+    updateHoliday = (holidays) => {
+        this.setState({holidayArr: holidays})
+    }
+
+    async componentDidMount(){
+        await this.fetchMealTotals()
+    }
+
     async fetchMealTotals () {
-        let site = localStorage.getItem("site")
-        let info = {
-            site: site,
+        // var mondayDate = getWeekArr(new Date)[1]
+        if (this.state.weekArr.len === 0) {
+            return
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/siteTotals', {
+        let mondayDate = this.state.weekArr[1];
+        console.log(mondayDate)
+        let info = {
+            site: "SLO",
+            week: mondayDate
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,7 +63,8 @@ class SiteManagerHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        this.setState({totals: data.meals, routes: data.routes})
+        this.setState({totals: data.totals, routes: data.routes})
+        console.log(this.state.totals)
     }
 
     printDocument() {
@@ -79,7 +81,6 @@ class SiteManagerHomepage extends Component {
             const pdf = new jsPDF();
             pdf.addImage(canvas, 'JPEG', 2, 10, 180, 220);
             pdf.output('dataurlnewwindow');
-            pdf.save("download.pdf");
         })
         ;
     }
@@ -94,7 +95,6 @@ class SiteManagerHomepage extends Component {
 
     render() {
         let {totals, routes, weekArr, holidayArr} = this.state
-        console.log(weekArr)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Site Manager Overview</h1>
@@ -105,8 +105,8 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
-                        <div className = "confirmation-buttons" style={{ display:'flex'}}>
-                            <h3>Confirm Total For:</h3>
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
+                            <h3>Confirm Total For: </h3>
                             <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/>
                             <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/>
                             <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/>

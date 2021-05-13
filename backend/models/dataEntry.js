@@ -7,7 +7,8 @@ const dataEntrySchema = new mongoose.Schema({
    email: String,
    password: String,
    isAuthenticated: Boolean,
-   site: String
+   site: String,
+   admin: {type: Boolean, required: true, default: false}
 })
 
 const DataEntry = userConnection.model("dataentriers", dataEntrySchema)

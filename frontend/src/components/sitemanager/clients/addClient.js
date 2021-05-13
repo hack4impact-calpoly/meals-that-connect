@@ -22,7 +22,6 @@ class AddClient extends Component {
                     emergencyContact: "",
                     emergencyPhone: "",
                     noMilk: false,
-                    mealNumber: "",
                     specialInstructions: "",
                     clientC2: false,
                     NE: "",
@@ -50,7 +49,6 @@ class AddClient extends Component {
     }
 
     render() {
-        console.log(this.state.site)
         return (
             <form style={{"padding": "100px"}} onSubmit={this.addClient}>
                 <h1>Add Client</h1>
@@ -68,8 +66,6 @@ class AddClient extends Component {
                     </div>
                     <label for="client-address">Address*</label><br/>
                     <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
-                    <label for="client-mealnumber">Num. of Meals*</label><br/>
-                    <input type="number" id="client-mealnumber" onChange={e => this.setState({mealNumber: e.target.value})} required={true}/><br/>
                     <label>Food Days*</label>
                     <table style={{marginLeft: "auto", marginRight: "auto"}} className="add-table">
                         <tr>
@@ -142,8 +138,10 @@ class AddClient extends Component {
                     <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
                     <br/>
-
-                    <button type="submit">Submit</button>
+                    <div id="button-div">
+                    <button type="button" className="button-cancel" onClick={()=> this.props.history.push("/clients")}>Cancel</button>
+                    <button type="submit" className="button-submit">Submit</button>
+                    </div>
                 </div>
             </form>
         );
