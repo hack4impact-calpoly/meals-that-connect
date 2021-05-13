@@ -108,7 +108,7 @@ class AddVolunteer extends Component {
                     <br/>
                     <div id="button-div">
                     <button type="button" className="button-cancel" onClick={()=> this.props.history.push("/volunteer")}>Cancel</button>
-                    <input type="submit" className="button-submit"/>
+                    <button type="submit" className="button-submit">Submit</button>
                     </div>
                 </div>
             </form>
