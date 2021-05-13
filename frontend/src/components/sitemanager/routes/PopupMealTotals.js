@@ -68,9 +68,9 @@ class PopupMealTotals extends Component {
                     <p id="popup">Are you sure you'd like to submit your meal orders for <b>{getDate(this.props.weekArr, this.props.day)}</b>? 
                         They will be shared with the kitchen staff once you submit. 
                         You'll still be able to go back and resubmit the order until <b>{getDeadline(this.props.weekArr, this.props.day)}</b>.</p>
-                    <div id = "popup-div">
-                        <button type="button" className="popup-button-cancel"  onClick={() => {close();}}>Cancel</button>
-                        <button type="button" className="popup-button-submit" onClick= {() => {this.submitActions(); close();}}>Submit</button>
+                    <div id = "button-div">
+                        <button type="button" className="button-cancel"  onClick={() => {close();}}>Cancel</button>
+                        <button type="button" className="button-submit" onClick= {() => {this.submitActions(); close();}}>Submit</button>
                     </div>
                 </div>
             )}

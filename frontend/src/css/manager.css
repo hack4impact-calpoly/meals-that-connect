@@ -55,13 +55,14 @@ input::-webkit-inner-spin-button {
   font-size: 20px;
   margin: 10px;
 }
-#popup-div {
+#button-div {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#popup-div button {
+#button-div button,
+input {
   overflow: hidden;
   padding: 12px 28px;
   border: none;
@@ -78,17 +79,17 @@ input::-webkit-inner-spin-button {
   width: 150px;
 }
 
-.popup-button-cancel:hover,
-.popup-button-cancel button-fade:focus,
-.popup-button-cancel button-fade:active {
+.button-cancel:hover,
+.button-cancel button-fade:focus,
+.button-cancel button-fade:active {
   background-color: #ff4000;
   color: white;
   cursor: pointer;
 }
 
-.popup-button-submit:hover,
-.popup-button-submit button-fade:focus,
-.popup-button-submit button-fade:active {
+.button-submit:hover,
+.button-submit button-fade:focus,
+.button-submit button-fade:active {
   background-color: #00b000;
   color: white;
   cursor: pointer;
