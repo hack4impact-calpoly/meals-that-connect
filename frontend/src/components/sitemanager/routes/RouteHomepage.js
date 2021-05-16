@@ -219,6 +219,8 @@ class RouteHomepage extends Component {
         console.log(this.state)
         let {routes, clients, weekArr} = this.state;
         let title = weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"
+        console.log(routes);
+        console.log(clients);
         return (
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
@@ -234,12 +236,14 @@ class RouteHomepage extends Component {
                                 </section>
                         );})}
                     </div>
+                    { (localStorage.getItem("userType") == "site-manager") ? 
                     <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
                         <ModalContent 
                             currentClient={this.state.currentClient} 
                             submit={this.submit} 
                             handleCloseModal={this.handleCloseModal}/>
                     </Modal>
+                    : ""}
                 </div>
             </div>
            

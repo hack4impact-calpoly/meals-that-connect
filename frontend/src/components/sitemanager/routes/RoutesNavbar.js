@@ -17,10 +17,16 @@ class routesOverview extends Component {
         window.scrollTo({ top: yCoordinate + yOffset }); 
     }
 
+    url = (route) => {
+        let here = (localStorage.getItem("userType") == "site-manager") ? "routes#"+route : "routes-data-entry#"+route
+        return here;
+    };
+
     render() {
         let routes = this.props.routes
         let fixed = this.props.fixed
         let scroll = this.scrollWidthOffset
+        
 
         return (
             <div id="route-sidebar" style={fixed ? {position: 'fixed', marginTop: 100, maxHeight: '85vh' } : {height: '100%'}}>
@@ -34,7 +40,7 @@ class routesOverview extends Component {
                     <hr></hr>
                     {routes.map((route, i) =>{
                         return (
-                            <Link scroll={(el) => scroll(el)} to={"routes#"+route}>
+                            <Link scroll={(el) => scroll(el)} to={ this.url(route) }>
                                 <button type="button" className="route">Route {route}</button>
                             </Link>
                     );})}
