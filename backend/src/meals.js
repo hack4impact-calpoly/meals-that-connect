@@ -99,6 +99,80 @@ async function existsMeal(client, week) {
     return output
 }
 
+// This function returns the correct list of clients 
+// that need deliveries for a given day
+router.post('/routeOverviewDay', (req, res) => {
+    // takes in these parameters from the front end.
+    // site is used to search and day which is a string M, T, W, Th, F
+    let {site, day} = req.body
+    
+    // this calls the Clients database and searches for matches to the site
+    // if there is an error it prints in the backend console 
+    // WARNING: danger of finding all clients with the same site
+    // if someone puts in "SLO" and another "San Luis Obispo" they will not be 
+    // found in the same list. This function will sort by SLO
+    Meal.find({site: site}, function (err, clients) {
+      if (err) 
+        console.log(err) 
+      else {
+        //console.log(clients)
+        var sortedRoutes = SortClients(clients, day)
+        res.send(sortedRoutes)
+      }
+    })
+})
+
+// This function will return a sorted list of clients by route number.
+// sorts from ascending order and also sorts clients by their index value
+function SortClients(clients, day) {
+  // removes clients without the day
+  for (let i = 0; i < clients.length; i++) {
+    let client = clients[i]
+
+    if (client.foodDays[day] == false) {
+      clients.splice(i, 1) // removes client from list at index i, 1 is number of elements removed
+      i--; // decrement i to take into account for removing an element from the list
+    }
+  }
+  // sorts clients by route then by index in increasing order
+  clients.sort(function(a, b) {
+    // localeCompare compares two string values if equal (0) sort by index
+    return a.routeNumber.localeCompare(b.routeNumber) || a.index - b.index
+  })
+  // get number of routes in array bad implementation I'm tired... sorry!
+  // code between the ******** should be rewritten to be cleaner. Brain fried.
+  // ********
+  let numRoutes = []
+  for (let j = 0; j < clients.length; j++) {
+      // if route not already in the array add it
+      if (numRoutes.includes(clients[j].routeNumber) === false)
+          numRoutes.push(clients[j].routeNumber)
+  }
+
+  // fill array with empty arrays
+  let clientsByRoute = []
+  for (let k = 0; k < numRoutes.length; k++) {
+      var temp = []
+      clientsByRoute.push(temp)
+  }
+
+  // iterate through clients add client to array if routes match. Otherwise add to next array
+  // this puts clients in a 2d array
+  // From line
+  let index = 0
+  for (let j = 0; j < clients.length; j++) {
+    if (numRoutes[index].localeCompare(clients[j].routeNumber) === 0)
+        clientsByRoute[index].push(clients[j])
+    else {
+      index += 1
+      clientsByRoute[index].push(clients[j])
+    }
+  } 
+ // ************ 
+
+  return clientsByRoute
+}
+
 router.post('/siteTotals', (req, res) => {
     let {site, week} = req.body
     let currMonday = formatDate(getMonday(new Date()))
@@ -111,11 +185,16 @@ router.post('/siteTotals', (req, res) => {
             res.status(404).send("error")
         }
         else {
+            
             let mealData = sortFormatMeals(data)
             let mealTotals = []
+            var totals = {"meals": 0, "routes": 0, "totals": 0};
             for (let i = 0; i < routes.length; i++) {
-            mealTotals.push(getRouteTotals(mealData.meals[mealData.routes[i]]))
+              var routeTotals = getRouteTotals(mealData.meals[mealData.routes[i]])
+              totals += routeTotals
+              mealTotals.push(routeTotals)
             }  
+            mealTotals.push(totals)
             res.send({"meals": mealTotals, "routes": routes})
         }
         })
@@ -127,6 +206,7 @@ router.post('/siteTotals', (req, res) => {
                 res.status(404).send("error")
             }
             else {
+              console.log('"here')
                 data = []
                 for (let i = 0; i < clients.length; i++) {
                     existsMeal(clients[i], week).then(meal => {

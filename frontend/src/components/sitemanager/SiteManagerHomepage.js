@@ -67,22 +67,101 @@ class SiteManagerHomepage extends Component {
         console.log(this.state.totals)
     }
 
-    printDocument() {
-        const input = document.getElementById('meal-totals')
-        console.log(input.height)
-        
-        console.log(input);
-    
-        html2canvas(input)
-        .then((canvas) => {
-            console.log('here')
-            const imgData = canvas.toDataURL('image/png');
-            console.log(imgData)
-            const pdf = new jsPDF();
-            pdf.addImage(canvas, 'JPEG', 2, 10, 180, 220);
-            pdf.output('dataurlnewwindow');
+    // grabs the sorted list of clients by route and index based on site and day
+    async fetchRouteOverview(site, day) {
+        let param = {
+            site: site,
+            day: day
+        }
+        // call to mongodb backend function
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/routeOverviewDay', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(param)
         })
-        ;
+
+        const clients = await response.json();
+        console.log(clients)
+        return clients
+    }
+    // data isn't right there is a lot of data missing for this page to be created
+    async printDocument(site, day) {
+        
+        let clients = await this.fetchRouteOverview(site, day)
+        var doc = new jsPDF()
+
+
+        for (let i = 0; i < clients.length; i++) {
+            // add header
+            var date = "5/21/2021"
+            doc.setFontSize(20);
+            doc.text("Route " + clients[i] + ", Mon, " + date, 15, 15);
+
+            doc.setFontSize(10);
+            doc.text("If a problem arises, call: Jesse 805-235-8864", 15, 22);
+
+            //Totals Header need to calculate totals before hand
+            doc.cell(121, 23, 17, 7, "Totals:")
+            doc.cell(138, 23, 15, 7, "  " + 1)
+            doc.cell(153, 23, 13, 7, "  " + 20)
+            doc.cell(166, 23, 13, 7, "  " + 20)
+            doc.cell(179, 23, 16, 7, "  " + 20)
+
+            // Header of the Route
+            doc.cell(15, 30, 16, 17, "Stop\n #")
+            doc.cell(31, 30, 37, 17, "          Name")
+            doc.cell(68, 30, 44, 17, "             Address")
+            doc.cell(112, 30, 26, 17, "     Phone")
+            doc.cell(138, 30, 15, 17, "Froz?")
+            doc.cell(153, 30, 13, 17, "Wht\nBag")
+            doc.cell(166, 30, 13, 17, "Bwn\nBag")
+            doc.cell(179, 30, 16, 17, " Num\n   of\nMeals")
+
+            // iterate through clients with the same route
+            var y = 48
+            var x = 15
+            for (let j = 0; j < clients[i].length; j++) {
+                // add stop number
+                doc.cell(x, y, 16, 21, "\n" + j + 1)
+                doc.setFontSize(8)
+                doc.cell(x + 16, y, 37, 7, clients[i][j].firstName + " " + clients[i][j].lastName)
+                doc.cell(x + 16, y + 7, 164, 7, "Emergency Contact: " + clients[i][j].emergencyContact + ", " + clients[i][j].emergencyPhone)
+                doc.cell(x + 16, y + 14, 164, 7, "Special Instructions: " + clients[i][j].specialInstructions)
+
+                doc.cell(x + 53, y, 44, 7, clients[i][j].address)
+                
+                // get phone number here
+                doc.cell(x + 97, y, 26, 7, clients[i][j].phoneNumber)
+                let frozenNum = 0
+                var count = 0
+                if (clients[i][j].frozenDay.localeCompare(day) === 0) {
+                    frozenNum = clients[i][j].frozenNumber
+                }
+                doc.cell(x + 123, y, 15, 7, "   " + frozenNum)
+                //Wht Bag
+                doc.cell(x + 138, y, 13, 7, "   " + clients[i][j].whtBag)
+                //bwn Bag
+                doc.cell(x + 138, y, 13, 7, "   " + clients[i][j].bwnBag)
+                // num of meals. 
+                doc.cell(x + 138, y, 13, 7, "   " + clients[i][j].numOfMeals)
+
+                count += 1;
+                // if 10 rows already made create a new page
+                if (count >= 10) {
+                    count = 0
+                    // account for new page spacing 
+                    y = 15
+                    doc.newPage()
+                } else {
+                    y += 22
+                }
+                
+            }
+            doc.newPage()
+        }
+        doc.output('dataurlnewwindow')
     }
 
     handleOpenModal = () => {
@@ -113,7 +192,7 @@ class SiteManagerHomepage extends Component {
                             <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/>
                             <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/>
                         </div>
-                        <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
+                        <button className="route" style={{marginTop: 20,width: 300}} onClick={() => this.printDocument("SLO", "M")}>Print Meal Totals</button>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
                         <div id="order-modal-header">
