@@ -129,12 +129,14 @@ class SiteManagerHomepage extends Component {
                 doc.setFontSize(8)
                 // get phone number here
                 doc.cell(x + 97, y, 26, 9, clients[i][j].phoneNumber)
+
                 let frozenNum = 0
                 var count = 0
                 if (clients[i][j].frozenDay.localeCompare(day) === 0) {
                     frozenNum = clients[i][j].frozenNumber
                     fTotal += frozenNum
                 }
+
                 doc.cell(x + 123, y, 15, 9, "   " + frozenNum)
 
                 // get WhtBag or Bwn Bag
@@ -149,6 +151,7 @@ class SiteManagerHomepage extends Component {
                     bwnBag = 1
                     bTotal += 1
                 }
+
                 //Wht Bag
                 doc.cell(x + 138, y, 13, 9, "   " + whtBag)
                 //bwn Bag
@@ -156,8 +159,8 @@ class SiteManagerHomepage extends Component {
                 // num of meals of hot meals is always 1 for each client
                 doc.cell(x + 164, y, 16, 9, "   " + 1)
                 nTotal += 1
-
                 count += 1;
+
                 // if 10 rows already made create a new page
                 if (count >= 10) {
                     count = 0
