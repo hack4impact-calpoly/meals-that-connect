@@ -25,8 +25,9 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
     */
     if (value === true || value === false)
     {
+      //checkboxes
         return (
-            <input type={inputType} style={{width: width, boxShadow: 'none'}} checked={value} onChange={(e) => props.handleBoolChange(route, key, e.target.checked, day, index)}/>
+            <input type={inputType} disabled={(localStorage.getItem("userType") == "site-manager") ? false : true} style={{width: width, boxShadow: 'none'}} checked={value} onChange={(e) => props.handleBoolChange(route, key, e.target.checked, day, index)}/>
         )
     }
     /*
@@ -69,8 +70,10 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
             margin: 0,
         }),
         }
+        // isOption currently giving errors, 
         return (
         <Select 
+            isDisabled={(localStorage.getItem("userType") == "site-manager") ? false : true}
             options={options} 
             styles={customStyles} 
             placeholder="Select" 
@@ -85,14 +88,14 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
   else
   {
     return (
-        <input type={inputType} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => props.handleChange(props, key, e.target.value, index)} />
+        <input type={inputType} disabled={(localStorage.getItem("userType") == "site-manager") ? false : true} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => props.handleChange(props, key, e.target.value, index)} />
     )
   }
 }
 
 const RouteTable = (props) => {
-  const columns = React.useMemo(
-    () => [
+  console.log("in route table")
+  let columns = [
     {
     Header: 'Route '+ props.routenum,
     columns: [
@@ -158,17 +161,21 @@ const RouteTable = (props) => {
       width: 100,
       Cell: (cellProperties) => EditableCell(props, cellProperties, "holidayFrozen", null, 100, "checkbox")
       },
+    ],},
+  ]
+
+  if (localStorage.getItem("userType") == "site-manager") {
+    let editBtn =
       { Header: 'Edit Details',
         width: 120,
         Cell: row => (<div style={{textAlign: 'center'}} onClick={() => editClient(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                </svg></div>)
-      },
-    ],},
-    ],
-    []
-  )
+                </svg></div>) 
+      }
+    console.log(columns[1]['columns'])
+    columns[1]['columns'].push(editBtn)
+  }
 
   function editClient(client) {
     props.showModal(client)
@@ -176,7 +183,8 @@ const RouteTable = (props) => {
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/>
+    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/> 
+    
   </Styles>
   )
 }
