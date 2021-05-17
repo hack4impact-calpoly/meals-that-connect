@@ -111,7 +111,7 @@ router.post('/routeOverviewDay', (req, res) => {
     // WARNING: danger of finding all clients with the same site
     // if someone puts in "SLO" and another "San Luis Obispo" they will not be 
     // found in the same list. This function will sort by SLO
-    Meal.find({site: site}, function (err, clients) {
+    Client.find({site: site}, function (err, clients) {
       if (err) 
         console.log(err) 
       else {
@@ -206,7 +206,6 @@ router.post('/siteTotals', (req, res) => {
                 res.status(404).send("error")
             }
             else {
-              console.log('"here')
                 data = []
                 for (let i = 0; i < clients.length; i++) {
                     existsMeal(clients[i], week).then(meal => {

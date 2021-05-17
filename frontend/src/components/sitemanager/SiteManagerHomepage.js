@@ -10,8 +10,6 @@ import { getWeekArr } from './calendar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/manager.css';
 
-
-import * as html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
 const moment = require('moment')
@@ -32,6 +30,7 @@ class SiteManagerHomepage extends Component {
     updateWeek = (week) => {
         console.log("Updating week")
         this.state.weekArr = week
+        
         // this.setState({weekArr: week})
         this.fetchMealTotals()
     }
@@ -83,31 +82,21 @@ class SiteManagerHomepage extends Component {
         })
 
         const clients = await response.json();
-        console.log(clients)
+        //console.log(clients)
         return clients
     }
     // data isn't right there is a lot of data missing for this page to be created
-    async printDocument(site, day) {
+    async printDocument(site, dayString, day) {
         
-        let clients = await this.fetchRouteOverview(site, day)
+        let clients = await this.fetchRouteOverview(site, dayString)
         var doc = new jsPDF()
 
-
         for (let i = 0; i < clients.length; i++) {
-            // add header
-            var date = "5/21/2021"
-            doc.setFontSize(20);
-            doc.text("Route " + clients[i] + ", Mon, " + date, 15, 15);
+            doc.setFontSize(18);
+            doc.text("Route " + clients[i][0].routeNumber + ", Mon, " + this.getDate(this.state.weekArr, day), 15, 15);
 
             doc.setFontSize(10);
             doc.text("If a problem arises, call: Jesse 805-235-8864", 15, 22);
-
-            //Totals Header need to calculate totals before hand
-            doc.cell(121, 23, 17, 7, "Totals:")
-            doc.cell(138, 23, 15, 7, "  " + 1)
-            doc.cell(153, 23, 13, 7, "  " + 20)
-            doc.cell(166, 23, 13, 7, "  " + 20)
-            doc.cell(179, 23, 16, 7, "  " + 20)
 
             // Header of the Route
             doc.cell(15, 30, 16, 17, "Stop\n #")
@@ -122,30 +111,50 @@ class SiteManagerHomepage extends Component {
             // iterate through clients with the same route
             var y = 48
             var x = 15
+            var fTotal = 0
+            var wTotal = 0
+            var bTotal = 0
+            var nTotal = 0
             for (let j = 0; j < clients[i].length; j++) {
                 // add stop number
-                doc.cell(x, y, 16, 21, "\n" + j + 1)
+                var stopNum = j + 1
+                doc.cell(x, y, 16, 21, "\n" + stopNum)
                 doc.setFontSize(8)
-                doc.cell(x + 16, y, 37, 7, clients[i][j].firstName + " " + clients[i][j].lastName)
-                doc.cell(x + 16, y + 7, 164, 7, "Emergency Contact: " + clients[i][j].emergencyContact + ", " + clients[i][j].emergencyPhone)
-                doc.cell(x + 16, y + 14, 164, 7, "Special Instructions: " + clients[i][j].specialInstructions)
-
-                doc.cell(x + 53, y, 44, 7, clients[i][j].address)
-                
+                doc.cell(x + 16, y, 37, 9, clients[i][j].firstName + " " + clients[i][j].lastName)
+                doc.cell(x + 16, y + 9, 164, 6, "Emergency Contact: " + clients[i][j].emergencyContact + ", " + clients[i][j].emergencyPhone)
+                doc.cell(x + 16, y + 15, 164, 6, "Special Instructions: " + clients[i][j].specialInstructions)
+                doc.setFontSize(6.5)
+                doc.cell(x + 53, y, 44, 9, clients[i][j].address)
+                doc.setFontSize(8)
                 // get phone number here
-                doc.cell(x + 97, y, 26, 7, clients[i][j].phoneNumber)
+                doc.cell(x + 97, y, 26, 9, clients[i][j].phoneNumber)
                 let frozenNum = 0
                 var count = 0
                 if (clients[i][j].frozenDay.localeCompare(day) === 0) {
                     frozenNum = clients[i][j].frozenNumber
+                    fTotal += frozenNum
                 }
-                doc.cell(x + 123, y, 15, 7, "   " + frozenNum)
+                doc.cell(x + 123, y, 15, 9, "   " + frozenNum)
+
+                // get WhtBag or Bwn Bag
+                var whtBag = 0
+                var bwnBag = 0
+                // if noMilk is true
+                if (clients[i][j].noMilk) {
+                    whtBag = 1
+                    wTotal += 1
+                }
+                else {
+                    bwnBag = 1
+                    bTotal += 1
+                }
                 //Wht Bag
-                doc.cell(x + 138, y, 13, 7, "   " + clients[i][j].whtBag)
+                doc.cell(x + 138, y, 13, 9, "   " + whtBag)
                 //bwn Bag
-                doc.cell(x + 138, y, 13, 7, "   " + clients[i][j].bwnBag)
-                // num of meals. 
-                doc.cell(x + 138, y, 13, 7, "   " + clients[i][j].numOfMeals)
+                doc.cell(x + 151, y, 13, 9, "   " + bwnBag)
+                // num of meals of hot meals is always 1 for each client
+                doc.cell(x + 164, y, 16, 9, "   " + 1)
+                nTotal += 1
 
                 count += 1;
                 // if 10 rows already made create a new page
@@ -153,16 +162,51 @@ class SiteManagerHomepage extends Component {
                     count = 0
                     // account for new page spacing 
                     y = 15
-                    doc.newPage()
+                    doc.addPage()
                 } else {
                     y += 22
                 }
                 
             }
-            doc.newPage()
+            //Totals Header need to calculate totals before hand
+            doc.cell(121, 23, 17, 7, "Totals:")
+            doc.cell(138, 23, 15, 7, "  " + fTotal)
+            doc.cell(153, 23, 13, 7, "  " + wTotal)
+            doc.cell(166, 23, 13, 7, "  " + bTotal)
+            doc.cell(179, 23, 16, 7, "  " + nTotal)
+
+            if (i < clients.length -1)
+                doc.addPage()
         }
         doc.output('dataurlnewwindow')
     }
+
+    getDate(weekArr, tableDay) {
+        //let weekArr = props.weekArr
+        console.log(weekArr)
+        let curr;
+        if (weekArr.length === 1)
+        {
+          curr = new Date();
+        }
+        else
+        {
+          curr = new Date(weekArr[0]);
+        }
+        let week = [];
+      
+        for (let i = 1; i <= 7; i++) {
+          let first = curr.getDate() - curr.getDay() + i;
+          let day = new Date(curr.setDate(first));
+          let month = day.getMonth() + 1;
+          let date = day.getDate();
+          let year = day.getFullYear();
+          let mdy = month + "/" + date + "/" + year;
+          week.push(mdy);
+        }
+        return week[tableDay];
+      }
+      
 
     handleOpenModal = () => {
         this.setState({showModal: true});
@@ -192,7 +236,14 @@ class SiteManagerHomepage extends Component {
                             <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/>
                             <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/>
                         </div>
-                        <button className="route" style={{marginTop: 20,width: 300}} onClick={() => this.printDocument("SLO", "M")}>Print Meal Totals</button>
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
+                            <h3>Driver Routes For: </h3>
+                            <button className="route" onClick={() => this.printDocument("SLO", "M", 0)}>Monday</button>
+                            <button className="route" onClick={() => this.printDocument("SLO", "T", 1)}>Tuesday</button>
+                            <button className="route" onClick={() => this.printDocument("SLO", "W", 2)}>Wednesday</button>
+                            <button className="route" onClick={() => this.printDocument("SLO", "Th", 3)}>Thursday</button>
+                            <button className="route" onClick={() => this.printDocument("SLO", "F", 4)}>Friday</button>
+                        </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
                         <div id="order-modal-header">

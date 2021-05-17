@@ -205,6 +205,7 @@ const Table = (props) => {
 
 function getDate(weekArr, tableDay) {
   //let weekArr = props.weekArr
+  console.log(weekArr)
   let curr;
   if (weekArr.length === 1)
   {
