@@ -25,8 +25,6 @@ class LogHours extends Component {
            volunteerID: this.state.volunteerID,
         }
 
-        console.log(info)
-
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/all', {
             method: 'POST',
             headers: {
@@ -43,7 +41,6 @@ class LogHours extends Component {
             }
         })
         .then((data) => {
-            console.log(data)
             this.setState({log: data})
         })
         .catch(err => {
@@ -56,8 +53,6 @@ class LogHours extends Component {
     deleteLog = (data) => {
         let logs = this.state.log
         let index = logs.indexOf(data)
-        console.log(data)
-        console.log(index)
         this.setState({
             log: this.state.log.filter((_, i) => i !== index)
         });
@@ -70,7 +65,6 @@ class LogHours extends Component {
             date: this.state.date,
             hours: this.state.hours
         }
-        console.log(hourLog)
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/add', {
             method: 'POST',
             headers: {
@@ -88,7 +82,6 @@ class LogHours extends Component {
     }
 
     render() {
-        console.log(this.state.log)
         return (
             <div className="logging-container">
                 <form className="log-input-box" onSubmit={this.newLog}>

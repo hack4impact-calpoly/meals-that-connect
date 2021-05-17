@@ -7,7 +7,6 @@ const DataEntry = require('../models/dataEntry');
 const { request } = require('../server');
 
 router.post('/', async (req, res) => {
-    console.log(req.body)
     const {email, userType} = req.body
     
     let user = getUser(userType)
@@ -22,7 +21,6 @@ router.post('/', async (req, res) => {
        }
        else {
              console.log("profile found successfully")
-             console.log(result)
              res.send(result)
       }
     })
@@ -42,7 +40,6 @@ router.post('/', async (req, res) => {
 router.post('/update', async (req, res) => {
     const { firstName, lastName, userType, email } = req.body
     const { phoneNumber, availability, driver, kitchenStaff, notes } = req.body
-    console.log(req.body)
     let user = getUser(userType)
     if (user == null) {
        res.status(404).send("Invalid user type") 
@@ -51,8 +48,8 @@ router.post('/update', async (req, res) => {
     if (userType === "volunteer") {
         Volunteer.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName, 
             phoneNumber: phoneNumber, availability: availability, driver: driver, 
-            kitchenStaff: kitchenStaff, notes: notes }}).then(() => {
-                res.status(200).send("success")
+            kitchenStaff: kitchenStaff, notes: notes }}).then(user => {
+                res.status(200).send(user)
                 console.log("successfully updates")
             })
     }
