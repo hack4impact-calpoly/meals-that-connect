@@ -85,7 +85,7 @@ class SiteManagerHomepage extends Component {
         //console.log(clients)
         return clients
     }
-    // data isn't right there is a lot of data missing for this page to be created
+    
     async printDocument(site, dayString, day) {
         
         let clients = await this.fetchRouteOverview(site, dayString)
