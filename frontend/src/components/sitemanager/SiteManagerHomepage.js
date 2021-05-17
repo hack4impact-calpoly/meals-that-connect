@@ -24,6 +24,7 @@ class SiteManagerHomepage extends Component {
             weekArr: [],
             holidayArr: [],
             clients: {},
+            site: localStorage.getItem("site")
          };
     }
 
@@ -89,7 +90,8 @@ class SiteManagerHomepage extends Component {
         return clients
     }
     
-    async printDocument(site, dayString, day) {
+    async printDocument(dayString, day) {
+        let site = this.state.site
         
         let clients = await this.fetchRouteOverview(site, dayString, day)
         var doc = new jsPDF()
@@ -256,11 +258,11 @@ class SiteManagerHomepage extends Component {
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
                             <h3>Driver Routes For: </h3>
-                            <button className="route" onClick={() => this.printDocument("SLO", "M", 0)}>Monday</button>
-                            <button className="route" onClick={() => this.printDocument(this.props.localStorage.get("site"), "T", 1)}>Tuesday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "W", 2)}>Wednesday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "Th", 3)}>Thursday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "F", 4)}>Friday</button>
+                            <button className="route" onClick={() => this.printDocument("M", 0)}>Monday</button>
+                            <button className="route" onClick={() => this.printDocument("T", 1)}>Tuesday</button>
+                            <button className="route" onClick={() => this.printDocument("W", 2)}>Wednesday</button>
+                            <button className="route" onClick={() => this.printDocument("Th", 3)}>Thursday</button>
+                            <button className="route" onClick={() => this.printDocument("F", 4)}>Friday</button>
                         </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
