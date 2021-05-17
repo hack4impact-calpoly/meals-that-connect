@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
+import '../../../css/manager.css'
 
 class AddVolunteer extends Component {
     constructor(props) {
@@ -78,8 +79,8 @@ class AddVolunteer extends Component {
                     </table>
                     
                     <br></br>
-
-                    <label>Avaliability</label>
+                    
+                    <label>Availability</label>
                     <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="volunteer-m">Monday</label></th>
@@ -111,7 +112,10 @@ class AddVolunteer extends Component {
                     <input type="checkbox" id="volunteer-completedOrientation" onChange={() => this.setState(prevState => ({completedOrientation: !prevState.completedOrientation}))}/><br/>
 
                     <br/>
-                    <input type="submit"/>
+                    <div id="button-div">
+                    <button type="button" className="generic-button" onClick={()=> this.props.history.push("/volunteer")}>Cancel</button>
+                    <input type="submit" className="generic-button"/>
+                    </div>
                 </div>
             </form>
         );

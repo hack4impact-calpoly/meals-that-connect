@@ -36,7 +36,7 @@ const Styles = styled.div`
     }
     th {
       padding: 0.5rem;
-      background: #D4D4D4;
+      background: #BDD3D2;
       color: black;
       fontWeight: bold;
     }

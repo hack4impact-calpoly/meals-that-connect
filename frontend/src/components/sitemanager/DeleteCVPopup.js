@@ -20,9 +20,9 @@ class DeleteCVPopup extends Component {
             {close => (
                 <div>
                     <p id="popup">Are you sure you'd like to remove <b>{this.props.person["firstName"]}  {this.props.person["lastName"]}</b>? </p>
-                    <div id = "popup-div">
-                        <button type="button" className="popup-button-cancel"  onClick={() => {close();}}>Cancel</button>
-                        <button type="button" className="popup-button-submit" onClick= {() => {remove(this.props.person, this.props.type); close();}}>Remove</button>
+                    <div id = "button-div">
+                        <button type="button" className="button-cancel"  onClick={() => {close();}}>Cancel</button>
+                        <button type="button" className="button-submit" onClick= {() => {remove(this.props.person, this.props.type); close();}}>Remove</button>
                     </div>
                 </div>
             )}
