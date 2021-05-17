@@ -25,8 +25,6 @@ class LogHours extends Component {
            volunteerID: this.state.volunteerID,
         }
 
-        console.log(info)
-
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/all', {
             method: 'POST',
             headers: {
@@ -43,7 +41,6 @@ class LogHours extends Component {
             }
         })
         .then((data) => {
-            console.log(data)
             this.setState({logs: data})
         })
         .catch(err => {
@@ -56,8 +53,6 @@ class LogHours extends Component {
     deleteLog = (data) => {
         let logs = this.state.logs
         let index = logs.indexOf(data)
-        console.log(data)
-        console.log(index)
         this.setState({
             logs: this.state.logs.filter((_, i) => i !== index)
         });
@@ -70,7 +65,6 @@ class LogHours extends Component {
             date: this.state.date,
             hours: this.state.hours
         }
-        console.log(hourLog)
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/add', {
             method: 'POST',
             headers: {
@@ -89,12 +83,7 @@ class LogHours extends Component {
 
     render() {
         let hoursExist = this.state.logs.length > 0
-        let noHours = null;
-        if(this.state.logs.length === 0)
-        {
-            noHours = <h2>No hours logged so far</h2>
-        }
-        console.log(this.state)
+
         return (
             <div className="logging-container">
                 <form className="log-input-box" onSubmit={this.newLog}>
@@ -110,7 +99,8 @@ class LogHours extends Component {
                     <button id="submit-button" className="log-input"  type="submit">SUBMIT</button>
                     <br/>
                 </form>
-                {hoursExist? <LoggedHoursTable data={this.state.logs} deleteLog={this.deleteLog}/> : noHours}
+                {hoursExist? <LoggedHoursTable data={this.state.logs} deleteLog={this.deleteLog}/> 
+                : <h2>No hours logged so far</h2>}
             </div>
         );
     }

@@ -58,7 +58,6 @@ class Profile extends Component {
     };
 
     async fetchUserData () {
-        console.log("Fetching user data")
         let email = localStorage.getItem('userEmail')
         let type = this.state.userType
         let info = {
@@ -76,6 +75,7 @@ class Profile extends Component {
         const data = await response.json();
         
         if (type === "volunteer") {
+            localStorage.setItem("volunteerID", data.volunteerID)
             this.setState( { 
                 firstName: data.firstName,
                 lastName: data.lastName,
@@ -88,6 +88,7 @@ class Profile extends Component {
                 notes: data.notes,
                 admin: data.admin,
             })
+            
         }
         else {
             this.setState( { 
@@ -147,7 +148,6 @@ class Profile extends Component {
             body: JSON.stringify(profile)
         })
         .then((res) => {
-            console.log(res)
             if (res.status === 404) {
                 _this.setState({error: true})
             }
@@ -175,7 +175,6 @@ class Profile extends Component {
     }
 
     render() {
-        console.log(this.state)
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page
