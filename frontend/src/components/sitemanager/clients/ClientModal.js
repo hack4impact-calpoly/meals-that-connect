@@ -174,7 +174,7 @@ class ModalContent extends Component {
                                     <th>Holiday Frozen</th>
                                 </tr>
                                 <tr>
-                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("clientC2", !currentClient.noMilk)}/></td>
+                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("noMilk", !currentClient.noMilk)}/></td>
                                     <td><input type="checkbox" checked={currentClient["clientC2"]} id="client-c2" onChange={e =>  this.handleChangeMoreInfo("clientC2", !currentClient.clientC2)}/></td>
                                     <td><input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen" onChange={e => this.handleChangeMoreInfo("holidayFrozen", !currentClient.holidayFrozen)}/></td>
                                 </tr>
