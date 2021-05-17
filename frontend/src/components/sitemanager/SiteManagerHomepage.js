@@ -132,7 +132,8 @@ class SiteManagerHomepage extends Component {
 
                 let frozenNum = 0
                 var count = 0
-                if (clients[i][j].frozenDay.localeCompare(day) === 0) {
+ 
+                if (clients[i][j].frozenDay.localeCompare(dayString) === 0) {
                     frozenNum = clients[i][j].frozenNumber
                     fTotal += frozenNum
                 }
@@ -187,7 +188,6 @@ class SiteManagerHomepage extends Component {
 
     getDate(weekArr, tableDay) {
         //let weekArr = props.weekArr
-        console.log(weekArr)
         let curr;
         if (weekArr.length === 1)
         {
