@@ -8,7 +8,7 @@ class LogHours extends Component {
         super(props);
         this.state = {
             volunteerID: localStorage.getItem("volunteerID"),
-            log: [],
+            logs: [],
             date: '',
             hours : "",
         };
@@ -44,7 +44,7 @@ class LogHours extends Component {
         })
         .then((data) => {
             console.log(data)
-            this.setState({log: data})
+            this.setState({logs: data})
         })
         .catch(err => {
             console.log("Error")
@@ -54,12 +54,12 @@ class LogHours extends Component {
      }
 
     deleteLog = (data) => {
-        let logs = this.state.log
+        let logs = this.state.logs
         let index = logs.indexOf(data)
         console.log(data)
         console.log(index)
         this.setState({
-            log: this.state.log.filter((_, i) => i !== index)
+            logs: this.state.logs.filter((_, i) => i !== index)
         });
         window.location.reload();
     }
@@ -88,7 +88,13 @@ class LogHours extends Component {
     }
 
     render() {
-        console.log(this.state.log)
+        let hoursExist = this.state.logs.length > 0
+        let noHours = null;
+        if(this.state.logs.length === 0)
+        {
+            noHours = <h2>No hours logged so far</h2>
+        }
+        console.log(this.state)
         return (
             <div className="logging-container">
                 <form className="log-input-box" onSubmit={this.newLog}>
@@ -104,7 +110,7 @@ class LogHours extends Component {
                     <button id="submit-button" className="log-input"  type="submit">SUBMIT</button>
                     <br/>
                 </form>
-                <LoggedHoursTable data={this.state.log} deleteLog={this.deleteLog}/>
+                {hoursExist? <LoggedHoursTable data={this.state.logs} deleteLog={this.deleteLog}/> : noHours}
             </div>
         );
     }
