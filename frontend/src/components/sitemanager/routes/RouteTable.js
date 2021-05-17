@@ -177,7 +177,7 @@ const RouteTable = (props) => {
   function editClient(client) {
     props.showModal(client)
   }  
-//{ (localStorage.getItem("userType") == "site-manager") ? <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/> : null }
+
   return (
   <Styles height={CELL_HEIGHT}>
     <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/> 

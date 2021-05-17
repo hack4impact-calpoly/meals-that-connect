@@ -114,7 +114,7 @@ class SiteManagerHomepage extends Component {
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/> : null }
                         </div>
-                        { (localStorage.getItem("userType") == "site-manager") ?  <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button> : null }
+                        <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
                         <div id="order-modal-header">
