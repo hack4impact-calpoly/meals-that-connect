@@ -177,18 +177,15 @@ function SortClients(clients, day) {
   // get number of routes in array bad implementation I'm tired... sorry!
   // code between the ******** should be rewritten to be cleaner. Brain fried.
   // ********
+  let clientsByRoute = []
   let numRoutes = []
   for (let j = 0; j < clients.length; j++) {
       // if route not already in the array add it
-      if (numRoutes.includes(clients[j].routeNumber) === false)
+      if (numRoutes.includes(clients[j].routeNumber) === false) {
           numRoutes.push(clients[j].routeNumber)
-  }
-
-  // fill array with empty arrays
-  let clientsByRoute = []
-  for (let k = 0; k < numRoutes.length; k++) {
-      var temp = []
-      clientsByRoute.push(temp)
+          var temp = []
+          clientsByRoute.push(temp)
+      }
   }
 
   // iterate through clients add client to array if routes match. Otherwise add to next array
