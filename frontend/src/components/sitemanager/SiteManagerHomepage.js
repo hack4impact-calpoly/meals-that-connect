@@ -67,10 +67,13 @@ class SiteManagerHomepage extends Component {
     }
 
     // grabs the sorted list of clients by route and index based on site and day
-    async fetchRouteOverview(site, day) {
+    async fetchRouteOverview(site, dayString, day) {
+        var index = day + 1
+        let Date = this.state.weekArr[index];
         let param = {
             site: site,
-            day: day
+            day: dayString,
+            week: Date
         }
         // call to mongodb backend function
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/routeOverviewDay', {
@@ -88,12 +91,23 @@ class SiteManagerHomepage extends Component {
     
     async printDocument(site, dayString, day) {
         
-        let clients = await this.fetchRouteOverview(site, dayString)
+        let clients = await this.fetchRouteOverview(site, dayString, day)
         var doc = new jsPDF()
+        console.log(clients)
+        // Sorry! clean this up to be better
+        let abbrev = 'Mon'
+        if (day === 'T')
+            abbrev = 'Tues'
+        else if (day === 'W')
+            abbrev = 'Wed'
+        else if (day === 'Th')
+            abbrev = 'Thurs'
+        else if (day === 'F')
+            abbrev = 'Fri'
 
         for (let i = 0; i < clients.length; i++) {
             doc.setFontSize(18);
-            doc.text("Route " + clients[i][0].routeNumber + ", Mon, " + this.getDate(this.state.weekArr, day), 15, 15);
+            doc.text("Route " + clients[i][0].routeNumber + ", " + abbrev + ", " + this.getDate(this.state.weekArr, day), 15, 15);
 
             doc.setFontSize(10);
             doc.text("If a problem arises, call: Jesse 805-235-8864", 15, 22);
@@ -242,8 +256,8 @@ class SiteManagerHomepage extends Component {
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
                             <h3>Driver Routes For: </h3>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "M", 0)}>Monday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "T", 1)}>Tuesday</button>
+                            <button className="route" onClick={() => this.printDocument("SLO", "M", 0)}>Monday</button>
+                            <button className="route" onClick={() => this.printDocument(this.props.localStorage.get("site"), "T", 1)}>Tuesday</button>
                             <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "W", 2)}>Wednesday</button>
                             <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "Th", 3)}>Thursday</button>
                             <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "F", 4)}>Friday</button>

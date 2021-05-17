@@ -99,25 +99,55 @@ async function existsMeal(client, week) {
     return output
 }
 
+async function findClientMeal(client, week) {
+  let data
+  await Meal.findOne({clientID: client._id, startDate: week}, function(err, meal) {
+    if (err) {
+      console.log("error")
+    }
+    else {
+      data = meal
+    }
+  })
+  return data
+}
 // This function returns the correct list of clients 
 // that need deliveries for a given day
 router.post('/routeOverviewDay', (req, res) => {
     // takes in these parameters from the front end.
     // site is used to search and day which is a string M, T, W, Th, F
-    let {site, day} = req.body
-    
-    // this calls the Clients database and searches for matches to the site
-    // if there is an error it prints in the backend console 
-    // WARNING: danger of finding all clients with the same site
-    // if someone puts in "SLO" and another "San Luis Obispo" they will not be 
-    // found in the same list. This function will sort by SLO
+    let {site, day, week} = req.body
+    week = formatDate(week)
+
+    //console.log(week)
     Client.find({site: site}, function (err, clients) {
-      if (err) 
+      if (err) {
         console.log(err) 
-      else {
-        //console.log(clients)
-        var sortedRoutes = SortClients(clients, day)
-        res.send(sortedRoutes)
+        res.status(404).send("error")
+      } else {
+        var clientsWithMeals = []
+        for (let i = 0; i < clients.length; i++) {        
+          findClientMeal(clients[i], week).then(meal => {
+            var client = {}
+            client.firstName = clients[i].firstName
+            client.lastName = clients[i].lastName
+            client.address = clients[i].address
+            client.phoneNumber = clients[i].phoneNumber
+            client.routeNumber = clients[i].routeNumber
+            client.emergencyContact = clients[i].emergencyContact
+            client.emergencyPhone = clients[i].emergencyPhone
+            client.foodDays = clients[i].foodDays
+            client.frozenNumber = meal.frozenNumber
+            client.frozenDay = meal.frozenDay
+            client.noMilk = meal.noMilk
+            
+            clientsWithMeals.push(client)
+            if (i == clients.length- 1) {
+              var sortedRoutes = SortClients(clientsWithMeals, day)
+              res.send(sortedRoutes)
+            }
+          })
+        }
       }
     })
 })
