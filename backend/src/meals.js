@@ -220,7 +220,6 @@ router.post('/siteTotals', (req, res) => {
             res.status(404).send("error")
         }
         else {
-            
             let mealData = sortFormatMeals(data)
             let mealTotals = []
             var totals = {"meals": 0, "routes": 0, "totals": 0};
