@@ -1,15 +1,16 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { isLoggedIn, hasPermission } from './components/authentication/authenticationUtils.js';
 import Home from './components/homepage/Home'
+import NoPermission from './components/NoPermission'
 
 const PrivateRoute = ({ component: Component = null, render: Render = null, requiredUser, ...rest }) => {
     return (
         <Route {...rest} render={props => (
             isLoggedIn()
-            ?   (   hasPermission(requiredUser)
+            ?   (   hasPermission(requiredUser) === true
                     ? (Render ? (Render(props)) : Component ? (<Component {...props} />) : null)
-                    : <Redirect to="/no-permission"/>
+                    : <NoPermission/>
                 )
             : <Home/>
         )} />

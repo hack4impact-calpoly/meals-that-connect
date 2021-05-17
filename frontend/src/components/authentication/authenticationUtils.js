@@ -15,12 +15,6 @@ export function isAuthenticated() {
 }
 
 export function printStorage() {
-    // let keys = Object.keys(localStorage)
-    // let i = keys.length;
-
-    // while ( i-- ) {
-    //     console.log(keys[i] + ": " + localStorage.getItem(keys[i]));
-    // }
     var archive = [],
         keys = Object.keys(localStorage),
         i = 0, key;
@@ -55,6 +49,7 @@ export function getHoursPassed() {
 export function signout(){
     localStorage.setItem("isLoggedIn", 'false')
     localStorage.removeItem("email");
+    localStorage.removeItem("userEmail");
     localStorage.removeItem("site");
     localStorage.removeItem("time");
     localStorage.removeItem("week");

@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
-const bcrypt = require('bcrypt')
-const Volunteer = require('../models/Volunteer')
-const Hours = require("../models/Hours")
+const Volunteer = require('../models/volunteer')
+const Hours = require("../models/hours")
 
 router.post('/addVolunteer', async (req, res) => {
   const {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
@@ -12,7 +11,7 @@ router.post('/addVolunteer', async (req, res) => {
   Volunteer.findOne({'email': email}).then(function(result) {
   if (result) {
     console.log("email already in use")
-     res.sstatus(404).send("email already in use")     
+     res.status(404).send("email already in use")     
   }
   var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
   volun.save()
@@ -21,6 +20,22 @@ router.post('/addVolunteer', async (req, res) => {
   }).catch(err => {
     console.log(err)
     res.send(500).send("Internal server error")
+  })
+})
+
+router.post('/delete', async (req, res) => {
+  const { id } = req.body
+  Volunteer.deleteOne({_id: id}).then(function(result) {
+    if (result) {
+      console.log("Deleted volunteer")
+      res.status(200).send("Deleted")   
+      return   
+    }
+    else {
+      res.send(500).send("Failed to delete")
+    }
+    }).catch(err => {
+      res.send(500).send("Failed to delete")
   })
 })
 
@@ -103,7 +118,6 @@ router.post('/updateVolunteerInfo', async (req, res) => {
     }
   })
 })
-
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body

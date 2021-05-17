@@ -22,7 +22,6 @@ class AddClient extends Component {
                     emergencyContact: "",
                     emergencyPhone: "",
                     noMilk: false,
-                    mealNumber: "",
                     specialInstructions: "",
                     clientC2: false,
                     NE: "",
@@ -50,7 +49,6 @@ class AddClient extends Component {
     }
 
     render() {
-        console.log(this.state.site)
         return (
             <form style={{"padding": "100px"}} onSubmit={this.addClient}>
                 <h1>Add Client</h1>
@@ -68,14 +66,15 @@ class AddClient extends Component {
                     </div>
                     <label for="client-address">Address*</label><br/>
                     <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
-                    <label for="client-mealnumber">Num. of Meals*</label><br/>
-                    <input type="number" id="client-mealnumber" onChange={e => this.setState({mealNumber: e.target.value})} required={true}/><br/>
+                    
+                    <br></br>
+
                     <label>Food Days*</label>
                     <table style={{marginLeft: "auto", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="client-foodday-m">Monday</label></th>
                             <th><label for="client-foodday-t">Tuesday</label></th>
-                            <th><label for="client-foodday-w">Wednesday</label></th>
+                            <th style={{width: "25%"}}><label for="client-foodday-w">Wednesday</label></th>
                             <th><label for="client-foodday-th">Thursday</label></th>
                             <th><label for="client-foodday-f">Friday</label></th>
                         </tr>
@@ -90,13 +89,15 @@ class AddClient extends Component {
                     <br/>
                     <label for="client-frozenNumber">Number of Frozen Meals*</label><br/>
                     <input type="number" id="client-frozenNumber" onChange={e => this.setState({frozenNumber: e.target.value})} required={true}/><br/>
+                    
+                    <br></br>
 
                     <label>Frozen Days</label>
                     <table style={{marginLeft: "auto", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="client-frozenday-m">Monday</label></th>
                             <th><label for="client-frozenday-t">Tuesday</label></th>
-                            <th><label for="client-frozenday-w">Wednesday</label></th>
+                            <th style={{width: "25%"}}><label for="client-frozenday-w">Wednesday</label></th>
                             <th><label for="client-frozenday-th">Thursday</label></th>
                             <th><label for="client-frozenday-f">Friday</label></th>
                         </tr>
@@ -109,8 +110,12 @@ class AddClient extends Component {
                         </tr>
                     </table>
 
+                    <br></br>
+
                     <label for="client-phone">Phone Number*</label><br/>
                     <input type="text" id="client-phone" onChange={e => this.setState({phoneNumber: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
+
+                    <br></br>
 
                     <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
                         <div><label for="client-emergencycontact">Emergency Contact</label></div>
@@ -118,6 +123,8 @@ class AddClient extends Component {
                         <div><input type="text" id="client-emergencycontact" onChange={e => this.setState({emergencyContact: e.target.value})}/></div>
                         <div><input type="text" id="client-emergencyphone" onChange={e => this.setState({emergencyPhone: e.target.value})}/></div>
                     </div>
+
+                    <br></br>
 
                     <label for="client-nomilk">No Milk</label><br/>
                     <input type="checkbox" id="client-nomilk" onChange={() => this.setState(prevState => ({noMilk: !prevState.noMilk}))}/><br/>
@@ -128,6 +135,8 @@ class AddClient extends Component {
 
                     <label for="client-c2">C2 Client</label><br/>
                     <input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/>
+
+                    <br></br>
 
                     <label for="client-ne">N/E</label><br/>
                     <input type="text" id="client-ne" onChange={e => this.setState({NE: e.target.value})} style={{"width": "1320px"}}/><br/>
@@ -142,8 +151,10 @@ class AddClient extends Component {
                     <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
                     <br/>
-
-                    <button type="submit">Submit</button>
+                    <div id="button-div">
+                    <button type="button" className="generic-button" onClick={()=> this.props.history.push("/clients")}>Cancel</button>
+                    <button type="submit" className="generic-button">Submit</button>
+                    </div>
                 </div>
             </form>
         );

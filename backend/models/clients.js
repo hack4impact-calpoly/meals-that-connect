@@ -18,7 +18,6 @@ const clientSchema = new mongoose.Schema({
    emergencyContact: String,
    emergencyPhone: String,
    noMilk: {type: Boolean, required: true, default: false},
-   mealNumber: {type: Number, required: true, default: 1},
    specialInstructions: String,
    clientC2: {type: Boolean, required: true},
    NE: String,
@@ -26,7 +25,9 @@ const clientSchema = new mongoose.Schema({
    holidayFrozen: {type: Boolean, required: true, default: false},
    routeNumber: {type: String, required: true},
    site: {type: String, required: true},
-   index: {type: Number, required: true}
+   index: {type: Number, required: true},
+   subservice: {type: String, required: true, default: ""},
+   wellskyID: {type: String, required: true, default: ""}
 
 })
 

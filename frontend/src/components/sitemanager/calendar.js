@@ -17,6 +17,10 @@ function getWeekDays(weekStart) {
   return days;
 }
 
+export function getWeekArr(date) {
+  return getWeekDays(getWeekRange(date).from)
+};
+
 function getWeekRange(date) {
   return {
     from: moment(date)
@@ -184,20 +188,20 @@ export default class Example extends React.Component {
             }
 
             .SelectedWeekExample .DayPicker-Day--selectedRange {
-              background-color: #19850d !important;
-              border-top-color: #19850d;
-              border-bottom-color: #19850d;
-              border-left-color: #19850d;
-              border-right-color: #19850d;
+              background-color: #4EB2AC !important;
+              border-top-color: #4EB2AC;
+              border-bottom-color: #4EB2AC;
+              border-left-color: #4EB2AC;
+              border-right-color: #4EB2AC;
             }
 
             .SelectedWeekExample .DayPicker-Day--selectedRangeStart {
-              background-color: #0e4f07 !important;
+              background-color: #0D2E46 !important;
               border-left: 1px solid #082e04;
             }
 
             .SelectedWeekExample .DayPicker-Day--selectedRangeEnd {
-              background-color: #0e4f07 !important;
+              background-color: #0D2E46 !important;
               border-right: 1px solid #082e04;
             }
 

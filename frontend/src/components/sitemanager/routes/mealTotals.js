@@ -10,16 +10,8 @@ const Styles = styled.div`
     border-spacing: 0;
     width: 100%; 
     border: solid 2px #142850;
-    tr {  
-      :last-child {
-        td {
-          border-bottom: 1;
-          flex-direc  
-        }
-      }
-    }
     th {
-        background: #b7f8ac;
+        background: #BDD3D2;
         color: black;
         border: solid 1px #142850;
         textAlign: column.textAlign;
@@ -106,7 +98,8 @@ const Table = (props) => {
           accessor: 'info',
           columns: [
             {
-              Header: ' ',
+              Header: 'Meals',
+              width: 200,
               accessor: 'info'
             }
           ]
@@ -179,17 +172,17 @@ const Table = (props) => {
     // Get white bag data for each route, placeholder for now
     let whiteBagData = {
       route: routeNum,
-      info: "-", 
-      monday: "-", 
-      tuesday: "-",
-      wednesday: "-",
-      thursday: "-",
-      friday: "-",
+      info: "White Bags", 
+      monday: props.data[i]['whitebag'][0], 
+      tuesday: props.data[i]['whitebag'][1],
+      wednesday: props.data[i]['whitebag'][2],
+      thursday: props.data[i]['whitebag'][3],
+      friday: props.data[i]['whitebag'][4],
     }
     // Get meal data for each route
     let mealData = {
       route: " ", 
-      info: "# of Meals", 
+      info: "Brown Bags", 
       monday: props.data[i]['meals'][0],
       tuesday: props.data[i]['meals'][1],
       wednesday: props.data[i]['meals'][2],
@@ -210,7 +203,7 @@ const Table = (props) => {
   )
 }
 
-function getDate(weekArr, tableDay) {
+export function getDate(weekArr, tableDay) {
   //let weekArr = props.weekArr
   let curr;
   if (weekArr.length === 1)
@@ -253,24 +246,25 @@ function getHolidayDate(holidayArr) {
 function cellClass(cell, props) {
   let holidayDates = getHolidayDate(props.holidayArr);
   const rowID = (+(cell['row']['id'])) % 3;
+  let width = cell.column.Header === "Meals" ? 200 : 'auto'
   
   if (cell['value'] !== " " && rowID === 2){
-    return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null, width: width}} id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
   
   if (cell['column']['id'] === "route"){
     if (cell['value'] === " " && rowID === 2){
-      return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+      return <td id="last-cell-route" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
     }
     else if (cell['value'] === " " && rowID === 0) {
-      return <td id="top-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+      return <td id="top-cell-route" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
     }
     else {
-      return <td id="middle-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+      return <td id="middle-cell-route" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
     }
   }
   else {
-    return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null, width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
   }
 }
 

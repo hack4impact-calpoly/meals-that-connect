@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components'
-import { useTable } from 'react-table'
+import { useTable, useFilters} from 'react-table'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper';
@@ -37,7 +37,7 @@ table {
   }
   th {
     height: 40px;
-    background: #D4D4D4;
+    background: #BDD3D2;
     color: black;
     fontWeight: bold;
   }
@@ -60,6 +60,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
         columns,
         getRowId,
     },
+        useFilters,
     )
   
     const moveRow = (dragIndex, hoverIndex) => {
@@ -90,7 +91,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
             ],
         })
   
-        fetch(process.process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
+        fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -116,7 +117,9 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             <th></th>
                             {headerGroup.headers.map(column => (
-                                <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}
+                                    <div>{(column.canFilter && column.filter === true) ? column.render('Filter') : null}</div>
+                                </th>
                             ))}
                         </tr>
                     ))}
@@ -185,17 +188,27 @@ const Row = ({ row, index, moveRow, showModal }) => {
     preview(drop(dropRef))
     drag(dragRef)
 
+    // in the case user is not site-manager, instead of arrows you will see a blank column; circle doesn't appear
+
     return (
         <tr ref={dropRef} style={{ opacity }}>
+            { (localStorage.getItem("userType") == "site-manager") ? 
             <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
                 </svg>
             </td>
+             : 
+             <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+                <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+             </svg>
+            </td>}
             
             {row.cells.map(cell => {
                 return <td >{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>
             })}
+            
         </tr>
     )
 }
