@@ -106,6 +106,7 @@ async function findClientMeal(client, week) {
       console.log("error")
     }
     else {
+
       data = meal
     }
   })
@@ -129,19 +130,23 @@ router.post('/routeOverviewDay', (req, res) => {
         for (let i = 0; i < clients.length; i++) {        
           findClientMeal(clients[i], week).then(meal => {
             var client = {}
-            client.firstName = clients[i].firstName
-            client.lastName = clients[i].lastName
-            client.address = clients[i].address
-            client.phoneNumber = clients[i].phoneNumber
-            client.routeNumber = clients[i].routeNumber
-            client.emergencyContact = clients[i].emergencyContact
-            client.emergencyPhone = clients[i].emergencyPhone
-            client.foodDays = clients[i].foodDays
-            client.frozenNumber = meal.frozenNumber
-            client.frozenDay = meal.frozenDay
-            client.noMilk = meal.noMilk
+            if (meal != null) {
+              client.firstName = clients[i].firstName
+              client.lastName = clients[i].lastName
+              client.address = clients[i].address
+              client.phoneNumber = clients[i].phoneNumber
+              client.routeNumber = clients[i].routeNumber
+              client.emergencyContact = clients[i].emergencyContact
+              client.emergencyPhone = clients[i].emergencyPhone
+              client.specialInstructions = clients[i].specialInstructions
+              client.foodDays = clients[i].foodDays
+              client.frozenNumber = meal.frozenNumber
+              client.frozenDay = meal.frozenDay
+              client.noMilk = meal.noMilk
             
-            clientsWithMeals.push(client)
+              clientsWithMeals.push(client)
+            }
+
             if (i == clients.length- 1) {
               var sortedRoutes = SortClients(clientsWithMeals, day)
               res.send(sortedRoutes)

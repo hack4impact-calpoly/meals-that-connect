@@ -51,7 +51,7 @@ class SiteManagerHomepage extends Component {
         let mondayDate = this.state.weekArr[1];
         console.log(mondayDate)
         let info = {
-            site: "SLO",
+            site: localStorage.getItem("site"),
             week: mondayDate
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
@@ -67,9 +67,8 @@ class SiteManagerHomepage extends Component {
     }
 
     // grabs the sorted list of clients by route and index based on site and day
-    async fetchRouteOverview(site, dayString, day) {
-        var index = day + 1
-        let Date = this.state.weekArr[index];
+    async fetchRouteOverview(site, dayString) {
+        let Date = this.state.weekArr[1];
         let param = {
             site: site,
             day: dayString,
@@ -91,18 +90,18 @@ class SiteManagerHomepage extends Component {
     
     async printDocument(site, dayString, day) {
         
-        let clients = await this.fetchRouteOverview(site, dayString, day)
+        let clients = await this.fetchRouteOverview(site, dayString)
         var doc = new jsPDF()
-        console.log(clients)
+        //console.log(clients)
         // Sorry! clean this up to be better
         let abbrev = 'Mon'
-        if (day === 'T')
+        if (dayString === 'T')
             abbrev = 'Tues'
-        else if (day === 'W')
+        else if (dayString === 'W')
             abbrev = 'Wed'
-        else if (day === 'Th')
+        else if (dayString === 'Th')
             abbrev = 'Thurs'
-        else if (day === 'F')
+        else if (dayString === 'F')
             abbrev = 'Fri'
 
         for (let i = 0; i < clients.length; i++) {
@@ -123,12 +122,31 @@ class SiteManagerHomepage extends Component {
             doc.cell(179, 30, 16, 17, " Num\n   of\nMeals")
 
             // iterate through clients with the same route
-            var y = 48
-            var x = 15
             var fTotal = 0
             var wTotal = 0
             var bTotal = 0
             var nTotal = 0
+            // get totals for the route
+            for (let k = 0; k < clients[i].length; k++) {
+                if (clients[i][k].frozenDay.localeCompare(dayString) === 0) {
+                    fTotal += clients[i][k].frozenNumber
+                }
+                if (clients[i][k].noMilk)
+                    wTotal += 1
+                else 
+                    bTotal += 1
+                nTotal += 1
+            }
+
+             // Totals Header need to calculate totals before hand
+            doc.cell(121, 23, 17, 7, "Totals:")
+            doc.cell(138, 23, 15, 7, "  " + fTotal)
+            doc.cell(153, 23, 13, 7, "  " + wTotal)
+            doc.cell(166, 23, 13, 7, "  " + bTotal)
+            doc.cell(179, 23, 16, 7, "  " + nTotal)
+
+            var y = 48
+            var x = 15
             for (let j = 0; j < clients[i].length; j++) {
                 // add stop number
                 var stopNum = j + 1
@@ -147,10 +165,9 @@ class SiteManagerHomepage extends Component {
                 let frozenNum = 0
                 var count = 0
  
-                if (clients[i][j].frozenDay.localeCompare(dayString) === 0) {
+                if (clients[i][j].frozenDay.localeCompare(dayString) === 0) 
                     frozenNum = clients[i][j].frozenNumber
-                    fTotal += frozenNum
-                }
+                
 
                 doc.cell(x + 123, y, 15, 9, "   " + frozenNum)
 
@@ -158,14 +175,10 @@ class SiteManagerHomepage extends Component {
                 var whtBag = 0
                 var bwnBag = 0
                 // if noMilk is true
-                if (clients[i][j].noMilk) {
+                if (clients[i][j].noMilk)
                     whtBag = 1
-                    wTotal += 1
-                }
-                else {
+                else 
                     bwnBag = 1
-                    bTotal += 1
-                }
 
                 //Wht Bag
                 doc.cell(x + 138, y, 13, 9, "   " + whtBag)
@@ -173,7 +186,6 @@ class SiteManagerHomepage extends Component {
                 doc.cell(x + 151, y, 13, 9, "   " + bwnBag)
                 // num of meals of hot meals is always 1 for each client
                 doc.cell(x + 164, y, 16, 9, "   " + 1)
-                nTotal += 1
                 count += 1;
 
                 // if 10 rows already made create a new page
@@ -187,12 +199,6 @@ class SiteManagerHomepage extends Component {
                 }
                 
             }
-            //Totals Header need to calculate totals before hand
-            doc.cell(121, 23, 17, 7, "Totals:")
-            doc.cell(138, 23, 15, 7, "  " + fTotal)
-            doc.cell(153, 23, 13, 7, "  " + wTotal)
-            doc.cell(166, 23, 13, 7, "  " + bTotal)
-            doc.cell(179, 23, 16, 7, "  " + nTotal)
 
             if (i < clients.length -1)
                 doc.addPage()
@@ -256,11 +262,11 @@ class SiteManagerHomepage extends Component {
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
                             <h3>Driver Routes For: </h3>
-                            <button className="route" onClick={() => this.printDocument("SLO", "M", 0)}>Monday</button>
-                            <button className="route" onClick={() => this.printDocument(this.props.localStorage.get("site"), "T", 1)}>Tuesday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "W", 2)}>Wednesday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "Th", 3)}>Thursday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "F", 4)}>Friday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "M", 0)}>Monday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "T", 1)}>Tuesday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "W", 2)}>Wednesday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "Th", 3)}>Thursday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "F", 4)}>Friday</button>
                         </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
