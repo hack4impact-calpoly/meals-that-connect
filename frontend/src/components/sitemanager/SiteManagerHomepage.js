@@ -24,6 +24,7 @@ class SiteManagerHomepage extends Component {
             weekArr: [],
             holidayArr: [],
             clients: {},
+            site: localStorage.getItem("site")
          };
     }
 
@@ -67,10 +68,10 @@ class SiteManagerHomepage extends Component {
     }
 
     // grabs the sorted list of clients by route and index based on site and day
-    async fetchRouteOverview(site, dayString) {
+    async fetchRouteOverview(dayString) {
         let Date = this.state.weekArr[1];
         let param = {
-            site: site,
+            site: localStorage.getItem("site"),
             day: dayString,
             week: Date
         }
@@ -88,9 +89,9 @@ class SiteManagerHomepage extends Component {
         return clients
     }
     
-    async printDocument(site, dayString, day) {
+    async printDocument(dayString, day) {
         
-        let clients = await this.fetchRouteOverview(site, dayString)
+        let clients = await this.fetchRouteOverview(dayString)
         var doc = new jsPDF()
         //console.log(clients)
         // Sorry! clean this up to be better
@@ -262,11 +263,11 @@ class SiteManagerHomepage extends Component {
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
                             <h3>Driver Routes For: </h3>
-                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "M", 0)}>Monday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "T", 1)}>Tuesday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "W", 2)}>Wednesday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "Th", 3)}>Thursday</button>
-                            <button className="route" onClick={() => this.printDocument(localStorage.getItem("site"), "F", 4)}>Friday</button>
+                            <button className="route" onClick={() => this.printDocument("M", 0)}>Monday</button>
+                            <button className="route" onClick={() => this.printDocument("T", 1)}>Tuesday</button>
+                            <button className="route" onClick={() => this.printDocument("W", 2)}>Wednesday</button>
+                            <button className="route" onClick={() => this.printDocument("Th", 3)}>Thursday</button>
+                            <button className="route" onClick={() => this.printDocument("F", 4)}>Friday</button>
                         </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
