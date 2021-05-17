@@ -52,7 +52,7 @@ class SiteManagerHomepage extends Component {
         let mondayDate = this.state.weekArr[1];
         console.log(mondayDate)
         let info = {
-            site: localStorage.getItem("site"),
+            site: this.state.site,
             week: mondayDate
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
@@ -71,7 +71,7 @@ class SiteManagerHomepage extends Component {
     async fetchRouteOverview(dayString) {
         let Date = this.state.weekArr[1];
         let param = {
-            site: localStorage.getItem("site"),
+            site: this.state.site,
             day: dayString,
             week: Date
         }
