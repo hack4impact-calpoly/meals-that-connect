@@ -11,7 +11,7 @@ router.post('/addVolunteer', async (req, res) => {
   Volunteer.findOne({'email': email}).then(function(result) {
   if (result) {
     console.log("email already in use")
-     res.sstatus(404).send("email already in use")     
+     res.status(404).send("email already in use")     
   }
   var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
   volun.save()

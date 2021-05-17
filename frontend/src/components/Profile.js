@@ -272,9 +272,9 @@ class Profile extends Component {
                     <textarea type="text" id="notes" value={notes} onChange={e => this.setState({notes: e.target.value})} size="50" style={{"width": "720px", "padding": "10px"}} readOnly={this.state.readOnly} hidden={(this.state.userType === 'volunteer') ? false : true}/>
                 </div>
                 <div id='buttons'>
-                    <button id="changes-button" type="submit" onClick={this.edit}>EDIT PROFILE</button>
-                    {hideCancel && <button id="signout-button" type="submit" onClick={this.signOut} >SIGN OUT</button>}
-                    {!hideCancel && <button id="cancel-button" type="submit" onClick={this.cancel}>CANCEL</button>}
+                    <button id="changes-button" className="generic-button" type="submit" onClick={this.edit} style={{width: '100%'}}>EDIT PROFILE</button>
+                    {hideCancel && <button className="generic-button" type="submit" onClick={this.signOut} style={{width: '100%'}}>SIGN OUT</button>}
+                    {!hideCancel && <button className="generic-button" type="submit" onClick={this.cancel} style={{width: '100%'}}>CANCEL</button>}
                 </div>
             </div>
         ); 

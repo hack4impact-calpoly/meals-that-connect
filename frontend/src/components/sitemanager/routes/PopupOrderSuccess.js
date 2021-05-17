@@ -15,7 +15,7 @@ class PopupOrderSuccess extends Component {
                 <div>
                     <p>Successfully submitted order!</p>
                     <div>
-                        <button type="button" className="popup-button-cancel">Close</button>
+                        <button type="button" className="button-cancel">Close</button>
                     </div>
                 </div>
         );

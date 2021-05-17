@@ -10,18 +10,18 @@ class VolunteerHoursOverview extends Component {
         this.state = {
            volunteerData: [],
            loaded: false,
-           week: [],
-           holiday: []
+           weekArr: [],
+           holidayArr: [],
         };
     }
     
     updateWeek = (week) => {
-        console.log(week)
+        console.log("Updating week")
         this.setState({weekArr: week})
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
+        console.log("Loading holidays")
         this.setState({holidayArr: holidays})
     }
 
@@ -47,7 +47,7 @@ class VolunteerHoursOverview extends Component {
                 <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                    {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData}/> :
+                    {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData} weekArr={this.state.weekArr}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}
