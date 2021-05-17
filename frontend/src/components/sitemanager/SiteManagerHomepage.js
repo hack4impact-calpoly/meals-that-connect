@@ -242,11 +242,11 @@ class SiteManagerHomepage extends Component {
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
                             <h3>Driver Routes For: </h3>
-                            <button className="route" onClick={() => this.printDocument("SLO", "M", 0)}>Monday</button>
-                            <button className="route" onClick={() => this.printDocument("SLO", "T", 1)}>Tuesday</button>
-                            <button className="route" onClick={() => this.printDocument("SLO", "W", 2)}>Wednesday</button>
-                            <button className="route" onClick={() => this.printDocument("SLO", "Th", 3)}>Thursday</button>
-                            <button className="route" onClick={() => this.printDocument("SLO", "F", 4)}>Friday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "M", 0)}>Monday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "T", 1)}>Tuesday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "W", 2)}>Wednesday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "Th", 3)}>Thursday</button>
+                            <button className="route" onClick={() => this.printDocument(localStorage.get("site"), "F", 4)}>Friday</button>
                         </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
