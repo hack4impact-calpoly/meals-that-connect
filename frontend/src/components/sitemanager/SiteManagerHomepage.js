@@ -118,6 +118,7 @@ class SiteManagerHomepage extends Component {
             for (let j = 0; j < clients[i].length; j++) {
                 // add stop number
                 var stopNum = j + 1
+                doc.setFontSize(10)
                 doc.cell(x, y, 16, 21, "\n" + stopNum)
                 doc.setFontSize(8)
                 doc.cell(x + 16, y, 37, 9, clients[i][j].firstName + " " + clients[i][j].lastName)
