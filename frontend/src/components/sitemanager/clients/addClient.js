@@ -68,6 +68,9 @@ class AddClient extends Component {
                     <label for="client-address">Address*</label><br/>
                     <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1130px"}}/><br/>
                     
+                    <label for="client-routenumber">Route Number</label><br/>
+                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
+                    
                     <br></br>
 
                     <div style={{"text-align": "left"}}>
@@ -129,15 +132,8 @@ class AddClient extends Component {
 
                     <br></br>
 
-                    <label for="client-nomilk">No Milk</label><br/>
-                    <input type="checkbox" id="client-nomilk" onChange={() => this.setState(prevState => ({noMilk: !prevState.noMilk}))}/><br/>
-
                     <label for="client-specialinstructions">Special Instructions</label><br/>
                     <input type="text" id="client-specialinstructions" onChange={e => this.setState({specialInstructions: e.target.value})} style={{"width": "1130px"}}/><br/>
-
-
-                    <label for="client-c2">C2 Client</label><br/>
-                    <input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/>
 
                     <br></br>
 
@@ -147,11 +143,21 @@ class AddClient extends Component {
                     <label for="client-email">Email Address*</label><br/>
                     <input type="email" id="client-email" onChange={e => this.setState({email: e.target.value})} required={true} style={{"width": "1130px"}}/><br/>
 
-                    <label for="client-holidayfrozen">Holiday Frozen</label><br/>
-                    <input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/>
+                    <br></br>
 
-                    <label for="client-routenumber">Route Number</label><br/>
-                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
+                    <table style={{marginLeft: "left", marginRight: "auto"}} className="add-table">
+                        <tr>
+                            <th><label for="client-nomilk">No Milk</label><br/></th>
+                            <th><label for="client-c2">C2 Client</label><br/></th>
+                            <th><label for="client-holidayfrozen">Holiday Frozen</label><br/></th>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" id="client-nomilk" onChange={() => this.setState(prevState => ({noMilk: !prevState.noMilk}))}/><br/></td>
+                            <td><input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/></td>
+                            <td><input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/></td>
+                        </tr>
+                    </table>
 
                     <br/>
                     <div id="button-div">
