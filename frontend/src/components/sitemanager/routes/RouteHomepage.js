@@ -232,7 +232,7 @@ class RouteHomepage extends Component {
                             return (
                                 <section style={{marginRight: 80, paddingLeft: 320}}>
                                     <a id={String(route)}></a>
-                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}
+                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal} mondayDate={this.state.weekArr[1]}
                                         handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
                                 </section>
                         );})}

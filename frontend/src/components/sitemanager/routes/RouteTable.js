@@ -9,6 +9,10 @@ const REG_CELL_WIDTH = 130;
 const CELL_HEIGHT = 60;
 const days = ["M", "T", "W", "Th", "F"];
 
+function add_week(dt){
+  return new Date(dt.setDate(dt.getDate() + 7));      
+}
+
 
 const EditableCell = (props, cellProperties, key, day, width, inputType) => {
 
@@ -19,6 +23,11 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
         value = value[day]
     }
 
+    // Disable editing for previous weeks
+    let currDate = new Date()
+    let nextMonday = add_week(new Date(props.mondayDate))
+    let enabled = (localStorage.getItem("userType") == "site-manager") && (nextMonday > currDate)
+
     /*
         Check if value is a boolean, If it is, show a checkbox and
         Update the props array with the new checked value
@@ -27,7 +36,7 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
     {
       //checkboxes
         return (
-            <input type={inputType} disabled={(localStorage.getItem("userType") == "site-manager") ? false : true} style={{width: width, boxShadow: 'none'}} checked={value} onChange={(e) => props.handleBoolChange(route, key, e.target.checked, day, index)}/>
+            <input type={inputType} disabled={!enabled} style={{width: width, boxShadow: 'none'}} checked={value} onChange={(e) => props.handleBoolChange(route, key, e.target.checked, day, index)}/>
         )
     }
     /*
@@ -73,7 +82,7 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
         // isOption currently giving errors, 
         return (
         <Select 
-            isDisabled={(localStorage.getItem("userType") == "site-manager") ? false : true}
+            isDisabled={!enabled}
             options={options} 
             styles={customStyles} 
             placeholder="Select" 
@@ -88,13 +97,14 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
   else
   {
     return (
-        <input type={inputType} disabled={(localStorage.getItem("userType") == "site-manager") ? false : true} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => props.handleChange(props, key, e.target.value, index)} />
+        <input type={inputType} disabled={!enabled} style={{width: width, height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => props.handleChange(props, key, e.target.value, index)} />
     )
   }
 }
 
+ 
+
 const RouteTable = (props) => {
-  console.log("in route table")
   let columns = [
     {
     Header: 'Route '+ props.routenum,
