@@ -5,9 +5,9 @@ import '../../../css/volunteerTable.css'
 import { ColumnFilter } from '../columnFilter';
 import DeleteCVPopup from '../DeleteCVPopup.js'
 
-const TEXT_TYPE = "type";
+const TEXT_TYPE = "text";
 const CELL_HEIGHT = 55;
-const BOOL_HEIGHT = 70;
+const BOOL_WIDTH = 70;
 const days = ["M", "T", "W", "Th", "F"];
 
 const Styles = styled.div`
@@ -40,7 +40,8 @@ const Styles = styled.div`
       background: #D4D4D4;
       color: black;
       fontWeight: bold;
-      border: 1px solid black;
+      border-left: 0px solid black;
+      border-top: 0px solid black;
     }
   }
 `
@@ -132,13 +133,13 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
   if (value === true || value === false)
   {
     return (
-        <input type={type} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox(cellProperties["row"]["original"]["volunteerID"])}/>
+        <input type={type} style={{boxShadow: 'none', margin: 0, marginTop: 20}} checked={selected} onChange={e => updateCheckbox(cellProperties["row"]["original"]["volunteerID"])}/>
     )
   }
   else
   {
     return (
-        <input type={type} style={{width: width,height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
+        <input type={type} style={{height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
     )
   }
 
@@ -155,75 +156,66 @@ const VolunteerOverviewData = (props) => {
           Filter: ColumnFilter,
           filter: true,
           width: 150,
-          Cell: (cellProperties) => EditableCell(cellProperties, 149, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 150, TEXT_TYPE, null)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
           Filter: ColumnFilter,
           filter: true,
           width: 150,
-          Cell: (cellProperties) => EditableCell(cellProperties, 149, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 150, TEXT_TYPE, null)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
           filter: false,
           width: 150,
-          Cell: (cellProperties) => EditableCell(cellProperties, 149, "tel", null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 150, "tel", null)
           },
           { Header: 'Email',
           accessor: 'email',
           filter: false,
           width: 350,
-          Cell: row => <div style={{width: 349}}>{row.row.original.email}</div>
+          Cell: row => <div style={{width: 350-1.25, marginTop: 12}}>{row.row.original.email}</div>
           },
-          /*
-          { Header: 'Using Digital System?',
-          accessor: 'digitalSystem',
-          filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", null)
-          },
-          */
           { Header: 'M',
           accessor: 'availabilityM',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'M')
           },
           { Header: 'T',
           accessor: 'availabilityT',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'T')
           },
           { Header: 'W',
           accessor: 'availabilityW',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'W')
           },
           { Header: 'Th',
           accessor: 'availabilityTh',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'Th')
           },
           { Header: 'F',
           accessor: 'availabilityF',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'F')
           },
           { Header: 'More Details',
-            width: 100,
-            Cell: row => (<div style={{paddingTop: '12px', width: 100, cursor: 'pointer'}} onClick={() => editVolunteer(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+            Cell: row => (<div style={{paddingTop: '12px', width: 'auto', cursor: 'pointer'}} onClick={() => editVolunteer(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                     </svg></div>)
           },
           { Header: 'Remove Volunteer',
           width: 100,
-          Cell: row => (<DeleteCVPopup person={row.row.original} type={"volunteer"}/>)
+          Cell: row => (<div style={{paddingTop: '12px'}}><DeleteCVPopup person={row.row.original} type={"volunteer"}/></div>)
           },
       ],},
       
@@ -296,10 +288,15 @@ function VolunteerOverviewTable({ columns, data }) {
         prepareRow(row)
         return (
           <tr {...row.getRowProps()}>
-            {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {email: row["original"]["email"], value: cell["value"], original: row["original"]})}</td>
-            })}
-          </tr>
+              {row.cells.map(cell => {
+                return (
+                  <td {...cell.getCellProps({style: {width: cell.column.width}})}>
+                    {cell.render('Cell', {email: row["original"]["email"], value: cell["value"], original: row["original"]})}
+                  </td>
+                );
+              })}
+            </tr>
+          
         )
       })}
     </tbody>
