@@ -78,10 +78,13 @@ class ModalContent extends Component {
                     <div id="client-info-header" style={{position: "fixed"}}>
                         <h1>Client Information</h1>
                         <button 
+                            onClick={this.props.handleCloseModal} 
+                            className="generic-button" 
+                            style={{margin: '10px 0px '}}>{"Cancel"}</button>
+                        <button 
+                            className="generic-button"
                             onClick={() => this.props.submit(this.state)} 
-                            style={{fontSize: "18px"}} 
-                            >Exit and SAVE</button>
-                        <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px"}}>{"Exit and DON'T SAVE"}</button>
+                            style={{margin: '10px 0px 10px 20px'}}> Save </button>
                     </div>
                     <div id="client-info-body">
                         <div className="two-column">
@@ -171,7 +174,7 @@ class ModalContent extends Component {
                                     <th>Holiday Frozen</th>
                                 </tr>
                                 <tr>
-                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("clientC2", !currentClient.noMilk)}/></td>
+                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("noMilk", !currentClient.noMilk)}/></td>
                                     <td><input type="checkbox" checked={currentClient["clientC2"]} id="client-c2" onChange={e =>  this.handleChangeMoreInfo("clientC2", !currentClient.clientC2)}/></td>
                                     <td><input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen" onChange={e => this.handleChangeMoreInfo("holidayFrozen", !currentClient.holidayFrozen)}/></td>
                                 </tr>

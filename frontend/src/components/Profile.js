@@ -58,7 +58,6 @@ class Profile extends Component {
     };
 
     async fetchUserData () {
-        console.log("Fetching user data")
         let email = localStorage.getItem('userEmail')
         let type = this.state.userType
         let info = {
@@ -76,6 +75,7 @@ class Profile extends Component {
         const data = await response.json();
         
         if (type === "volunteer") {
+            localStorage.setItem("volunteerID", data.volunteerID)
             this.setState( { 
                 firstName: data.firstName,
                 lastName: data.lastName,
@@ -88,6 +88,7 @@ class Profile extends Component {
                 notes: data.notes,
                 admin: data.admin,
             })
+            
         }
         else {
             this.setState( { 
@@ -148,7 +149,6 @@ class Profile extends Component {
             body: JSON.stringify(profile)
         })
         .then((res) => {
-            console.log(res)
             if (res.status === 404) {
                 _this.setState({error: true})
             }
@@ -181,9 +181,12 @@ class Profile extends Component {
     }
 
     render() {
+<<<<<<< HEAD
         console.log("site stored in local storage: " + localStorage.getItem("site"))
         console.log("this.state.site: " + this.state.site)
         console.log(this.state)
+=======
+>>>>>>> 8626373909d2357256ad5716c9cfcc11857a34db
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page
@@ -296,9 +299,9 @@ class Profile extends Component {
                     <textarea type="text" id="notes" value={notes} onChange={e => this.setState({notes: e.target.value})} size="50" style={{"width": "720px", "padding": "10px"}} readOnly={this.state.readOnly} hidden={(this.state.userType == 'volunteer') ? false : true}/>
                 </div>
                 <div id='buttons'>
-                    <button id="changes-button" type="submit" onClick={this.edit}>EDIT PROFILE</button>
-                    {hideCancel && <button id="signout-button" type="submit" onClick={this.signOut} >SIGN OUT</button>}
-                    {!hideCancel && <button id="cancel-button" type="submit" onClick={this.cancel}>CANCEL</button>}
+                    <button id="changes-button" className="generic-button" type="submit" onClick={this.edit} style={{width: '100%'}}>EDIT PROFILE</button>
+                    {hideCancel && <button className="generic-button" type="submit" onClick={this.signOut} style={{width: '100%'}}>SIGN OUT</button>}
+                    {!hideCancel && <button className="generic-button" type="submit" onClick={this.cancel} style={{width: '100%'}}>CANCEL</button>}
                 </div>
             </div>
         ); 

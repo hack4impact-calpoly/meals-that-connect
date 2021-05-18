@@ -11,7 +11,7 @@ router.post('/addVolunteer', async (req, res) => {
   Volunteer.findOne({'email': email}).then(function(result) {
   if (result) {
     console.log("email already in use")
-     res.sstatus(404).send("email already in use")     
+     res.status(404).send("email already in use")     
   }
   var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
   volun.save()
@@ -47,6 +47,37 @@ router.post('/volunteerSite', async (req, res) => {
     }
     else {
       res.send(volunteer)
+    }
+  })
+})
+
+router.post('/availability', async (req, res) => {
+  const {site} = req.body
+  Volunteer.find({site: site}, function (err, volunteers) {
+    let daily_availability = {
+      M: [],
+      T: [],
+      W: [],
+      Th: [],
+      F: []
+    }
+    console.log(daily_availability)
+    let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+
+    volunteers.forEach(volunteer => {
+      let availability = volunteer.availability
+      for (let day of days) {
+        if (availability[day]) {
+          daily_availability[day].push(volunteer.firstName = " " + volunteer.lastName)
+        }
+      }
+    })
+    console.log(daily_availability)
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.send(daily_availability)
     }
   })
 })

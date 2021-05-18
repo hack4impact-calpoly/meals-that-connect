@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
+import '../../../css/manager.css'
 
 class AddVolunteer extends Component {
     constructor(props) {
@@ -77,12 +78,14 @@ class AddVolunteer extends Component {
                         </tr>
                     </table>
                     
-                    <label>Avaliability</label>
+                    <br></br>
+                    
+                    <label>Availability</label>
                     <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="volunteer-m">Monday</label></th>
                             <th><label for="volunteer-t">Tuesday</label></th>
-                            <th><label for="volunteer-w">Wednesday</label></th>
+                            <th style={{width: "25%"}}><label for="volunteer-w">Wednesday</label></th>
                             <th><label for="volunteer-th">Thursday</label></th>
                             <th><label for="volunteer-f">Friday</label></th>
                         </tr>
@@ -98,14 +101,21 @@ class AddVolunteer extends Component {
                     <label for="volunteer-notes">Notes</label><br/>
                     <input type="text" id="volunteer-notes" onChange={e => this.setState({notes: e.target.value})} style={{"width": "1320px"}}/><br/>
 
+                    <br></br>
+
                     <label for="volunteer-digitalSystem">Digital System</label><br/>
                     <input type="checkbox" id="volunteer-digitalSystem" onChange={() => this.setState(prevState => ({digitalSystem: !prevState.digitalSystem}))}/><br/>
+
+                    <br></br>
 
                     <label for="volunteer-completedOrientation">Completed Orientation?</label><br/>
                     <input type="checkbox" id="volunteer-completedOrientation" onChange={() => this.setState(prevState => ({completedOrientation: !prevState.completedOrientation}))}/><br/>
 
                     <br/>
-                    <input type="submit"/>
+                    <div id="button-div">
+                    <button type="button" className="generic-button" onClick={()=> this.props.history.push("/volunteer")}>Cancel</button>
+                    <input type="submit" className="generic-button"/>
+                    </div>
                 </div>
             </form>
         );

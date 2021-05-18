@@ -105,18 +105,19 @@ router.post('/siteTotals', (req, res) => {
     console.log("calling site totals")
     week = formatDate(week)
     if (currMonday > week) {
-        Meal.find({site: site}, function (err, data) {
+        Meal.find({site: site, startDate: week}, function (err, data) {
         if (err) {
             console.log(err)
             res.status(404).send("error")
         }
         else {
-            let mealData = sortFormatMeals(data)
+            console.log("Getting meal data")
+            let {routes, meals} = sortFormatMeals(data)
             let mealTotals = []
             for (let i = 0; i < routes.length; i++) {
-            mealTotals.push(getRouteTotals(mealData.meals[mealData.routes[i]]))
+              mealTotals.push(getRouteTotals(meals[routes[i]]))
             }  
-            res.send({"meals": mealTotals, "routes": routes})
+            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
         }
         })
     }
@@ -124,7 +125,7 @@ router.post('/siteTotals', (req, res) => {
         Client.find({site: site}, async function (err, clients) {
             if (err) {
                 console.log(err)
-                res.status(404).send("error")
+                res.status(404).send("error") 
             }
             else {
                 data = []

@@ -5,9 +5,6 @@ import Home from './components/homepage/Home'
 import NoPermission from './components/NoPermission'
 
 const PrivateRoute = ({ component: Component = null, render: Render = null, requiredUser, ...rest }) => {
-    console.log(requiredUser)
-    console.log(isLoggedIn())
-    console.log(hasPermission(requiredUser))
     return (
         <Route {...rest} render={props => (
             isLoggedIn()
