@@ -61,13 +61,18 @@ class ModalContent extends Component {
     }
 
     render() {
-        const options = [
+        const options1 = [
             { value: 'None', label: 'None' },
             { value: 'M', label: 'M' },
             { value: 'T', label: 'T' },
             { value: 'W', label: 'W' },
             { value: 'Th', label: 'Th' },
             { value: 'F', label: 'F' }
+        ]
+        const options2 = [
+            { value: '0', label: '0' },
+            { value: '2', label: '2' },
+            { value: '7', label: '7' }
         ]
         const customStyles = {
             control: (provided, state) => ({
@@ -88,15 +93,19 @@ class ModalContent extends Component {
         }
         let currentClient = this.state;
         return (
-            <div style={{marginBottom: 40}}>
+            <div style={{marginBottom: 50}}>
                 <div id="modal-content">
                     <div id="client-info-header" style={{position: "fixed"}}>
                         <h1>Client Information</h1>
                         <button 
+                            onClick={this.props.handleCloseModal} 
+                            className="generic-button" 
+                            style={{margin: '10px 0px '}}>{"Cancel"}</button>
+                        <button 
+                            className="generic-button"
                             onClick={() => this.props.submit(this.state)} 
-                            style={{fontSize: "18px"}} 
-                            >Exit and SAVE</button>
-                        <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px", marginBottom: 20}}>{"Exit and DON'T SAVE"}</button>
+                            style={{margin: '10px 0px 10px 20px'}}> Save </button>
+                        
                     </div>
                     <div id="client-info-body">
                         <div className="two-column">
@@ -141,16 +150,24 @@ class ModalContent extends Component {
                             </tbody>
                         </table>
                         <br/>
-                        <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                        <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber" style={{width: "1130px"}} onChange={e =>  this.handleChangeMoreInfo("frozenNumber", e.target.value)}/><br/>
+                        <div style={{"text-align": "left"}}> <label for="client-frozenNumber">Number of Frozen Meals</label><br/> </div>
+                        <div style={{width: 300}}>
+                            <Select 
+                                options={options2} 
+                                styles={customStyles} 
+                                placeholder="Select" 
+                                defaultValue={{value: this.state.frozenNumber, label: this.state.frozenNumber}} 
+                                onChange={e => this.setState({frozenNumber: e.value})}/>
+                        </div>
 
                         <label>Frozen Days</label>
                         <Select 
-                            options={options} 
+                            options={options1} 
                             styles={customStyles} 
                             placeholder="Select" 
                             defaultValue={{value: currentClient.frozenDay, label: currentClient.frozenDay}} 
                             onChange={e => this.handleChangeMoreInfo("frozenDay", e.value)}/>
+
                         <label for="client-phone">Phone Number</label><br/>
                         <input type="text" value={currentClient["phoneNumber"]} id="client-phone" style={{width: "1130px"}} onChange={e =>  this.handleChangeMoreInfo("phoneNumber", e.target.value)}/><br/>
                         <div className="two-column">

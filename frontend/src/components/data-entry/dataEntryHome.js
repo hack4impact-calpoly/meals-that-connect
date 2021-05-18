@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SiteManagerHomepage from '../sitemanager/SiteManagerHomepage.js'
 
 class DataEntryHome extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class DataEntryHome extends Component {
     render() {
         return (
             <div>
-                <h1 style={{paddingTop: "100px"}}>Data Entry Homepage</h1>
+                <SiteManagerHomepage />
             </div>
         );
     }

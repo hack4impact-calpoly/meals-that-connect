@@ -76,6 +76,7 @@ class App extends Component {
               <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule" component={VolunteerSchedule}/>
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
               <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
+              <PrivateRoute requiredUser="data-entry" exact path = "/routes-data-entry" component={RouteHomePage}/>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
 
