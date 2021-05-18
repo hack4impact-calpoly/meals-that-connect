@@ -54,12 +54,12 @@ router.post('/delete', async (req, res) => {
 
 router.post('/volunteerSite', async (req, res) => {
   const {site} = req.body
-  Volunteer.find({site: site}, function (err, volunteer) {
+  Volunteer.find({site: site}, function (err, volunteers) {
     if (err) {
       console.log(err)
     }
     else {
-      res.send(volunteer)
+      res.send(volunteers)
     }
   })
 })
@@ -132,6 +132,24 @@ router.post('/update-volunteer', async (req, res) => {
           }
     })
   res.send("Information updated");
+});
+
+router.post('/update-volunteers', async (req, res) => {
+  const {id, key, data} = req.body
+  console.log(id);
+  var query = {}
+  query[key] = data;
+
+  Volunteer.updateOne({'volunteerID': id}, query)
+   .then(function(result) {
+       if (!result) {
+         console.log("Error in updating info");
+         res.send("Error in updating info");
+       } else {
+         console.log("Information updated");
+         res.send("Information updated");
+         }
+   })
 });
 
 router.post('/volunteerComplete', async(req, res) => {

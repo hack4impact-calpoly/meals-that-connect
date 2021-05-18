@@ -10,7 +10,7 @@ class VolunteerOverview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            volunteerData: [],
+            volunteers: [],
             loaded: false,
             week: [],
             holiday: [],
@@ -66,7 +66,7 @@ class VolunteerOverview extends Component {
         })
         const data = await response.json();
         
-        this.setState({volunteerData: data, loaded: true})
+        this.setState({volunteers: data, loaded: true})
     }
 
     componentWillMount() {
@@ -132,7 +132,7 @@ class VolunteerOverview extends Component {
                 <div className="site-manager-container" style={{Left: 0}}>
                     {this.state.loaded === true ? 
                     <section style={{marginRight: 80, paddingRight: 50}}>
-                        <VolunteerOverviewTable data={this.state.volunteerData} style={{marginRight: '100px'}} showModal={this.handleOpenModal} refreshData={this.refreshData}/>
+                        <VolunteerOverviewTable data={this.state.volunteers} style={{marginRight: '100px'}} showModal={this.handleOpenModal} refreshData={this.refreshData}/>
                     </section> : 
                     <div>
                         <Spinner animation="border" role="status" />
