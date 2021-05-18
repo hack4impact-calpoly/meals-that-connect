@@ -36,17 +36,17 @@ const Styles = styled.div`
     }
     th {
       padding: 0.5rem;
-      background: #D4D4D4;
+      background: #BDD3D2;
       color: black;
       fontWeight: bold;
     }
   }
 `
 
-const EditableCell = (cellProperties, width, type, dayAvailability) => {
+const EditableCell = (cellProperties, width, type, dayAvailability, key) => {
   // We need to keep and update the state of the cell normally
   var useStateCall;
-  const email = cellProperties["email"];
+  let volunteerID = cellProperties.volunteerID
 
   if (dayAvailability != null)
   {
@@ -71,24 +71,43 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
     setValue(targetValue);
   }
 
-  const updateDatabase = async () => {
-    return 0
+  let updateDatabase = (key, value) => {
+      const updateData = {
+          volunteerID: volunteerID, 
+          key: key, 
+          value: value
+      }
+      fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-field', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+      })
   }
 
-  const updateCheckbox = async () => {
+  const updateCheckbox = () => {
     setSelected(!selected);
+    if (key === 'availability') {
+      let availability = cellProperties["original"]["availability"]
+      availability[dayAvailability] = !selected
+      updateDatabase(key, availability)
+    }
+    else {
+      updateDatabase(key, !selected)
+    }
   }
 
   if (type === "checkbox")
   {
     return (
-        <input type={type} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
+        <input type={type} disabled={key === "digitalSytem"} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
     )
   }
   else
   {
     return (
-        <input type={type} style={{width: width,height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase()}/>
+        <input type={type} style={{width: width,height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(key, value)}/>
     )
   }
 
@@ -105,93 +124,81 @@ const VolunteerOverviewData = (props) => {
           Filter: ColumnFilter,
           filter: true,
           width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null, 'volunteerID')
           },
           { Header: 'First Name',
           accessor: 'firstName',
           Filter: ColumnFilter,
           filter: true,
           width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null, 'firstName')
           },
           { Header: 'Last Name',
           accessor: 'lastName',
           Filter: ColumnFilter,
           filter: true,
           width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null)
-          },
-          { Header: 'Org.',
-          accessor: 'site',
-          filter: false,
-          width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 99, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null, 'lastName')
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
           filter: false,
-          width: 300,
-          Cell: (cellProperties) => EditableCell(cellProperties, 299, "tel", null)
+          width: 200,
+          Cell: (cellProperties) => EditableCell(cellProperties, 199, "tel", null, 'phoneNumber')
           },
           { Header: 'Email',
           accessor: 'email',
           filter: false,
           width: 350,
-          Cell: row => <div style={{width: 349}}>{row.row.original.email}</div>
+          Cell: row => <div style={{width: 349}}>{row.value}</div>
           },
-          { Header: 'Using Digital System?',
+          { Header: 'Using Digital System',
           accessor: 'digitalSystem',
           filter: false,
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 99, "checkbox", null)
+          Cell: row => <div style={{width: 100}}>{row.value === false ? "No" : "Yes"}</div>
           },
           { Header: 'M',
           accessor: 'monday',
           filter: false,
           width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M')
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M', 'availability')
           },
           { Header: 'T',
           accessor: 'tuesday',
           filter: false,
           width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T')
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T', 'availability')
           },
           { Header: 'W',
           accessor: 'wednesday',
           filter: false,
           width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W')
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W', 'availability')
           },
           { Header: 'Th',
           accessor: 'thursday',
           filter: false,
           width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th')
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th', 'availability')
           },
           { Header: 'F',
           accessor: 'friday',
           filter: false,
           width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F')
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F', 'availability')
           },
           { Header: 'Volunteer Certificate Signed?',
           accessor: 'completedOrientation',
           filter: false,
           width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null)
-          },
-          { Header: 'Role',
-          accessor: 'role',
-          filter: false,
-          width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null, 'completedOrientation')
           },
           { Header: 'Notes',
           accessor: 'notes',
           filter: false,
           width: 270,
-          Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null, 'notes')
           },
           { Header: 'Remove Volunteer',
           width: 100,
@@ -264,7 +271,7 @@ function VolunteerOverviewTable({ columns, data }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {email: row["original"]["email"], value: cell["value"], original: row["original"]})}</td>
+              return <td>{cell.render('Cell', {volunteerID: row["original"]["volunteerID"], value: cell["value"], original: row["original"]})}</td>
             })}
           </tr>
         )

@@ -6,14 +6,21 @@ const Volunteer = require('../models/volunteer')
 const Hours = require("../models/hours")
 
 router.post('/addVolunteer', async (req, res) => {
-  const {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
+  let {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
+  console.log(req.body)
   var volunteerID = getID();
+  password = "Placeholder"
+  let admin = false
   Volunteer.findOne({'email': email}).then(function(result) {
   if (result) {
     console.log("email already in use")
-     res.sstatus(404).send("email already in use")     
+     res.status(404).send("email already in use")     
   }
-  var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
+  digitalSystem = false
+  var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, 
+                            isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, 
+                            availability, notes, digitalSystem, completedOrientation, admin})
+  console.log(volun)
   volun.save()
   console.log("succcessfully added volunteer")
   res.status(200).send("success")
@@ -47,6 +54,37 @@ router.post('/volunteerSite', async (req, res) => {
     }
     else {
       res.send(volunteer)
+    }
+  })
+})
+
+router.post('/availability', async (req, res) => {
+  const {site} = req.body
+  Volunteer.find({site: site}, function (err, volunteers) {
+    let daily_availability = {
+      M: [],
+      T: [],
+      W: [],
+      Th: [],
+      F: []
+    }
+    console.log(daily_availability)
+    let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+
+    volunteers.forEach(volunteer => {
+      let availability = volunteer.availability
+      for (let day of days) {
+        if (availability[day]) {
+          daily_availability[day].push(volunteer.firstName = " " + volunteer.lastName)
+        }
+      }
+    })
+    console.log(daily_availability)
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.send(daily_availability)
     }
   })
 })
@@ -87,6 +125,28 @@ router.post('/updateVolunteerInfo', async (req, res) => {
     }
   })
 })
+
+
+router.post('/update-field', async (req, res) => {
+  const {volunteerID, key, value} = req.body
+  console.log(req.body)
+
+  var query = {}
+  query[key] = value;
+  console.log(query)
+
+  Volunteer.updateOne({'volunteerID': volunteerID}, query)
+   .then(function(result) {
+      if (!result) {
+         console.log("Error in updating info");
+         res.send("Error in updating info");
+      } 
+      else {
+         console.log("Information updated");
+         res.send("Information updated");
+      }
+   })
+});
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body

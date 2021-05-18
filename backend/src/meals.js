@@ -211,22 +211,20 @@ router.post('/siteTotals', (req, res) => {
     console.log("calling site totals")
     week = formatDate(week)
     if (currMonday > week) {
-        Meal.find({site: site}, function (err, data) {
+        Meal.find({site: site, startDate: week}, function (err, data) {
         if (err) {
             console.log(err)
             res.status(404).send("error")
         }
         else {
-            let mealData = sortFormatMeals(data)
+            console.log("Getting meal data")
+            let {routes, meals} = sortFormatMeals(data)
             let mealTotals = []
             var totals = {"meals": 0, "routes": 0, "totals": 0};
             for (let i = 0; i < routes.length; i++) {
-              var routeTotals = getRouteTotals(mealData.meals[mealData.routes[i]])
-              totals += routeTotals
-              mealTotals.push(routeTotals)
+              mealTotals.push(getRouteTotals(meals[routes[i]]))
             }  
-            mealTotals.push(totals)
-            res.send({"meals": mealTotals, "routes": routes})
+            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
         }
         })
     }
@@ -234,22 +232,28 @@ router.post('/siteTotals', (req, res) => {
         Client.find({site: site}, async function (err, clients) {
             if (err) {
                 console.log(err)
-                res.status(404).send("error")
+                res.status(404).send("error") 
             }
             else {
                 data = []
+                let total = clients.length
                 for (let i = 0; i < clients.length; i++) {
-                    existsMeal(clients[i], week).then(meal => {
-                        data.push(meal)
-                        if (data.length == clients.length) {
-                            let {routes, meals} = sortFormatMeals(data)
-                            let mealTotals = []
-                            for (let i = 0; i < routes.length; i++) {
-                            mealTotals.push(getRouteTotals(meals[routes[i]]))
-                            }  
-                            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
-                        }
-                    })
+                    if (clients[i].routeNumber !== '-1') {
+                      existsMeal(clients[i], week).then(meal => {
+                          data.push(meal)
+                          if (data.length == total) {
+                              let {routes, meals} = sortFormatMeals(data)
+                              let mealTotals = []
+                              for (let i = 0; i < routes.length; i++) {
+                              mealTotals.push(getRouteTotals(meals[routes[i]]))
+                              }  
+                              res.send({"meals": meals, "routes": routes, "totals": mealTotals})
+                          }
+                      })
+                    }
+                    else {
+                      total -= 1
+                    }
                 }
             }
         })

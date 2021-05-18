@@ -26,8 +26,8 @@ const clientSchema = new mongoose.Schema({
    routeNumber: {type: String, required: true},
    site: {type: String, required: true},
    index: {type: Number, required: true},
-   subservice: {type: String, required: true, default: ""},
-   wellskyID: {type: String, required: true, default: ""}
+   subservice: {type: String, default: ""},
+   wellskyID: {type: String, default: ""}
 
 })
 
