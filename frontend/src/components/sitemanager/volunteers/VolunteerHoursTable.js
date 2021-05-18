@@ -89,12 +89,6 @@ const VolunteerHoursTable = (props) => {
         ],
     },
     {
-        Header: 'Volunteer Signature (I received newsletter)',
-        accessor: 'signature',
-        Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.signature.toString()}</div> ),
-        Cell: (cellProperties) => EditableCell(cellProperties, 100),
-    },
-    {
         Header: 'MON',
         accessor: 'weekOneMon',
         columns: [

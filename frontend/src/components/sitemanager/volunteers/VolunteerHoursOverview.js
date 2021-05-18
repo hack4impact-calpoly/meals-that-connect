@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { getWeekArr } from '../calendar'
 import VolunteerHoursTable from './VolunteerHoursTable'
 import VolunteerNavbar from './VolunteerNavbar'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +18,7 @@ class VolunteerHoursOverview extends Component {
     
     updateWeek = (week) => {
         console.log("Updating week")
+        console.log(week)
         this.setState({weekArr: week})
         this.fetchHours()
     }
@@ -31,9 +33,15 @@ class VolunteerHoursOverview extends Component {
     }
 
     async fetchHours () {
+        var weekArr = getWeekArr(new Date)
+        if (this.state.weekArr.length > 0) {
+            weekArr = this.state.weekArr[1];
+        }
+        console.log("Fetching hours")
+        console.log(this.state.weekArr)
         let info = {
             site: localStorage.getItem("site"),
-            week: this.state.weekArr
+            week: weekArr
          }
          let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/siteVolunHours', {
             method: 'POST',
@@ -45,10 +53,10 @@ class VolunteerHoursOverview extends Component {
          const data = await response.json();
          this.setState({volunteerData: data, loaded: true})
          console.log(this.state.volunteerData)
-
     }
 
     render() {
+        console.log(this.state)
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
