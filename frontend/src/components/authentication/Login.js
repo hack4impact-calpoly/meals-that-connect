@@ -190,11 +190,11 @@ class Login extends Component {
                 <div id="cta-type">
                     <div id="site-manager">
                         <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
-                        <label for="site-manager">Manager</label>
+                        <label for="site-manager"> Site Manager</label>
                     </div>
                     <div id="data-entry">
                         <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
-                        <label for="data-entry">Data Entry</label>
+                        <label for="data-entry">Data Manager</label>
                     </div>
                     <div id="volunteer">
                         <input type="radio" id="volunteerID" name="cta" value="volunteer" onChange={this.changeUserType} checked={null}/>
