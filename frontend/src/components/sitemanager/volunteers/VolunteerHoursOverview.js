@@ -55,12 +55,15 @@ class VolunteerHoursOverview extends Component {
 
     render() {
         console.log(this.state)
+        let data = this.state.volunteerData
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Hours Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                    {this.state.loaded === true ? <VolunteerHoursTable data={this.state.volunteerData} weekArr={this.state.weekArr}/> :
+                    {this.state.loaded === true ? 
+                    data.length == 0 ? <h2 style={{textAlign: 'center', width: 'calc(100vw - 750px)'}}>No volunteer hours logged for this week</h2> : 
+                    <VolunteerHoursTable data={this.state.volunteerData} weekArr={this.state.weekArr}/> :
                     <div>
                         <Spinner animation="border" role="status" />
                     </div>}

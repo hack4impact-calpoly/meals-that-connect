@@ -155,7 +155,11 @@ async function getVolunteerHours(site, weekArr) {
       var days = [0,0,0,0,0,0,0]
       await Hours.find({volunteerID: volunteerID}, function (err, hrs)
       {
-        if (err)
+        if (first === "Vincent") {
+          console.log(volunteerList[index])
+        console.log(hrs)
+        }
+        if (hrs === [])
         {
           console.log(err)
         }
@@ -175,13 +179,16 @@ async function getVolunteerHours(site, weekArr) {
               }
             }
           }
-          totals.push({firstName: first, lastName: last, Su: days[0], M: days[1], 
-          T: days[2], W: days[3],Th: days[4], F: days[5], Sa: days[6]})
+          var sum = days[1] + days[2] + days[3] + days[4] + days[5]
+          if (sum > 0) {
+            // console.log(volunteerList[index])
+            totals.push({firstName: first, lastName: last, Su: days[0], M: days[1], 
+            T: days[2], W: days[3],Th: days[4], F: days[5], Sa: days[6]})
+          }
          }
         }
       )
     }
-    console.log(totals)
     return totals
 }
 
