@@ -25,11 +25,8 @@ router.post('/addClient', async (req, res) => {
                                 emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, 
                                 clientC2, NE, email, holidayFrozen, routeNumber, site, index,
                                 subservice, wellskyID})
-        console.log({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, 
-          emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, 
-          clientC2, NE, email, holidayFrozen, routeNumber, site, index,
-          subservice, wellskyID})
-        client.save().then(data => console.log(data))
+  
+        client.save()
         console.log("succcessfully added client")
         res.status(200).send("success")
       }
