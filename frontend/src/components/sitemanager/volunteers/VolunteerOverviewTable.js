@@ -140,7 +140,7 @@ const EditableCell = (cellProperties, width, type, dayAvailability, key) => {
   else
   {
     return (
-        <input type={type} style={{height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
+        <input type={type} style={{height: CELL_HEIGHT, width: width, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
     )
   }
 
@@ -176,7 +176,7 @@ const VolunteerOverviewData = (props) => {
           accessor: 'email',
           filter: false,
           width: 350,
-          Cell: row => <div style={{width: 350-1.25, marginTop: 12}}>{row.row.original.email}</div>
+          Cell: row => <div style={{width: 350, marginTop: 12}}>{row.row.original.email}</div>
           },
           { Header: 'M',
           accessor: 'availabilityM',
