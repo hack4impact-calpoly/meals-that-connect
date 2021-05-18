@@ -4,6 +4,7 @@ const router = express.Router();
 
 const Volunteer = require('../models/volunteer')
 const Hours = require("../models/hours")
+const moment = require('moment')
 
 router.post('/addVolunteer', async (req, res) => {
   let {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
@@ -114,8 +115,8 @@ router.get('/allVolunteers', async (req, res) => {
 })
 
 router.post('/siteVolunHours', async (req, res) => {
-  const {site} = req.body
-  var totals = await getVolunteerHours(site)
+  const {site, week} = req.body
+  var totals = await getVolunteerHours(site, week)
   res.send(totals)
 })
 
@@ -265,24 +266,51 @@ async function getVolunteersBySite(siteName) {
   })
 }
 
-//rewrite this funcion
-async function getVolunteerHours(site) {
+async function getVolunteerHours(site, weekArr) {
     var volunteerList = await getVolunteersBySite(site)
     var totals = []
+    // for each volunteer -> get all their logged hours
+    console.log(weekArr)
     for (var index in volunteerList) {
+      var volunteerID = volunteerList[index].volunteerID
       var first = volunteerList[index].firstName
       var last = volunteerList[index].lastName
-      await Hours.find({firstName: first, lastName: last}, function (err, hrs)
+      var days = [0,0,0,0,0,0,0]
+      await Hours.find({volunteerID: volunteerID}, function (err, hrs)
       {
-        if (err)
+        if (first === "Vincent") {
+          console.log(volunteerList[index])
+        console.log(hrs)
+        }
+        if (hrs === [])
         {
           console.log(err)
         }
-        else
-        {
-          totals.push({firstName: first, lastName: last, hours: hrs})
+         else
+         {
+          for (let i=0; i<weekArr.length; i++)
+          {
+            let day = new Date(weekArr[i])
+            for (let i = 0; i < hrs.length; i++)
+            {
+              let hourLog = hrs[i]
+              volunDate = new Date(hourLog.date)
+              if (volunDate.getDate() === day.getDate())
+              {
+                week = day.getDay() // returns 0-6
+                days[week] += hourLog.home
+              }
+            }
+          }
+          var sum = days[1] + days[2] + days[3] + days[4] + days[5]
+          if (sum > 0) {
+            // console.log(volunteerList[index])
+            totals.push({firstName: first, lastName: last, Su: days[0], M: days[1], 
+            T: days[2], W: days[3],Th: days[4], F: days[5], Sa: days[6]})
+          }
+         }
         }
-      })
+      )
     }
     return totals
 }

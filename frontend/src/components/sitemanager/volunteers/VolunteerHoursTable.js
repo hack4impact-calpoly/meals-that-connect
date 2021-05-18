@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { useTable } from 'react-table'
 import { getDate} from '../routes/mealTotals'
 
+const HOUR_WIDTH = 100
+
 const Styles = styled.div`
  table {
    margin: 0px 30px 30px 10px;
@@ -18,7 +20,7 @@ const Styles = styled.div`
    }
    th,
    td {
-     padding: 0.5rem;
+     padding: 0.5rem 1.0rem ;
      border-bottom: 1px solid black;
      border-right: 1px solid black;
      font-size: 20px;
@@ -67,54 +69,41 @@ const EditableCell = (cellProperties, width) => {
   }
 
   return (
-      <span><input style={{width: width +20, margin: '-5px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/></span>
+      <input style={{margin: '-5px -10px', textAlign: 'center', width: width}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/>
   )
 };
 
 const VolunteerHoursTable = (props) => {
   const columns = [
     {
-        Header: 'Volunteer Name',
+        Header: ' ',
         columns: [
         {                 
             accessor: 'lastName',
-            Header: () => ( <div style={ { textAlign: 'left' } }>Last</div> ),
-            Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.lastName.toString()}</div> ),
+            width: 120,
+            Header: () => ( <div style={ { textAlign: 'left', width: 200 } }>Volunteer Name</div> ),
+            Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.firstName.toString() + " " + row.row.original.lastName.toString()}</div> ),
         }, 
-        {                 
-            accessor: 'firstName',
-            Header: () => ( <div style={ { textAlign: 'left' } }>First</div> ),
-            Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.firstName.toString()}</div> ),
-        },
         ],
-    },
-    {
-        Header: 'Volunteer Signature (I received newsletter)',
-        accessor: 'signature',
-        Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.signature.toString()}</div> ),
-        Cell: (cellProperties) => EditableCell(cellProperties, 100),
     },
     {
         Header: 'MON',
         accessor: 'weekOneMon',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(props.weekArr, 0)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 0)}</div> ),
                 accessor: 'weekOneMonDate',
                 columns: [
                     {
                         Header: 'Home',
-                        // change the databse of hours to a different name? getting a list of objecs
-                        // intead of correct hours variable
-                        accessor: 'hours',
+                        accessor: 'M',
 
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'dinner',
-                         
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -125,18 +114,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneTue',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(props.weekArr, 1)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 1)}</div> ),
                 accessor: 'weekOneTueDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'T',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -147,18 +136,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneWed',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(props.weekArr, 2)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 2)}</div> ),
                 accessor: 'weekOneWedDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'W',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -169,18 +158,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneThu',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(props.weekArr, 3)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 3)}</div> ),
                 accessor: 'weekOneThuDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOnThuHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'Th',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -191,18 +180,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneFri',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(props.weekArr, 4)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 4)}</div> ),
                 accessor: 'weekOneFriDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'F',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>
                     },
                 ],
             },
@@ -214,7 +203,7 @@ const VolunteerHoursTable = (props) => {
   
   return (
   <Styles>
-    <RouteTable columns={columns} data={data}/>
+    <RouteTable columns={columns} data={props.data}/>
   </Styles>
   )
 }
