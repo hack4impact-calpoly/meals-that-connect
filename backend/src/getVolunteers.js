@@ -188,6 +188,7 @@ router.post('/update-volunteers', async (req, res) => {
          res.send("Information updated");
          }
    })
+ })
 
 router.post('/update-field', async (req, res) => {
   const {volunteerID, key, value} = req.body
@@ -207,7 +208,8 @@ router.post('/update-field', async (req, res) => {
          console.log("Information updated");
          res.send("Information updated");
       }
-});
+  });
+})
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body

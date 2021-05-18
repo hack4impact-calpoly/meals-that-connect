@@ -139,7 +139,7 @@ const EditableCell = (cellProperties, width, type, dayAvailability, key) => {
   }
   else
   {
-    return 
+    return (
         <input type={type} style={{height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
     )
   }
@@ -216,8 +216,8 @@ const VolunteerOverviewData = (props) => {
                     </svg></div>)
           },
           { Header: 'Remove Volunteer',
-          width: 100,
-          Cell: row => (<div style={{paddingTop: '12px'}}><DeleteCVPopup person={row.row.original} type={"volunteer"}/></div>)
+          width: 120,
+          Cell: row => (<div style={{padding: '12px 0px 0px 10px'}}><DeleteCVPopup person={row.row.original} type={"volunteer"}/></div>)
           },
       ],},
       
@@ -297,6 +297,7 @@ function VolunteerOverviewTable({ columns, data }) {
                   </td>
                 );
               })}
+          </tr>
         )
       })}
     </tbody>
