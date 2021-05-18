@@ -154,8 +154,10 @@ class AddClient extends Component {
                     <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
                     <br/>
-
-                    <button type="submit">Submit</button>
+                    <div id="button-div">
+                    <button type="button" className="generic-button" onClick={()=> this.props.history.push("/clients")}>Cancel</button>
+                    <button type="submit" className="generic-button">Submit</button>
+                    </div>
                 </div>
             </form>
         );
