@@ -142,6 +142,7 @@ class ModalContent extends Component {
                             </tbody>
                         </table>
                         <br/>
+                        
                         <div style={{"text-align": "left"}}> <label for="client-frozenNumber">Number of Frozen Meals</label><br/> </div>
                         <div style={{width: 300}}>
                             <Select 
