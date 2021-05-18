@@ -16,7 +16,8 @@ class Signup extends Component {
                 lastName: "",
                 email: "",
                 password: "",
-                site: "SLO"
+                site: "SLO",
+                code: "",
             },
             volunteerData: { //volunteers only
                 driver: false,
@@ -62,9 +63,24 @@ class Signup extends Component {
         }
     }
 
+    validCode = () => {
+        if (this.state.userType !== "site-manager" && this.state.userType !== "data-entry") {
+            return true
+        }
+        const code = this.state.personalData.code;
+        if (code !== process.env.REACT_APP_USER_CODE) {
+            this.setState({error: true, errorMessage: "Invalid code"});
+            return false
+        }
+        else {
+            this.setState({error: false});
+            return true
+        }
+    }
+
     signup = (e) => {
         e.preventDefault()
-        if (this.state.passwordValidated === true) {
+        if (this.state.passwordValidated === true && this.validCode()) {
             let userType = this.state.userType;
             if (userType === "site-manager" || userType === "data-entry" || userType === "volunteer"){
                 this.firebase_signup(this.state.email, this.state.password);
@@ -77,7 +93,6 @@ class Signup extends Component {
 
     firebase_signup = () => {
         let {email, password} = this.state.personalData
-        // console.log(email + " " + password)
         fire.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in 
@@ -137,7 +152,8 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "site-manager"
+            user: "site-manager",
+            admin: false
         }
 
         this.mongo_signup(newSiteManager)
@@ -151,7 +167,8 @@ class Signup extends Component {
             password: personalData["password"],
             isAuthenticated: this.state.isAuthenticated,
             site: personalData["site"],
-            user: "data-entry"
+            user: "data-entry",
+            admin: false
         }
 
         this.mongo_signup(newDataEntry)
@@ -169,10 +186,9 @@ class Signup extends Component {
             isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
             isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
             user: "volunteer",
-
             phoneNumber: "0",
             availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
-        
+            admin: false,
         }
         this.mongo_signup(newVolunteer)
     }
@@ -197,6 +213,17 @@ class Signup extends Component {
     }
 
     render() {
+        let user = this.state.userType
+        let needsCode = false
+        if (user === 'site-manager') {
+            user = "Site Manager"
+            needsCode = true
+        }
+        else if (user === 'data-entry') {
+            user = "Data Manager"
+            needsCode = true
+        }
+
         return (
             <div className="auth-form">
                 <h1 id="title">SIGN UP</h1>
@@ -204,11 +231,11 @@ class Signup extends Component {
                 <div id="cta-type">
                     <div id="site-manager">
                         <input type="radio" id="siteManager" name="cta" value="site-manager" onChange={this.changeUserType} checked={null}/>
-                        <label for="siteManager">Manager</label>
+                        <label for="siteManager">Site Manager</label>
                     </div>
                     <div id="data-entry">
                         <input type="radio" id="dataEntry" name="cta" value="data-entry" onChange={this.changeUserType} checked={null}/>
-                        <label for="dataEntry">Data Entry</label>
+                        <label for="dataEntry">Data Manager</label>
                     </div>
                     <div id="volunteer">
                         <input type="radio" id="volunteerID" name="cta" value="volunteer" onChange={this.changeUserType} checked={null}/>
@@ -244,6 +271,9 @@ class Signup extends Component {
                 <p id = "input">Confirm Password</p>
                 <input type="password" className="account-info" id="password-confirm" size="50" style={{width: '500px'}} onChange={this.validatePassword}  required/>
                 <br/>
+                {needsCode && <p id = "input">{user} Code</p>}
+                {needsCode && <input type="text" className="account-info" id="code" size="50" style={{width: '500px'}} onChange={this.handleChange}  required/>}
+                {needsCode && <br/>}
                 <section>
                     {this.state.passwordValidated === false &&
                         <div>
@@ -265,7 +295,7 @@ class Signup extends Component {
                     }
                 </section>
                 {this.state.emptyUser && <div className="signup-error">Select the type of user</div>}
-                {this.state.error && <div className="signup-error">Email taken</div>}
+                {this.state.error && <div className="signup-error">{this.state.errorMessage}</div>}
                 <input id = "signup-button" type="submit" value="CREATE ACCOUNT"/>
                 <p>Already have an account? <Link to="/login">Log in</Link></p>
                 </form>
