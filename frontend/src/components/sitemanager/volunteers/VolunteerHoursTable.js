@@ -98,7 +98,7 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'hours',
+                        accessor: 'M',
 
                         Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
@@ -122,7 +122,7 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneTueHome',
+                        accessor: 'T',
                         Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
@@ -144,7 +144,7 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneWedHome',
+                        accessor: 'W',
                         Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
@@ -166,7 +166,7 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOnThuHome',
+                        accessor: 'Th',
                         Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
@@ -188,7 +188,7 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneFriHome',
+                        accessor: 'F',
                         Cell: (cellProperties) => EditableCell(cellProperties, 55),
                     },
                     {
@@ -206,7 +206,7 @@ const VolunteerHoursTable = (props) => {
   
   return (
   <Styles>
-    <RouteTable columns={columns} data={data}/>
+    <RouteTable columns={columns} data={props.data}/>
   </Styles>
   )
 }

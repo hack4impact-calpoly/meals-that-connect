@@ -89,7 +89,6 @@ class RouteHomepage extends Component {
         let data = this.state.clients[route][index]
         data[key] = value
         this.setState({})
-        this.setState({})
     }
 
     handleSelect = (route, key, value, index) => {

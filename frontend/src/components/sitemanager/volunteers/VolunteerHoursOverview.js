@@ -19,7 +19,8 @@ class VolunteerHoursOverview extends Component {
     updateWeek = (week) => {
         console.log("Updating week")
         console.log(week)
-        this.setState({weekArr: week})
+        //this.setState({weekArr: week})
+        this.state.weekArr = week
         this.fetchHours()
     }
 
@@ -35,7 +36,7 @@ class VolunteerHoursOverview extends Component {
     async fetchHours () {
         var weekArr = getWeekArr(new Date)
         if (this.state.weekArr.length > 0) {
-            weekArr = this.state.weekArr[1];
+            weekArr = this.state.weekArr;
         }
         console.log("Fetching hours")
         console.log(this.state.weekArr)

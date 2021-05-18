@@ -153,6 +153,7 @@ async function getVolunteerHours(site, weekArr) {
       var volunteerID = volunteerList[index].volunteerID
       var first = volunteerList[index].firstName
       var last = volunteerList[index].lastName
+      var days = [0,0,0,0,0,0,0]
       await Hours.find({volunteerID: volunteerID}, function (err, hrs)
       {
         if (err)
@@ -170,10 +171,13 @@ async function getVolunteerHours(site, weekArr) {
               volunDate = new Date(hourLog.date)
               if (volunDate.getDate() === day.getDate())
               {
-                totals.push({firstName: first, lastName: last, date: day, hours: hourLog.home})
+                week = day.getDay() // returns 0-6
+                days[week] += hourLog.home
               }
             }
           }
+          totals.push({firstName: first, lastName: last, Su: days[0], M: days[1], 
+          T: days[2], W: days[3],Th: days[4], F: days[5], Sa: days[6]})
          }
         }
       )
