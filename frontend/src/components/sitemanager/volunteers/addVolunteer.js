@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import '../../../css/manager.css'
+import '../../../css/manager.css';
+import "../../../css/Modal.css";
 
 class AddVolunteer extends Component {
     constructor(props) {
@@ -48,16 +49,16 @@ class AddVolunteer extends Component {
             <form style={{"padding": "100px"}} onSubmit={this.addVolunteer}>
                 <h1>Add Volunteer</h1>
                 <h3>* = Required</h3>
-                <div id="volunteer-info-body">
+                <div id="volunteer-info-body" style={{"padding-bottom": "100px", "padding-left": "10px", "margin-left": "10px", "text-align": "left"}}>
 
-                    <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
+                    <div className="two-column">
                         <div><label for="volunter-firstname">First Name*</label></div>
                         <div><label for="volunteer-lastname" className="secondColumn-text">Last Name*</label></div>
                         <div><input type="text" id="volunteer-firstname" onChange={e => this.setState({firstName: e.target.value})} required={true}/></div>
                         <div><input type="text" id="volunteer-lastname" className="secondColumn-input" onChange={e => this.setState({lastName: e.target.value})} required={true}/><br/></div>
                     </div>
 
-                    <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
+                    <div className="two-column">
                         <div><label for="volunteer-email">Email Address*</label></div>
                         <div><label for="volunteer-phone">Phone Number*</label></div>
                         <div><input type="email" id="volunteer-email" onChange={e => this.setState({email: e.target.value})} required={true}/></div>
@@ -65,7 +66,7 @@ class AddVolunteer extends Component {
                     </div>
                     <br/>
                     
-                    <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="add-table">
+                    <table style={{marginTop: "10px", marginLeft: "left", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="volunteer-kitchenStaff">Kitchen Staff</label></th>
                             <th><label for="volunteer-isAuthenticated_driver">Authenticated Driver</label></th>
@@ -81,7 +82,7 @@ class AddVolunteer extends Component {
                     <br></br>
                     
                     <label>Availability</label>
-                    <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="add-table">
+                    <table style={{marginTop: "10px", marginLeft: "left", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="volunteer-m">Monday</label></th>
                             <th><label for="volunteer-t">Tuesday</label></th>
