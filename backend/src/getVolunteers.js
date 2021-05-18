@@ -4,6 +4,7 @@ const router = express.Router();
 
 const Volunteer = require('../models/volunteer')
 const Hours = require("../models/hours")
+const moment = require('moment')
 
 router.post('/addVolunteer', async (req, res) => {
   const {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
@@ -63,8 +64,8 @@ router.get('/allVolunteers', async (req, res) => {
 })
 
 router.post('/siteVolunHours', async (req, res) => {
-  const {site} = req.body
-  var totals = await getVolunteerHours(site)
+  const {site, week} = req.body
+  var totals = await getVolunteerHours(site, week)
   res.send(totals)
 })
 
@@ -143,24 +144,41 @@ async function getVolunteersBySite(siteName) {
 }
 
 //rewrite this funcion
-async function getVolunteerHours(site) {
+async function getVolunteerHours(site, weekArr) {
     var volunteerList = await getVolunteersBySite(site)
     var totals = []
+    // for each volunteer -> get all their logged hours
+    console.log(weekArr)
     for (var index in volunteerList) {
+      var volunteerID = volunteerList[index].volunteerID
       var first = volunteerList[index].firstName
       var last = volunteerList[index].lastName
-      await Hours.find({firstName: first, lastName: last}, function (err, hrs)
+      await Hours.find({volunteerID: volunteerID}, function (err, hrs)
       {
         if (err)
         {
           console.log(err)
         }
-        else
-        {
-          totals.push({firstName: first, lastName: last, hours: hrs})
+         else
+         {
+          for (let i=0; i<weekArr.length; i++)
+          {
+            let day = new Date(weekArr[i])
+            for (let i = 0; i < hrs.length; i++)
+            {
+              let hourLog = hrs[i]
+              volunDate = new Date(hourLog.date)
+              if (volunDate.getDate() === day.getDate())
+              {
+                totals.push({firstName: first, lastName: last, date: day, hours: hourLog.home})
+              }
+            }
+          }
+         }
         }
-      })
+      )
     }
+    console.log(totals)
     return totals
 }
 

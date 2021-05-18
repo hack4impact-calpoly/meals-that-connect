@@ -18,6 +18,7 @@ class VolunteerHoursOverview extends Component {
     updateWeek = (week) => {
         console.log("Updating week")
         this.setState({weekArr: week})
+        this.fetchHours()
     }
 
     updateHoliday = (holidays) => {
@@ -26,19 +27,25 @@ class VolunteerHoursOverview extends Component {
     }
 
     async componentDidMount(){
-       let info = {
-          site: localStorage.getItem("site"),
-       }
-       let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/siteVolunHours', {
-          method: 'POST',
-          headers: {
-             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(info)
-       })
-       const data = await response.json();
+        console.log("Loading")
+    }
 
-       this.setState({volunteerData: data, loaded: true})
+    async fetchHours () {
+        let info = {
+            site: localStorage.getItem("site"),
+            week: this.state.weekArr
+         }
+         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/siteVolunHours', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+         })
+         const data = await response.json();
+         this.setState({volunteerData: data, loaded: true})
+         console.log(this.state.volunteerData)
+
     }
 
     render() {

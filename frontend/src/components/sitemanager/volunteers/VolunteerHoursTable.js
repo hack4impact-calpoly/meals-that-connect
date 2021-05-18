@@ -105,8 +105,6 @@ const VolunteerHoursTable = (props) => {
                 columns: [
                     {
                         Header: 'Home',
-                        // change the databse of hours to a different name? getting a list of objecs
-                        // intead of correct hours variable
                         accessor: 'hours',
 
                         Cell: (cellProperties) => EditableCell(cellProperties, 55),
