@@ -112,14 +112,31 @@ export default class Example extends React.Component {
   }
 
   handleDayChange = date => {
-    let days = getWeekDays(getWeekRange(date).from)
-    this.setState({ selectedDays: days });
-    localStorage.setItem("week", this.state.selectedDays);
-    this.props.updateWeek(days)
+    // calculate the week that cannot be advanced (4 weeks after the current week)
+    let numWeeks = 4;
+    let maxAdvancement = new Date();
+    var currDay = maxAdvancement.getDay();
+    let sunday = maxAdvancement.getDate() - currDay;
+    maxAdvancement = new Date(maxAdvancement.setDate(sunday));
+    maxAdvancement.setDate(maxAdvancement.getDate() + numWeeks * 7);
 
-    let day = new Date();
-    let year = day.getFullYear();
-    this.getHolidays(year)
+    // get an array of the week of the date clicked
+    let days = getWeekDays(getWeekRange(date).from)
+
+    // refresh the calendar if the date clicedk is within the 4 week advancement range
+    if (days[0] < maxAdvancement) {
+      this.setState({ selectedDays: days });
+      localStorage.setItem("week", this.state.selectedDays);
+      this.props.updateWeek(days)
+
+      let day = new Date();
+      let year = day.getFullYear();
+      this.getHolidays(year)
+    }
+    // give an error if the date clicked is not within the 4 week advancement range
+    else {
+      alert("Scheduling is only available 4 weeks in advance.")
+    }
   };
 
   handleDayEnter = date => {
