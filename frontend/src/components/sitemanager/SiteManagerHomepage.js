@@ -97,7 +97,7 @@ class SiteManagerHomepage extends Component {
         let {totals, routes, weekArr, holidayArr} = this.state
         return (
             <div className="site-manager-page">
-                <h1 className="site-manager-page-header">Site Manager Overview</h1>
+                <h1 className="site-manager-page-header"> { (localStorage.getItem("userType") == "site-manager") ? "Site Manager Overview" : "Data Entry Homepage" }</h1>
                 <div className="site-manager-container">
                     <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                     <div>
@@ -105,13 +105,14 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
-                            <h3>Confirm Total For: </h3>
-                            <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/>
+                        { (localStorage.getItem("userType") == "site-manager") ? <h3>Confirm Total For: </h3> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/> : null }
                         </div>
                         <button className="route" style={{marginTop: 20,width: 300}} onClick={this.printDocument}>Print Meal Totals</button>
                     </div>

@@ -37,7 +37,7 @@ const Styles = styled.div`
     }
     th {
       padding: 0.5rem;
-      background: #D4D4D4;
+      background: #BDD3D2;
       color: black;
       fontWeight: bold;
       border-left: 0px solid black;
@@ -46,10 +46,10 @@ const Styles = styled.div`
   }
 `
 
-const EditableCell = (cellProperties, width, type, dayAvailability) => {
+const EditableCell = (cellProperties, width, type, dayAvailability, key) => {
   // We need to keep and update the state of the cell normally
   var useStateCall;
-  const email = cellProperties["email"];
+  let volunteerID = cellProperties.volunteerID
 
   if (dayAvailability != null)
   {
@@ -87,6 +87,7 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
       }
 
       await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-volunteers', {
+
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -138,7 +139,7 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
   }
   else
   {
-    return (
+    return 
         <input type={type} style={{height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
     )
   }
@@ -296,8 +297,6 @@ function VolunteerOverviewTable({ columns, data }) {
                   </td>
                 );
               })}
-            </tr>
-          
         )
       })}
     </tbody>
