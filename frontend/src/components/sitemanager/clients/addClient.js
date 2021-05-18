@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../../../css/AddPersons.css';
 import { withRouter } from "react-router-dom";
+import Select from 'react-select'
 import "../../../css/Modal.css";
 
 class AddClient extends Component {
@@ -17,7 +18,7 @@ class AddClient extends Component {
                         Th: false,
                         F: false
                     },
-                    frozenNumber: "",
+                    frozenNumber: 0,
                     frozenDay: "",
                     phoneNumber: "",
                     emergencyContact: "",
@@ -50,10 +51,42 @@ class AddClient extends Component {
     }
 
     render() {
+        let options = [
+            { value: '0', label: '0' },
+            { value: '2', label: '2' },
+            { value: '7', label: '7' }
+        ]
+        const customStyles = {
+            option: (provided, state) => ({
+              ...provided,
+              fontSize: 24,
+            }),
+            control:(provided, state) => ({
+                // none of react-select's styles are passed to <Control />
+                ...provided,
+                fontSize: 24,
+                padding: '0px 10px',
+                marginBottom: 10,
+              }), 
+              valueContainer:(provided, state) => ({
+                // none of react-select's styles are passed to <Control />
+                ...provided,
+                padding: '0px 10px',
+                margin: 0,
+                height: 70,
+              }), 
+            singleValue: (provided, state) => {
+              const opacity = state.isDisabled ? 0.5 : 1;
+              const transition = 'opacity 300ms';
+          
+              return { ...provided, opacity, transition };
+            }
+        }
+
         return (
-            <form style={{"padding": "100px"}} onSubmit={this.addClient}>
+            <form style={{"padding": "100px"}} className="addPerson" onSubmit={this.addClient}>
                 <h1>Add Client</h1>
-                <h3>* = Required</h3>
+                <br/>
                 <div style={{"padding-bottom": "100px", "padding-left": "10px", "margin-left": "10px", "text-align": "left"}}>
                     <div className="two-column">
                             <div> <label for="client-firstname">First Name*</label><br/> </div>
@@ -70,8 +103,6 @@ class AddClient extends Component {
                     
                     <label for="client-routenumber">Route Number</label><br/>
                     <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
-                    
-                    <br></br>
 
                     <div style={{"text-align": "left"}}>
                         <label>Food Days*</label>
@@ -92,11 +123,17 @@ class AddClient extends Component {
                             <td><input type="checkbox" id="client-foodday-f" onChange={e => this.setState(prevState => ({foodDays: {...prevState.foodDays, F: !prevState.foodDays.F}}))}/></td>
                         </tr>               
                     </table>
-                    <br/>
-                    <div style={{"text-align": "left"}}> <label for="client-frozenNumber">Number of Frozen Meals*</label><br/> </div>
-                    <input type="number" style={{"margin-left": "0px"}} id="client-frozenNumber" onChange={e => this.setState({frozenNumber: e.target.value})} required={true}/><br/>
-                    
-                    <br></br>
+                    <div style={{"text-align": "left"}}> <label for="client-frozenNumber">Number of Frozen Meals</label><br/> </div>
+        
+        
+                    <div style={{width: 300}}>
+                        <Select 
+                            options={options} 
+                            styles={customStyles} 
+                            placeholder="Select" 
+                            defaultValue={{value: this.state.frozenNumber, label: this.state.frozenNumber}} 
+                            onChange={e => this.setState({frozenNumber: e.value})}/>
+                    </div>
 
                     <div> <label>Frozen Days</label> </div>
                     <table style={{marginLeft: "left", marginRight: "auto"}} className="add-table">
@@ -116,12 +153,8 @@ class AddClient extends Component {
                         </tr>
                     </table>
 
-                    <br></br>
-
                     <div style={{"text-align": "left"}}> <label for="client-phone">Phone Number*</label><br/> </div>
                     <input type="text" id="client-phone" onChange={e => this.setState({phoneNumber: e.target.value})} required={true} style={{"width": "1130px"}}/><br/>
-
-                    <br></br>
 
                     <div className="two-column">
                         <div><label for="client-emergencycontact">Emergency Contact</label></div>
@@ -130,12 +163,9 @@ class AddClient extends Component {
                         <div><input type="text" id="client-emergencyphone" onChange={e => this.setState({emergencyPhone: e.target.value})}/></div>
                     </div>
 
-                    <br></br>
-
                     <label for="client-specialinstructions">Special Instructions</label><br/>
                     <input type="text" id="client-specialinstructions" onChange={e => this.setState({specialInstructions: e.target.value})} style={{"width": "1130px"}}/><br/>
 
-                    <br></br>
 
                     <label for="client-ne">N/E</label><br/>
                     <input type="text" id="client-ne" onChange={e => this.setState({NE: e.target.value})} style={{"width": "1130px"}}/><br/>

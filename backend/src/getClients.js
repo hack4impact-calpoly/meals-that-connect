@@ -19,8 +19,17 @@ router.post('/addClient', async (req, res) => {
         res.send(500).send("Internal server error")
       }
       else {
-        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
-        client.save()
+        let subservice = ""
+        let wellskyID = ""
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, 
+                                emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, 
+                                clientC2, NE, email, holidayFrozen, routeNumber, site, index,
+                                subservice, wellskyID})
+        console.log({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, 
+          emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, 
+          clientC2, NE, email, holidayFrozen, routeNumber, site, index,
+          subservice, wellskyID})
+        client.save().then(data => console.log(data))
         console.log("succcessfully added client")
         res.status(200).send("success")
       }
@@ -84,6 +93,7 @@ router.post('/siteTotals', async (req, res) => {
       for (let i = 0; i < routes.length; i++) {
         mealTotals.push(getRouteTotals(clients[routes[i]]))
       }  
+      console.log(routes)
       res.send({"meals": mealTotals, "routes": routes})
     }
   })
