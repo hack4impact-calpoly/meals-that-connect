@@ -1,5 +1,5 @@
 #route-sidebar, .site-manager-sidebar {
-    background-color: #b7f8ac;
+    background-color: #BDD3D2;
     margin: 0px 40px;
     padding-bottom: 20px;
     border: solid 3px black;
@@ -15,23 +15,19 @@ hr {
 
 .route { 
     overflow: hidden;
-    padding: 12px 28px;
+    padding: 15px 20px;
     border: none;
-    font-family: 'Mulish', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 20px;
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-property: color, background-color;
-    transition-property: color, background-color;
+    letter-spacing: 2px;
+    background-color: #0D2E46;
+    color: white;
     margin: 5px;
     width: 150px;
 }
 
 .route:hover, .route button-fade:focus, .route button-fade:active {
-    background-color: #2098D1;
+    background-color: #4EB2AC;
     color: white;
     cursor: pointer;
 }

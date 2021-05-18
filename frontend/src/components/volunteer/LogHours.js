@@ -8,7 +8,7 @@ class LogHours extends Component {
         super(props);
         this.state = {
             volunteerID: localStorage.getItem("volunteerID"),
-            log: [],
+            logs: [],
             date: '',
             hours : "",
         };
@@ -24,8 +24,6 @@ class LogHours extends Component {
         let info = {
            volunteerID: this.state.volunteerID,
         }
-
-        console.log(info)
 
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/all', {
             method: 'POST',
@@ -43,8 +41,7 @@ class LogHours extends Component {
             }
         })
         .then((data) => {
-            console.log(data)
-            this.setState({log: data})
+            this.setState({logs: data})
         })
         .catch(err => {
             console.log("Error")
@@ -54,12 +51,10 @@ class LogHours extends Component {
      }
 
     deleteLog = (data) => {
-        let logs = this.state.log
+        let logs = this.state.logs
         let index = logs.indexOf(data)
-        console.log(data)
-        console.log(index)
         this.setState({
-            log: this.state.log.filter((_, i) => i !== index)
+            logs: this.state.logs.filter((_, i) => i !== index)
         });
         window.location.reload();
     }
@@ -70,7 +65,6 @@ class LogHours extends Component {
             date: this.state.date,
             hours: this.state.hours
         }
-        console.log(hourLog)
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/add', {
             method: 'POST',
             headers: {
@@ -88,12 +82,8 @@ class LogHours extends Component {
     }
 
     render() {
-        let noHours = null;
-        if(this.state.log.length === 0)
-        {
-            noHours = <h2>No hours logged so far</h2>
-        }
-        console.log(this.state.log)
+        let hoursExist = this.state.logs.length > 0
+
         return (
             <div className="logging-container">
                 <form className="log-input-box" onSubmit={this.newLog}>
@@ -109,9 +99,8 @@ class LogHours extends Component {
                     <button id="submit-button" className="log-input"  type="submit">SUBMIT</button>
                     <br/>
                 </form>
-                <LoggedHoursTable data={this.state.log} deleteLog={this.deleteLog}/>
-                <br></br>
-                {noHours}
+                {hoursExist? <LoggedHoursTable data={this.state.logs} deleteLog={this.deleteLog}/> 
+                : <h2>No hours logged so far</h2>}
             </div>
         );
     }
