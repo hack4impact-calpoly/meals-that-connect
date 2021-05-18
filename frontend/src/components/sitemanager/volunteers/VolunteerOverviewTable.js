@@ -43,7 +43,7 @@ const Styles = styled.div`
   }
 `
 
-const EditableCell = (cellProperties, width, type, dayAvailability) => {
+const EditableCell = (cellProperties, width, type, dayAvailability, requiredUser = null) => {
   // We need to keep and update the state of the cell normally
   var useStateCall;
   const email = cellProperties["email"];
@@ -82,7 +82,7 @@ const EditableCell = (cellProperties, width, type, dayAvailability) => {
   if (type === "checkbox")
   {
     return (
-        <input type={type} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
+        <input disabled={requiredUser !== null && requiredUser !== localStorage.getItem("userType")} type={type} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
     )
   }
   else
@@ -143,7 +143,7 @@ const VolunteerOverviewData = (props) => {
           accessor: 'digitalSystem',
           filter: false,
           width: 100,
-          Cell: (cellProperties) => EditableCell(cellProperties, 99, "checkbox", null)
+          Cell: (cellProperties) => EditableCell(cellProperties, 99, "checkbox", null, "site-manager")
           },
           { Header: 'M',
           accessor: 'monday',
@@ -239,6 +239,9 @@ function VolunteerOverviewTable({ columns, data }) {
     prepareRow} = useTable({
     columns,
     data,
+    initialState: {
+      hiddenColumns: (localStorage.getItem("userType") === "data-entry") ? ["monday", "tuesday", "wednesday", "thursday", "friday"] : ["volunteerID"]  
+    }
     },
     useFilters,
     useBlockLayout,

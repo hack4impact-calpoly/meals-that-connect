@@ -30,6 +30,7 @@ class ModalContent extends Component {
             routeNumber: this.props.currentClient.routeNumber,
             site: this.props.currentClient.site,
             index: this.props.currentClient.index,
+            wellskyID: this.props.currentClient.wellskyID,
             _id: this.props.currentClient._id
          }
     }
@@ -43,6 +44,10 @@ class ModalContent extends Component {
         else {
             this.setState({[name]: value})
         }
+    }
+
+    checkViewable = (currentUser, userType) => {
+        return currentUser === userType
     }
 
     render() {
@@ -72,6 +77,7 @@ class ModalContent extends Component {
             }),
         }
         let currentClient = this.state;
+        let currentUser = localStorage.getItem("userType")
         return (
             <div style={{marginBottom: 40}}>
                 <div id="modal-content">
@@ -87,6 +93,18 @@ class ModalContent extends Component {
                             style={{margin: '10px 0px 10px 20px'}}> Save </button>
                     </div>
                     <div id="client-info-body">
+                        {this.checkViewable(currentUser, "data-entry") &&
+                            <div>
+                                <label for="client-wellskyID">WellSky ID</label><br/>
+                                <input 
+                                    type="text" 
+                                    value={currentClient["wellskyID"]} 
+                                    id="client-wellskyID" 
+                                    style={{width: "1130px"}}
+                                    onChange={e =>  this.handleChangeMoreInfo("wellskyID", e.target.value)}/><br/>
+                            </div>
+                        }
+
                         <div className="two-column">
                             <div><label for="client-firstname">First Name</label></div>
                             <div><label for="client-lastname">Last Name</label></div>
@@ -101,52 +119,58 @@ class ModalContent extends Component {
                                     id="client-lastname"
                                     onChange={e =>  this.handleChangeMoreInfo("lastName", e.target.value)}/></div>
                         </div>
-                        <label for="client-address">Address</label><br/>
 
+                        <label for="client-address">Address</label><br/>
                         <input 
                             type="text" 
                             value={currentClient["address"]} 
                             id="client-address" 
                             style={{width: "1130px"}}
                             onChange={e =>  this.handleChangeMoreInfo("address", e.target.value)}/><br/>
+                        
                         <label for="client-route">Route Number</label><br/>
-
                         <input 
+                            readOnly={currentUser !== "site-manager"}
                             type="text" 
                             value={currentClient["routeNumber"]} 
                             id="client-route" 
                             style={{width: "1130px"}}
                             onChange={e =>  this.handleChangeMoreInfo("routeNumber", e.target.value)}/><br/>
-                        <label>Food Days</label>
-                        <table className="add-table">
-                            <tbody>
-                                <tr>
-                                    <th>Monday</th>
-                                    <th>Tuesday</th>
-                                    <th>Wednesday</th>
-                                    <th>Thursday</th>
-                                    <th>Friday</th>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m" onChange={e =>  this.handleChangeMoreInfo("foodDays", "M")}/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t" onChange={e =>  this.handleChangeMoreInfo("foodDays", "T")}/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w" onChange={e =>  this.handleChangeMoreInfo("foodDays", "W")}/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th" onChange={e =>  this.handleChangeMoreInfo("foodDays", "Th")}/></td>
-                                    <td><input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f" onChange={e =>  this.handleChangeMoreInfo("foodDays", "F")}/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br/>
-                        <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
-                        <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber" style={{width: "1130px"}} onChange={e =>  this.handleChangeMoreInfo("frozenNumber", e.target.value)}/><br/>
 
-                        <label>Frozen Days</label>
-                        <Select 
-                            options={options} 
-                            styles={customStyles} 
-                            placeholder="Select" 
-                            defaultValue={{value: currentClient.frozenDay, label: currentClient.frozenDay}} 
-                            onChange={e => this.handleChangeMoreInfo("frozenDay", e.value)}/>
+                        {this.checkViewable(currentUser, "site-manager") &&
+                            <div>
+                                <label>Food Days</label>
+                                <table className="add-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Monday</th>
+                                            <th>Tuesday</th>
+                                            <th>Wednesday</th>
+                                            <th>Thursday</th>
+                                            <th>Friday</th>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" checked={currentClient["foodDays"]["M"]} id="client-foodday-m" onChange={e =>  this.handleChangeMoreInfo("foodDays", "M")}/></td>
+                                            <td><input type="checkbox" checked={currentClient["foodDays"]["T"]} id="client-foodday-t" onChange={e =>  this.handleChangeMoreInfo("foodDays", "T")}/></td>
+                                            <td><input type="checkbox" checked={currentClient["foodDays"]["W"]} id="client-foodday-w" onChange={e =>  this.handleChangeMoreInfo("foodDays", "W")}/></td>
+                                            <td><input type="checkbox" checked={currentClient["foodDays"]["Th"]} id="client-foodday-th" onChange={e =>  this.handleChangeMoreInfo("foodDays", "Th")}/></td>
+                                            <td><input type="checkbox" checked={currentClient["foodDays"]["F"]} id="client-foodday-f" onChange={e =>  this.handleChangeMoreInfo("foodDays", "F")}/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br/>
+                                <label for="client-frozenNumber">Number of Frozen Meals</label><br/>
+                                <input type="text" value={currentClient["frozenNumber"]} id="client-frozenNumber" style={{width: "1130px"}} onChange={e =>  this.handleChangeMoreInfo("frozenNumber", e.target.value)}/><br/>
+
+                                <label>Frozen Days</label>
+                                <Select 
+                                    options={options} 
+                                    styles={customStyles} 
+                                    placeholder="Select" 
+                                    defaultValue={{value: currentClient.frozenDay, label: currentClient.frozenDay}} 
+                                    onChange={e => this.handleChangeMoreInfo("frozenDay", e.value)}/>
+                            </div>
+                        }
 
                         <label for="client-phone">Phone Number</label><br/>
                         <input type="text" value={currentClient["phoneNumber"]} id="client-phone" style={{width: "1130px"}} onChange={e =>  this.handleChangeMoreInfo("phoneNumber", e.target.value)}/><br/>
@@ -157,29 +181,35 @@ class ModalContent extends Component {
                             <div><input type="text" value={currentClient["emergencyPhone"]} id="client-emergencyphone" className="secondColumn-input" onChange={e =>  this.handleChangeMoreInfo("emergencyPhone", e.target.value)}/></div>
                         </div>
 
-                        <label for="client-specialinstructions">Special Instructions</label><br/>
-                        <input type="text" value={currentClient["specialInstructions"]} id="client-specialinstructions" onChange={e => this.handleChangeMoreInfo("specialInstructions", e.target.value)}/><br/>
+                        {this.checkViewable(currentClient, "site-manager") &&
+                            <div>
+                                <label for="client-specialinstructions">Special Instructions</label><br/>
+                                <input type="text" value={currentClient["specialInstructions"]} id="client-specialinstructions" onChange={e => this.handleChangeMoreInfo("specialInstructions", e.target.value)}/><br/>
+                            </div>
+                        }
 
                         <label for="client-ne">N/E</label><br/>
-                        <input type="text" value={currentClient["NE"]} id="client-ne" onChange={e =>  this.handleChangeMoreInfo("NE", e.target.value)}/><br/>
+                        <input type="text" style={{width: "1130px"}} value={currentClient["NE"]} id="client-ne" onChange={e =>  this.handleChangeMoreInfo("NE", e.target.value)}/><br/>
 
                         <label for="client-email">Email Address</label><br/>
-                        <input type="text" value={currentClient["email"]} id="client-email" onChange={e =>  this.handleChangeMoreInfo("email", e.target.value)}/><br/>
+                        <input type="text" style={{width: "1130px"}} value={currentClient["email"]} id="client-email" onChange={e =>  this.handleChangeMoreInfo("email", e.target.value)}/><br/>
 
-                        <table className="add-table" style={{marginTop: "20px"}}>
-                            <tbody>
-                                <tr>
-                                    <th>No Milk</th>
-                                    <th>C2 Client</th>
-                                    <th>Holiday Frozen</th>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("clientC2", !currentClient.noMilk)}/></td>
-                                    <td><input type="checkbox" checked={currentClient["clientC2"]} id="client-c2" onChange={e =>  this.handleChangeMoreInfo("clientC2", !currentClient.clientC2)}/></td>
-                                    <td><input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen" onChange={e => this.handleChangeMoreInfo("holidayFrozen", !currentClient.holidayFrozen)}/></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {this.checkViewable(currentUser, "site-manager") &&
+                            <table className="add-table" style={{marginTop: "20px"}}>
+                                <tbody>
+                                    <tr>
+                                        <th>No Milk</th>
+                                        <th>C2 Client</th>
+                                        <th>Holiday Frozen</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" checked={currentClient["noMilk"]} id="client-nomilk" onChange={e => this.handleChangeMoreInfo("clientC2", !currentClient.noMilk)}/></td>
+                                        <td><input type="checkbox" checked={currentClient["clientC2"]} id="client-c2" onChange={e =>  this.handleChangeMoreInfo("clientC2", !currentClient.clientC2)}/></td>
+                                        <td><input type="checkbox" checked={currentClient["holidayFrozen"]} id="client-holidayfrozen" onChange={e => this.handleChangeMoreInfo("holidayFrozen", !currentClient.holidayFrozen)}/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>

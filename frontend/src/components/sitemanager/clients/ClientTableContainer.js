@@ -38,6 +38,7 @@ class ClientTableContainer extends Component {
                 routeNumber: null,
                 site: null,
                 index: null,
+                wellskyID: null,
                 _id: null
             }
         }
@@ -127,13 +128,16 @@ class ClientTableContainer extends Component {
         window.location.reload()
     }
 
-    render() { 
+    render() {
+        let currentUser = localStorage.getItem("userType")
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
-                <Link to="/add-client">
-                    <button className="generic-button">Add Client</button>
-                </Link>
+                {currentUser === "site-manager" &&
+                    <Link to="/add-client">
+                        <button className="generic-button">Add Client</button>
+                    </Link>
+                }
                 <div className="site-manager-container">
                     {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
                     <div>
