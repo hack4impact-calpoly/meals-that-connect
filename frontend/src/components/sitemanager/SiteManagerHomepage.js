@@ -30,7 +30,6 @@ class SiteManagerHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        console.log("Updating week")
         this.state.weekArr = week
         // this.setState({weekArr: week})
         this.fetchMealTotals()
@@ -50,7 +49,6 @@ class SiteManagerHomepage extends Component {
             return
         }
         let mondayDate = this.state.weekArr[1];
-        console.log(mondayDate)
         let info = {
             site: "SLO",
             week: mondayDate
@@ -64,14 +62,10 @@ class SiteManagerHomepage extends Component {
         })
         const data = await response.json();
         this.setState({totals: data.totals, routes: data.routes})
-        console.log(this.state.totals)
     }
 
     printDocument() {
         const input = document.getElementById('meal-totals')
-        console.log(input.height)
-        
-        console.log(input);
     
         html2canvas(input)
         .then((canvas) => {
