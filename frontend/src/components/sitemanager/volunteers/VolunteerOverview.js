@@ -16,12 +16,10 @@ class VolunteerOverview extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
         this.setState({weekArr: week})
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
@@ -42,7 +40,6 @@ class VolunteerOverview extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Overview</h1>
