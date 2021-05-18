@@ -143,7 +143,6 @@ async function getVolunteersBySite(siteName) {
   })
 }
 
-//rewrite this funcion
 async function getVolunteerHours(site, weekArr) {
     var volunteerList = await getVolunteersBySite(site)
     var totals = []
