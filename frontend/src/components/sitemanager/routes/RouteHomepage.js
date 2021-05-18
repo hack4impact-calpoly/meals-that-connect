@@ -225,13 +225,14 @@ class RouteHomepage extends Component {
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <h1 className="site-manager-page-header">{title}</h1>
+                {routes.length == 0 ? <h2 style={{marginTop: 40}}>No route data for this week</h2> : null}
                 <div className="site-manager-container">
                     <div>
                         {routes.map((route, i) =>{
                             return (
                                 <section style={{marginRight: 80, paddingLeft: 320}}>
                                     <a id={String(route)}></a>
-                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}
+                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal} mondayDate={this.state.weekArr[1]}
                                         handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
                                 </section>
                         );})}
