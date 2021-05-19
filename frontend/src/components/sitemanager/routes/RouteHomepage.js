@@ -89,7 +89,6 @@ class RouteHomepage extends Component {
         let data = this.state.clients[route][index]
         data[key] = value
         this.setState({})
-        this.setState({})
     }
 
     handleSelect = (route, key, value, index) => {
@@ -219,27 +218,32 @@ class RouteHomepage extends Component {
         console.log(this.state)
         let {routes, clients, weekArr} = this.state;
         let title = weekArr ? "Routes for " + this.formatDate(weekArr[1]) + " to " + this.formatDate(weekArr[5]) : "Routes Page"
+        console.log(routes);
+        console.log(clients);
         return (
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <h1 className="site-manager-page-header">{title}</h1>
+                {routes.length == 0 ? <h2 style={{marginTop: 40}}>No route data for this week</h2> : null}
                 <div className="site-manager-container">
                     <div>
                         {routes.map((route, i) =>{
                             return (
                                 <section style={{marginRight: 80, paddingLeft: 320}}>
                                     <a id={String(route)}></a>
-                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal}
+                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal} mondayDate={this.state.weekArr[1]}
                                         handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
                                 </section>
                         );})}
                     </div>
+                    { (localStorage.getItem("userType") == "site-manager") ? 
                     <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
                         <ModalContent 
                             currentClient={this.state.currentClient} 
                             submit={this.submit} 
                             handleCloseModal={this.handleCloseModal}/>
                     </Modal>
+                    : ""}
                 </div>
             </div>
            

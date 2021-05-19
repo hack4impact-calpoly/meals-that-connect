@@ -1,13 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
+import { getDate} from '../routes/mealTotals'
+
+const HOUR_WIDTH = 100
 
 const Styles = styled.div`
  table {
-   margin: 10px 30px 30px 10px;
+   margin: 0px 30px 30px 10px;
    border-spacing: 0;
    border: 1px solid black;
-   background-color: #f2fff0;
    font-family: 'Mulish', sans-serif;
    tr {
      :last-child {
@@ -18,7 +20,7 @@ const Styles = styled.div`
    }
    th,
    td {
-     padding: 0.5rem;
+     padding: 0.5rem 1.0rem ;
      border-bottom: 1px solid black;
      border-right: 1px solid black;
      font-size: 20px;
@@ -28,7 +30,7 @@ const Styles = styled.div`
      }
    }
    th {
-     background: #D4D4D4;
+     background: #BDD3D2;
      color: black;
      fontWeight: bold;
    }
@@ -67,55 +69,41 @@ const EditableCell = (cellProperties, width) => {
   }
 
   return (
-      <span><input style={{width: width +20, margin: '-5px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/></span>
+      <input style={{margin: '-5px -10px', textAlign: 'center', width: width}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/>
   )
 };
 
 const VolunteerHoursTable = (props) => {
-  const columns = React.useMemo(
-    () => [
+  const columns = [
     {
-        Header: 'Volunteer Name',
+        Header: ' ',
         columns: [
         {                 
             accessor: 'lastName',
-            Header: () => ( <div style={ { textAlign: 'left' } }>Last</div> ),
-            Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.lastName.toString()}</div> ),
+            width: 120,
+            Header: () => ( <div style={ { textAlign: 'left', width: 200 } }>Volunteer Name</div> ),
+            Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.firstName.toString() + " " + row.row.original.lastName.toString()}</div> ),
         }, 
-        {                 
-            accessor: 'firstName',
-            Header: () => ( <div style={ { textAlign: 'left' } }>First</div> ),
-            Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.firstName.toString()}</div> ),
-        },
         ],
-    },
-    {
-        Header: 'Volunteer Signature (I received newsletter)',
-        accessor: 'signature',
-        Cell: row => ( <div style={ { textAlign: 'left' } }>{row.row.original.signature.toString()}</div> ),
-        Cell: (cellProperties) => EditableCell(cellProperties, 100),
     },
     {
         Header: 'MON',
         accessor: 'weekOneMon',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(0)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 0)}</div> ),
                 accessor: 'weekOneMonDate',
                 columns: [
                     {
                         Header: 'Home',
-                        // change the databse of hours to a different name? getting a list of objecs
-                        // intead of correct hours variable
-                        accessor: 'hours',
-                        
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'M',
+
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'dinner',
-                         
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -126,18 +114,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneTue',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(1)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 1)}</div> ),
                 accessor: 'weekOneTueDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'T',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -148,18 +136,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneWed',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(2)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 2)}</div> ),
                 accessor: 'weekOneWedDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'W',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -170,18 +158,18 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneThu',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(3)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 3)}</div> ),
                 accessor: 'weekOneThuDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOnThuHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'Th',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>,
                     },
                 ],
             },
@@ -192,477 +180,35 @@ const VolunteerHoursTable = (props) => {
         accessor: 'weekOneFri',
         columns: [
             {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(4)}</div> ),
+                Header: () => ( <div style={ { textAlign: 'center' } }>{getDate(props.weekArr, 4)}</div> ),
                 accessor: 'weekOneFriDate',
                 columns: [
                     {
                         Header: 'Home',
-                        accessor: 'weekOneFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
+                        accessor: 'F',
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
                     },
                     {
                         Header: 'Dining',
                         accessor: 'weekOneFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
+                        Cell: row => <div style={{width: HOUR_WIDTH-20}}>0</div>
                     },
                 ],
             },
         ],
     },
-    {
-        Header: 'MON',
-        accessor: 'weekTwoMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(7)}</div> ),
-                accessor: 'weekTwoMonDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekTwoMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekTwoMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekTwoTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(8)}</div> ),
-                accessor: 'weekTwoTueDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekTwoTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekTwoTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekTwoWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(9)}</div> ),
-                accessor: 'weekTwoWedDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekTwoWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekTwoWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekTwoThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(10)}</div> ),
-                accessor: 'weekTwoThuDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekTwoThuHome',
-                       Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekTwoThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekTwoFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(11)}</div> ),
-                accessor: 'weekTwoFriDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekTwoFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekTwoFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekThreeMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(14)}</div> ),
-                accessor: 'weekThreeMonDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekThreeMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekThreeMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekThreeTue',
-        columns: [
-           {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(15)}</div> ),
-                accessor: 'weekThreeTueDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekThreeTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekThreeTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekThreeWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(16)}</div> ),
-                accessor: 'weekThreeWedDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekThreeWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekThreeWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekThreeThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(17)}</div> ),
-                accessor: 'weekThreeThuDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekThreeThursHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekThreeThursDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekThreeFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(18)}</div> ),
-                accessor: 'weekThreeFriDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekThreeFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekThreeFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekFourMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(21)}</div> ),
-                accessor: 'weekFourMonDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFourMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFourMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekFourTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(22)}</div> ),
-                accessor: 'weekFourTueDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFourTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFourTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekFourWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(23)}</div> ),
-                accessor: 'weekFourWedDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFourWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFourWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekFourThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(24)}</div> ),
-                accessor: 'weekFourThuDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFourThurHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 55),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFourThurDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 60),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekFourFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(25)}</div> ),
-                accessor: 'weekFourFriDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFourFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFourFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'MON',
-        accessor: 'weekFiveMon',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(28)}</div> ),
-                accessor: 'weekFiveMonDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveMonHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveMonDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'TUE',
-        accessor: 'weekFiveTue',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(29)}</div> ),
-                accessor: 'weekFiveTueDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveTueHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveTueDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'WED',
-        accessor: 'weekFiveWed',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(30)}</div> ),
-                accessor: 'weekFiveWedDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveWedHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveWedDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'THU',
-        accessor: 'weekFiveThu',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(31)}</div> ),
-                accessor: 'weekFiveThuDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveThuHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveThuDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        Header: 'FRI',
-        accessor: 'weekFiveFri',
-        columns: [
-            {
-                Header: () => ( <div style={ { textAlign: 'right', marginRight: '20px' } }>{getDate(32)}</div> ),
-                accessor: 'weekFiveFriDate',
-                columns: [
-                    {
-                        Header: 'Home',
-                        accessor: 'weekFiveFriHome',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                    {
-                        Header: 'Dining',
-                        accessor: 'weekFiveFriDining',
-                        Cell: (cellProperties) => EditableCell(cellProperties, 45),
-                    },
-                ],
-            },
-        ],
-    },
-    ],
-    [] 
-  )
+    ]
    
   const data = React.useMemo(() => props.data, [])
   
   return (
   <Styles>
-    <RouteTable columns={columns} data={data}/>
+    <RouteTable columns={columns} data={props.data}/>
   </Styles>
   )
 }
 
-function RouteTable({ columns, data }) {
+function RouteTable({ columns, data, props }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -700,26 +246,5 @@ function RouteTable({ columns, data }) {
   </table>
  )
 }
-
-function getDate(tableDay) {
-    let curr = new Date();
-    let firstDay = new Date(curr.getFullYear(), curr.getMonth(), 1).getDay();
-    let lastDay = new Date(curr.getFullYear(), curr.getMonth()+1, 0).getDate()
-    let dates = [];
-
-    for (let i = 0; i < firstDay - 1; i++) {
-        dates.push(' ');
-    }
-  
-    for (let i = firstDay; i <= lastDay; i++) {
-        dates.push(i);
-    }
-
-    for (let i = dates.length - 1; i <= 35; i++) {
-        dates.push(' ');
-    }
-
-    return dates[tableDay];
-  }
 
 export default VolunteerHoursTable;

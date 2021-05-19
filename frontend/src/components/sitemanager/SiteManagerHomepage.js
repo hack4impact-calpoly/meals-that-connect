@@ -245,7 +245,7 @@ class SiteManagerHomepage extends Component {
         let {totals, routes, weekArr, holidayArr} = this.state
         return (
             <div className="site-manager-page">
-                <h1 className="site-manager-page-header">Site Manager Overview</h1>
+                <h1 className="site-manager-page-header"> { (localStorage.getItem("userType") == "site-manager") ? "Site Manager Overview" : "Data Entry Homepage" }</h1>
                 <div className="site-manager-container">
                     <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                     <div>
@@ -253,21 +253,22 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
-                            <h3>Confirm Total For: </h3>
-                            <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/>
-                            <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/>
+                        { (localStorage.getItem("userType") == "site-manager") ? <h3>Confirm Total For: </h3> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/> : null }
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
                             <h3>Driver Routes For: </h3>
-                            <button className="route" onClick={() => this.printDocument("M", 0)}>Monday</button>
-                            <button className="route" onClick={() => this.printDocument("T", 1)}>Tuesday</button>
-                            <button className="route" onClick={() => this.printDocument("W", 2)}>Wednesday</button>
-                            <button className="route" onClick={() => this.printDocument("Th", 3)}>Thursday</button>
-                            <button className="route" onClick={() => this.printDocument("F", 4)}>Friday</button>
+                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("M", 0)}>Monday</button>
+                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("T", 1)}>Tuesday</button>
+                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("W", 2)}>Wednesday</button>
+                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("Th", 3)}>Thursday</button>
+                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("F", 4)}>Friday</button>
                         </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">

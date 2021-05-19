@@ -109,7 +109,3 @@ input[type=email]:focus {
     transition-property: color, background-color;
     width: 100%;
 }
-#changes-button:hover, #cancel-button:hover, #signout-button:hover {
-    background-color: #2098D1;
-    color: white;
-}

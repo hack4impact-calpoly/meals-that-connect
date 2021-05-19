@@ -21,6 +21,7 @@
     letter-spacing: 2px;
     font-weight: 700;
     font-size: 40px;
+    color: #0D2E46;
 }
 p{
     font-family: 'Quicksand', sans-serif;
@@ -136,6 +137,8 @@ input[type=radio] {
     font-weight: 600;
     font-size: 20px;
     letter-spacing: 2px;
+    color: white;
+    background-color: #0D2E46;
     -webkit-transform: perspective(1px) translateZ(0);
     transform: perspective(1px) translateZ(0);
     -webkit-transition-duration: 0.3s;
@@ -144,7 +147,7 @@ input[type=radio] {
     transition-property: color, background-color;
 }
 #signup-button:hover{
-    background-color: #2098D1;
+    background-color: #4EB2AC;
     color: white;
 }
 
