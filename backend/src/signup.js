@@ -43,9 +43,10 @@ router.post('/', async (req, res) =>{
           var doc;
           if (user == "volunteer") {
              var volunteerID = getID();
+             let digitalSystem = true
              const {driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, phoneNumber, availability} = req.body  
              doc = new userType({ volunteerID, firstName, lastName, email, password, driver, kitchenStaff, 
-                     isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, admin: admin })
+                     isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, digitalSystem, admin })
           } else {
              doc = new userType({ firstName, lastName, email, password, isAuthenticated, site, admin: admin })
           }

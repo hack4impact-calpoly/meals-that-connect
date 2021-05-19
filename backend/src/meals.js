@@ -129,18 +129,24 @@ router.post('/siteTotals', (req, res) => {
             }
             else {
                 data = []
+                let total = clients.length
                 for (let i = 0; i < clients.length; i++) {
-                    existsMeal(clients[i], week).then(meal => {
-                        data.push(meal)
-                        if (data.length == clients.length) {
-                            let {routes, meals} = sortFormatMeals(data)
-                            let mealTotals = []
-                            for (let i = 0; i < routes.length; i++) {
-                            mealTotals.push(getRouteTotals(meals[routes[i]]))
-                            }  
-                            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
-                        }
-                    })
+                    if (clients[i].routeNumber !== '-1') {
+                      existsMeal(clients[i], week).then(meal => {
+                          data.push(meal)
+                          if (data.length == total) {
+                              let {routes, meals} = sortFormatMeals(data)
+                              let mealTotals = []
+                              for (let i = 0; i < routes.length; i++) {
+                              mealTotals.push(getRouteTotals(meals[routes[i]]))
+                              }  
+                              res.send({"meals": meals, "routes": routes, "totals": mealTotals})
+                          }
+                      })
+                    }
+                    else {
+                      total -= 1
+                    }
                 }
             }
         })

@@ -4,22 +4,43 @@ const router = express.Router();
 
 const Volunteer = require('../models/volunteer')
 const Hours = require("../models/hours")
+const moment = require('moment')
 
 router.post('/addVolunteer', async (req, res) => {
-  const {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
+  let {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
+  console.log(req.body)
   var volunteerID = getID();
+  password = "Placeholder"
+  let admin = false
   Volunteer.findOne({'email': email}).then(function(result) {
   if (result) {
     console.log("email already in use")
      res.status(404).send("email already in use")     
   }
-  var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation})
+  digitalSystem = false
+  var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, 
+                            isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, 
+                            availability, notes, digitalSystem, completedOrientation, admin})
+  console.log(volun)
   volun.save()
   console.log("succcessfully added volunteer")
   res.status(200).send("success")
   }).catch(err => {
     console.log(err)
     res.send(500).send("Internal server error")
+  })
+})
+
+router.post('/id', async (req, res) => {
+  console.log("getting volunteer")
+  const {_id} = req.body
+  Volunteer.findOne({_id: _id}, function (err, volunteer) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.send(volunteer)
+    }
   })
 })
 
@@ -41,12 +62,12 @@ router.post('/delete', async (req, res) => {
 
 router.post('/volunteerSite', async (req, res) => {
   const {site} = req.body
-  Volunteer.find({site: site}, function (err, volunteer) {
+  Volunteer.find({site: site}, function (err, volunteers) {
     if (err) {
       console.log(err)
     }
     else {
-      res.send(volunteer)
+      res.send(volunteers)
     }
   })
 })
@@ -94,8 +115,8 @@ router.get('/allVolunteers', async (req, res) => {
 })
 
 router.post('/siteVolunHours', async (req, res) => {
-  const {site} = req.body
-  var totals = await getVolunteerHours(site)
+  const {site, week} = req.body
+  var totals = await getVolunteerHours(site, week)
   res.send(totals)
 })
 
@@ -117,6 +138,78 @@ router.post('/updateVolunteerInfo', async (req, res) => {
       //console.log(volunteer)
     }
   })
+})
+
+router.post('/update-volunteer', async (req, res) => {
+  const { firstName,
+          lastName,
+          availability,
+          phoneNumber,
+          site,
+          notes,
+          digitalSystem,
+          completedOrientation,
+          id} = req.body
+
+  Volunteer.updateOne({'_id': id}, 
+            { firstName: firstName,
+              lastName: lastName,
+              availability: availability,
+              phoneNumber: phoneNumber,
+              site: site,
+              notes: notes,
+              digitalSystem: digitalSystem,
+              completedOrientation: completedOrientation
+            })
+    .then(function(result) {
+        if (!result) {
+          console.log("Error in updating info");
+          res.send("Error in updating info");
+          return;
+        } else {
+          console.log("Information updated");
+          }
+    })
+  res.send("Information updated");
+});
+
+router.post('/update-volunteers', async (req, res) => {
+  const {id, key, data} = req.body
+  console.log(id);
+  var query = {}
+  query[key] = data;
+
+  Volunteer.updateOne({'volunteerID': id}, query)
+   .then(function(result) {
+       if (!result) {
+         console.log("Error in updating info");
+         res.send("Error in updating info");
+       } else {
+         console.log("Information updated");
+         res.send("Information updated");
+         }
+   })
+ })
+
+router.post('/update-field', async (req, res) => {
+  const {volunteerID, key, value} = req.body
+  console.log(req.body)
+
+  var query = {}
+  query[key] = value;
+  console.log(query)
+
+  Volunteer.updateOne({'volunteerID': volunteerID}, query)
+   .then(function(result) {
+      if (!result) {
+         console.log("Error in updating info");
+         res.send("Error in updating info");
+      } 
+      else {
+         console.log("Information updated");
+         res.send("Information updated");
+      }
+  });
 })
 
 router.post('/volunteerComplete', async(req, res) => {
@@ -173,24 +266,47 @@ async function getVolunteersBySite(siteName) {
   })
 }
 
-//rewrite this funcion
-async function getVolunteerHours(site) {
+async function getVolunteerHours(site, weekArr) {
     var volunteerList = await getVolunteersBySite(site)
     var totals = []
+    // for each volunteer -> get all their logged hours
+    console.log(weekArr)
     for (var index in volunteerList) {
+      var volunteerID = volunteerList[index].volunteerID
       var first = volunteerList[index].firstName
       var last = volunteerList[index].lastName
-      await Hours.find({firstName: first, lastName: last}, function (err, hrs)
+      var days = [0,0,0,0,0,0,0]
+      await Hours.find({volunteerID: volunteerID}, function (err, hrs)
       {
-        if (err)
+        if (first === "Vincent") {
+          console.log(volunteerList[index])
+        console.log(hrs)
+        }
+        if (hrs === [])
         {
           console.log(err)
         }
-        else
-        {
-          totals.push({firstName: first, lastName: last, hours: hrs})
+         else
+         {
+          for (let i=0; i<weekArr.length; i++)
+          {
+            let day = new Date(weekArr[i])
+            for (let i = 0; i < hrs.length; i++)
+            {
+              let hourLog = hrs[i]
+              volunDate = new Date(hourLog.date)
+              if (volunDate.getDate() === day.getDate())
+              {
+                week = day.getDay() // returns 0-6
+                days[week] += hourLog.home
+              }
+            }
+          }
+          totals.push({firstName: first, lastName: last, Su: days[0], M: days[1], 
+          T: days[2], W: days[3],Th: days[4], F: days[5], Sa: days[6]})
+         }
         }
-      })
+      )
     }
     return totals
 }

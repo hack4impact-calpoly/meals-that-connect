@@ -51,13 +51,18 @@ class ModalContent extends Component {
     }
 
     render() {
-        const options = [
+        const options1 = [
             { value: 'None', label: 'None' },
             { value: 'M', label: 'M' },
             { value: 'T', label: 'T' },
             { value: 'W', label: 'W' },
             { value: 'Th', label: 'Th' },
             { value: 'F', label: 'F' }
+        ]
+        const options2 = [
+            { value: '0', label: '0' },
+            { value: '2', label: '2' },
+            { value: '7', label: '7' }
         ]
         const customStyles = {
             control: (provided, state) => ({
@@ -164,7 +169,7 @@ class ModalContent extends Component {
 
                                 <label>Frozen Days</label>
                                 <Select 
-                                    options={options} 
+                                    options={options1} 
                                     styles={customStyles} 
                                     placeholder="Select" 
                                     defaultValue={{value: currentClient.frozenDay, label: currentClient.frozenDay}} 

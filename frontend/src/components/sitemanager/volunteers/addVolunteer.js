@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
-import '../../../css/manager.css'
+import '../../../css/manager.css';
+import "../../../css/Modal.css";
 
 class AddVolunteer extends Component {
     constructor(props) {
@@ -12,8 +13,9 @@ class AddVolunteer extends Component {
                     email: "",
                     password: "",
                     kitchenStaff: false,
-                    isAuthenticated_driver: false,
-                    isAuthenticated_kitchenStaff: false,
+                    driver: false,
+                    isAuthenticated_kitchenStaff: true,
+                    isAuthenticated_driver: true,
                     site: localStorage.getItem("site"),
                     phoneNumber: "",
                     availability: {
@@ -45,43 +47,40 @@ class AddVolunteer extends Component {
 
     render() {
         return (
-            <form style={{"padding": "100px"}} onSubmit={this.addVolunteer}>
+            <form style={{"padding": "100px"}} className="addPerson" onSubmit={this.addVolunteer}>
                 <h1>Add Volunteer</h1>
-                <h3>* = Required</h3>
-                <div id="volunteer-info-body">
+                <hbr/>
+                <div id="volunteer-info-body" style={{"padding-bottom": "100px", "padding-left": "10px", "margin-left": "10px", "text-align": "left"}}>
 
-                    <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
+                    <div className="two-column">
                         <div><label for="volunter-firstname">First Name*</label></div>
                         <div><label for="volunteer-lastname" className="secondColumn-text">Last Name*</label></div>
                         <div><input type="text" id="volunteer-firstname" onChange={e => this.setState({firstName: e.target.value})} required={true}/></div>
                         <div><input type="text" id="volunteer-lastname" className="secondColumn-input" onChange={e => this.setState({lastName: e.target.value})} required={true}/><br/></div>
                     </div>
 
-                    <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
+                    <div className="two-column">
                         <div><label for="volunteer-email">Email Address*</label></div>
                         <div><label for="volunteer-phone">Phone Number*</label></div>
                         <div><input type="email" id="volunteer-email" onChange={e => this.setState({email: e.target.value})} required={true}/></div>
                         <div><input type="text" id="volunteer-phone" onChange={e => this.setState({phoneNumber: e.target.value})} required={true}/><br/></div>
                     </div>
-                    <br/>
                     
-                    <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="add-table">
+                    <label>Volunteer Type</label>
+                    <table style={{marginTop: "10px", marginLeft: "left", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="volunteer-kitchenStaff">Kitchen Staff</label></th>
-                            <th><label for="volunteer-isAuthenticated_driver">Authenticated Driver</label></th>
-                            <th><label for="volunteer-isAuthenticated_kitchenStaff">Authenticated Kitchen Staff</label></th>
+                            <th><label for="volunteer-driver">Driver</label></th>
                         </tr>
                         <tr>
                             <td><input type="checkbox" id="volunteer-kitchenStaff" onChange={() => this.setState(prevState => ({kitchenStaff: !prevState.kitchenStaff}))}/></td>
-                            <td><input type="checkbox" id="volunteer-isAuthenticated_driver" onChange={() => this.setState(prevState => ({isAuthenticated_driver: !prevState.isAuthenticated_driver}))}/></td>
-                            <td><input type="checkbox" id="volunteer-isAuthenticated_kitchenStaff" onChange={() => this.setState(prevState => ({isAuthenticated_kitchenStaff: !prevState.isAuthenticated_kitchenStaff}))}/></td>
-                        </tr>
+                            <td><input type="checkbox" id="volunteer-driver" onChange={() => this.setState(prevState => ({driver: !prevState.driver}))}/></td>
+                       </tr>
                     </table>
                     
-                    <br></br>
                     
                     <label>Availability</label>
-                    <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="add-table">
+                    <table style={{marginTop: "10px", marginLeft: "left", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="volunteer-m">Monday</label></th>
                             <th><label for="volunteer-t">Tuesday</label></th>
@@ -97,19 +96,18 @@ class AddVolunteer extends Component {
                             <td><input type="checkbox" id="volunteer-f" onChange={e => this.setState(prevState => ({availability: {...prevState.availability, F: !prevState.availability.F}}))}/></td>
                         </tr>
                     </table>
-                    <br/>
                     <label for="volunteer-notes">Notes</label><br/>
                     <input type="text" id="volunteer-notes" onChange={e => this.setState({notes: e.target.value})} style={{"width": "1320px"}}/><br/>
 
-                    <br></br>
+                    <table style={{marginLeft: "left", marginRight: "auto", width: 500, marginTop: 15}} className="add-table">
+                        <tr>
+                            <th><label for="volunteer-completedOrientation">Completed Orientation</label><br/></th>
+                        </tr>
 
-                    <label for="volunteer-digitalSystem">Digital System</label><br/>
-                    <input type="checkbox" id="volunteer-digitalSystem" onChange={() => this.setState(prevState => ({digitalSystem: !prevState.digitalSystem}))}/><br/>
-
-                    <br></br>
-
-                    <label for="volunteer-completedOrientation">Completed Orientation?</label><br/>
-                    <input type="checkbox" id="volunteer-completedOrientation" onChange={() => this.setState(prevState => ({completedOrientation: !prevState.completedOrientation}))}/><br/>
+                        <tr>
+                            <td><input type="checkbox" id="volunteer-completedOrientation" onChange={() => this.setState(prevState => ({completedOrientation: !prevState.completedOrientation}))}/></td>
+                        </tr>
+                    </table>
 
                     <br/>
                     <div id="button-div">

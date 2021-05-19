@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 function Columns() {
   return (
     <div className = {styles.columns}>
-        <h1>LOG IN or SIGN UP</h1>
-        <h1 id= {styles.arrow}> V </h1>
         <div className = {styles.row}>
           <div id = {styles.column1}>
             <div>
