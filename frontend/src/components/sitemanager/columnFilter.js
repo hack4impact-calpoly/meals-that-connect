@@ -8,7 +8,7 @@ export const ColumnFilter = ({ column }) => {
                 placeholder="Search"
                 value={filterValue || ''}
                 onChange={(e) => setFilter(e.target.value)}
-                style={{background: '#FFFFFF', marginTop: 5}}
+                style={{background: '#FFFFFF', margin: "5px 0px 0px 0px"}}
             />
         </span>
     )
