@@ -44,7 +44,7 @@ table {
 }
 `
 
-export const DraggableTable = ({ columns, data, setData, route, showModal }) => {
+export const DraggableTable = ({ columns, data, setData, route, showModal, routeTable = 0 }) => {
     const getRowId = React.useCallback(row => {
         return row.index
     }, [])
@@ -60,7 +60,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
         columns,
         getRowId,
         initialState: {
-            hiddenColumns: (localStorage.getItem("userType") === "data-entry") ? ["foodDaysM", "foodDaysT", "foodDaysW", "foodDaysTh", "foodDaysF"] : ["wellskyID"]  
+            hiddenColumns: (localStorage.getItem("userType") === "data-entry" && routeTable === 0) ? ["foodDaysM", "foodDaysT", "foodDaysW", "foodDaysTh", "foodDaysF"] : ["wellskyID"]  
         }
     },
         useFilters,
