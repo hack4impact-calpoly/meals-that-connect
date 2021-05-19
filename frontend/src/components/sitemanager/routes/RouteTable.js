@@ -191,7 +191,7 @@ const RouteTable = (props) => {
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/> 
+    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal} routeTable={1}/> 
   </Styles>
   )
 }

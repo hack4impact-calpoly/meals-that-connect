@@ -61,7 +61,6 @@ class VolunteerSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        console.log(data)
         
         this.setState({volunteers: data})
     }
@@ -81,7 +80,7 @@ class VolunteerSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        
+        console.log(data)
         this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, mealPrep2: data.mealPrep2, mealPrep3: data.mealPrep3, mealPrep4: data.mealPrep4, mealPrep5: data.mealPrep5, staff: data.staff, computer: data.computer})
     }
 
