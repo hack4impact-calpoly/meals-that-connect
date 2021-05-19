@@ -226,6 +226,7 @@ class Profile extends Component {
                     <div style={{width: 300, marginLeft: userType === "volunteer" ? 130 : 0}}>
                         <p className='input-firstName'>User Type</p>
                         <Select 
+                            isDisabled={this.state.readOnly}
                             options={options} 
                             placeholder="User Type" 
                             styles={customStyles}
