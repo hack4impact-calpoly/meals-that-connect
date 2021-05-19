@@ -32,6 +32,7 @@ class Profile extends Component {
             hideCancel: true,
             RedirectLoggedUser: false,
             admin: false,
+            originalSite: localStorage.getItem('site')
         };
     }
 
@@ -125,7 +126,7 @@ class Profile extends Component {
 		let _this = this
 
         let {firstName, lastName, phoneNumber, availability, userType, 
-             email, driver, kitchenStaff, notes, originalUser, site} = this.state
+             email, driver, kitchenStaff, notes, originalUser, site, originalSite} = this.state
 
         let profile = {
             email: email,
@@ -137,7 +138,7 @@ class Profile extends Component {
             availability: availability,
             driver: driver,
             kitchenStaff: kitchenStaff,
-            site: site
+            site: originalSite
         }
 
 
@@ -181,12 +182,9 @@ class Profile extends Component {
     }
 
     render() {
-<<<<<<< HEAD
         console.log("site stored in local storage: " + localStorage.getItem("site"))
         console.log("this.state.site: " + this.state.site)
         console.log(this.state)
-=======
->>>>>>> 8626373909d2357256ad5716c9cfcc11857a34db
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page
@@ -196,7 +194,7 @@ class Profile extends Component {
           )
         }
 
-        let { hideCancel, driver, kitchenStaff, notes, userType, admin } = this.state
+        let { hideCancel, driver, kitchenStaff, notes, userType, admin, site } = this.state
         let { M, T, W, Th, F } = this.state.availability
         let options = [
             { value: 'site-manager', label: 'site-manager' },
@@ -258,13 +256,13 @@ class Profile extends Component {
                     {hideCancel && <p className='input-Email'>Email</p>}
                     {hideCancel && <input type="text" size="50" style={{width: '720px'}} defaultValue={this.state.email} onChange={this.handleChange} readOnly/>}
                     {admin && <p className='input-site'>Site</p>}
-                    {admin && (hideCancel || this.state.userType !== 'data-entry' ? <input type="text" size="50" style={{width: '720px'}} defaultValue={this.state.site} onChange={this.handleChange} readOnly={true}/> :
+                    {admin && (hideCancel || userType !== 'data-entry' ? <input type="text" size="50" style={{width: '720px'}} defaultValue={site} readOnly={true}/> :
                     <div style={{width: 300}}>
                         <Select 
                             options={sites} 
                             placeholder="Site" 
                             styles={customStyles}
-                            defaultValue={{value: this.state.site, label: this.state.site}} 
+                            defaultValue={{value: site, label: site}} 
                             onChange={this.handleSiteSelect}/>
                     </div>)}
                     <p className='input-phoneNumber' hidden={(this.state.userType == 'volunteer') ? false : true}>Phone Number</p>
