@@ -12,7 +12,6 @@ class PopupOrderSuccess extends Component {
     render()
     {
         return(
-    
                 <div>
                     <p>Successfully submitted order!</p>
                     <div>

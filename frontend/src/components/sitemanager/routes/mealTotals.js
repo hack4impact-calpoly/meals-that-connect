@@ -152,22 +152,62 @@ const Table = (props) => {
               accessor: 'friday'}
             ]
           },
+        {
+          Header: 'Week Totals',
+          // accessor: 'friday'
+          columns: [
+            {
+              Header: '',
+              accessor: 'weekTotals'}
+            ]
+          },
         ],
       }
     ]
 
   let routeList = []
+  let frozenTotal = {
+    route: ' ',
+    info: 'Frozen',
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    weekTotals: 0
+  }
+  let whiteBagTotal = {
+    route: 'Daily Totals',
+    info: 'White Bags',
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    weekTotals: 0
+  }
+  let brownBagTotal = {
+    route: ' ',
+    info: 'Brown Bags',
+    monday: 0,
+    tuesday: 0,
+    wednesday: 0,
+    thursday: 0,
+    friday: 0,
+    weekTotals: 0
+  }
   for (let i =0; i < props.routes.length; i++) {
     var routeNum = props.routes[i]
     // Get frozen data for each route
     let frozenData = {
-      route: '',
+      route: ' ',
       info: 'Frozen',
       monday: props.data[i]['frozen'][0],
       tuesday: props.data[i]['frozen'][1],
       wednesday: props.data[i]['frozen'][2],
       thursday: props.data[i]['frozen'][3],
-      friday: props.data[i]['frozen'][4]
+      friday: props.data[i]['frozen'][4],
+      weekTotals: props.data[i]['frozen'].reduce((a, b) => a + b, 0)
     }
     // Get white bag data for each route, placeholder for now
     let whiteBagData = {
@@ -178,6 +218,7 @@ const Table = (props) => {
       wednesday: props.data[i]['whitebag'][2],
       thursday: props.data[i]['whitebag'][3],
       friday: props.data[i]['whitebag'][4],
+      weekTotals: props.data[i]['whitebag'].reduce((a, b) => a + b, 0)
     }
     // Get meal data for each route
     let mealData = {
@@ -187,13 +228,20 @@ const Table = (props) => {
       tuesday: props.data[i]['meals'][1],
       wednesday: props.data[i]['meals'][2],
       thursday: props.data[i]['meals'][3],
-      friday: props.data[i]['meals'][4]
+      friday: props.data[i]['meals'][4],
+      weekTotals: props.data[i]['meals'].reduce((a, b) => a + b, 0)
     }
     routeList.push(frozenData)
     routeList.push(whiteBagData)
     routeList.push(mealData)
   }
-
+  deconstructRouteList(routeList, frozenTotal, "Frozen")
+  deconstructRouteList(routeList, whiteBagTotal, "White Bags")
+  deconstructRouteList(routeList, brownBagTotal, "Brown Bags")
+  routeList.push(frozenTotal)
+  routeList.push(whiteBagTotal)
+  routeList.push(brownBagTotal)
+  console.log(frozenTotal)
   const data = React.useMemo(() => routeList, [] )
 
   return (
@@ -201,6 +249,24 @@ const Table = (props) => {
       <MealTotals columns={columns} data={routeList} props={props}/>
     </Styles>
   )
+}
+
+function deconstructRouteList(routeList, data, name) {
+    for (let row of routeList) {
+      if (row.info === name) {
+        data['monday'] += row['monday']
+        data['tuesday'] += row['tuesday']
+        data['wednesday'] += row['wednesday']
+        data['thursday'] += row['thursday']
+        data['friday'] += row['friday']
+
+        data['weekTotals'] += row['monday']
+        data['weekTotals'] += row['tuesday']
+        data['weekTotals'] += row['wednesday']
+        data['weekTotals'] += row['thursday']
+        data['weekTotals'] += row['friday']
+      }
+    }
 }
 
 export function getDate(weekArr, tableDay) {
@@ -232,8 +298,8 @@ function getHolidayDate(holidayArr) {
   //let holidayArr = props.holidayArr
   let week = [];
 
-  for (let i = 0; i < holidayArr.length; i++) {
-    let day = new Date(holidayArr[i]);
+  for (let holiday of holidayArr) {
+    let day = new Date(holiday);
     let month = day.getMonth() + 1;
     let date = day.getDate();
     let year = day.getFullYear();

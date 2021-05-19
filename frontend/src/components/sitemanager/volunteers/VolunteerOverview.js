@@ -44,12 +44,10 @@ class VolunteerOverview extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
         this.setState({weekArr: week})
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
