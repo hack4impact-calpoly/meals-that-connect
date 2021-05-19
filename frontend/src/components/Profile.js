@@ -138,7 +138,7 @@ class Profile extends Component {
             availability: availability,
             driver: driver,
             kitchenStaff: kitchenStaff,
-            site: originalSite
+            site: site
         }
 
 
@@ -182,8 +182,6 @@ class Profile extends Component {
     }
 
     render() {
-        console.log("site stored in local storage: " + localStorage.getItem("site"))
-        console.log("this.state.site: " + this.state.site)
         console.log(this.state)
         const { RedirectLoggedUser } = this.state;
 
@@ -202,9 +200,9 @@ class Profile extends Component {
             { value: 'volunteer', label: 'volunteer' }
         ]
         let sites = [
-            { value: 'slo', label: 'SLO' },
-            { value: 'five-cities', label: 'Five Cities' },
-            { value: 'cambria', label: 'Cambria' }
+            { value: 'SLO', label: 'SLO' },
+            { value: 'Five Cities', label: 'Five Cities' },
+            { value: 'Cambria', label: 'Cambria' }
         ]
 
         const customStyles = {
