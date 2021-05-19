@@ -254,8 +254,8 @@ class SiteManagerHomepage extends Component {
                             <Spinner animation="border" role="status" />
                         </div>}
 
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
-                        { (localStorage.getItem("userType") == "site-manager") ? <h3>Confirm Total For: </h3> : null }
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, display: 'none'}} >
+                        { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/> : null }
@@ -263,7 +263,7 @@ class SiteManagerHomepage extends Component {
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/> : null }
                         </div>
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
-                            <h3>Driver Routes For: </h3>
+                            <h3 style={{width: 200}}>Driver Routes: </h3>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("M", 0)}>Monday</button>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("T", 1)}>Tuesday</button>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("W", 2)}>Wednesday</button>
