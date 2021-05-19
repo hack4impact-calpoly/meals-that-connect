@@ -98,7 +98,7 @@ input[type=checkbox] {
 input[type=radio] {
     -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
     transform: scale(1.5);
-    margin-right: 15px;
+    margin-right: 3px;
 }
 
 .link{

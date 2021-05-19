@@ -5,9 +5,10 @@ import '../../../css/volunteerTable.css'
 import { ColumnFilter } from '../columnFilter';
 import DeleteCVPopup from '../DeleteCVPopup.js'
 
-const TEXT_TYPE = "type";
+const TEXT_TYPE = "text";
 const CELL_HEIGHT = 55;
-const BOOL_HEIGHT = 70;
+const BOOL_WIDTH = 70;
+const days = ["M", "T", "W", "Th", "F"];
 
 const Styles = styled.div`
  table {
@@ -39,11 +40,13 @@ const Styles = styled.div`
       background: #BDD3D2;
       color: black;
       fontWeight: bold;
+      border-left: 0px solid black;
+      border-top: 0px solid black;
     }
   }
 `
 
-const EditableCell = (cellProperties, width, type, dayAvailability, key) => {
+const EditableCell = (cellProperties, width, type, dayAvailability, requiredUser = null) => {
   // We need to keep and update the state of the cell normally
   var useStateCall;
   let volunteerID = cellProperties.volunteerID
@@ -71,43 +74,73 @@ const EditableCell = (cellProperties, width, type, dayAvailability, key) => {
     setValue(targetValue);
   }
 
-  let updateDatabase = (key, value) => {
+  const updateDatabase = async (cell, newValue, originalValue, volunteerID) => {
+    if (newValue !== originalValue)
+    {
+
+      const key = cellProperties["column"]["id"]
+
       const updateData = {
-          volunteerID: volunteerID, 
-          key: key, 
-          value: value
+        id: volunteerID,
+        key: key,
+        data: newValue
       }
-      fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-field', {
+
+      await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-volunteers', {
+
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify(updateData)
       })
+    }
   }
 
-  const updateCheckbox = () => {
+  const updateDatabaseDays = async (volunteerID) =>
+        {
+          const accessor = cellProperties["column"]["id"]; //availability
+          const header = cellProperties["column"]["Header"]; //day (M/T/W/Th/F)
+          const key = accessor.slice(0, accessor.length - header.length);
+          const data = cellProperties["row"]["original"][key]; //{M: true, T: false}
+          data[header] = !selected;
+      
+          const updateData = {
+              id: volunteerID,
+              key: key,
+              data: data
+            }
+          await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-volunteers', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(updateData)
+          })
+        }
+
+  const updateCheckbox = async (volunteerID) => {
     setSelected(!selected);
-    if (key === 'availability') {
-      let availability = cellProperties["original"]["availability"]
-      availability[dayAvailability] = !selected
-      updateDatabase(key, availability)
+    if(days.includes(cellProperties["column"]["Header"]))
+    {
+      updateDatabaseDays(volunteerID)
     }
-    else {
-      updateDatabase(key, !selected)
+    else
+    {
+      updateDatabase(cellProperties, !selected, selected, volunteerID);
     }
   }
 
-  if (type === "checkbox")
+  if (value === true || value === false)
   {
     return (
-        <input type={type} disabled={key === "digitalSytem"} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
+        <input disabled={requiredUser !== null && requiredUser !== localStorage.getItem("userType")} type={type} style={{width: width-10, boxShadow: 'none'}} checked={selected} onChange={e => updateCheckbox()}/>
     )
   }
   else
   {
     return (
-        <input type={type} style={{width: width,height: CELL_HEIGHT, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(key, value)}/>
+        <input type={type} style={{height: CELL_HEIGHT, width: width, padding: '15px'}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(cellProperties, e.target.value, cellProperties["value"], cellProperties["row"]["original"]["volunteerID"])}/>
     )
   }
 
@@ -119,102 +152,89 @@ const VolunteerOverviewData = (props) => {
       {
       Header: 'Volunteer Overview',
       columns: [
-          { Header: 'Volunteer ID',
-          accessor: 'volunteerID',
-          Filter: ColumnFilter,
-          filter: true,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null, 'volunteerID')
-          },
           { Header: 'First Name',
           accessor: 'firstName',
           Filter: ColumnFilter,
           filter: true,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null, 'firstName')
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 150, TEXT_TYPE, null)
           },
           { Header: 'Last Name',
           accessor: 'lastName',
           Filter: ColumnFilter,
           filter: true,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, TEXT_TYPE, null, 'lastName')
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 150, TEXT_TYPE, null)
           },
           { Header: 'Phone',
           accessor: 'phoneNumber',
           filter: false,
-          width: 200,
-          Cell: (cellProperties) => EditableCell(cellProperties, 199, "tel", null, 'phoneNumber')
+          width: 150,
+          Cell: (cellProperties) => EditableCell(cellProperties, 150, "tel", null)
           },
           { Header: 'Email',
           accessor: 'email',
           filter: false,
           width: 350,
-          Cell: row => <div style={{width: 349}}>{row.value}</div>
-          },
-          { Header: 'Using Digital System',
-          accessor: 'digitalSystem',
-          filter: false,
-          width: 100,
-          Cell: row => <div style={{width: 100}}>{row.value === false ? "No" : "Yes"}</div>
+          Cell: row => <div style={{width: 350, marginTop: 12}}>{row.row.original.email}</div>
           },
           { Header: 'M',
-          accessor: 'monday',
+          accessor: 'availabilityM',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'M', 'availability')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'M')
           },
           { Header: 'T',
-          accessor: 'tuesday',
+          accessor: 'availabilityT',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'T', 'availability')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'T')
           },
           { Header: 'W',
-          accessor: 'wednesday',
+          accessor: 'availabilityW',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'W', 'availability')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'W')
           },
           { Header: 'Th',
-          accessor: 'thursday',
+          accessor: 'availabilityTh',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'Th', 'availability')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'Th')
           },
           { Header: 'F',
-          accessor: 'friday',
+          accessor: 'availabilityF',
           filter: false,
-          width: BOOL_HEIGHT,
-          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_HEIGHT-1.1, "checkbox", 'F', 'availability')
+          width: BOOL_WIDTH,
+          Cell: (cellProperties) => EditableCell(cellProperties, BOOL_WIDTH, "checkbox", 'F')
           },
-          { Header: 'Volunteer Certificate Signed?',
-          accessor: 'completedOrientation',
-          filter: false,
-          width: 130,
-          Cell: (cellProperties) => EditableCell(cellProperties, 129, "checkbox", null, 'completedOrientation')
-          },
-          { Header: 'Notes',
-          accessor: 'notes',
-          filter: false,
-          width: 270,
-          Cell: (cellProperties) => EditableCell(cellProperties, 270, TEXT_TYPE, null, 'notes')
+          { Header: 'More Details',
+            width: 100,
+            Cell: row => (<div style={{paddingTop: '12px', width: 'auto', cursor: 'pointer'}} onClick={() => editVolunteer(row.row.original)}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg></div>)
           },
           { Header: 'Remove Volunteer',
-          width: 100,
-          Cell: row => (<DeleteCVPopup person={row.row.original} type={"volunteer"}/>)
+          width: 120,
+          Cell: row => (<div style={{padding: '12px 0px 0px 10px'}}><DeleteCVPopup person={row.row.original} type={"volunteer"}/></div>)
           },
       ],},
       
       ],
       []
   )
+
+  function editVolunteer(id) {
+    console.log("Editing volunteer")
+    props.showModal(id)
+  } 
   
   const data = React.useMemo(() => props.data, []);
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <VolunteerOverviewTable columns={columns} data={data}/>
+    <VolunteerOverviewTable columns={columns} data={data} showModal={props.showModal}/>
   </Styles>
   )
 }
@@ -246,6 +266,9 @@ function VolunteerOverviewTable({ columns, data }) {
     prepareRow} = useTable({
     columns,
     data,
+    initialState: {
+      hiddenColumns: (localStorage.getItem("userType") === "data-entry") ? ["monday", "tuesday", "wednesday", "thursday", "friday"] : ["volunteerID"]  
+    }
     },
     useFilters,
     useBlockLayout,
@@ -270,9 +293,13 @@ function VolunteerOverviewTable({ columns, data }) {
         prepareRow(row)
         return (
           <tr {...row.getRowProps()}>
-            {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {volunteerID: row["original"]["volunteerID"], value: cell["value"], original: row["original"]})}</td>
-            })}
+              {row.cells.map(cell => {
+                return (
+                  <td {...cell.getCellProps({style: {width: cell.column.width}})}>
+                    {cell.render('Cell', {email: row["original"]["email"], value: cell["value"], original: row["original"]})}
+                  </td>
+                );
+              })}
           </tr>
         )
       })}

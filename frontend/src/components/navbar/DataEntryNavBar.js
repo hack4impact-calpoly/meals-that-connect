@@ -11,8 +11,8 @@ class DataEntryNavBar extends Component {
                 </div>
                 <div className="navbar-right">
                     <Link className="navbar-link" to="/">Routes</Link>
-                    <Link className="navbar-link" to="/volunteer">Volunteers</Link>
-                    <Link className="navbar-link" to="/clients">Clients</Link>
+                    <Link className="navbar-link" to="/volunteer-data-entry">Volunteers</Link>
+                    <Link className="navbar-link" to="/clients-data-entry">Clients</Link>
                     <Link className="navbar-link" to="/profile">
                         <img src = "https://static.thenounproject.com/png/3070444-200.png" height="35" />
                     </Link>

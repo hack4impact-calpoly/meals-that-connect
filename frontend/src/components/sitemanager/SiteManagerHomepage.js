@@ -29,7 +29,6 @@ class SiteManagerHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        console.log("Updating week")
         this.state.weekArr = week
         
         // this.setState({weekArr: week})
@@ -50,7 +49,6 @@ class SiteManagerHomepage extends Component {
             return
         }
         let mondayDate = this.state.weekArr[1];
-        console.log(mondayDate)
         let info = {
             site: this.state.site,
             week: mondayDate
@@ -64,7 +62,6 @@ class SiteManagerHomepage extends Component {
         })
         const data = await response.json();
         this.setState({totals: data.totals, routes: data.routes})
-        console.log(this.state.totals)
     }
 
     // grabs the sorted list of clients by route and index based on site and day
@@ -82,6 +79,7 @@ class SiteManagerHomepage extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(param)
+
         })
 
         const clients = await response.json();

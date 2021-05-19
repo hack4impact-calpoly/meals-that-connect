@@ -18,7 +18,7 @@ const Styles = styled.div`
       }
     }
     th {
-        background: #b7f8ac;
+        background: #BDD3D2;
         color: black;
         border: solid 1px #142850;
         textAlign: column.textAlign;
