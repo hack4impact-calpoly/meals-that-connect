@@ -177,7 +177,7 @@ const Table = (props) => {
     weekTotals: 0
   }
   let whiteBagTotal = {
-    route: 'Daily Totals',
+    route: 'Totals',
     info: 'White Bags',
     monday: 0,
     tuesday: 0,
