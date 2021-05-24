@@ -223,6 +223,7 @@ router.post('/siteTotals', (req, res) => {
             var totals = {"meals": 0, "routes": 0, "totals": 0};
             for (let i = 0; i < routes.length; i++) {
               mealTotals.push(getRouteTotals(meals[routes[i]]))
+              
             }  
             res.send({"meals": meals, "routes": routes, "totals": mealTotals})
         }
@@ -290,8 +291,10 @@ function sortFormatMeals(data) {
   for (let i = 0; i < data.length; i++) {
       let client = data[i]
       if (i > 0 && client.routeNumber != prevRoute) {
-          meals[prevRoute] = routeData
-          routes.push(prevRoute)
+          if (prevRoute !== "-1") {
+            meals[prevRoute] = routeData
+            routes.push(prevRoute)
+          }
           routeData = []
       }
       prevRoute = client.routeNumber
