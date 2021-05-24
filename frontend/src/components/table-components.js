@@ -76,12 +76,12 @@ export const DraggableTable = ({ columns, data, setData, route, showModal, route
 
         let clients = [
             {
-            id: dragRecord._id,
+            id: routeTable === 0 ? dragRecord._id : dragRecord.clientID,
             name: dragRecord.firstName,
             index: hoverIndex,
             },
             {
-            id: hoverRecord._id,
+            id: routeTable === 0 ? hoverRecord._id : hoverRecord.clientID,
             name: hoverRecord.firstName,
             index: dragIndex
             }
@@ -93,7 +93,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal, route
                 [hoverIndex, 0, dragRecord],
             ],
         })
-  
+
         fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
