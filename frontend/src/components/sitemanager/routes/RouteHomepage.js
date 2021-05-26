@@ -248,8 +248,8 @@ class RouteHomepage extends Component {
                         </Modal>
                         : ""}
                     </div> :
-                <div>
-                <Spinner animation="border" role="status" style={{marginLeft: '750px'}}/>
+                <div id = "spin">
+                <Spinner animation="border" role="status" style={{left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                 </div>}
             </div>
            

@@ -248,8 +248,8 @@ class SiteManagerHomepage extends Component {
                     <RoutesNavbar routes={this.state.routes} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                     <div>
                         {this.state.totals ? <div id="meal-totals"><MealTotals data={totals} routes={routes} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
-                        <div>
-                            <Spinner animation="border" role="status" />
+                        <div id = "spin">
+                        <Spinner animation="border" role="status" style={{left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                         </div>}
 
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, display: 'none'}} >

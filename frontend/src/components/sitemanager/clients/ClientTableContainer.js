@@ -141,8 +141,8 @@ class ClientTableContainer extends Component {
                 }
                 <div className="site-manager-container">
                     {loaded ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
-                        <div>
-                        <Spinner animation="border" role="status" />
+                        <div id = "spin">
+                        <Spinner animation="border" role="status" style={{left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                         </div>}
                 </div>
                 <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal-client" overlayClassName="Overlay">
