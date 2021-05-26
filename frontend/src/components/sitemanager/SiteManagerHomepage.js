@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 import MealTotals from './routes/mealTotals';
+import OrderTotals from './routes/orderTotals';
 import RoutesNavbar from './routes/RoutesNavbar';
 import PopupMealTotals from './routes/PopupMealTotals';
 import 'reactjs-popup/dist/index.css';
@@ -23,6 +24,7 @@ class SiteManagerHomepage extends Component {
             routes: [],
             weekArr: [],
             holidayArr: [],
+            orders: null,
             clients: {},
             site: localStorage.getItem("site")
          };
@@ -30,9 +32,8 @@ class SiteManagerHomepage extends Component {
 
     updateWeek = (week) => {
         this.state.weekArr = week
-        
-        // this.setState({weekArr: week})
         this.fetchMealTotals()
+        this.fetchOrderTotals()
     }
 
     updateHoliday = (holidays) => {
@@ -41,6 +42,7 @@ class SiteManagerHomepage extends Component {
 
     async componentDidMount(){
         await this.fetchMealTotals()
+        await this.fetchOrderTotals()
     }
 
     async fetchMealTotals () {
@@ -64,6 +66,25 @@ class SiteManagerHomepage extends Component {
         this.setState({totals: data.totals, routes: data.routes})
     }
 
+    async fetchOrderTotals () {
+        if (this.state.weekArr.len === 0) {
+            return
+        }
+        let info = {
+            site: this.state.site,
+            weekArr: this.state.weekArr
+        }
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'orders/totals', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        })
+        const data = await response.json();
+        this.setState({orders: data.orders})
+    }
+
     // grabs the sorted list of clients by route and index based on site and day
     async fetchRouteOverview(dayString) {
         let Date = this.state.weekArr[1];
@@ -83,7 +104,6 @@ class SiteManagerHomepage extends Component {
         })
 
         const clients = await response.json();
-        //console.log(clients)
         return clients
     }
     
@@ -91,7 +111,6 @@ class SiteManagerHomepage extends Component {
         
         let clients = await this.fetchRouteOverview(dayString)
         var doc = new jsPDF()
-        //console.log(clients)
         // Sorry! clean this up to be better
         let abbrev = 'Mon'
         if (dayString === 'T')
@@ -237,13 +256,18 @@ class SiteManagerHomepage extends Component {
     
     handleCloseModal = () => {
         this.setState({showModal: false});
+        this.fetchOrderTotals()
     }
 
     render() {
-        let {totals, routes, weekArr, holidayArr} = this.state
+        let {totals, routes, weekArr, holidayArr, orders} = this.state
         let sunday = new Date(weekArr[6])
         sunday.setDate(sunday.getDate() + 1);
         let isPastWeek = new Date() > sunday
+
+        if (totals) {
+            console.log(totals) 
+        }
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header"> { (localStorage.getItem("userType") == "site-manager") ? "Site Manager Overview" : "Data Entry Homepage" }</h1>
@@ -254,14 +278,18 @@ class SiteManagerHomepage extends Component {
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}
+                        {orders ? <div id="meal-totals"><OrderTotals data={orders} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
+                        <div>
+                            <Spinner animation="border" role="status" />
+                        </div>}
 
                         <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20 }} >
                         { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={2} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} totals={totals} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} totals={totals} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={2} totals={totals} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} totals={totals} showModal={this.handleOpenModal}/> : null }
+                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} totals={totals} showModal={this.handleOpenModal}/> : null }
                         </div>
                         <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20}} >
                             <h3 style={{width: 200}}>Driver Routes: </h3>
