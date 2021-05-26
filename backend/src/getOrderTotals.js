@@ -32,7 +32,7 @@ router.post('/totals', async (req, res) => {
 				orders.brownbag[day] = order.brownBag
 			})
 
-			res.send({"orders": orders, "frozen": 0})
+			res.send({"orders": orders})
 		}
 	})
  });
