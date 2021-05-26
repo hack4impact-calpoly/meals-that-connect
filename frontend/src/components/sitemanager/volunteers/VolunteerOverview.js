@@ -131,7 +131,7 @@ class VolunteerOverview extends Component {
                     {this.state.loaded === true ? 
                         <VolunteerOverviewTable data={this.state.volunteers} showModal={this.handleOpenModal} refreshData={this.refreshData}/> : 
                     <div id = "spin">
-                        <Spinner animation="border" role="status" style={{left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
+                        <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                     </div>}
                 </div>
                 <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal-client" overlayClassName="Overlay">
