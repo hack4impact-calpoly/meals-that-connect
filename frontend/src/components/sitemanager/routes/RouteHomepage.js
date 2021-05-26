@@ -89,7 +89,6 @@ class RouteHomepage extends Component {
         let data = this.state.clients[route][index]
         data[key] = value
         this.setState({})
-        this.setState({})
     }
 
     handleSelect = (route, key, value, index) => {
@@ -131,7 +130,7 @@ class RouteHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        this.setState({weekArr: week})
+        this.state.weekArr = week
         this.fetchRoutes()
     }
 

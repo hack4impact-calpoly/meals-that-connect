@@ -44,7 +44,7 @@ table {
 }
 `
 
-export const DraggableTable = ({ columns, data, setData, route, showModal }) => {
+export const DraggableTable = ({ columns, data, setData, route, showModal, routeTable = 0 }) => {
     const getRowId = React.useCallback(row => {
         return row.index
     }, [])
@@ -59,6 +59,9 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
         data: data,
         columns,
         getRowId,
+        initialState: {
+            hiddenColumns: (localStorage.getItem("userType") === "data-entry" && routeTable === 0) ? ["foodDaysM", "foodDaysT", "foodDaysW", "foodDaysTh", "foodDaysF"] : ["wellskyID"]  
+        }
     },
         useFilters,
     )
@@ -73,12 +76,12 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
 
         let clients = [
             {
-            id: dragRecord._id,
+            id: routeTable === 0 ? dragRecord._id : dragRecord.clientID,
             name: dragRecord.firstName,
             index: hoverIndex,
             },
             {
-            id: hoverRecord._id,
+            id: routeTable === 0 ? hoverRecord._id : hoverRecord.clientID,
             name: hoverRecord.firstName,
             index: dragIndex
             }
@@ -90,7 +93,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
                 [hoverIndex, 0, dragRecord],
             ],
         })
-  
+
         fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
@@ -115,7 +118,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal }) => 
                 <thead>
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
-                            <th></th>
+                            {localStorage.getItem("userType") !== "data-entry" && <th></th>}
                             {headerGroup.headers.map(column => (
                                 <th style={{ width: column.width, textAlign: column.textAlign }} {...column.getHeaderProps()}>{column.render('Header')}
                                     <div>{(column.canFilter && column.filter === true) ? column.render('Filter') : null}</div>
@@ -192,18 +195,13 @@ const Row = ({ row, index, moveRow, showModal }) => {
 
     return (
         <tr ref={dropRef} style={{ opacity }}>
-            { (localStorage.getItem("userType") == "site-manager") ? 
-            <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
-                </svg>
-            </td>
-             : 
-             <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>
-             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
-                <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-             </svg>
-            </td>}
+            {localStorage.getItem("userType") !== "data-entry" &&
+                <td style={{ width: '40px', padding: '10px' }} ref={dragRef}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
+                    </svg>
+                </td>
+            }
             
             {row.cells.map(cell => {
                 return <td >{cell.render('Cell', {value: cell["value"], original: row["original"], clientID: row["original"]["_id"], key: cell["column"]["id"]})}</td>

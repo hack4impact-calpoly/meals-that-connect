@@ -19,14 +19,14 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
     var route = cellProperties.row.original.routeNumber
     var value = cellProperties["original"][key];
     var index = cellProperties.row.index;
-    if (key == "foodDays") {
+    if (key === "foodDays") {
         value = value[day]
     }
 
     // Disable editing for previous weeks
     let currDate = new Date()
     let nextMonday = add_week(new Date(props.mondayDate))
-    let enabled = (localStorage.getItem("userType") == "site-manager") && (nextMonday > currDate)
+    let enabled = (localStorage.getItem("userType") === "site-manager") && (nextMonday > currDate)
 
     /*
         Check if value is a boolean, If it is, show a checkbox and
@@ -55,7 +55,6 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
 
         else if (key ==="frozenDay") {
             options = [
-                { value: 'Default', label: 'Default' },
                 { value: 'M', label: 'M' },
                 { value: 'T', label: 'T' },
                 { value: 'W', label: 'W' },
@@ -64,20 +63,20 @@ const EditableCell = (props, cellProperties, key, day, width, inputType) => {
             ]
         }
         const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            border: 'none',
-        }),
-        singleValue: (provided, state) => {
-            const padding = 3;
-        
-            return { ...provided,  padding };
-        },
-        input: (provided, state) => ({
-            ...provided,
-            padding: 0,
-            margin: 0,
-        }),
+            control: (provided, state) => ({
+                ...provided,
+                border: 'none',
+            }),
+            singleValue: (provided, state) => {
+                const padding = 3;
+            
+                return { ...provided,  padding };
+            },
+            input: (provided, state) => ({
+                ...provided,
+                padding: 0,
+                margin: 0,
+            }),
         }
         // isOption currently giving errors, 
         return (
@@ -174,7 +173,7 @@ const RouteTable = (props) => {
     ],},
   ]
 
-  if (localStorage.getItem("userType") == "site-manager") {
+  if (localStorage.getItem("userType") === "site-manager") {
     let editBtn =
       { Header: 'Edit Details',
         width: 120,
@@ -192,8 +191,7 @@ const RouteTable = (props) => {
 
   return (
   <Styles height={CELL_HEIGHT}>
-    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal}/> 
-    
+    <DraggableTable columns={columns} data={props.data} setData={props.setData} route={props.routenum} showModal={props.showModal} routeTable={1}/> 
   </Styles>
   )
 }

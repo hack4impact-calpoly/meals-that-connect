@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../../css/AddPersons.css';
 import { withRouter } from "react-router-dom";
+import Select from 'react-select'
+import "../../../css/Modal.css";
 
 class AddClient extends Component {
     constructor(props) {
@@ -16,7 +18,7 @@ class AddClient extends Component {
                         Th: false,
                         F: false
                     },
-                    frozenNumber: "",
+                    frozenNumber: 0,
                     frozenDay: "",
                     phoneNumber: "",
                     emergencyContact: "",
@@ -49,28 +51,63 @@ class AddClient extends Component {
     }
 
     render() {
+        let options = [
+            { value: '0', label: '0' },
+            { value: '2', label: '2' },
+            { value: '7', label: '7' }
+        ]
+        const customStyles = {
+            option: (provided, state) => ({
+              ...provided,
+              fontSize: 24,
+            }),
+            control:(provided, state) => ({
+                // none of react-select's styles are passed to <Control />
+                ...provided,
+                fontSize: 24,
+                padding: '0px 10px',
+                marginBottom: 10,
+              }), 
+              valueContainer:(provided, state) => ({
+                // none of react-select's styles are passed to <Control />
+                ...provided,
+                padding: '0px 10px',
+                margin: 0,
+                height: 70,
+              }), 
+            singleValue: (provided, state) => {
+              const opacity = state.isDisabled ? 0.5 : 1;
+              const transition = 'opacity 300ms';
+          
+              return { ...provided, opacity, transition };
+            }
+        }
+
         return (
-            <form style={{"padding": "100px"}} onSubmit={this.addClient}>
+            <form style={{"padding": "100px"}} className="addPerson" onSubmit={this.addClient}>
                 <h1>Add Client</h1>
-                <h3>* = Required</h3>
-                <div>
-                    <div style={{"display": "flex"}}>
-                        <div style={{"flex": "10%"}}>
-                            <label for="client-firstname">First Name*</label><br/>
-                            <input type="text" id="client-firstname" onChange={e => this.setState({firstName: e.target.value})} required={true}/>
-                        </div>
-                        <div style={{"flex": "10%"}}>
-                            <label for="client-lastname">Last Name*</label><br/>
-                            <input type="text" id="client-lastname" onChange={e => this.setState({lastName: e.target.value})} required={true}/>
-                        </div>
+                <br/>
+                <div style={{"padding-bottom": "100px", "padding-left": "10px", "margin-left": "10px", "text-align": "left"}}>
+                    <div className="two-column">
+                            <div> <label for="client-firstname">First Name*</label><br/> </div>
+                            <div> <label for="client-lastname">Last Name*</label><br/> </div>
+                            <div> <input type="text" id="client-firstname" 
+                                onChange={e => this.setState({firstName: e.target.value})} 
+                                required={true}/> </div>
+                            <div> <input type="text" id="client-lastname" 
+                                onChange={e => this.setState({lastName: e.target.value})} 
+                                required={true}/></div>
                     </div>
                     <label for="client-address">Address*</label><br/>
-                    <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
+                    <input type="text" id="client-address" onChange={e => this.setState({address: e.target.value})} required={true} style={{"width": "1130px"}}/><br/>
                     
-                    <br></br>
+                    <label for="client-routenumber">Route Number</label><br/>
+                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
 
-                    <label>Food Days*</label>
-                    <table style={{marginLeft: "auto", marginRight: "auto"}} className="add-table">
+                    <div style={{"text-align": "left"}}>
+                        <label>Food Days*</label>
+                    </div>
+                    <table style={{marginLeft: "left", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="client-foodday-m">Monday</label></th>
                             <th><label for="client-foodday-t">Tuesday</label></th>
@@ -86,14 +123,20 @@ class AddClient extends Component {
                             <td><input type="checkbox" id="client-foodday-f" onChange={e => this.setState(prevState => ({foodDays: {...prevState.foodDays, F: !prevState.foodDays.F}}))}/></td>
                         </tr>               
                     </table>
-                    <br/>
-                    <label for="client-frozenNumber">Number of Frozen Meals*</label><br/>
-                    <input type="number" id="client-frozenNumber" onChange={e => this.setState({frozenNumber: e.target.value})} required={true}/><br/>
-                    
-                    <br></br>
+                    <div style={{"text-align": "left"}}> <label for="client-frozenNumber">Number of Frozen Meals</label><br/> </div>
+        
+        
+                    <div style={{width: 300}}>
+                        <Select 
+                            options={options} 
+                            styles={customStyles} 
+                            placeholder="Select" 
+                            defaultValue={{value: this.state.frozenNumber, label: this.state.frozenNumber}} 
+                            onChange={e => this.setState({frozenNumber: e.value})}/>
+                    </div>
 
-                    <label>Frozen Days</label>
-                    <table style={{marginLeft: "auto", marginRight: "auto"}} className="add-table">
+                    <div> <label>Frozen Days</label> </div>
+                    <table style={{marginLeft: "left", marginRight: "auto"}} className="add-table">
                         <tr>
                             <th><label for="client-frozenday-m">Monday</label></th>
                             <th><label for="client-frozenday-t">Tuesday</label></th>
@@ -110,45 +153,41 @@ class AddClient extends Component {
                         </tr>
                     </table>
 
-                    <br></br>
+                    <div style={{"text-align": "left"}}> <label for="client-phone">Phone Number*</label><br/> </div>
+                    <input type="text" id="client-phone" onChange={e => this.setState({phoneNumber: e.target.value})} required={true} style={{"width": "1130px"}}/><br/>
 
-                    <label for="client-phone">Phone Number*</label><br/>
-                    <input type="text" id="client-phone" onChange={e => this.setState({phoneNumber: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
-
-                    <br></br>
-
-                    <div style={{"grid-template-columns": "auto auto", "justify-content": "space-evenly", "row-gap": "10px", "column-gap": "0px"}} className="two-column">
+                    <div className="two-column">
                         <div><label for="client-emergencycontact">Emergency Contact</label></div>
                         <div><label for="client-emergencyphone">Emergency Contact Phone</label></div>
                         <div><input type="text" id="client-emergencycontact" onChange={e => this.setState({emergencyContact: e.target.value})}/></div>
                         <div><input type="text" id="client-emergencyphone" onChange={e => this.setState({emergencyPhone: e.target.value})}/></div>
                     </div>
 
-                    <br></br>
-
-                    <label for="client-nomilk">No Milk</label><br/>
-                    <input type="checkbox" id="client-nomilk" onChange={() => this.setState(prevState => ({noMilk: !prevState.noMilk}))}/><br/>
-
                     <label for="client-specialinstructions">Special Instructions</label><br/>
-                    <input type="text" id="client-specialinstructions" onChange={e => this.setState({specialInstructions: e.target.value})} style={{"width": "1320px"}}/><br/>
+                    <input type="text" id="client-specialinstructions" onChange={e => this.setState({specialInstructions: e.target.value})} style={{"width": "1130px"}}/><br/>
 
-
-                    <label for="client-c2">C2 Client</label><br/>
-                    <input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/>
-
-                    <br></br>
 
                     <label for="client-ne">N/E</label><br/>
-                    <input type="text" id="client-ne" onChange={e => this.setState({NE: e.target.value})} style={{"width": "1320px"}}/><br/>
+                    <input type="text" id="client-ne" onChange={e => this.setState({NE: e.target.value})} style={{"width": "1130px"}}/><br/>
 
                     <label for="client-email">Email Address*</label><br/>
-                    <input type="email" id="client-email" onChange={e => this.setState({email: e.target.value})} required={true} style={{"width": "1320px"}}/><br/>
+                    <input type="email" id="client-email" onChange={e => this.setState({email: e.target.value})} required={true} style={{"width": "1130px"}}/><br/>
 
-                    <label for="client-holidayfrozen">Holiday Frozen</label><br/>
-                    <input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/>
+                    <br></br>
 
-                    <label for="client-routenumber">Route Number</label><br/>
-                    <input type="text" id="client-routenumber" onChange={e => this.setState({routeNumber: e.target.value})} /><br/>
+                    <table style={{marginLeft: "left", marginRight: "auto"}} className="add-table">
+                        <tr>
+                            <th><label for="client-nomilk">No Milk</label><br/></th>
+                            <th><label for="client-c2">C2 Client</label><br/></th>
+                            <th><label for="client-holidayfrozen">Holiday Frozen</label><br/></th>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" id="client-nomilk" onChange={() => this.setState(prevState => ({noMilk: !prevState.noMilk}))}/><br/></td>
+                            <td><input type="checkbox" id="client-c2" onChange={() => this.setState(prevState => ({clientC2: !prevState.clientC2}))}/><br/></td>
+                            <td><input type="checkbox" id="client-holidayfrozen" onChange={() => this.setState(prevState => ({holidayFrozen: !prevState.holidayFrozen}))}/><br/></td>
+                        </tr>
+                    </table>
 
                     <br/>
                     <div id="button-div">

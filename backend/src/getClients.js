@@ -19,7 +19,13 @@ router.post('/addClient', async (req, res) => {
         res.send(500).send("Internal server error")
       }
       else {
-        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site, index})
+        let subservice = ""
+        let wellskyID = ""
+        var client = new Client({firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, 
+                                emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, 
+                                clientC2, NE, email, holidayFrozen, routeNumber, site, index,
+                                subservice, wellskyID})
+  
         client.save()
         console.log("succcessfully added client")
         res.status(200).send("success")
@@ -230,9 +236,6 @@ router.post('/update-data', async (req, res) => {
           NE, 
           email, 
         } = req.body
-
-  console.log(req.body)
-  console.log(id)
 
   Client.updateOne({'_id': id}, 
             { firstName: firstName,

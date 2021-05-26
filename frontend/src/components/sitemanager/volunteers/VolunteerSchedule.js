@@ -25,27 +25,24 @@ class VolunteerSchedule extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
         this.state.weekArr = week;
         this.fetchSchedule();
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
     getMonday = (d) => {
         d = new Date(d); // turns passed in string into date
         var day = d.getDay(), // current date
-            diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday; take the difference to find monday
+            diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday; take the difference to find monday
         return new Date(d.setDate(diff));
       }
       
 
     async componentWillMount(){
         this.state.weekArr[1] = this.getMonday(new Date());
-        console.log("mount")
         await this.fetchVolunteers();
         this.fetchSchedule();
     }
@@ -64,8 +61,6 @@ class VolunteerSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        console.log("data")
-        console.log(data)
         
         this.setState({volunteers: data})
     }
@@ -85,17 +80,12 @@ class VolunteerSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        console.log("data")
         console.log(data)
-        
         this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, mealPrep2: data.mealPrep2, mealPrep3: data.mealPrep3, mealPrep4: data.mealPrep4, mealPrep5: data.mealPrep5, staff: data.staff, computer: data.computer})
     }
 
     render() {
-        console.log("schedule overview week array and routes")
         let {loaded, routes, weekArr, holidayArr, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer, volunteers} = this.state
-        //console.log(weekArr[1])
-        //console.log(routes[4])
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
