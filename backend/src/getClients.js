@@ -90,7 +90,6 @@ router.post('/siteTotals', async (req, res) => {
       for (let i = 0; i < routes.length; i++) {
         mealTotals.push(getRouteTotals(clients[routes[i]]))
       }  
-      console.log(routes)
       res.send({"meals": mealTotals, "routes": routes})
     }
   })
@@ -237,9 +236,6 @@ router.post('/update-data', async (req, res) => {
           NE, 
           email, 
         } = req.body
-
-  console.log(req.body)
-  console.log(id)
 
   Client.updateOne({'_id': id}, 
             { firstName: firstName,

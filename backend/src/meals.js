@@ -88,6 +88,7 @@ async function existsMeal(client, week) {
             meal.firstName = client.firstName
             meal.lastName = client.lastName
             meal.address = client.address
+            meal.index = client.index
             Meal.updateOne({clientID: client._id, startDate: week}, meal).then(function(updated) {
                 if (!updated) {
                     console.log("Error in updating meal");
@@ -97,6 +98,111 @@ async function existsMeal(client, week) {
         }  
     })
     return output
+}
+
+async function findClientMeal(client, week) {
+  let data
+  await Meal.findOne({clientID: client._id, startDate: week}, function(err, meal) {
+    if (err) {
+      console.log("error")
+    }
+    else {
+
+      data = meal
+    }
+  })
+  return data
+}
+// This function returns the correct list of clients 
+// that need deliveries for a given day
+router.post('/routeOverviewDay', (req, res) => {
+    // takes in these parameters from the front end.
+    // site is used to search and day which is a string M, T, W, Th, F
+    let {site, day, week} = req.body
+    week = formatDate(week)
+
+    Client.find({site: site}, function (err, clients) {
+      if (err) {
+        console.log(err) 
+        res.status(404).send("error")
+      } else {
+        var clientsWithMeals = []
+        for (let i = 0; i < clients.length; i++) {        
+          findClientMeal(clients[i], week).then(meal => {
+            var client = {}
+            if (meal != null) {
+              client.firstName = clients[i].firstName
+              client.lastName = clients[i].lastName
+              client.address = clients[i].address
+              client.phoneNumber = clients[i].phoneNumber
+              client.routeNumber = clients[i].routeNumber
+              client.emergencyContact = clients[i].emergencyContact
+              client.emergencyPhone = clients[i].emergencyPhone
+              client.specialInstructions = clients[i].specialInstructions
+              client.foodDays = meal.foodDays
+              client.frozenNumber = meal.frozenNumber
+              client.frozenDay = meal.frozenDay
+              client.noMilk = meal.noMilk
+            
+              clientsWithMeals.push(client)
+            }
+
+            if (i == clients.length - 1) {
+              var sortedRoutes = SortClients(clientsWithMeals, day)
+              res.send(sortedRoutes)
+            }
+          })
+        }
+      }
+    })
+})
+
+// This function will return a sorted list of clients by route number.
+// sorts from ascending order and also sorts clients by their index value
+function SortClients(clients, day) {
+  // removes clients without the day
+  for (let i = 0; i < clients.length; i++) {
+    let client = clients[i]
+
+    if (client.foodDays[day] == false) {
+      clients.splice(i, 1) // removes client from list at index i, 1 is number of elements removed
+      i--; // decrement i to take into account for removing an element from the list
+    }
+  }
+  // sorts clients by route then by index in increasing order
+  clients.sort(function(a, b) {
+    // localeCompare compares two string values if equal (0) sort by index
+    return a.routeNumber.localeCompare(b.routeNumber) || a.index - b.index
+  })
+  // get number of routes in array bad implementation I'm tired... sorry!
+  // code between the ******** should be rewritten to be cleaner. Brain fried.
+  // ********
+  let clientsByRoute = []
+  let numRoutes = []
+  for (let j = 0; j < clients.length; j++) {
+      // if route not already in the array add it
+      if (numRoutes.includes(clients[j].routeNumber) === false) {
+          numRoutes.push(clients[j].routeNumber)
+          var temp = []
+          clientsByRoute.push(temp)
+      }
+  }
+
+  // iterate through clients add client to array if routes match. Otherwise add to next array
+  // this puts clients in a 2d array
+  // From line
+  let index = 0
+  for (let j = 0; j < clients.length; j++) {
+    if (numRoutes[index].localeCompare(clients[j].routeNumber) === 0)
+        clientsByRoute[index].push(clients[j])
+    else {
+      index += 1
+      clientsByRoute[index].push(clients[j])
+    }
+  } 
+ // ************ 
+
+  return clientsByRoute
 }
 
 router.post('/siteTotals', (req, res) => {
@@ -114,8 +220,10 @@ router.post('/siteTotals', (req, res) => {
             console.log("Getting meal data")
             let {routes, meals} = sortFormatMeals(data)
             let mealTotals = []
+            var totals = {"meals": 0, "routes": 0, "totals": 0};
             for (let i = 0; i < routes.length; i++) {
               mealTotals.push(getRouteTotals(meals[routes[i]]))
+              
             }  
             res.send({"meals": meals, "routes": routes, "totals": mealTotals})
         }
@@ -175,7 +283,10 @@ router.post('/routeSite', async (req, res) => {
 })
 
 function sortFormatMeals(data) {
-  data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : -1 )
+  data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
+  for (let i = 0; i < data.length; i++) {
+    data[i].index = i
+  }
   let meals = {}
   let prevRoute = null
   let routeData = []
@@ -183,8 +294,10 @@ function sortFormatMeals(data) {
   for (let i = 0; i < data.length; i++) {
       let client = data[i]
       if (i > 0 && client.routeNumber != prevRoute) {
-          meals[prevRoute] = routeData
-          routes.push(prevRoute)
+          if (prevRoute !== "-1") {
+            meals[prevRoute] = routeData
+            routes.push(prevRoute)
+          }
           routeData = []
       }
       prevRoute = client.routeNumber
