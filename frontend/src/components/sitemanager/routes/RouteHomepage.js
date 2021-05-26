@@ -130,7 +130,7 @@ class RouteHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        this.setState({weekArr: week})
+        this.state.weekArr = week
         this.fetchRoutes()
     }
 
