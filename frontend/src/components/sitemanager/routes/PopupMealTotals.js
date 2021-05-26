@@ -11,48 +11,39 @@ class PopupMealTotals extends Component {
 
     submitActions()
     {
-        let day = getFoodDay(this.props.day);
-        this.fetchTotalMeals(day);
+        this.addOrder()
         this.props.showModal()
     }
 
-    async fetchTotalMeals (day) {
+    getOrderDetails() {
         let site = localStorage.getItem("site")
-        let info = {
+        let {totals, day, weekArr} = this.props
+        let order = {
             site: site,
-            foodDay: day
-        }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'orders/mealTotal', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(info)
+            date: weekArr[day+1],
+            frozen: 0,
+            whiteBag: 0,
+            brownBag: 0,
+        };
+        totals.forEach(meal => {
+            order.frozen += meal["frozen"][day]
+            order.brownBag += meal["meals"][day]
+            order.whiteBag += meal["whitebag"][day]
         })
-        const data = await response.json();
-        this.setState({brownBag: data.meals, frozen: data.frozen, showSuccess: false})
-        this.addOrder()
+        return order
     }
 
     async addOrder(){
-        let site = localStorage.getItem("site")
-        let date = getDateObj(this.props.weekArr, this.props.day)
-        let info = {
-            site: site,
-            date: date,
-            frozen: this.state.frozen,
-            whiteBag: 0,
-            brownBag: this.state.brownBag
-        }
+        let order = this.getOrderDetails()
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'orders/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(info)
+            body: JSON.stringify(order)
         })
         const data = await response.json();
-        this.setState({brownBag: data.brownBag, frozen: data.frozen, showSuccess: true})
+        this.setState({showSuccess: true})
     }
 
 

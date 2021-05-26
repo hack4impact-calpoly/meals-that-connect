@@ -92,6 +92,7 @@ class Login extends Component {
 
     firebase_checkEmailVerif = (firebase_user, user) => {
         var emailVerified = firebase_user.emailVerified;
+        console.log("firebase email")
         
         if (!emailVerified) {
             this.props.history.push("/email-verification");
