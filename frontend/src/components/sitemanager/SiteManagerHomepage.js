@@ -241,6 +241,9 @@ class SiteManagerHomepage extends Component {
 
     render() {
         let {totals, routes, weekArr, holidayArr} = this.state
+        let sunday = new Date(weekArr[6])
+        sunday.setDate(sunday.getDate() + 1);
+        let isPastWeek = new Date() > sunday
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header"> { (localStorage.getItem("userType") == "site-manager") ? "Site Manager Overview" : "Data Entry Homepage" }</h1>
@@ -252,7 +255,7 @@ class SiteManagerHomepage extends Component {
                             <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                         </div>}
 
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, display: 'none'}} >
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20 }} >
                         { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} showModal={this.handleOpenModal}/> : null }
@@ -260,7 +263,7 @@ class SiteManagerHomepage extends Component {
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} showModal={this.handleOpenModal}/> : null }
                         </div>
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20}}>
+                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20}} >
                             <h3 style={{width: 200}}>Driver Routes: </h3>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("M", 0)}>Monday</button>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("T", 1)}>Tuesday</button>

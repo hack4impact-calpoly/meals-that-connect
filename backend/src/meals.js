@@ -88,6 +88,7 @@ async function existsMeal(client, week) {
             meal.firstName = client.firstName
             meal.lastName = client.lastName
             meal.address = client.address
+            meal.index = client.index
             Meal.updateOne({clientID: client._id, startDate: week}, meal).then(function(updated) {
                 if (!updated) {
                     console.log("Error in updating meal");
@@ -120,7 +121,6 @@ router.post('/routeOverviewDay', (req, res) => {
     let {site, day, week} = req.body
     week = formatDate(week)
 
-    //console.log(week)
     Client.find({site: site}, function (err, clients) {
       if (err) {
         console.log(err) 
@@ -147,7 +147,7 @@ router.post('/routeOverviewDay', (req, res) => {
               clientsWithMeals.push(client)
             }
 
-            if (i == clients.length- 1) {
+            if (i == clients.length - 1) {
               var sortedRoutes = SortClients(clientsWithMeals, day)
               res.send(sortedRoutes)
             }
@@ -223,6 +223,7 @@ router.post('/siteTotals', (req, res) => {
             var totals = {"meals": 0, "routes": 0, "totals": 0};
             for (let i = 0; i < routes.length; i++) {
               mealTotals.push(getRouteTotals(meals[routes[i]]))
+              
             }  
             res.send({"meals": meals, "routes": routes, "totals": mealTotals})
         }
@@ -282,7 +283,10 @@ router.post('/routeSite', async (req, res) => {
 })
 
 function sortFormatMeals(data) {
-  data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : -1 )
+  data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
+  for (let i = 0; i < data.length; i++) {
+    data[i].index = i
+  }
   let meals = {}
   let prevRoute = null
   let routeData = []
@@ -290,8 +294,10 @@ function sortFormatMeals(data) {
   for (let i = 0; i < data.length; i++) {
       let client = data[i]
       if (i > 0 && client.routeNumber != prevRoute) {
-          meals[prevRoute] = routeData
-          routes.push(prevRoute)
+          if (prevRoute !== "-1") {
+            meals[prevRoute] = routeData
+            routes.push(prevRoute)
+          }
           routeData = []
       }
       prevRoute = client.routeNumber
