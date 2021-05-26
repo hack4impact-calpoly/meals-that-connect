@@ -93,7 +93,7 @@ class VolunteerSchedule extends Component {
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
                 {this.state.loaded ? <VolunteersScheduleTable volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} staff={staff} computer={computer}/> :
                     <div>
-                        <Spinner animation="border" role="status" />
+                        <Spinner animation="border" role="status" style={{marginLeft: '750px'}}/>
                     </div>}
                 </div>
             </div>

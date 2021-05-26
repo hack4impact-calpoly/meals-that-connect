@@ -127,13 +127,11 @@ class VolunteerOverview extends Component {
             <div >
                 <h1 className="site-manager-page-header">Volunteer Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
-                <div className="site-manager-container" style={{Left: 0}}>
+                <div className="site-manager-container">
                     {this.state.loaded === true ? 
-                    <section style={{marginRight: 80, paddingRight: 50}}>
-                        <VolunteerOverviewTable data={this.state.volunteers} style={{marginRight: '100px'}} showModal={this.handleOpenModal} refreshData={this.refreshData}/>
-                    </section> : 
+                        <VolunteerOverviewTable data={this.state.volunteers} showModal={this.handleOpenModal} refreshData={this.refreshData}/> : 
                     <div>
-                        <Spinner animation="border" role="status" />
+                        <Spinner animation="border" role="status" style={{marginLeft: '750px'}}/>
                     </div>}
                 </div>
                 <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal-client" overlayClassName="Overlay">

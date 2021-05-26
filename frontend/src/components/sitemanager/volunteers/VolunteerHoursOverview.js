@@ -65,7 +65,7 @@ class VolunteerHoursOverview extends Component {
                     data.length == 0 ? <h2 style={{textAlign: 'center', width: 'calc(100vw - 750px)'}}>No volunteer hours logged for this week</h2> : 
                     <VolunteerHoursTable data={this.state.volunteerData} weekArr={this.state.weekArr}/> :
                     <div>
-                        <Spinner animation="border" role="status" />
+                        <Spinner animation="border" role="status" style={{marginLeft: '750px'}}/>
                     </div>}
                 </div>
             </div>
