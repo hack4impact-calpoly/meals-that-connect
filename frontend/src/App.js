@@ -68,21 +68,26 @@ class App extends Component {
               <PrivateRoute requiredUser="none" path="/profile" component={Profile}/>
               <PrivateRoute requiredUser="none" path="/no-permission" component={NoPermission}/>
 
-              <PrivateRoute requiredUser="site-manager" exact path = "/routes" component={RouteHomePage}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer" component={VolunteerOverview}/>
-              <PrivateRoute requiredUser="site-manager" exact path = "/add-volunteer" component={AddVolunteer}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/clients" component={ClientTableContainer}/>
-              <PrivateRoute requiredUser="site-manager" exact path = "/add-client" component={AddClient}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/edit-client" component={EditClient}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-hours" component={VolunteerHours}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule" component={VolunteerSchedule}/>
-              <PrivateRoute requiredUser="site-manager" exact path="/volunteer-schedule" component={VolunteerSchedule}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path = "/routes" component={RouteHomePage}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path="/volunteer" component={VolunteerOverview}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path = "/add-volunteer" component={AddVolunteer}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path="/clients" component={ClientTableContainer}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path = "/add-client" component={AddClient}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path="/edit-client" component={EditClient}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path="/volunteer-hours" component={VolunteerHours}/>
+              <PrivateRoute requiredUser={["site-manager", "data-entry"]} exact path="/volunteer-schedule" component={VolunteerSchedule}/>
+
               <PrivateRoute requiredUser="data-entry" exact path="/clients-data-entry" component={ClientTableContainer}/>
               <PrivateRoute requiredUser="data-entry" exact path="/volunteer-data-entry" component={VolunteerOverview}/>
+              <PrivateRoute requiredUser="data-entry" exact path = "/routes-data-entry" component={RouteHomePage}/>
+
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
               <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
+<<<<<<< HEAD
               <PrivateRoute requiredUser="volunteer" path="/show-my-schedule" component={showSchedule}/>
               <PrivateRoute requiredUser="data-entry" exact path = "/routes-data-entry" component={RouteHomePage}/>
+=======
+>>>>>>> master
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
 

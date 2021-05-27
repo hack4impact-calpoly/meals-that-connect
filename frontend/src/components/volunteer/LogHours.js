@@ -8,6 +8,7 @@ class LogHours extends Component {
         super(props);
         this.state = {
             volunteerID: localStorage.getItem("volunteerID"),
+            site: localStorage.getItem("site"),
             logs: [],
             date: '',
             hours : "",
@@ -23,6 +24,7 @@ class LogHours extends Component {
         this.state.date = Moment(date).format('YYYY-MM-DD')
         let info = {
            volunteerID: this.state.volunteerID,
+           site: this.state.site
         }
 
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/all', {
@@ -63,7 +65,8 @@ class LogHours extends Component {
         const hourLog = {
             volunteerID: this.state.volunteerID,
             date: this.state.date,
-            hours: this.state.hours
+            hours: this.state.hours,
+            site: this.state.site
         }
         fetch(process.env.REACT_APP_SERVER_URL + 'hours/add', {
             method: 'POST',

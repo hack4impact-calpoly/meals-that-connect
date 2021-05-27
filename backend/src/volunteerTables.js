@@ -27,10 +27,11 @@ router.post('/OverviewTable', async (req, res) => {
 // Takes in volunteerID to find the correct volunteer in the
 // database and updates their hours
 router.post('/Hours', async (req, res) => {
-   const {volunteerID, key, data} = req.body
+   const {volunteerID, key, data, site} = req.body
 
    var query = {}
    query[key] = data
+   query["site"] = site
 
    Hours.updateOne({'volunteerID': volunteerID}, query).then(function(result) {
       if (!result) {
