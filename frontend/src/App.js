@@ -37,13 +37,17 @@ import Profile from './components/Profile';
 class App extends Component {
   constructor(props) {
         super(props);
-        this.state = { isLoggedIn: isLoggedIn};
+        this.state = { isLoggedIn: isLoggedIn, loaded: false};
     }
 
   // when page is reloaded it calls function that will check if storage has a user logged in
   componentDidMount() {
     printStorage();
     isAuthenticated();
+    if (!this.state.loaded) {
+      this.setState({loaded: true})
+    }
+    //window.location.reload(false)
   }
 
   //when initializing your private route links please include a requiredUser property!
