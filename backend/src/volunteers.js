@@ -1,16 +1,35 @@
-const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 
 const Volunteer = require('../models/volunteer')
-const Hours = require("../models/hours")
-const moment = require('moment')
+const decodeToken = require("./token.js")
+
+/*
+  Contains methods:
+    addVolunteer: Create a new volunteer
+    id: Fetch the volunteer with the provided ID
+    volunteerComplete: 
+    delete: Delete the volunteer with the provided ID
+    volunteerSite: Find all the volunteers at the provided site
+    update-volunteer: Update all fields for a provided volunteer
+    update-volunteers: Update 1 field for a provided volunteer
+    availability: Fetch all volunteers who are available to drive on a given weekday at the provided site
+    updateVolunteerInfo: Update the provided volunteer's phone number, availability and note
+*/
 
 router.post('/addVolunteer', async (req, res) => {
-  let {firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
-  console.log(req.body)
+  let { token, firstName, lastName, email, password, driver, kitchenStaff, isAuthenticated_driver, isAuthenticated_kitchenStaff, 
+        phoneNumber, availability, notes, digitalSystem, completedOrientation} = req.body  
   var volunteerID = getID();
   password = "Placeholder"
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+  let site = userData.site
+
   let admin = false
   Volunteer.findOne({'email': email}).then(function(result) {
   if (result) {
@@ -21,7 +40,6 @@ router.post('/addVolunteer', async (req, res) => {
   var volun = new Volunteer({volunteerID, firstName, lastName, email, password, driver, kitchenStaff, 
                             isAuthenticated_driver, isAuthenticated_kitchenStaff, site, phoneNumber, 
                             availability, notes, digitalSystem, completedOrientation, admin})
-  console.log(volun)
   volun.save()
   console.log("succcessfully added volunteer")
   res.status(200).send("success")
@@ -32,8 +50,14 @@ router.post('/addVolunteer', async (req, res) => {
 })
 
 router.post('/id', async (req, res) => {
-  console.log("getting volunteer")
-  const {_id} = req.body
+  const {token, _id} = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+
   Volunteer.findOne({_id: _id}, function (err, volunteer) {
     if (err) {
       console.log(err)
@@ -45,7 +69,14 @@ router.post('/id', async (req, res) => {
 })
 
 router.post('/delete', async (req, res) => {
-  const { id } = req.body
+  const { id, token } = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+
   Volunteer.deleteOne({_id: id}).then(function(result) {
     if (result) {
       console.log("Deleted volunteer")
@@ -61,7 +92,15 @@ router.post('/delete', async (req, res) => {
 })
 
 router.post('/volunteerSite', async (req, res) => {
-  const {site} = req.body
+  const {token} = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+  let site = userData.site 
+
   Volunteer.find({site: site}, function (err, volunteers) {
     if (err) {
       console.log(err)
@@ -73,53 +112,55 @@ router.post('/volunteerSite', async (req, res) => {
 })
 
 router.post('/availability', async (req, res) => {
-    const {site} = req.body
-    Volunteer.find({site: site, driver: true}, function (err, volunteers) {
-        let daily_availability = {
-        M: [],
-        T: [],
-        W: [],
-        Th: [],
-        F: []
-        }
-        let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+  const {token} = req.body
 
-        volunteers.forEach(volunteer => {
-            let availability = volunteer.availability
-            console.log(volunteer)
-            for (let day of days) {
-                if (availability[day]) {
-                    let volunteerObj = {
-                        name: volunteer.firstName + " " + volunteer.lastName,
-                        id: volunteer._id
-                    }
-                    daily_availability[day].push(volunteerObj)
-                }
-            }
-        })
-        if (err) {
-            console.log(err)
-        }
-        else {
-            res.send(daily_availability)
-        }
-    })
-})
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+  let site = userData.site 
 
-router.get('/allVolunteers', async (req, res) => {
-  Volunteer.find({}, function (err, volunteer) {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      res.send(volunteer)
-    }
+  Volunteer.find({site: site, driver: true}, function (err, volunteers) {
+      let daily_availability = {
+      M: [],
+      T: [],
+      W: [],
+      Th: [],
+      F: []
+      }
+      let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+
+      volunteers.forEach(volunteer => {
+          let availability = volunteer.availability
+          console.log(volunteer)
+          for (let day of days) {
+              if (availability[day]) {
+                  let volunteerObj = {
+                      name: volunteer.firstName + " " + volunteer.lastName,
+                      id: volunteer._id
+                  }
+                  daily_availability[day].push(volunteerObj)
+              }
+          }
+      })
+      if (err) {
+          console.log(err)
+      }
+      else {
+          res.send(daily_availability)
+      }
   })
 })
 
 router.post('/updateVolunteerInfo', async (req, res) => {
-  const { phoneNumber, email, days, notes } = req.body
+  const { token, phoneNumber, email, days, notes } = req.body
 
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
@@ -136,15 +177,22 @@ router.post('/updateVolunteerInfo', async (req, res) => {
 })
 
 router.post('/update-volunteer', async (req, res) => {
-  const { firstName,
+  const { token,
+          firstName,
           lastName,
           availability,
           phoneNumber,
-          site,
           notes,
           digitalSystem,
           completedOrientation,
           id} = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+  let site = userData.site
 
   Volunteer.updateOne({'_id': id}, 
             { firstName: firstName,
@@ -169,10 +217,15 @@ router.post('/update-volunteer', async (req, res) => {
 });
 
 router.post('/update-volunteers', async (req, res) => {
-  const {id, key, data} = req.body
-  console.log(id);
+  const {token, id, key, data} = req.body
   var query = {}
   query[key] = data;
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
   Volunteer.updateOne({'volunteerID': id}, query)
    .then(function(result) {
@@ -185,27 +238,6 @@ router.post('/update-volunteers', async (req, res) => {
          }
    })
  })
-
-router.post('/update-field', async (req, res) => {
-  const {volunteerID, key, value} = req.body
-  console.log(req.body)
-
-  var query = {}
-  query[key] = value;
-  console.log(query)
-
-  Volunteer.updateOne({'volunteerID': volunteerID}, query)
-   .then(function(result) {
-      if (!result) {
-         console.log("Error in updating info");
-         res.send("Error in updating info");
-      } 
-      else {
-         console.log("Information updated");
-         res.send("Information updated");
-      }
-  });
-})
 
 router.post('/volunteerComplete', async(req, res) => {
   const { email } = req.body
@@ -229,7 +261,13 @@ router.post('/volunteerComplete', async(req, res) => {
 })
 
 router.post('/volunteerDelete', async(req, res) => {
-  const { email } = req.body
+  const { token, email } = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
   Volunteer.deleteOne({"email": email})
     .then(function(volunteer) {

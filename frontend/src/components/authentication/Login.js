@@ -167,8 +167,6 @@ class Login extends Component {
         localStorage.setItem("token", token);
         localStorage.setItem("userType", this.state.userType);
         localStorage.setItem("site", user.site);
-        localStorage.setItem("time", date);
-        localStorage.setItem("isLoggedIn", true);
     }
 
     render() {

@@ -126,7 +126,6 @@ export default class Example extends React.Component {
     // refresh the calendar if the date clicedk is within the 4 week advancement range
     if (days[0] < maxAdvancement) {
       this.setState({ selectedDays: days });
-      localStorage.setItem("week", this.state.selectedDays);
       this.props.updateWeek(days)
 
       let day = new Date();

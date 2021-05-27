@@ -53,7 +53,8 @@ class SiteManagerHomepage extends Component {
         let mondayDate = this.state.weekArr[1];
         let info = {
             site: this.state.site,
-            week: mondayDate
+            week: mondayDate,
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
@@ -66,13 +67,22 @@ class SiteManagerHomepage extends Component {
         this.setState({totals: data.totals, routes: data.routes})
     }
 
+    getAuthHeaders() {
+        let authToken = localStorage.getItem("token");
+        const authStr = "Bearer ".concat(authToken);
+        var headers = { headers: { Authorization: authStr } };
+        console.log(headers)
+        return headers;
+    }
+
     async fetchOrderTotals () {
         if (this.state.weekArr.len === 0) {
             return
         }
         let info = {
             site: this.state.site,
-            weekArr: this.state.weekArr
+            weekArr: this.state.weekArr,
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'orders/totals', {
             method: 'POST',

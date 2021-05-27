@@ -4,10 +4,24 @@ const router = express.Router();
 const SiteManager = require('../models/siteManager');
 const Volunteer = require('../models/volunteer');
 const DataEntry = require('../models/dataEntry');
-const { request } = require('../server');
+const decodeToken = require("./token.js")
+
+/*
+  Contains methods:
+    : Fetch the current user's data
+    update: Update the current user's data
+*/
 
 router.post('/', async (req, res) => {
-    const {email, userType} = req.body
+    const {token} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let email = userData.email
+    let userType = userData.user
     
     let user = getUser(userType)
     if (user == null) {
@@ -25,21 +39,20 @@ router.post('/', async (req, res) => {
       }
     })
  });
- 
- function getUser(user) {
-    if (user === "volunteer")
-       return Volunteer
-    else if (user === "site-manager")
-       return SiteManager
-    else if (user === "data-entry")
-       return DataEntry
-    else
-       return null
- }
 
 router.post('/update', async (req, res) => {
-    const { firstName, lastName, userType, email, site } = req.body
+    const { firstName, lastName } = req.body
     const { phoneNumber, availability, driver, kitchenStaff, notes } = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let email = userData.email
+    let userType = userData.user
+    let site = userData.site
+
     let user = getUser(userType)
     if (user == null) {
        res.status(404).send("Invalid user type") 
@@ -60,5 +73,16 @@ router.post('/update', async (req, res) => {
         })
     }
 })
+
+function getUser(user) {
+   if (user === "volunteer")
+      return Volunteer
+   else if (user === "site-manager")
+      return SiteManager
+   else if (user === "data-entry")
+      return DataEntry
+   else
+      return null
+}
 
 module.exports = router;

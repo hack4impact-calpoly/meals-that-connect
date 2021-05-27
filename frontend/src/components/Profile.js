@@ -58,11 +58,10 @@ class Profile extends Component {
     }
 
     async fetchUserData () {
-        let email = localStorage.getItem('userEmail')
+        let token = localStorage.getItem('token')
         let type = this.state.userType
         let info = {
-            email: email,
-            userType: type
+            token: token
         }
 
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'profile', {
@@ -75,12 +74,11 @@ class Profile extends Component {
         const data = await response.json();
         
         if (type === "volunteer") {
-            localStorage.setItem("volunteerID", data.volunteerID)
             this.setState( { 
                 firstName: data.firstName,
                 lastName: data.lastName,
                 site: data.site,
-                email: email,
+                email: data.email,
                 phoneNumber: data.phoneNumber,
                 availability: data.availability,
                 kitchenStaff: data.kitchenStaff,
@@ -96,7 +94,7 @@ class Profile extends Component {
                 lastName: data.lastName,
                 site: data.site,
                 admin: data.admin,
-                email: email,
+                email: data.email,
             })
         }
     }

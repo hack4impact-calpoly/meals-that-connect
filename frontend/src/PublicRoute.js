@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { isLoggedIn } from './components/authentication/authenticationUtils.js';
+import { isAuthenticated } from './components/authentication/authenticationUtils.js';
 
 const PublicRoute = ({component: Component, authenticated, ...rest}) => {
     return (
         <Route {...rest} render={props => (
-            isLoggedIn() 
+            isAuthenticated() 
             ? <Redirect to='/' />
             : <Component {...props} />
         )} />
