@@ -157,6 +157,53 @@ router.post('/routeOverviewDay', (req, res) => {
     })
 })
 
+// This function returns the correct list of clients 
+// that need deliveries for a given day for a given site
+router.post('/routeOverviewDayRoute', (req, res) => {
+  // takes in these parameters from the front end.
+  // site is used to search and day which is a string M, T, W, Th, F
+  let {site, day, week, routeNumber} = req.body
+  week = formatDate(week)
+  console.log("Getting route pdf data")
+  console.log(req.body)
+
+  Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
+    if (err) {
+      console.log(err) 
+      res.status(404).send("error")
+    } else {
+      console.log(clients)
+      var clientsWithMeals = []
+      for (let i = 0; i < clients.length; i++) {        
+        findClientMeal(clients[i], week).then(meal => {
+          var client = {}
+          if (meal != null) {
+            client.firstName = clients[i].firstName
+            client.lastName = clients[i].lastName
+            client.address = clients[i].address
+            client.phoneNumber = clients[i].phoneNumber
+            client.routeNumber = clients[i].routeNumber
+            client.emergencyContact = clients[i].emergencyContact
+            client.emergencyPhone = clients[i].emergencyPhone
+            client.specialInstructions = clients[i].specialInstructions
+            client.foodDays = meal.foodDays
+            client.frozenNumber = meal.frozenNumber
+            client.frozenDay = meal.frozenDay
+            client.noMilk = meal.noMilk
+          
+            clientsWithMeals.push(client)
+          }
+
+          if (i == clients.length - 1 || clients.length == 0) {
+            var sortedRoutes = SortClients(clientsWithMeals, day)
+            res.send(sortedRoutes)
+          }
+        })
+      }
+    }
+  })
+})
+
 // This function will return a sorted list of clients by route number.
 // sorts from ascending order and also sorts clients by their index value
 function SortClients(clients, day) {

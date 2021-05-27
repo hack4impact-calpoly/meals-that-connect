@@ -130,11 +130,11 @@ class SiteManagerHomepage extends Component {
                         </div>
                         <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20}} >
                             <h3 style={{width: 200}}>Driver Routes: </h3>
-                            <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, weekArr, site)}>Monday</button>
-                            <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, weekArr, site)}>Tuesday</button>
-                            <button className="route" style={{width: 165}} onClick={() => printDocument("W", 2, weekArr, site)}>Wednesday</button>
-                            <button className="route" style={{width: 165}} onClick={() => printDocument("Th", 3, weekArr, site)}>Thursday</button>
-                            <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, weekArr, site)}>Friday</button>
+                            <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, weekArr, site, null)}>Monday</button>
+                            <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, weekArr, site, null)}>Tuesday</button>
+                            <button className="route" style={{width: 165}} onClick={() => printDocument("W", 2, weekArr, site, null)}>Wednesday</button>
+                            <button className="route" style={{width: 165}} onClick={() => printDocument("Th", 3, weekArr, site, null)}>Thursday</button>
+                            <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, weekArr, site, null)}>Friday</button>
                         </div>
                     </div>
                     <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
@@ -175,17 +175,19 @@ function getDate(weekArr, tableDay) {
   }
 
 // grabs the sorted list of clients by route and index based on site and da
-export async function fetchRouteOverview(dayString, weekArr, site) {
+export async function fetchRouteOverview(dayString, weekArr, site, route) {
     //console.log("here")
     let Date = weekArr[1];
     let param = {
         site: site,
         day: dayString,
-        week: Date
+        week: Date,
+        routeNumber: route
     }
     console.log(param)
-    // call to mongodb backend function
-    let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/routeOverviewDay', {
+    let url = route ? "meals/routeOverviewDayRoute" : "meals/routeOverviewDay"
+    console.log(url)
+    let response = await fetch(process.env.REACT_APP_SERVER_URL + url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -200,9 +202,9 @@ export async function fetchRouteOverview(dayString, weekArr, site) {
 
     return clients
 }
-export async function printDocument(dayString, day, weekArr, site) {
-        console.log("print")
-        let clients = await fetchRouteOverview(dayString, weekArr, site)
+export async function printDocument(dayString, day, weekArr, site, route) {
+        console.log(route)
+        let clients = await fetchRouteOverview(dayString, weekArr, site, route)
         console.log(clients)
         var doc = new jsPDF()
         // Sorry! clean this up to be better

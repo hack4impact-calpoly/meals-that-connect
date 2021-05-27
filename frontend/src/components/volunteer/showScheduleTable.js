@@ -5,7 +5,7 @@ import "../../css/totalMeals.css"
 import holidays from '@date/holidays-us'
 
 import fetchMealTotals from '../sitemanager/SiteManagerHomepage'
-import printDocument from '../sitemanager/SiteManagerHomepage'
+import {printDocument} from '../sitemanager/SiteManagerHomepage'
 import SiteManagerHomepage from '../sitemanager/SiteManagerHomepage'
 
 //var sitemanager = new SiteManagerHomepage;
@@ -256,24 +256,25 @@ export function getDate(weekArr, tableDay) {
 function cellClass(cell, props) {
     console.log(cell)
     let width = cell.column.Header === "Meals" ? 200 : 'auto'
+    let route = cell.row.original.route
     
     if (cell['column']['id'] === "route"){
         return <td id="last-cell" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
     }
     else if (cell['column']['id'] == "monday" && cell['value'] == "assigned"){
-        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, props.weekArr, props.personalData.site)}>Monday</button> </td>
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, props.weekArr, props.personalData.site, route)}>Monday</button> </td>
     }
     else if (cell['column']['id'] == "tuesday" && cell['value'] == "assigned"){
-        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, props.weekArr, props.personalData.site)}>Tuesday</button> </td>
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, props.weekArr, props.personalData.site, route)}>Tuesday</button> </td>
     }
     else if (cell['column']['id'] == "wednesday" && cell['value'] == "assigned"){
-        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("W", 2, props.weekArr, props.personalData.site)}>Wednesday</button> </td>
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("W", 2, props.weekArr, props.personalData.site, route)}>Wednesday</button> </td>
     }
     else if (cell['column']['id'] == "thursday" && cell['value'] == "assigned"){
-        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("Th", 3, props.weekArr, props.personalData.site)}>Thursday</button> </td>
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("Th", 3, props.weekArr, props.personalData.site, route)}>Thursday</button> </td>
     }
     else if (cell['column']['id'] == "friday" && cell['value'] == "assigned"){
-        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, props.weekArr, props.personalData.site)}>Friday</button> </td>
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, props.weekArr, props.personalData.site, route)}>Friday</button> </td>
     }
     else {
         return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
