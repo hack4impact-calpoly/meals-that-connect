@@ -1,13 +1,12 @@
 const express = require('express');
-const moment = require('moment')
+var jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs')
 
 const router = express.Router();
 
 const Volunteer = require('../models/volunteer')
 const SiteManager = require('../models/siteManager')
 const DataEntry = require('../models/dataEntry')
-const Meal = require("../models/meals")
-const Client = require("../models/clients");
 
 router.post('/email-taken', async (req, res) =>{
    const {email, user} = req.body
@@ -25,7 +24,7 @@ router.post('/email-taken', async (req, res) =>{
 });
 
 router.post('/', async (req, res) => {
-   const {email, user} = req.body
+   const {email, user, password} = req.body
    
    let userType = getUser(user)
    if (userType == null) {
@@ -35,14 +34,33 @@ router.post('/', async (req, res) => {
    userType.findOne({'email': email}).then(function(result) {
       if (!result) {
          console.log("Invalid email")
-         res.status(404).send("Invalid email")
+         res.status(404).send("Invalid email or password")
       }
       else {
-         console.log("login successful")
-         res.send(result)
+         const correctPwd = bcrypt.compareSync(password, result.password);
+         if (!correctPwd) {
+            res.status(404).send("Invalid email or password")
+         }
+         else {
+            console.log("login successful")
+            let { site, volunteerID } = result
+            var token = jwt.sign(
+               {  
+                  email: email, 
+                  user: user,
+                  site: site,
+                  volunteerID: volunteerID
+               },
+               "secret-change-me",
+               { expiresIn: "24h" }
+            );
+            result['token'] = token
+            res.send({result, token})
+         }
       }
    })
 });
+
 
 // reset password
 router.post('/reset-password', async(req, res) => {

@@ -122,14 +122,14 @@ class Login extends Component {
             }
         })
         .then(data => {
-            _this.storeUser(data)
-            if (this.state.userType === "volunteer"){
-                this.volunteerInfoCheck(data)
-            }
-            else {
-                window.location.reload(true);
-                // _this.props.history.push("/");
-            }
+            _this.storeUser(data.result, data.token)
+            // if (this.state.userType === "volunteer"){
+            //     this.volunteerInfoCheck(data)
+            // }
+            // else {
+            //     window.location.reload(true);
+            //     // _this.props.history.push("/");
+            // }
         })
         .catch(err => {
             console.log("Error")
@@ -157,13 +157,14 @@ class Login extends Component {
         })
     }
 
-    storeUser = async (user) => {
+    storeUser = async (user, token) => {
         console.log(user)
         const date = new Date();
         if (this.state.userType == "volunteer") {
            localStorage.setItem("volunteerID", user.volunteerID);
         }
         localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("token", token);
         localStorage.setItem("userType", this.state.userType);
         localStorage.setItem("site", user.site);
         localStorage.setItem("time", date);

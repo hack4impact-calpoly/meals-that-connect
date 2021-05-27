@@ -7,6 +7,22 @@ const moment = require('moment')
 const Meal = require("../models/meals")
 const Client = require("../models/clients")
 
+const checkToken = (req, res, next) => {
+  const header = req.headers["authorization"];
+  if (typeof header !== "undefined") {
+    const bearer = header.split(" ");
+    const token = bearer[1];
+    var decoded = jwt.verify(token, "secret-change-me");
+    console.log(decoded)
+    req.token = token;
+    req.user = decoded.user;
+    next();
+  } else {
+    //If header is undefined return Forbidden (403)
+    res.sendStatus(403);
+  }
+};
+
 // Given a meal field and a value, update the client's meal data for the specified week
 router.post('/update-field', async (req, res) => {
     const {date, clientID, key, value} = req.body
@@ -310,7 +326,7 @@ function sortFormatMeals(data) {
   return {"meals": meals, "routes": routes}
 }
 
-router.post('/site', async (req, res) => {
+router.post('/site', checkToken, async (req, res) => {
   const {site, week} = req.body
   Meal.find({site: site, index: {$exists:true}}, function (err, clients) {
     if (err) {
