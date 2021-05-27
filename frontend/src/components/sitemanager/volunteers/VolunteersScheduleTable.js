@@ -13,9 +13,11 @@ const dayIndexTable = {
     "F": 4
 }
 
-function updateValues (value, type, props, dayIndex){
-    let val = []
-    val.push(value)
+function updateValues (value, id, type, props, dayIndex){
+    let val = {
+        name: value,
+        id: id
+    }
     if (type === 'Staff') //update staff volunteer info
         props.staff[dayIndex] = val;
     else if (type === 'Computer') //update computer volunteer info
@@ -31,27 +33,23 @@ function updateValues (value, type, props, dayIndex){
     else if (type === "Meal Prep 5") //update meal Prep volunteer info
         props.mealPrep5[dayIndex] = val;
     else { //update route volunteer info
-        let routesLength = Object.keys(props.routes).length
-        let routesValues = Object.values(props.routes)
-
-        // get routes volunteers
-        for (let i =0; i < routesLength; i++) {
-            
-            var routeNum = Object.keys(props.routes)[i]
-            
-            if (routeNum === type){
-            routesValues[i][dayIndex] = val;
-            break;
+        for(let route in props.routes) {
+            if(route === type) {
+                props.routes[route][dayIndex] = val
             }
         }
     }
-    props.handleSelect(localStorage.getItem("site"), getMonday(new Date()), props)
+    props.handleSelect(localStorage.getItem("site"), props.weekArr[1], props)
 }
 
 function EditableCell (cellProperties, day, props, availability) {
-    const val = cellProperties["value"] // value stored in backend
+    const val =  (cellProperties["value"] !== undefined && cellProperties["value"] !== null) ? cellProperties["value"]["name"] : cellProperties["value"] // value stored in backend
     const site = localStorage.getItem("site")
-    const [value, setValue] = React.useState(val);
+    const [value, setValue] = React.useState(val)
+    
+    let volunteers = {
+
+    }
 
     // make sure that value is set without waiting for useState, so correct information shows up
     React.useEffect(() => {
@@ -59,12 +57,15 @@ function EditableCell (cellProperties, day, props, availability) {
     }, [val])
 
     let options = []
-    for(let name of availability[day]) {
+    for(let volunteer of availability[day]) {
         let entry = {
-            value: name,
-            label: name
+            value: volunteer.name,
+            label: volunteer.name
         }
         options.push(entry)
+        if(!(volunteer in volunteers)) {
+            volunteers[volunteer.name] = volunteer.id;
+        }
     }
     const customStyles = {
         control: (provided, state) => ({
@@ -82,14 +83,13 @@ function EditableCell (cellProperties, day, props, availability) {
             margin: 0,
         }),
     }
-
     return (
         <Select
             options={options} 
             styles={customStyles} 
             placeholder="Select" 
             defaultValue={{value: val, label: val}}
-            onChange={e => updateValues(e.value.trim(), cellProperties["row"]["route"], props, dayIndexTable[day])}
+            onChange={e => updateValues(e.value, volunteers[e.value], cellProperties["row"]["route"], props, dayIndexTable[day])}
         />
     )
 }
@@ -115,7 +115,7 @@ function VolunteersScheduleTable ({ columns, data, props }) {
                 {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                    <th style={{"width": "200px"}} {...column.getHeaderProps()}>{column.render('Header')}</th>
                     ))}
                 </tr>
                 ))}
@@ -126,9 +126,9 @@ function VolunteersScheduleTable ({ columns, data, props }) {
                     prepareRow(row)
                     return (
                         <tr {...row.getRowProps()}>
-                        {row.cells.map(cell => {
-                            return <td>{cell.render('Cell', {row:cell['row']['original']})}</td>
-                        })}
+                            {row.cells.map(cell => {
+                                return <td>{cell.render('Cell', {row:cell['row']['original']})}</td>
+                            })}
                         </tr>
                     )
                 })}
@@ -219,24 +219,24 @@ const Table = (props) => {
     let routesValues = Object.values(props.routes)
 
     // get routes volunteers
-    for (let i =0; i < routesLength; i++) {
+    for (let i = 0; i < routesLength; i++) {
+        var routeNum = Object.keys(props.routes)[i]
 
-    var routeNum = Object.keys(props.routes)[i]
-
-    // Get frozen data for each route
-    let routeData = {
-        route: routeNum,
-        monday: routesValues[i][0],
-        tuesday: routesValues[i][1],
-        wednesday: routesValues[i][2],
-        thursday: routesValues[i][3],
-        friday: routesValues[i][4]
-    }
-    routeList.push(routeData)
+        // Get frozen data for each route
+        let routeData = {
+            route: routeNum,
+            monday: routesValues[i][0],
+            tuesday: routesValues[i][1],
+            wednesday: routesValues[i][2],
+            thursday: routesValues[i][3],
+            friday: routesValues[i][4]
+        }
+        routeList.push(routeData)
     }
 
     // get mealPrep volunteers
     let meal = props.mealPrep
+    
     let mealPrepData = {
         route: "Meal Prep",
         monday: meal[0],
@@ -263,31 +263,31 @@ const Table = (props) => {
         route: "Meal Prep 3",
         monday: meal3[0],
         tuesday: meal3[1],
-        wednesday: meal3[2],
-        thursday: meal3[3],
-        friday: meal3[4]
+        wednesday: meal3[2] ,
+        thursday: meal3[3] ,
+        friday: meal3[4] 
     }
     routeList.push(mealPrepData3)
 
     let meal4 = props.mealPrep4
     let mealPrepData4 = {
         route: "Meal Prep 4",
-        monday: meal4[0],
-        tuesday: meal4[1],
-        wednesday: meal4[2],
-        thursday: meal4[3],
-        friday: meal4[4]
+        monday: meal4[0] ,
+        tuesday: meal4[1] ,
+        wednesday: meal4[2] ,
+        thursday: meal4[3] ,
+        friday: meal4[4] 
     }
     routeList.push(mealPrepData4)
 
     let meal5 = props.mealPrep5
     let mealPrepData5 = {
         route: "Meal Prep 5",
-        monday: meal5[0],
-        tuesday: meal5[1],
-        wednesday: meal5[2],
-        thursday: meal5[3],
-        friday: meal5[4]
+        monday: meal5[0] ,
+        tuesday: meal5[1] ,
+        wednesday: meal5[2] ,
+        thursday: meal5[3] ,
+        friday: meal5[4] 
     }
     routeList.push(mealPrepData5)
 
@@ -295,11 +295,11 @@ const Table = (props) => {
     let computer = props.computer
     let computerData = {
         route: "Computer",
-        monday: computer[0],
-        tuesday: computer[1],
-        wednesday: computer[2],
-        thursday: computer[3],
-        friday: computer[4]
+        monday: computer[0] ,
+        tuesday: computer[1] ,
+        wednesday: computer[2] ,
+        thursday: computer[3] ,
+        friday: computer[4] 
     }
     routeList.push(computerData)
 
@@ -307,11 +307,11 @@ const Table = (props) => {
     let staff = props.staff
     let staffData = {
         route: "Staff",
-        monday: staff[0],
-        tuesday: staff[1],
-        wednesday: staff[2],
-        thursday: staff[3],
-        friday: staff[4]
+        monday: staff[0] ,
+        tuesday: staff[1] ,
+        wednesday: staff[2] ,
+        thursday: staff[3] ,
+        friday: staff[4] 
     }
     routeList.push(staffData)
 

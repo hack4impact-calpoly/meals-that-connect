@@ -73,34 +73,37 @@ router.post('/volunteerSite', async (req, res) => {
 })
 
 router.post('/availability', async (req, res) => {
-  const {site} = req.body
-  Volunteer.find({site: site}, function (err, volunteers) {
-    let daily_availability = {
-      M: [],
-      T: [],
-      W: [],
-      Th: [],
-      F: []
-    }
-    console.log(daily_availability)
-    let days = [ 'M', 'T', 'W', 'Th', 'F' ]
-
-    volunteers.forEach(volunteer => {
-      let availability = volunteer.availability
-      for (let day of days) {
-        if (availability[day]) {
-          daily_availability[day].push(volunteer.firstName = " " + volunteer.lastName)
+    const {site} = req.body
+    Volunteer.find({site: site, driver: true}, function (err, volunteers) {
+        let daily_availability = {
+        M: [],
+        T: [],
+        W: [],
+        Th: [],
+        F: []
         }
-      }
+        let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+
+        volunteers.forEach(volunteer => {
+            let availability = volunteer.availability
+            console.log(volunteer)
+            for (let day of days) {
+                if (availability[day]) {
+                    let volunteerObj = {
+                        name: volunteer.firstName + " " + volunteer.lastName,
+                        id: volunteer._id
+                    }
+                    daily_availability[day].push(volunteerObj)
+                }
+            }
+        })
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(daily_availability)
+        }
     })
-    console.log(daily_availability)
-    if (err) {
-      console.log(err)
-    }
-    else {
-      res.send(daily_availability)
-    }
-  })
 })
 
 router.get('/allVolunteers', async (req, res) => {
