@@ -60,7 +60,7 @@ export const DraggableTable = ({ columns, data, setData, route, showModal, route
         columns,
         getRowId,
         initialState: {
-            hiddenColumns: (localStorage.getItem("userType") === "data-entry" && routeTable === 0) ? ["foodDaysM", "foodDaysT", "foodDaysW", "foodDaysTh", "foodDaysF"] : ["wellskyID"]  
+            hiddenColumns: (localStorage.getItem("userType") === "data-entry" && routeTable === 0) ? ["foodDaysM", "foodDaysT", "foodDaysW", "foodDaysTh", "foodDaysF", "routeNumber"] : ["wellskyID"]  
         }
     },
         useFilters,
