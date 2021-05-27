@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
  }
 
 router.post('/update', async (req, res) => {
-    const { firstName, lastName, userType, email } = req.body
+    const { firstName, lastName, userType, email, site } = req.body
     const { phoneNumber, availability, driver, kitchenStaff, notes } = req.body
     let user = getUser(userType)
     if (user == null) {
@@ -54,7 +54,7 @@ router.post('/update', async (req, res) => {
             })
     }
     else {
-        user.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName }}).then(() => {
+        user.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName, site: site }}).then(() => {
             res.status(200).send("success")
             console.log("successfully updates")
         })

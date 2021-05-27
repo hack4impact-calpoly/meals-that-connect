@@ -39,7 +39,7 @@ const Table = (props) => {
 
             const key = cellProperties["column"]["id"]
 
-            if (key == "routeNumber" && newValue === "") {
+            if (key === "routeNumber" && newValue === "") {
               console.log("Updating route number")
               newValue = "-1"
             }
@@ -50,11 +50,11 @@ const Table = (props) => {
               data: newValue
             }
 
-            if (key == "routeNumber") {
+            if (key === "routeNumber") {
                 let index = cellProperties["row"]['index']
                 let newData = cellProperties["data"]
                 newData[index]['routeNumber'] = newValue
-                if (newValue == "") {
+                if (newValue === "") {
                   newData[index]['routeNumber'] = "-1"
                 }
                 console.log("Resetting index for row: " + index)

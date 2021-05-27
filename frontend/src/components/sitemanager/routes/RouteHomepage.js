@@ -5,14 +5,16 @@ import RoutesNavbar from './RoutesNavbar';
 import { getWeekArr } from '../calendar'
 import ModalContent from './RouteModal';
 import '../../../css/Modal.css';
-import { weekdaysMin } from 'moment';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Spinner from "react-bootstrap/Spinner"
 
 const moment = require('moment')
 
 class RouteHomepage extends Component {
     constructor(props) {
         super(props);
-        this.state = {  
+        this.state = {
+            loaded: false,  
             clients: {},
             routes: [],
             showModal: false,
@@ -75,7 +77,7 @@ class RouteHomepage extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        this.setState({clients: data.meals, routes: data.routes}) 
+        this.setState({clients: data.meals, routes: data.routes, loaded: true}) 
     }
 
     setData = (data, route) => {
@@ -130,7 +132,7 @@ class RouteHomepage extends Component {
     }
 
     updateWeek = (week) => {
-        this.setState({weekArr: week})
+        this.state.weekArr = week
         this.fetchRoutes()
     }
 
@@ -224,27 +226,31 @@ class RouteHomepage extends Component {
             <div style={{marginBottom: 40}}>
                 <RoutesNavbar routes={routes} fixed={true} updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <h1 className="site-manager-page-header">{title}</h1>
-                {routes.length == 0 ? <h2 style={{marginTop: 40}}>No route data for this week</h2> : null}
-                <div className="site-manager-container">
-                    <div>
-                        {routes.map((route, i) =>{
-                            return (
-                                <section style={{marginRight: 80, paddingLeft: 320}}>
-                                    <a id={String(route)}></a>
-                                    <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal} mondayDate={this.state.weekArr[1]}
-                                        handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
-                                </section>
-                        );})}
-                    </div>
-                    { (localStorage.getItem("userType") == "site-manager") ? 
-                    <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
-                        <ModalContent 
-                            currentClient={this.state.currentClient} 
-                            submit={this.submit} 
-                            handleCloseModal={this.handleCloseModal}/>
-                    </Modal>
-                    : ""}
-                </div>
+                {this.state.loaded === true ?
+                routes.length == 0 ? <h2 style={{marginTop: 40}}>No route data for this week</h2> : 
+                    <div className="site-manager-container">
+                        <div>
+                            {routes.map((route, i) =>{
+                                return (
+                                    <section style={{marginRight: 80, paddingLeft: 320}}>
+                                        <a id={String(route)}></a>
+                                        <RouteTable routenum={route} data={clients[route]} setData={this.setData} showModal={this.handleOpenModal} mondayDate={this.state.weekArr[1]}
+                                            handleChange={this.handleChange} handleBoolChange={this.handleBoolChange} handleSelect={this.handleSelect}></RouteTable>
+                                    </section>
+                            );})}
+                        </div>
+                        { (localStorage.getItem("userType") == "site-manager") ? 
+                        <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal" overlayClassName="Overlay">
+                            <ModalContent 
+                                currentClient={this.state.currentClient} 
+                                submit={this.submit} 
+                                handleCloseModal={this.handleCloseModal}/>
+                        </Modal>
+                        : ""}
+                    </div> :
+                <div id = "spin">
+                    <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
+                </div>}
             </div>
            
         );

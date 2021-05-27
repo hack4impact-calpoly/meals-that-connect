@@ -73,34 +73,37 @@ router.post('/volunteerSite', async (req, res) => {
 })
 
 router.post('/availability', async (req, res) => {
-  const {site} = req.body
-  Volunteer.find({site: site}, function (err, volunteers) {
-    let daily_availability = {
-      M: [],
-      T: [],
-      W: [],
-      Th: [],
-      F: []
-    }
-    console.log(daily_availability)
-    let days = [ 'M', 'T', 'W', 'Th', 'F' ]
-
-    volunteers.forEach(volunteer => {
-      let availability = volunteer.availability
-      for (let day of days) {
-        if (availability[day]) {
-          daily_availability[day].push(volunteer.firstName = " " + volunteer.lastName)
+    const {site} = req.body
+    Volunteer.find({site: site, driver: true}, function (err, volunteers) {
+        let daily_availability = {
+        M: [],
+        T: [],
+        W: [],
+        Th: [],
+        F: []
         }
-      }
+        let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+
+        volunteers.forEach(volunteer => {
+            let availability = volunteer.availability
+            console.log(volunteer)
+            for (let day of days) {
+                if (availability[day]) {
+                    let volunteerObj = {
+                        name: volunteer.firstName + " " + volunteer.lastName,
+                        id: volunteer._id
+                    }
+                    daily_availability[day].push(volunteerObj)
+                }
+            }
+        })
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(daily_availability)
+        }
     })
-    console.log(daily_availability)
-    if (err) {
-      console.log(err)
-    }
-    else {
-      res.send(daily_availability)
-    }
-  })
 })
 
 router.get('/allVolunteers', async (req, res) => {
@@ -114,17 +117,9 @@ router.get('/allVolunteers', async (req, res) => {
   })
 })
 
-router.post('/siteVolunHours', async (req, res) => {
-  const {site, week} = req.body
-  var totals = await getVolunteerHours(site, week)
-  res.send(totals)
-})
-
-
 router.post('/updateVolunteerInfo', async (req, res) => {
   const { phoneNumber, email, days, notes } = req.body
 
-  //let user = await Volunteer.findOne({"email": email})
 
   Volunteer.findOne({"email": email}).then(function(volunteer) {
     if (!volunteer) {
@@ -254,62 +249,6 @@ router.post('/volunteerDelete', async(req, res) => {
       }
     })
 })
-
-async function getVolunteersBySite(siteName) {
-  return await Volunteer.find({site: siteName}, function (err, volunteers) {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      return volunteers
-    }
-  })
-}
-
-async function getVolunteerHours(site, weekArr) {
-    var volunteerList = await getVolunteersBySite(site)
-    var totals = []
-    // for each volunteer -> get all their logged hours
-    console.log(weekArr)
-    for (var index in volunteerList) {
-      var volunteerID = volunteerList[index].volunteerID
-      var first = volunteerList[index].firstName
-      var last = volunteerList[index].lastName
-      var days = [0,0,0,0,0,0,0]
-      await Hours.find({volunteerID: volunteerID}, function (err, hrs)
-      {
-        if (first === "Vincent") {
-          console.log(volunteerList[index])
-        console.log(hrs)
-        }
-        if (hrs === [])
-        {
-          console.log(err)
-        }
-         else
-         {
-          for (let i=0; i<weekArr.length; i++)
-          {
-            let day = new Date(weekArr[i])
-            for (let i = 0; i < hrs.length; i++)
-            {
-              let hourLog = hrs[i]
-              volunDate = new Date(hourLog.date)
-              if (volunDate.getDate() === day.getDate())
-              {
-                week = day.getDay() // returns 0-6
-                days[week] += hourLog.home
-              }
-            }
-          }
-          totals.push({firstName: first, lastName: last, Su: days[0], M: days[1], 
-          T: days[2], W: days[3],Th: days[4], F: days[5], Sa: days[6]})
-         }
-        }
-      )
-    }
-    return totals
-}
 
 async function updateVolunteer(email, phoneNumber, days, notes) {
   await Volunteer.updateOne(

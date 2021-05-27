@@ -4,7 +4,6 @@ import { signout } from './authentication/authenticationUtils';
 import fire from './../fire.js';
 import { Redirect } from 'react-router-dom';
 import Select from 'react-select'
-import { printStorage } from './authentication/authenticationUtils.js';
 
 class Profile extends Component {
 
@@ -32,6 +31,7 @@ class Profile extends Component {
             hideCancel: true,
             RedirectLoggedUser: false,
             admin: false,
+            originalSite: localStorage.getItem('site')
         };
     }
 
@@ -42,20 +42,20 @@ class Profile extends Component {
     updateCheckbox = (e, day) => {
         if (!this.state.hideCancel) {
             this.state.availability[day] = (e.target.checked)
-            this.setState({});
+            this.setState({})
         }
-    };
+    }
 
     updateType = (e) => {
         if (!this.state.hideCancel) {
             this.setState({ [e.target.id]: e.target.checked });
         }
         
-    };
+    }
 
     async componentDidMount() {
         this.fetchUserData()
-    };
+    }
 
     async fetchUserData () {
         let email = localStorage.getItem('userEmail')
@@ -99,11 +99,11 @@ class Profile extends Component {
                 email: email,
             })
         }
-    };
+    }
 
     edit = () => {
         var button = document.getElementById("changes-button");
-        if (button.innerHTML == 'EDIT PROFILE') {
+        if (button.innerHTML === 'EDIT PROFILE') {
             button.innerHTML = 'SAVE CHANGES';
             this.setState( { readOnly: false, hideCancel: false } );  
         }
@@ -125,7 +125,7 @@ class Profile extends Component {
 		let _this = this
 
         let {firstName, lastName, phoneNumber, availability, userType, 
-             email, driver, kitchenStaff, notes, originalUser} = this.state
+             email, driver, kitchenStaff, notes, originalUser, site, originalSite} = this.state
 
         let profile = {
             email: email,
@@ -136,7 +136,8 @@ class Profile extends Component {
             phoneNumber: phoneNumber,
             availability: availability,
             driver: driver,
-            kitchenStaff: kitchenStaff
+            kitchenStaff: kitchenStaff,
+            site: site
         }
 
 
@@ -153,6 +154,7 @@ class Profile extends Component {
             }
             else {
                 localStorage.setItem("userType", userType)
+                localStorage.setItem("site", site)
                 window.location.reload()
             }
         })
@@ -171,7 +173,11 @@ class Profile extends Component {
 	}
 
     handleSelect = (e) => {
-        this.state.userType = e.value
+        this.setState({userType: e.value})
+    }
+
+    handleSiteSelect = (e) => {
+        this.state.site = e.value;
     }
 
     render() {
@@ -184,12 +190,17 @@ class Profile extends Component {
           )
         }
 
-        let { hideCancel, driver, kitchenStaff, notes, userType, admin } = this.state
+        let { hideCancel, driver, kitchenStaff, notes, userType, admin, site } = this.state
         let { M, T, W, Th, F } = this.state.availability
         let options = [
             { value: 'site-manager', label: 'site-manager' },
             { value: 'data-entry', label: 'data-entry' },
             { value: 'volunteer', label: 'volunteer' }
+        ]
+        let sites = [
+            { value: 'SLO', label: 'SLO' },
+            { value: 'Five Cities', label: 'Five Cities' },
+            { value: 'Cambria', label: 'Cambria' }
         ]
 
         const customStyles = {
@@ -222,7 +233,7 @@ class Profile extends Component {
 
         return (
             <div className='profile-container'>
-                <h1>{this.state.firstName.toUpperCase()} {this.state.lastName.toUpperCase()}'S PROFILE</h1>
+                <h1>{this.state.firstName.toUpperCase()} {this.state.lastName.toUpperCase()}{"'S PROFILE"}</h1>
                 <div id='profile-editable-fields'>
                     {admin && <p className='input-firstName'>User Type</p>}
                     {admin && (hideCancel ? <input type="text" id='phoneNumber' size="50" style={{width: '720px'}} defaultValue={userType} readOnly={true}/> :
@@ -240,21 +251,29 @@ class Profile extends Component {
                     <input type="text" id='lastName' size="50" style={{width: '720px'}} defaultValue={this.state.lastName} onChange={this.handleChange} readOnly={this.state.readOnly}/>
                     {hideCancel && <p className='input-Email'>Email</p>}
                     {hideCancel && <input type="text" size="50" style={{width: '720px'}} defaultValue={this.state.email} onChange={this.handleChange} readOnly/>}
-                    {hideCancel && <p className='input-site'>Site</p>}
-                    {hideCancel && <input type="text" size="50" style={{width: '720px'}} defaultValue={this.state.site} onChange={this.handleChange} readOnly/>}
+                    {admin && <p className='input-site'>Site</p>}
+                    {admin && (hideCancel || userType !== 'data-entry' ? <input type="text" size="50" style={{width: '720px'}} defaultValue={site} readOnly={true}/> :
+                    <div style={{width: 300}}>
+                        <Select 
+                            options={sites} 
+                            placeholder="Site" 
+                            styles={customStyles}
+                            defaultValue={{value: site, label: site}} 
+                            onChange={this.handleSiteSelect}/>
+                    </div>)}
                     <p className='input-phoneNumber' hidden={(this.state.userType == 'volunteer') ? false : true}>Phone Number</p>
                     <input type="text" id='phoneNumber' size="50" style={{width: '720px'}} defaultValue={this.state.phoneNumber} onChange={this.handleChange} readOnly={this.state.readOnly} hidden={(this.state.userType == 'volunteer') ? false : true}/>
                     
-                    <p className='input-phoneNumber' hidden={(this.state.userType == 'volunteer') ? false : true}>Volunteer Roles</p>
-                    <div className="volunteerType" hidden={(this.state.userType == 'volunteer') ? false : true}>
+                    <p className='input-phoneNumber' hidden={(this.state.userType === 'volunteer') ? false : true}>Volunteer Roles</p>
+                    <div className="volunteerType" hidden={(this.state.userType === 'volunteer') ? false : true}>
                         <input type="checkbox" id="driver" checked={driver} onChange={this.updateType}/>
                         <label for="driver" id="driver-text">Driver</label>
                         <input type="checkbox" id="kitchenStaff" checked={kitchenStaff} onChange={this.updateType}/>
                         <label for="kitchen" id= "kitchen-text">Kitchen Volunteer</label>
                     </div>
                     
-                    <p className='input-availability' hidden={(this.state.userType == 'volunteer') ? false : true}>Availability</p>
-                    <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="availability-table" hidden={(this.state.userType == 'volunteer') ? false : true}>
+                    <p className='input-availability' hidden={(this.state.userType === 'volunteer') ? false : true}>Availability</p>
+                    <table style={{marginTop: "10px", marginLeft: "auto", marginRight: "auto"}} className="availability-table" hidden={(this.state.userType === 'volunteer') ? false : true}>
                         <tr>
                             <th><label for="volunteer-m">Monday</label></th>
                             <th><label for="volunteer-t">Tuesday</label></th>
@@ -270,8 +289,8 @@ class Profile extends Component {
                             <td><input type="checkbox" onChange={e => this.updateCheckbox(e, "F")} checked={F} readOnly={this.state.readOnly}/></td>
                         </tr>
                     </table>
-                    <p className='input-notes' hidden={(this.state.userType == 'volunteer') ? false : true}>Notes</p>
-                    <textarea type="text" id="notes" value={notes} onChange={e => this.setState({notes: e.target.value})} size="50" style={{"width": "720px", "padding": "10px"}} readOnly={this.state.readOnly} hidden={(this.state.userType == 'volunteer') ? false : true}/>
+                    <p className='input-notes' hidden={(this.state.userType === 'volunteer') ? false : true}>Notes</p>
+                    <textarea type="text" id="notes" value={notes} onChange={e => this.setState({notes: e.target.value})} size="50" style={{"width": "720px", "padding": "10px"}} readOnly={this.state.readOnly} hidden={(this.state.userType === 'volunteer') ? false : true}/>
                 </div>
                 <div id='buttons'>
                     <button id="changes-button" className="generic-button" type="submit" onClick={this.edit} style={{width: '100%'}}>EDIT PROFILE</button>

@@ -44,12 +44,10 @@ class VolunteerOverview extends Component {
     }
 
     updateWeek = (week) => {
-        console.log(week)
         this.setState({weekArr: week})
     }
 
     updateHoliday = (holidays) => {
-        console.log(holidays)
         this.setState({holidayArr: holidays})
     }
 
@@ -129,13 +127,11 @@ class VolunteerOverview extends Component {
             <div >
                 <h1 className="site-manager-page-header">Volunteer Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
-                <div className="site-manager-container" style={{Left: 0}}>
+                <div className="site-manager-container">
                     {this.state.loaded === true ? 
-                    <section style={{marginRight: 80, paddingRight: 50}}>
-                        <VolunteerOverviewTable data={this.state.volunteers} style={{marginRight: '100px'}} showModal={this.handleOpenModal} refreshData={this.refreshData}/>
-                    </section> : 
-                    <div>
-                        <Spinner animation="border" role="status" />
+                        <VolunteerOverviewTable data={this.state.volunteers} showModal={this.handleOpenModal} refreshData={this.refreshData}/> : 
+                    <div id = "spin">
+                        <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                     </div>}
                 </div>
                 <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal-client" overlayClassName="Overlay">

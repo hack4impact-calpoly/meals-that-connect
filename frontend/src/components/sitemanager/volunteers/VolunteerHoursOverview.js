@@ -42,7 +42,7 @@ class VolunteerHoursOverview extends Component {
             site: localStorage.getItem("site"),
             week: weekArr
          }
-         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/siteVolunHours', {
+         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'hours/totals', {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json'
@@ -64,8 +64,8 @@ class VolunteerHoursOverview extends Component {
                     {this.state.loaded === true ? 
                     data.length == 0 ? <h2 style={{textAlign: 'center', width: 'calc(100vw - 750px)'}}>No volunteer hours logged for this week</h2> : 
                     <VolunteerHoursTable data={this.state.volunteerData} weekArr={this.state.weekArr}/> :
-                    <div>
-                        <Spinner animation="border" role="status" />
+                    <div id = "spin">
+                        <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                     </div>}
                 </div>
             </div>
