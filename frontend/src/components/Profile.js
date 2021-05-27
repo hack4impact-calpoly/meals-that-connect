@@ -42,6 +42,7 @@ class Profile extends Component {
     updateCheckbox = (e, day) => {
         if (!this.state.hideCancel) {
             this.state.availability[day] = (e.target.checked)
+            this.setState({})
         }
     }
 
@@ -180,7 +181,6 @@ class Profile extends Component {
     }
 
     render() {
-        console.log(this.state)
         const { RedirectLoggedUser } = this.state;
 
         // if user has signed in redirect to private page

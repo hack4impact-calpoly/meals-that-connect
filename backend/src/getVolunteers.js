@@ -74,7 +74,7 @@ router.post('/volunteerSite', async (req, res) => {
 
 router.post('/availability', async (req, res) => {
     const {site} = req.body
-    Volunteer.find({site: site}, function (err, volunteers) {
+    Volunteer.find({site: site, driver: true}, function (err, volunteers) {
         let daily_availability = {
         M: [],
         T: [],
