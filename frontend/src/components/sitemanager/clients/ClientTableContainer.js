@@ -131,6 +131,7 @@ class ClientTableContainer extends Component {
     render() {
         let currentUser = localStorage.getItem("userType")
         const loaded = this.state.loaded
+        console.log(this.state)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
