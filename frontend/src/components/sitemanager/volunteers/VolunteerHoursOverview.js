@@ -42,7 +42,7 @@ class VolunteerHoursOverview extends Component {
             site: localStorage.getItem("site"),
             week: weekArr
          }
-         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/siteVolunHours', {
+         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'hours/totals', {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json'

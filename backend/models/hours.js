@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const {hoursConnection} = require('../connections');
 
 const hourSchema = new mongoose.Schema({
+   site: {type: String, required: true},
    volunteerID: {type: String, required: true},
    date: {type: Date, required: true},
    home: {type: Number, required: true, default: 0},

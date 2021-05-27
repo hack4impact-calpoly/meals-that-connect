@@ -37,39 +37,37 @@ const Styles = styled.div`
  }
 `
 
-const EditableCell = (cellProperties, width) => {
-    var changedFlag = false;
+const EditableCell = (cellProperties, width, day) => {
     const firstName = cellProperties["firstName"];
     const lastName = cellProperties["lastName"];
     const key = cellProperties["column"]["id"];
     const [value, setValue] = React.useState(cellProperties["value"]);
     
     const handleChange = (targetValue) => {
-    setValue(targetValue);
-  }
+      setValue(targetValue);
+    }
 
-  const updateDatabase = async (firstNameD, lastNameD, keyD, valueD, changed) => {
-    if (changed !== false) {
-      console.log("yup")
+    const updateDatabase = async (firstNameD, lastNameD, keyD, valueD) => {
+      console.log(day)
       const updateData = {
-        firstName: firstNameD,
-        lastName: lastNameD,
         key: keyD,
-        value: valueD
+        value: valueD,
+        volunteerID: cellProperties.volunteerID,
+        site: localStorage.getItem("site"),
+        date: day
       }
-      await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/insertURL', {
+      await fetch(process.env.REACT_APP_SERVER_URL + 'hours/edit-site-manager', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify(updateData)
       })
+      return 0
     }
-    return 0
-  }
 
   return (
-      <input style={{margin: '-5px -10px', textAlign: 'center', width: width}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value, changedFlag)}/>
+      <input style={{margin: '-5px -10px', textAlign: 'center', width: width}} value={value} onChange={e => handleChange(e.target.value)} onBlur={e => updateDatabase(firstName, lastName, key, e.target.value)}/>
   )
 };
 
@@ -98,7 +96,7 @@ const VolunteerHoursTable = (props) => {
                         Header: 'Home',
                         accessor: 'M',
 
-                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH, getDate(props.weekArr, 0)),
                     },
                     {
                         Header: 'Dining',
@@ -120,7 +118,7 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'T',
-                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH, getDate(props.weekArr, 1)),
                     },
                     {
                         Header: 'Dining',
@@ -142,7 +140,7 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'W',
-                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH, getDate(props.weekArr, 2)),
                     },
                     {
                         Header: 'Dining',
@@ -164,7 +162,7 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'Th',
-                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH, getDate(props.weekArr, 3)),
                     },
                     {
                         Header: 'Dining',
@@ -186,7 +184,7 @@ const VolunteerHoursTable = (props) => {
                     {
                         Header: 'Home',
                         accessor: 'F',
-                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH),
+                        Cell: (cellProperties) => EditableCell(cellProperties, HOUR_WIDTH, getDate(props.weekArr, 4)),
                     },
                     {
                         Header: 'Dining',
@@ -237,7 +235,7 @@ function RouteTable({ columns, data, props }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map(cell => {
-              return <td>{cell.render('Cell', {firstName: row["original"]["firstName"], value: cell["value"], lastName: row["original"]["lastName"], value: cell["value"]})}</td>
+              return <td>{cell.render('Cell', {volunteerID: row["original"]["volunteerID"], firstName: row["original"]["firstName"], value: cell["value"], lastName: row["original"]["lastName"], value: cell["value"]})}</td>
             })}
           </tr>
         )

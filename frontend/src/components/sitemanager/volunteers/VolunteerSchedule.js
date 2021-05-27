@@ -161,7 +161,9 @@ class VolunteerSchedule extends Component {
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                {this.state.loaded ? <VolunteersScheduleTable handleSelect={this.handleSelect} volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} staff={staff} computer={computer}/> :
+                {this.state.loaded ? <VolunteersScheduleTable volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} 
+                                        mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} 
+                                        staff={staff} computer={computer} handleSelect={this.handleSelect}/> :
                     <div id = "spin">
                         <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                     </div>}
