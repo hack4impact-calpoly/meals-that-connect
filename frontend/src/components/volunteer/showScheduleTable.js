@@ -5,7 +5,7 @@ import "../../css/totalMeals.css"
 import holidays from '@date/holidays-us'
 
 import fetchMealTotals from '../sitemanager/SiteManagerHomepage'
-import printDocument from '../sitemanager/SiteManagerHomepage'
+import { printDocument } from '../sitemanager/SiteManagerHomepage'
 import SiteManagerHomepage from '../sitemanager/SiteManagerHomepage'
 
 //var sitemanager = new SiteManagerHomepage;
