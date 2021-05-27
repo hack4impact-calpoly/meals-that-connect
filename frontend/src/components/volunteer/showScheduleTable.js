@@ -276,7 +276,7 @@ function cellClass(cell, props) {
         return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, props.weekArr, props.personalData.site)}>Friday</button> </td>
     }
     else {
-        return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+        return <td id="last-cell-route" {...cell.getCellProps()}> {"-"} </td>
     }
   }
 
