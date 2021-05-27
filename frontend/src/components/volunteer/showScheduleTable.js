@@ -5,7 +5,7 @@ import "../../css/totalMeals.css"
 import holidays from '@date/holidays-us'
 
 import fetchMealTotals from '../sitemanager/SiteManagerHomepage'
-import {printDocument} from '../sitemanager/SiteManagerHomepage'
+import { printDocument } from '../sitemanager/SiteManagerHomepage'
 import SiteManagerHomepage from '../sitemanager/SiteManagerHomepage'
 
 //var sitemanager = new SiteManagerHomepage;
@@ -277,7 +277,7 @@ function cellClass(cell, props) {
         return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, props.weekArr, props.personalData.site, route)}>Friday</button> </td>
     }
     else {
-        return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+        return <td id="last-cell-route" {...cell.getCellProps()}> {"-"} </td>
     }
   }
 
