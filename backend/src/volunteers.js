@@ -86,7 +86,7 @@ router.post('/availability', async (req, res) => {
 
         volunteers.forEach(volunteer => {
             let availability = volunteer.availability
-            console.log(volunteer)
+            //console.log(volunteer)
             for (let day of days) {
                 if (availability[day]) {
                     let volunteerObj = {
@@ -104,6 +104,30 @@ router.post('/availability', async (req, res) => {
             res.send(daily_availability)
         }
     })
+})
+
+router.post('/current-volunteer', async (req, res) => {
+  const {site, email} = req.body
+
+  Volunteer.find({site: site, email: email}, function (err, volunteer) {
+    //console.log(volunteer)
+    //console.log(volunteer[0].firstName)
+      let info = {
+
+        firstName: volunteer[0].firstName,
+        lastName: volunteer[0].lastName,
+        id: volunteer[0]._id
+      }
+      //console.log(info)
+
+      if (err) {
+        console.log(err)
+      }
+      else {
+          res.send(info)
+      }
+
+  })
 })
 
 router.get('/allVolunteers', async (req, res) => {

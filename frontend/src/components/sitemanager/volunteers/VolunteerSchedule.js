@@ -108,7 +108,7 @@ class VolunteerSchedule extends Component {
 
     render() {
         let {loaded, routes, weekArr, holidayArr, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer, volunteers} = this.state
-        console.log(mealPrep)
+        //console.log(mealPrep)
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
