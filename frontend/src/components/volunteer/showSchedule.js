@@ -16,23 +16,18 @@ class showSchedule extends Component {
                 lastName: '',
                 email: '',
                 site: '',
-                phoneNumber: '',
-                availability: {
-                    M: '', 
-                    T: '', 
-                    W: '', 
-                    Th: '', 
-                    F: ''
-                },
-                driver: false,
-                kitchenStaff: false,
                 userType: localStorage.getItem('userType'),
-                volunteerID: ''
+                id: ''
             },
             weekArr: [],
             holidayArr: [],
             routes: [],
-            loaded: false
+            loaded: false,
+            mon: false,
+            tue: false,
+            wed: false,
+            thu: false,
+            fri: false
 		}
     }
 
@@ -51,6 +46,23 @@ class showSchedule extends Component {
         return new Date(d.setDate(diff));
     }
 
+    updatePDF = (day) => {
+        let {mon, tue, wed, thu, fri} = this.state;
+        
+        //if-statements to not cause render error for updating days
+
+        if ((day == "mon") && !mon)
+            this.setState({mon: true})
+        if (day == "tue" && !tue)
+            this.setState({tue: true})
+        if (day == "wed" && !wed)
+            this.setState({wed: true})
+        if (day == "thu" && !thu)
+            this.setState({thu: true})
+        if (day == "fri" && !fri)
+            this.setState({fri: true})
+    }
+
     async componentWillMount(){
         this.state.weekArr[1] = this.getMonday(new Date());
         //await this.fetchVolunteers();
@@ -61,19 +73,15 @@ class showSchedule extends Component {
 
     async fetchUserData () {
         let email = localStorage.getItem('userEmail')
-        let type = localStorage.getItem('userType')
-        console.log(type)
+        let site = localStorage.getItem('site')
+        //console.log(type)
         let info = {
             email: email,
-            userType: type
+            site: site
         }
         let personalData = this.state.personalData;
 
-        //console.log(info.email)
-        //console.log(info.userType)
-        //console.log(localStorage.getItem('userType'))
-
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'profile', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/current-volunteer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -81,32 +89,23 @@ class showSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
+
+        personalData.firstName = data.firstName
+        personalData.lastName =  data.lastName
+        personalData.site = site
+        personalData.email = email
+        personalData.id = data.id
         
-        if (type === "volunteer") {
-            //localStorage.setItem("volunteerID", data.volunteerID)
-             
-            personalData.firstName = data.firstName
-            personalData.lastName =  data.lastName
-            personalData.site = data.site
-            personalData.email = email
-            personalData.phoneNumber = data.phoneNumber
-            personalData.availability = data.availability
-            personalData.kitchenStaff = data.kitchenStaff
-            personalData.driver = data.driver
-            personalData.volunteerID = data.volunteerID
-            
-            this.setState( { personalData: personalData })
-            
-        }
+        this.setState( { personalData: personalData })
     }
 
     async fetchSchedule(){
         console.log("here")
         let info = {
             site: localStorage.getItem("site"),
-            //startDate: this.state.weekArr[1] 
+            startDate: this.state.weekArr[1] 
         }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/driver-schedule', {
+        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -115,20 +114,18 @@ class showSchedule extends Component {
         })
         const data = await response.json();
         console.log(data)
-        this.setState({ loaded: true, routes: data })
+        this.setState({ loaded: true, routes: data.routes })
     }
 
     render() {
         let {weekArr, holidayArr, personalData, routes, loaded} = this.state
-        console.log(personalData.firstName);
-        console.log(routes);
-        console.log(loaded);
+        
         return (
             <div className = "schedule-volunteer">
                 <h1 style={{paddingTop: "100px"}}>Driver Schedule</h1>
                 <VolunteerScheduleNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
-                <div className="site-manager-container" style={{paddingLeft: 0}}>
-                {this.state.loaded ? <div id="volunteer-schedule"><VolunteerScheduleTable routes={routes} personalData={personalData} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
+                <div className="site-manager-container" style={{paddingLeft: 30}}>
+                {this.state.loaded ? <div id="volunteer-schedule"><VolunteerScheduleTable routes={routes} personalData={personalData} updatePDF={this.updatePDF} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}

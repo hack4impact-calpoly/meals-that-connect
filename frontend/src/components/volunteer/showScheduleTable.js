@@ -4,6 +4,12 @@ import { useTable } from 'react-table'
 import "../../css/totalMeals.css"
 import holidays from '@date/holidays-us'
 
+import fetchMealTotals from '../sitemanager/SiteManagerHomepage'
+import printDocument from '../sitemanager/SiteManagerHomepage'
+import SiteManagerHomepage from '../sitemanager/SiteManagerHomepage'
+
+//var sitemanager = new SiteManagerHomepage;
+
 const Styles = styled.div`
   table {
     margin-left:-8px;
@@ -147,21 +153,76 @@ const Table = (props) => {
         }
     ]
 
-    console.log(props.personalData)
-    console.log(props.routes)
-    let routeList =[];
+    // list contains objects with volunteer information for each day
+    let routeList = []
+    let notEmpty = false;
 
-    routeList.push(" ");
-    routeList.push(" ");
-    routeList.push(" ");
-    routeList.push(" ");
-    routeList.push(" ");
-    routeList.push(" ");
+    //routes is an Object
+    let routesLength = Object.keys(props.routes).length
+    let routesValues = Object.values(props.routes)
+    console.log(routesLength)
 
+    let currUserID = props.personalData.id
+
+    // get routes volunteers
+    for (let i = 0; i < routesLength; i++) {
+        var routeNum = Object.keys(props.routes)[i]
+        //console.log(routeNum)
+
+        let mon = "", tue = "", wed = "", thu = "", fri = "";
+
+        // for each route check each day of the week to see if user is assigned
+        for (let j = 0; j <5; j++){
+
+            if ( ( (routesValues[i][j] != null) && (routesValues[i][j][0] != (""))) 
+                && (currUserID == routesValues[i][j].id)){
+
+                if (j == 0){
+                    mon = "assigned"
+                    notEmpty = true;
+                    props.updatePDF("mon");
+                }
+                else if (j == 1){
+                    tue = "assigned"
+                    notEmpty = true;
+                    props.updatePDF("tue");
+                }
+                else if (j == 2){
+                    wed = "assigned"
+                    notEmpty = true;
+                    props.updatePDF("wed");
+                }
+                else if (j == 3){
+                    thu = "assigned"
+                    notEmpty = true;
+                    props.updatePDF("thu");
+                }
+                else{
+                    fri = "assigned"
+                    notEmpty = true;
+                    props.updatePDF("fri");
+                }
+            }
+
+        }
+
+        // Get assigned for each route
+        let routeData = {
+            route: routeNum,
+            monday: mon,
+            tuesday: tue,
+            wednesday: wed,
+            thursday: thu,
+            friday: fri
+        }
+        routeList.push(routeData)
+    }
+
+    console.log("hello");
 
     return (
         <Styles>
-          <VolunteerScheduleTable columns={columns} data={routeList} props={props}/>
+          {notEmpty ? <VolunteerScheduleTable columns={columns} data={routeList} props={props}/> : <div style={{marginLeft: "125px"}}> You have no routes assigned or you are not a driver </div>}
         </Styles>
       )
 }
@@ -193,28 +254,30 @@ export function getDate(weekArr, tableDay) {
   }
 
 function cellClass(cell, props) {
-    //let holidayDates = getHolidayDate(props.holidayArr);
-    const rowID = (+(cell['row']['id'])) % 3;
+    console.log(cell)
     let width = cell.column.Header === "Meals" ? 200 : 'auto'
     
-    if (cell['value'] !== " " && rowID === 2){
-      return <td id="last-cell" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    if (cell['column']['id'] === "route"){
+        return <td id="last-cell" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
     }
-    
-    // if (cell['column']['id'] === "route"){
-    //   if (cell['value'] === " " && rowID === 2){
-    //     return <td id="last-cell-route" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
-    //   }
-    //   else if (cell['value'] === " " && rowID === 0) {
-    //     return <td id="top-cell-route" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
-    //   }
-    //   else {
-    //     return <td id="middle-cell-route" style={{width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
-    //   }
-    // }
-    // else {
-    //   return <td style={{backgroundColor: holidayDates.includes(cell['column'].Header) ? 'black' : null, width: width}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
-    // }
+    else if (cell['column']['id'] == "monday" && cell['value'] == "assigned"){
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, props.weekArr, props.personalData.site)}>Monday</button> </td>
+    }
+    else if (cell['column']['id'] == "tuesday" && cell['value'] == "assigned"){
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, props.weekArr, props.personalData.site)}>Tuesday</button> </td>
+    }
+    else if (cell['column']['id'] == "wednesday" && cell['value'] == "assigned"){
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("W", 2, props.weekArr, props.personalData.site)}>Wednesday</button> </td>
+    }
+    else if (cell['column']['id'] == "thursday" && cell['value'] == "assigned"){
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("Th", 3, props.weekArr, props.personalData.site)}>Thursday</button> </td>
+    }
+    else if (cell['column']['id'] == "friday" && cell['value'] == "assigned"){
+        return <td id="last-cell-route" > <button className="route" style={{width: 165}} onClick={() => printDocument("F", 4, props.weekArr, props.personalData.site)}>Friday</button> </td>
+    }
+    else {
+        return <td id="last-cell-route" {...cell.getCellProps()}>{cell.render('Cell')}</td>
+    }
   }
 
 export default Table;
