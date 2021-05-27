@@ -79,7 +79,7 @@ function VolunteerScheduleTable ({ columns, data, props }) {
 }
 
 const Table = (props) => {
-    console.log(props.weekArr);
+    //console.log(props.weekArr);
     let columns = [
     {
         Header: 'Volunteer Driver Schedule',
@@ -147,6 +147,8 @@ const Table = (props) => {
         }
     ]
 
+    console.log(props.personalData)
+    console.log(props.routes)
     let routeList =[];
 
     routeList.push(" ");
@@ -166,7 +168,7 @@ const Table = (props) => {
 
 export function getDate(weekArr, tableDay) {
     //let weekArr = props.weekArr
-    console.log(weekArr);
+    //console.log(weekArr);
     let curr;
     if (weekArr.length === 1)
     {

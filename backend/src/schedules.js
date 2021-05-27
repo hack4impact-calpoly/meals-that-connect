@@ -84,6 +84,20 @@ router.post('/get', async (req, res) => {
     })
 })
 
+router.post('/driver-schedule', async (req, res) => {
+    let {site, startDate} = req.body
+    getRoutes(site).then((route_names) => {
+        let routes = {}
+        route_names.forEach(route => {
+            let data = [ {name:" "}, {name:" "}, {name:" "}, {name:" "}, {name:" "} ]
+            routes[route] = data
+        })
+        console.log("Schedule successfully created")
+        res.status(200).send(routes)
+    })
+    
+})
+
 async function getRoutes(site) {
     let routes = {}
     await Client.find({site: site}, function (err, clients) {
