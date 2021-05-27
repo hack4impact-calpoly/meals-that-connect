@@ -9,12 +9,12 @@ app.use(bodyParser.json());
 
 var login = require('./src/login')
 var signup = require('./src/signup')
-var clients = require('./src/getClients')
+var clients = require('./src/clients')
 var tables = require('./src/volunteerTables')
-var volunteer = require('./src/getVolunteers')
+var volunteer = require('./src/volunteers')
 var meals = require('./src/meals')
-var hours = require('./src/hourLog')
-var orders = require('./src/getOrderTotals')
+var hours = require('./src/hours')
+var orders = require('./src/orders')
 var schedules = require('./src/schedules')
 var profile = require('./src/profile')
 

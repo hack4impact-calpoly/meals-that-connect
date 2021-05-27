@@ -47,6 +47,29 @@ class VolunteerSchedule extends Component {
         this.fetchSchedule();
     }
 
+    handleSelect = (site, date, props) => {
+        console.log("Handling select change")
+        const updateData = {
+            site: site,
+            startDate: date,
+            routes: props.routes,
+            mealPrep: props.mealPrep,
+            mealPrep2: props.mealPrep2,
+            mealPrep3: props.mealPrep3,
+            mealPrep4: props.mealPrep4,
+            mealPrep5: props.mealPrep5,
+            staff: props.staff,
+            computer: props.computer
+        }
+        console.log(updateData)
+        fetch(process.env.REACT_APP_SERVER_URL + 'schedules/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        })
+    }
 
     async fetchVolunteers(){
         
@@ -63,8 +86,8 @@ class VolunteerSchedule extends Component {
         const data = await response.json();
         
         this.setState({volunteers: data})
+        console.log(this.state.volunteers)
     }
-
 
     async fetchSchedule(){
         
@@ -80,20 +103,22 @@ class VolunteerSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        console.log(data)
         this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, mealPrep2: data.mealPrep2, mealPrep3: data.mealPrep3, mealPrep4: data.mealPrep4, mealPrep5: data.mealPrep5, staff: data.staff, computer: data.computer})
     }
 
     render() {
         let {loaded, routes, weekArr, holidayArr, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer, volunteers} = this.state
+        console.log(mealPrep)
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                {this.state.loaded ? <VolunteersScheduleTable volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} staff={staff} computer={computer}/> :
-                    <div>
-                        <Spinner animation="border" role="status" />
+                {this.state.loaded ? <VolunteersScheduleTable volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} 
+                                        mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} 
+                                        staff={staff} computer={computer} handleSelect={this.handleSelect}/> :
+                    <div id = "spin">
+                        <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                     </div>}
                 </div>
             </div>

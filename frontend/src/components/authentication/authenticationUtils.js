@@ -58,10 +58,11 @@ export function signout(){
     localStorage.removeItem("userType");
 }
 
-export function hasPermission(requiredUser){
-    if (requiredUser === "none")
+export function hasPermission(requiredUsers){
+    if (requiredUsers === "none")
     {
         return true;
     }
-    return localStorage.getItem("userType") === requiredUser
+    let userType = localStorage.getItem("userType")
+    return  requiredUsers.includes(userType)
 }

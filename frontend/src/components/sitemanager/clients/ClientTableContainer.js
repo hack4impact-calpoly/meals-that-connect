@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Clients from './Clients'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import Spinner from "react-bootstrap/Spinner"
 import {Link} from "react-router-dom";
 import Modal from 'react-modal';
@@ -130,6 +130,8 @@ class ClientTableContainer extends Component {
 
     render() {
         let currentUser = localStorage.getItem("userType")
+        const loaded = this.state.loaded
+        console.log(this.state)
         return (
             <div className="site-manager-page">
                 <h1 className="site-manager-page-header">Clients</h1>
@@ -139,10 +141,10 @@ class ClientTableContainer extends Component {
                     </Link>
                 }
                 <div className="site-manager-container">
-                    {this.state.loaded === true ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
-                    <div>
-                        <Spinner animation="border" role="status" />
-                    </div>}
+                    {loaded ? <Clients data={this.state.clients} setData={this.setData} showModal={this.handleOpenModal} refreshData={this.refreshData}/> :
+                        <div id = "spin">
+                            <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
+                        </div>}
                 </div>
                 <Modal isOpen={this.state.showModal} onRequestClose={this.handleCloseModal} className="Modal-client" overlayClassName="Overlay">
                     <ClientModal
