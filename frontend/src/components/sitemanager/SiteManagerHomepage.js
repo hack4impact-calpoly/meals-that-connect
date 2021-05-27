@@ -165,6 +165,7 @@ class SiteManagerHomepage extends Component {
 
             var y = 48
             var x = 15
+            var count = 0
             for (let j = 0; j < clients[i].length; j++) {
                 // add stop number
                 var stopNum = j + 1
@@ -178,10 +179,11 @@ class SiteManagerHomepage extends Component {
                 doc.cell(x + 53, y, 44, 9, clients[i][j].address)
                 doc.setFontSize(8)
                 // get phone number here
-                doc.cell(x + 97, y, 26, 9, clients[i][j].phoneNumber)
+                // do not remove the " " at the end. this accounts for if the client doesn't have a 
+                // phone number. makes the cell visible. not sure why i have to do this.
+                doc.cell(x + 97, y, 26, 9, clients[i][j].phoneNumber + " ")
 
                 let frozenNum = 0
-                var count = 0
  
                 if (clients[i][j].frozenDay.localeCompare(dayString) === 0) 
                     frozenNum = clients[i][j].frozenNumber
@@ -204,18 +206,19 @@ class SiteManagerHomepage extends Component {
                 doc.cell(x + 151, y, 13, 9, "   " + bwnBag)
                 // num of meals of hot meals is always 1 for each client
                 doc.cell(x + 164, y, 16, 9, "   " + 1)
-                count += 1;
+                count = count + 1;
 
                 // if 10 rows already made create a new page
                 if (count >= 10) {
-                    count = 0
                     // account for new page spacing 
-                    y = 15
-                    doc.addPage()
+                    if (count !== clients[i].length) {
+                        y = 15
+                        doc.addPage()
+                    }
+                    count = 0
                 } else {
                     y += 22
                 }
-                
             }
 
             if (i < clients.length -1)
