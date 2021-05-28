@@ -156,6 +156,7 @@ const Table = (props) => {
     // list contains objects with volunteer information for each day
     let routeList = []
     let notEmpty = false;
+    let displayRoute = false;
 
     //routes is an Object
     let routesLength = Object.keys(props.routes).length
@@ -180,26 +181,31 @@ const Table = (props) => {
                 if (j == 0){
                     mon = "assigned"
                     notEmpty = true;
+                    displayRoute = true;
                     props.updatePDF("mon");
                 }
                 else if (j == 1){
                     tue = "assigned"
                     notEmpty = true;
+                    displayRoute = true;
                     props.updatePDF("tue");
                 }
                 else if (j == 2){
                     wed = "assigned"
                     notEmpty = true;
+                    displayRoute = true;
                     props.updatePDF("wed");
                 }
                 else if (j == 3){
                     thu = "assigned"
                     notEmpty = true;
+                    displayRoute = true;
                     props.updatePDF("thu");
                 }
                 else{
                     fri = "assigned"
                     notEmpty = true;
+                    displayRoute = true;
                     props.updatePDF("fri");
                 }
             }
@@ -215,10 +221,14 @@ const Table = (props) => {
             thursday: thu,
             friday: fri
         }
-        routeList.push(routeData)
+        
+        if (displayRoute == true){ // only add assigned routes to table/routeList
+            routeList.push(routeData)
+            displayRoute = false;
+        }
     }
 
-    console.log("hello");
+    console.log(routeList);
 
     return (
         <Styles>
@@ -254,7 +264,7 @@ export function getDate(weekArr, tableDay) {
   }
 
 function cellClass(cell, props) {
-    console.log(cell)
+    //console.log(cell)
     let width = cell.column.Header === "Meals" ? 200 : 'auto'
     
     if (cell['column']['id'] === "route"){
