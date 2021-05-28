@@ -96,7 +96,7 @@ class VolunteerSchedule extends Component {
         let prevWeekInfo = {
             site: localStorage.getItem("site"),
             startDate: oneWeekAgo,
-            prevWeekData: null
+            prevData: null
         }
         await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',

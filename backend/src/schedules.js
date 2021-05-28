@@ -29,10 +29,10 @@ router.post('/update', async (req, res) => {
 
 router.post('/get', async (req, res) => {
     let {site, startDate, prevData} = req.body
-    console.log(startDate)
     startDate = moment(startDate).format('YYYY-MM-DD');
     Schedule.findOne({'site': site, 'startDate': startDate}).then(async function(result) {
         if (result) {
+            
             existing_routes = result.routes
             getRoutes(site).then((route_names) => {
                 let updated = false
@@ -59,23 +59,18 @@ router.post('/get', async (req, res) => {
             })   
         }
         else {
-            getRoutes(site).then((route_names) => {
+            initializeEmptySchedule(site).then((emptySchedule) => {
+                const EMPTY_SCHEDULE = emptySchedule
+                prevData = (prevData !== null) ? prevData : EMPTY_SCHEDULE
                 let routes = {}
                 routes = prevData["routes"]
-                let prevDataMealPrep = prevData["mealPrep"]      
-                let prevDataMealPrep2 = prevData["mealPrep2"]
-                let prevDataMealPrep3 = prevData["mealPrep3"]      
-                let prevDataMealPrep4 = prevData["mealPrep4"]
-                let prevDataMealPrep5 = prevData["mealPrep5"]      
-                let prevDataStaff = prevData["staff"]
-                let prevDataComputer = prevData["computer"]
-                mealPrep = [  [prevDataMealPrep[0]], [prevDataMealPrep[1]], [prevDataMealPrep[2]], [prevDataMealPrep[3]], [prevDataMealPrep[4]]]
-                mealPrep2 = [ [prevDataMealPrep2[0]], [prevDataMealPrep2[1]], [prevDataMealPrep2[2]], [prevDataMealPrep2[3]], [prevDataMealPrep2[4]]]
-                mealPrep3 = [ [prevDataMealPrep3[0]], [prevDataMealPrep3[1]], [prevDataMealPrep3[2]], [prevDataMealPrep3[3]], [prevDataMealPrep3[4]] ]
-                mealPrep4 = [ [prevDataMealPrep4[0]], [prevDataMealPrep4[1]], [prevDataMealPrep4[2]], [prevDataMealPrep4[3]], [prevDataMealPrep4[4]] ]
-                mealPrep5 = [ [prevDataMealPrep5[0]], [prevDataMealPrep5[1]], [prevDataMealPrep5[2]], [prevDataMealPrep5[3]], [prevDataMealPrep5[4]] ]
-                staff = [ [prevDataStaff[0]], [prevDataStaff[1]], [prevDataStaff[2]], [prevDataStaff[3]], [prevDataStaff[4]] ]
-                computer = [ [prevDataComputer[0]], [prevDataComputer[1]], [prevDataComputer[2]], [prevDataComputer[3]], [prevDataComputer[4]] ]
+                mealPrep = prevData["mealPrep"] 
+                mealPrep2 = prevData["mealPrep2"]
+                mealPrep3 = prevData["mealPrep3"] 
+                mealPrep4 = prevData["mealPrep4"]
+                mealPrep5 = prevData["mealPrep5"] 
+                staff = prevData["staff"]
+                computer = prevData["computer"]
                 var new_schedule = Schedule({site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer})
                 new_schedule.save()
                 console.log("Schedule successfully created")
@@ -104,6 +99,28 @@ async function getRoutes(site) {
         }
     })
     return Object.keys(routes)
+}
+
+async function initializeEmptySchedule(site) {
+    let route_names = await getRoutes(site)
+    let routes = {}
+    console.log(route_names)
+    route_names.forEach(route => {
+        let data = [ [""], [""], [""], [""], [""] ]
+        routes[route] = data
+    })
+    let emptySchedule = {
+        routes: routes,
+        mealPrep: [ [""], [""], [""], [""], [""] ],
+        mealPrep2: [ [""], [""], [""], [""], [""] ],
+        mealPrep3: [ [""], [""], [""], [""], [""] ],
+        mealPrep4: [ [""], [""], [""], [""], [""] ],
+        mealPrep5: [ [""], [""], [""], [""], [""] ],
+        staff: [ [""], [""], [""], [""], [""] ],
+        computer: [ [""], [""], [""], [""], [""] ]
+    }
+    console.log(emptySchedule)
+    return emptySchedule
 }
 
 module.exports = router;
