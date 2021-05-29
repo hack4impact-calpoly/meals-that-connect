@@ -37,7 +37,7 @@ export function decodeToken() {
 }
 
 export function signout(){
-    localStorage.removeItem("token");
+    window.localStorage.clear();
 }
 
 export function hasPermission(requiredUsers){

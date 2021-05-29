@@ -21,6 +21,7 @@ class PopupMealTotals extends Component {
         let order = {
             site: site,
             date: weekArr[day+1],
+            token: localStorage.getItem("token"),
             frozen: 0,
             whiteBag: 0,
             brownBag: 0,

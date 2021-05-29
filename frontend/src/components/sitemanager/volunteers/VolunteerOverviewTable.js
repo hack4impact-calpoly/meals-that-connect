@@ -83,7 +83,8 @@ const EditableCell = (cellProperties, width, type, dayAvailability, requiredUser
       const updateData = {
         id: volunteerID,
         key: key,
-        data: newValue
+        data: newValue,
+        token: localStorage.getItem("token")
       }
 
       await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-volunteers', {
@@ -108,7 +109,8 @@ const EditableCell = (cellProperties, width, type, dayAvailability, requiredUser
           const updateData = {
               id: volunteerID,
               key: key,
-              data: data
+              data: data,
+              token: localStorage.getItem("token")
             }
           await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-volunteers', {
               method: 'POST',
@@ -244,6 +246,7 @@ async function deleteVolunteer(cellProperties)
   const email = cellProperties["email"]
   const deleteData = {
     email: email,
+    token: localStorage.getItem("token")
   }
 
   await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/volunteerDelete', {

@@ -26,7 +26,8 @@ class SiteManagerHomepage extends Component {
             holidayArr: [],
             orders: null,
             clients: {},
-            site: localStorage.getItem("site")
+            site: localStorage.getItem("site"),
+            token: localStorage.getItem("token"),
          };
     }
 
@@ -54,7 +55,7 @@ class SiteManagerHomepage extends Component {
         let info = {
             site: this.state.site,
             week: mondayDate,
-            token: localStorage.getItem("token")
+            token: this.state.token
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
@@ -82,7 +83,7 @@ class SiteManagerHomepage extends Component {
         let info = {
             site: this.state.site,
             weekArr: this.state.weekArr,
-            token: localStorage.getItem("token")
+            token: this.state.token
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'orders/totals', {
             method: 'POST',
@@ -101,7 +102,8 @@ class SiteManagerHomepage extends Component {
         let param = {
             site: this.state.site,
             day: dayString,
-            week: Date
+            week: Date,
+            token: this.state.token
         }
         // call to mongodb backend function
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/routeOverviewDay', {
@@ -293,7 +295,7 @@ class SiteManagerHomepage extends Component {
                             <Spinner animation="border" role="status" />
                         </div>}
 
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20 }} >
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, "alignItems": 'center' }} >
                         { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} totals={totals} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} totals={totals} showModal={this.handleOpenModal}/> : null }
@@ -301,7 +303,7 @@ class SiteManagerHomepage extends Component {
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} totals={totals} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} totals={totals} showModal={this.handleOpenModal}/> : null }
                         </div>
-                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20}} >
+                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20, "alignItems": 'center'}} >
                             <h3 style={{width: 200}}>Driver Routes: </h3>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("M", 0)}>Monday</button>
                             <button className="route" style={{width: 165}} onClick={() => this.printDocument("T", 1)}>Tuesday</button>

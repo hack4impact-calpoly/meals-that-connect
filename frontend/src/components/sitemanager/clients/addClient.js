@@ -31,7 +31,8 @@ class AddClient extends Component {
                     holidayFrozen: false,
                     routeNumber: "-1",
                     site: localStorage.getItem("site"),
-                    index: ""
+                    index: "",
+                    token: localStorage.getItem("token")
         }   
     }
 

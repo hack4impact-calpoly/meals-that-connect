@@ -94,12 +94,17 @@ export const DraggableTable = ({ columns, data, setData, route, showModal, route
             ],
         })
 
+        let data = {
+            clients: clients,
+            token: localStorage.getItem("token")
+        }
+
         fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client-routes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(clients)
+            body: JSON.stringify(data)
         })
   
         if (route) {

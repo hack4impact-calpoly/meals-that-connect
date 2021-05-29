@@ -59,7 +59,8 @@ class VolunteerSchedule extends Component {
             mealPrep4: props.mealPrep4,
             mealPrep5: props.mealPrep5,
             staff: props.staff,
-            computer: props.computer
+            computer: props.computer,
+            token: localStorage.getItem("token")
         }
         console.log(updateData)
         fetch(process.env.REACT_APP_SERVER_URL + 'schedules/update', {
@@ -75,6 +76,7 @@ class VolunteerSchedule extends Component {
         
         let info = {
             site: localStorage.getItem("site"),
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/availability', {
             method: 'POST',
@@ -93,7 +95,8 @@ class VolunteerSchedule extends Component {
         
         let info = {
             site: localStorage.getItem("site"),
-            startDate: this.state.weekArr[1] 
+            startDate: this.state.weekArr[1],
+            token: localStorage.getItem("token") 
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',

@@ -40,7 +40,8 @@ class VolunteerHoursOverview extends Component {
         console.log("Fetching hours")
         let info = {
             site: localStorage.getItem("site"),
-            week: weekArr
+            week: weekArr,
+            token: localStorage.getItem("token")
          }
          let response = await fetch(process.env.REACT_APP_SERVER_URL + 'hours/totals', {
             method: 'POST',

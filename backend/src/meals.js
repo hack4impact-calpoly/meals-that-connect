@@ -129,6 +129,7 @@ router.post('/routeOverviewDay', (req, res) => {
 
 router.post('/siteTotals', (req, res) => {
   let {week, token} = req.body
+  console.log(req.body)
   let currMonday = formatDate(getMonday(new Date()))
   let userData = decodeToken(token)
   if (userData == null) {

@@ -58,7 +58,8 @@ const EditableCell = (cellProperties, width) => {
         logID: data._id,
         key: key,
         value: value,
-        site: localStorage.getItem("site")
+        site: localStorage.getItem("site"),
+        token: localStorage.getItem("token")
       }
       await fetch(process.env.REACT_APP_SERVER_URL + 'hours/edit', {
           method: 'POST',
@@ -150,6 +151,7 @@ const Table = (props) => {
 
 function deleteLog(data, props) {
   data.site = localStorage.getItem("site")
+  data.token = localStorage.getItem("token")
   fetch(process.env.REACT_APP_SERVER_URL + 'hours/delete', {
       method: 'POST',
       headers: {

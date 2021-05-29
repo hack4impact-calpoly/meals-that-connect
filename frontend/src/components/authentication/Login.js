@@ -123,13 +123,12 @@ class Login extends Component {
         })
         .then(data => {
             _this.storeUser(data.result, data.token)
-            // if (this.state.userType === "volunteer"){
-            //     this.volunteerInfoCheck(data)
-            // }
-            // else {
-            //     window.location.reload(true);
-            //     // _this.props.history.push("/");
-            // }
+            if (this.state.userType === "volunteer"){
+                this.volunteerInfoCheck(data)
+            }
+            else {
+                window.location.reload(true);
+            }
         })
         .catch(err => {
             console.log("Error")
@@ -158,8 +157,6 @@ class Login extends Component {
     }
 
     storeUser = async (user, token) => {
-        console.log(user)
-        const date = new Date();
         if (this.state.userType == "volunteer") {
            localStorage.setItem("volunteerID", user.volunteerID);
         }
