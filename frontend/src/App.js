@@ -25,6 +25,7 @@ import ResetPassword from './components/authentication/ResetPassword'
 import NoPermission from './components/NoPermission'
 
 import LogHours from './components/volunteer/LogHours'
+//import showSchedule from './components/volunteer/showSchedule'
 
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -33,6 +34,7 @@ import { isAuthenticated, isLoggedIn, printStorage } from './components/authenti
 
 import './css/App.css';
 import Profile from './components/Profile';
+import showSchedule from './components/volunteer/showSchedule';
 
 class App extends Component {
   constructor(props) {
@@ -85,6 +87,8 @@ class App extends Component {
 
               <PrivateRoute requiredUser="volunteer" exact path="/volunteer-additional-info" component={VolunteerInfo}/>
               <PrivateRoute requiredUser="volunteer" path="/log-hours" component={LogHours}/>
+              <PrivateRoute requiredUser="volunteer" path="/show-my-schedule" component={showSchedule}/>
+              <PrivateRoute requiredUser="data-entry" exact path = "/routes-data-entry" component={RouteHomePage}/>
               <PrivateRoute requiredUser="none" path="/" component={HomePageWrapper}/>
               
 
