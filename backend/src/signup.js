@@ -23,7 +23,7 @@ router.post('/email-taken', async (req, res) =>{
 });
 
 router.post('/', async (req, res) =>{
-    const {firstName, lastName, email, isAuthenticated, site, user, admin} = req.body
+    const {firstName, lastName, email, isAuthenticated, site, user, admin, adminCode, userCode} = req.body
     const password = bcrypt.hashSync(req.body.password, 9);
  
     let userType = getUser(user);
@@ -32,6 +32,18 @@ router.post('/', async (req, res) =>{
     if (userType == null) {
        res.status(404).send("Invalid user type") 
        return;
+    }
+
+    if (admin == true && adminCode !== process.env.ADMIN_CODE) {
+      console.log("Comes here")
+      res.status(403).send("Invalid admin code") 
+      return;
+    }
+
+    if (admin == false && user !== "volunteer" && userCode !== process.env.USER_CODE) {
+      console.log("Comes here 2")
+      res.status(403).send("Invalid user code") 
+      return;
     }
   
     userType.findOne({'email': email}).then(function(result) {

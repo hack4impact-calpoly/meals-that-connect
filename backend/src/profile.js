@@ -73,7 +73,7 @@ router.post('/update', async (req, res) => {
                        site: newSite,
                        volunteerID: user.volunteerID
                     },
-                    "secret-change-me",
+                    process.env.TOKEN_SECRET,
                     { expiresIn: "24h" }
                  );
             
@@ -89,7 +89,7 @@ router.post('/update', async (req, res) => {
                    user: newUser,
                    site: newSite
                 },
-                "secret-change-me",
+                process.env.TOKEN_SECRET,
                 { expiresIn: "24h" }
              );
         

@@ -31,7 +31,7 @@ export function decodeToken() {
     if (!token) {
         return null
     }
-    var decoded = jwt.verify(token, "secret-change-me");
+    var decoded = jwt.verify(token, process.env.REACT_APP_TOKEN_SECRET);
     console.log(decoded)
     return decoded
 }

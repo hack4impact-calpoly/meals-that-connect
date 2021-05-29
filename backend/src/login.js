@@ -1,8 +1,8 @@
 const express = require('express');
 var jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs')
-
 const router = express.Router();
+require('dotenv').config()
 
 const Volunteer = require('../models/volunteer')
 const SiteManager = require('../models/siteManager')
@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
                   site: site,
                   volunteerID: volunteerID
                },
-               "secret-change-me",
+               process.env.TOKEN_SECRET,
                { expiresIn: "24h" }
             );
             result['token'] = token

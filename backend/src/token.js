@@ -1,8 +1,9 @@
 
 var jwt = require("jsonwebtoken");
+require('dotenv').config()
 
 const decodeToken = function (token) {
-    var decoded = jwt.verify(token, "secret-change-me");
+    var decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     return decoded
 }
 

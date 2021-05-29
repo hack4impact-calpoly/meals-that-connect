@@ -116,7 +116,7 @@ class Signup extends Component {
                 isAuthenticated_driver: volunteerData["isAuthenticated_driver"],
                 isAuthenticated_kitchenStaff: volunteerData["isAuthenticated_kitchenStaff"],
                 user: userType,
-                code: personalData.code,
+                adminCode: personalData.code,
                 phoneNumber: "0",
                 availability: {"M": false, "T": false, "W": false, "Th": false, "F": false},
                 admin: true,
