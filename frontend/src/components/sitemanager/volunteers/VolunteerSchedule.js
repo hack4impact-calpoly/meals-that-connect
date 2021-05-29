@@ -11,6 +11,7 @@ class VolunteerSchedule extends Component {
         super(props);
         this.state = {
             loaded: false, //original: false,
+            prevWeekGet: false,
             weekArr: [],
             holidaysArr: [],
             routes: [],
@@ -20,12 +21,13 @@ class VolunteerSchedule extends Component {
             mealPrep4: [],
             mealPrep5: [],
             staff: [],
-            computer: []
+            computer: [],
+            prevWeek: {}
         };
     }
 
     updateWeek = (week) => {
-        this.state.weekArr = week;
+        this.state.weekArr = week
         this.fetchSchedule();
     }
 
@@ -61,7 +63,6 @@ class VolunteerSchedule extends Component {
             staff: props.staff,
             computer: props.computer
         }
-        console.log(updateData)
         fetch(process.env.REACT_APP_SERVER_URL + 'schedules/update', {
             method: 'POST',
             headers: {
@@ -86,14 +87,61 @@ class VolunteerSchedule extends Component {
         const data = await response.json();
         
         this.setState({volunteers: data})
-        console.log(this.state.volunteers)
     }
 
     async fetchSchedule(){
-        
+        var currentWeek = new Date(this.state.weekArr[1])
+        var currentWeekCopy = new Date(currentWeek)
+        var oneWeekAgo = new Date(currentWeek.setDate(currentWeek.getDate() - 7))
+        let prevWeekInfo = {
+            site: localStorage.getItem("site"),
+            startDate: oneWeekAgo,
+            prevData: null
+        }
+        await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(prevWeekInfo)
+        })
+        .then(response => response.json())
+        .then((res1)=>{
+            let info = {
+                site: localStorage.getItem("site"),
+                startDate: currentWeekCopy,
+                prevData: res1
+            }
+            fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(info)
+            })
+            .then(response=>response.json())
+            .then((res2)=>{
+                this.setState({ loaded: true, 
+                                routes: res2.routes, 
+                                mealPrep: res2.mealPrep, 
+                                mealPrep2: res2.mealPrep2, 
+                                mealPrep3: res2.mealPrep3, 
+                                mealPrep4: res2.mealPrep4, 
+                                mealPrep5: res2.mealPrep5, 
+                                staff: res2.staff, 
+                                computer: res2.computer})
+                console.log(this.state)
+            })
+        })
+    }
+
+    async fetchPreviousWeek() {
+        var currentWeek = new Date(this.state.weekArr[1])
+        var oneWeekAgo = new Date(currentWeek.setDate(currentWeek.getDate() - 7))
         let info = {
             site: localStorage.getItem("site"),
-            startDate: this.state.weekArr[1] 
+            startDate: oneWeekAgo,
+            prevWeekData: null
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',
@@ -102,13 +150,13 @@ class VolunteerSchedule extends Component {
             },
             body: JSON.stringify(info)
         })
-        const data = await response.json();
-        this.setState({loaded: true, routes: data.routes, mealPrep: data.mealPrep, mealPrep2: data.mealPrep2, mealPrep3: data.mealPrep3, mealPrep4: data.mealPrep4, mealPrep5: data.mealPrep5, staff: data.staff, computer: data.computer})
+        const data = await response.json()
+        this.setState({prevWeekGet: true, prevWeek: data})
     }
 
     render() {
         let {loaded, routes, weekArr, holidayArr, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer, volunteers} = this.state
-        //console.log(mealPrep)
+
         return (
             <div >
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
