@@ -130,7 +130,7 @@ class SiteManagerHomepage extends Component {
                             <Spinner animation="border" role="status" />
                         </div>}
 
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20 }} >
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, "alignItems": 'center' }} >
                         { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} totals={totals} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} totals={totals} showModal={this.handleOpenModal}/> : null }
@@ -138,7 +138,7 @@ class SiteManagerHomepage extends Component {
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} totals={totals} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} totals={totals} showModal={this.handleOpenModal}/> : null }
                         </div>
-                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20}} >
+                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20, "alignItems": 'center'}} >
                             <h3 style={{width: 200}}>Driver Routes: </h3>
                             <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, weekArr, site, null)}>Monday</button>
                             <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, weekArr, site, null)}>Tuesday</button>
