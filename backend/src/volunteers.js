@@ -111,45 +111,87 @@ router.post('/volunteerSite', async (req, res) => {
   })
 })
 
+router.post('/volunteer-driver-check', async (req, res) => {
+  const {site, email, volunteerID} = req.body
+  console.log("checking if volunteer is a driver")
+
+  Volunteer.find({site: site, email: email, volunteerID: volunteerID}, function (err, volunteer) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      //console.log(volunteer[0].driver)
+      res.send(volunteer[0].driver)
+    }
+  })
+
+})
+
+
 router.post('/availability', async (req, res) => {
-  const {token} = req.body
+    const {site, token} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+
+    Volunteer.find({site: site, driver: true}, function (err, volunteers) {
+        let daily_availability = {
+        M: [],
+        T: [],
+        W: [],
+        Th: [],
+        F: []
+        }
+        let days = [ 'M', 'T', 'W', 'Th', 'F' ]
+
+        volunteers.forEach(volunteer => {
+            let availability = volunteer.availability
+            //console.log(volunteer)
+            for (let day of days) {
+                if (availability[day]) {
+                    let volunteerObj = {
+                        name: volunteer.firstName + " " + volunteer.lastName,
+                        id: volunteer._id
+                    }
+                    daily_availability[day].push(volunteerObj)
+                }
+            }
+        })
+        if (err) {
+            console.log(err)
+        }
+        else {
+            res.send(daily_availability)
+        }
+    })
+})
+
+router.post('/current-volunteer', async (req, res) => {
+  const {site, email, token} = req.body
 
   let userData = decodeToken(token)
   if (userData == null) {
       res.status(403).send("Unauthorized user")
       return
   }
-  let site = userData.site 
 
-  Volunteer.find({site: site, driver: true}, function (err, volunteers) {
-      let daily_availability = {
-      M: [],
-      T: [],
-      W: [],
-      Th: [],
-      F: []
+  Volunteer.find({site: site, email: email}, function (err, volunteer) {
+      let info = {
+        firstName: volunteer[0].firstName,
+        lastName: volunteer[0].lastName,
+        id: volunteer[0]._id
       }
-      let days = [ 'M', 'T', 'W', 'Th', 'F' ]
 
-      volunteers.forEach(volunteer => {
-          let availability = volunteer.availability
-          console.log(volunteer)
-          for (let day of days) {
-              if (availability[day]) {
-                  let volunteerObj = {
-                      name: volunteer.firstName + " " + volunteer.lastName,
-                      id: volunteer._id
-                  }
-                  daily_availability[day].push(volunteerObj)
-              }
-          }
-      })
       if (err) {
-          console.log(err)
+        console.log(err)
       }
       else {
-          res.send(daily_availability)
+          res.send(info)
       }
+
   })
 })
 

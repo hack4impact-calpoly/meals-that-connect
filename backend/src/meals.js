@@ -12,6 +12,8 @@ const decodeToken = require("./token.js")
     siteTotals: returns the meals, routes, and meal totals for a given site and week
     routeOverviewDay: returns the list of clients and their ordered meals for a given site and day
         Used to generate the route pdfs
+    routeOverviewDayRoute: returns the list of clients and their ordered meals for a given site and day and route
+        Used to generate the route pdfs
     update-field: Update 1 field for a meal object given the clientID and date
     update-data: Update all the data for a meal object given a meal ID
 */
@@ -117,6 +119,58 @@ router.post('/routeOverviewDay', (req, res) => {
           }
 
           if (i == clients.length - 1) {
+            var sortedRoutes = SortClients(clientsWithMeals, day)
+            res.send(sortedRoutes)
+          }
+        })
+      }
+    }
+  })
+})
+
+// This function returns the correct list of clients 
+// that need deliveries for a given day for a given site for a given route
+router.post('/routeOverviewDayRoute', (req, res) => {
+  // takes in these parameters from the front end.
+  // site is used to search and day which is a string M, T, W, Th, F
+  let {site, day, week, routeNumber, token} = req.body
+  week = formatDate(week)
+  console.log(req.body)
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+    res.status(403).send("Unauthorized user")
+    return
+  }
+
+  Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
+    if (err) {
+      console.log(err) 
+      res.status(404).send("error")
+    } else {
+      console.log(clients)
+      var clientsWithMeals = []
+      for (let i = 0; i < clients.length; i++) {        
+        findClientMeal(clients[i], week).then(meal => {
+          var client = {}
+          if (meal != null) {
+            client.firstName = clients[i].firstName
+            client.lastName = clients[i].lastName
+            client.address = clients[i].address
+            client.phoneNumber = clients[i].phoneNumber
+            client.routeNumber = clients[i].routeNumber
+            client.emergencyContact = clients[i].emergencyContact
+            client.emergencyPhone = clients[i].emergencyPhone
+            client.specialInstructions = clients[i].specialInstructions
+            client.foodDays = meal.foodDays
+            client.frozenNumber = meal.frozenNumber
+            client.frozenDay = meal.frozenDay
+            client.noMilk = meal.noMilk
+          
+            clientsWithMeals.push(client)
+          }
+
+          if (i == clients.length - 1 || clients.length == 0) {
             var sortedRoutes = SortClients(clientsWithMeals, day)
             res.send(sortedRoutes)
           }

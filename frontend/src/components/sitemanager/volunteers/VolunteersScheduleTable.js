@@ -314,7 +314,7 @@ const Table = (props) => {
         friday: staff[4] 
     }
     routeList.push(staffData)
-
+    console.log(routeList)
     const data = React.useMemo(() => routeList, [] )
     return (
     <Styles>
@@ -326,7 +326,7 @@ const Table = (props) => {
 function getMonday(d) {
   d = new Date(d);
   var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+      diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
   return new Date(d.setDate(diff));
 }
 
