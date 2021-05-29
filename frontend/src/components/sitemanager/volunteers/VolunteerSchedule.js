@@ -61,7 +61,8 @@ class VolunteerSchedule extends Component {
             mealPrep4: props.mealPrep4,
             mealPrep5: props.mealPrep5,
             staff: props.staff,
-            computer: props.computer
+            computer: props.computer,
+            token: localStorage.getItem("token")
         }
         fetch(process.env.REACT_APP_SERVER_URL + 'schedules/update', {
             method: 'POST',
@@ -76,6 +77,7 @@ class VolunteerSchedule extends Component {
         
         let info = {
             site: localStorage.getItem("site"),
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/availability', {
             method: 'POST',
@@ -96,7 +98,8 @@ class VolunteerSchedule extends Component {
         let prevWeekInfo = {
             site: localStorage.getItem("site"),
             startDate: oneWeekAgo,
-            prevData: null
+            prevData: null,
+            token: localStorage.getItem("token")
         }
         await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',
@@ -110,7 +113,8 @@ class VolunteerSchedule extends Component {
             let info = {
                 site: localStorage.getItem("site"),
                 startDate: currentWeekCopy,
-                prevData: res1
+                prevData: res1,
+                token: localStorage.getItem("token")
             }
             fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
                 method: 'POST',
@@ -141,7 +145,8 @@ class VolunteerSchedule extends Component {
         let info = {
             site: localStorage.getItem("site"),
             startDate: oneWeekAgo,
-            prevWeekData: null
+            prevWeekData: null,
+            token: localStorage.getItem("token") 
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',

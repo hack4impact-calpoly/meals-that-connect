@@ -93,6 +93,7 @@ class Login extends Component {
     firebase_checkEmailVerif = (firebase_user, user) => {
         var emailVerified = firebase_user.emailVerified;
         console.log("firebase email")
+        console.log(firebase_user)
         
         if (!emailVerified) {
             this.props.history.push("/email-verification");
@@ -122,13 +123,12 @@ class Login extends Component {
             }
         })
         .then(data => {
-            _this.storeUser(data)
+            _this.storeUser(data.result, data.token)
             if (this.state.userType === "volunteer"){
                 this.volunteerInfoCheck(data)
             }
             else {
                 window.location.reload(true);
-                // _this.props.history.push("/");
             }
         })
         .catch(err => {
@@ -157,17 +157,14 @@ class Login extends Component {
         })
     }
 
-    storeUser = async (user) => {
-        console.log(user)
-        const date = new Date();
+    storeUser = async (user, token) => {
         if (this.state.userType == "volunteer") {
            localStorage.setItem("volunteerID", user.volunteerID);
         }
         localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("token", token);
         localStorage.setItem("userType", this.state.userType);
         localStorage.setItem("site", user.site);
-        localStorage.setItem("time", date);
-        localStorage.setItem("isLoggedIn", true);
     }
 
     render() {

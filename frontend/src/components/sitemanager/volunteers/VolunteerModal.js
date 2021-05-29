@@ -63,15 +63,19 @@ class VolunteerModalContent extends Component {
         }
         let currentVolunteer = this.state;
         return (
-            <div style={{marginBottom: 40}}>
+            <div style={{marginBottom: 50}}>
                 <div id="modal-content">
                     <div id="client-info-header" style={{position: "fixed"}}>
                         <h1>Volunteer Information</h1>
                         <button 
+                            onClick={this.props.handleCloseModal} 
+                            className="generic-button" 
+                            style={{margin: '10px 0px '}}> Cancel </button>
+                        <button 
+                            className="generic-button"
                             onClick={() => this.props.submit(this.state)} 
-                            style={{fontSize: "18px"}} 
-                            >Exit and SAVE</button>
-                        <button onClick={this.props.handleCloseModal} style={{fontSize: "18px", marginLeft: "30px"}}>{"Exit and DON'T SAVE"}</button>
+                            style={{margin: '10px 0px 10px 20px'}}> Save </button>
+
                     </div>
                     <div id="client-info-body">
                         <div className="two-column">

@@ -1,18 +1,28 @@
-const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 const moment = require('moment');
 
 const Schedule = require('../models/schedule')
-const Volunteer = require('../models/volunteer')
-const Hours = require("../models/hours")
 const Client = require("../models/clients")
+const decodeToken = require("./token.js")
+
+/*
+  Contains methods:
+    get: Fetch the schedule for the provided site and date
+    update: Update the schedule for the provided site and date
+*/
 
 router.post('/update', async (req, res) => {
-    let {site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer} = req.body
-    //console.log("update backend")
+    let {token, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer} = req.body
     startDate = moment(startDate).format('YYYY-MM-DD');
     
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let site = userData.site
+
     Schedule.updateOne({'site': site, 'startDate': startDate}, {site, startDate, routes, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer}).then(function(schedule) {
         if (!schedule) {
             res.status(404).send("Error in updating schedule");
@@ -28,8 +38,15 @@ router.post('/update', async (req, res) => {
 
 
 router.post('/get', async (req, res) => {
-    let {site, startDate, prevData} = req.body
+    let {token, site, startDate, prevData} = req.body
     startDate = moment(startDate).format('YYYY-MM-DD');
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+
     Schedule.findOne({'site': site, 'startDate': startDate}).then(async function(result) {
         if (result) {
             

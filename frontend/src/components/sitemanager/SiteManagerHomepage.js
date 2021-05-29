@@ -27,7 +27,8 @@ class SiteManagerHomepage extends Component {
             holidayArr: [],
             orders: null,
             clients: {},
-            site: localStorage.getItem("site")
+            site: localStorage.getItem("site"),
+            token: localStorage.getItem("token"),
          };
     }
 
@@ -54,7 +55,8 @@ class SiteManagerHomepage extends Component {
         let mondayDate = this.state.weekArr[1];
         let info = {
             site: this.state.site,
-            week: mondayDate
+            week: mondayDate,
+            token: this.state.token
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
@@ -67,13 +69,22 @@ class SiteManagerHomepage extends Component {
         this.setState({totals: data.totals, routes: data.routes})
     }
 
+    getAuthHeaders() {
+        let authToken = localStorage.getItem("token");
+        const authStr = "Bearer ".concat(authToken);
+        var headers = { headers: { Authorization: authStr } };
+        console.log(headers)
+        return headers;
+    }
+
     async fetchOrderTotals () {
         if (this.state.weekArr.len === 0) {
             return
         }
         let info = {
             site: this.state.site,
-            weekArr: this.state.weekArr
+            weekArr: this.state.weekArr,
+            token: this.state.token
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'orders/totals', {
             method: 'POST',
@@ -97,7 +108,6 @@ class SiteManagerHomepage extends Component {
 
     render() {
         let {totals, routes, weekArr, holidayArr, orders, site} = this.state
-        console.log(site)
         let sunday = new Date(weekArr[6])
         sunday.setDate(sunday.getDate() + 1);
         let isPastWeek = new Date() > sunday
@@ -120,7 +130,7 @@ class SiteManagerHomepage extends Component {
                             <Spinner animation="border" role="status" />
                         </div>}
 
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20 }} >
+                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, "alignItems": 'center' }} >
                         { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} totals={totals} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} totals={totals} showModal={this.handleOpenModal}/> : null }
@@ -128,7 +138,7 @@ class SiteManagerHomepage extends Component {
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} totals={totals} showModal={this.handleOpenModal}/> : null }
                         { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} totals={totals} showModal={this.handleOpenModal}/> : null }
                         </div>
-                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20}} >
+                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20, "alignItems": 'center'}} >
                             <h3 style={{width: 200}}>Driver Routes: </h3>
                             <button className="route" style={{width: 165}} onClick={() => printDocument("M", 0, weekArr, site, null)}>Monday</button>
                             <button className="route" style={{width: 165}} onClick={() => printDocument("T", 1, weekArr, site, null)}>Tuesday</button>
@@ -182,11 +192,10 @@ export async function fetchRouteOverview(dayString, weekArr, site, route) {
         site: site,
         day: dayString,
         week: Date,
-        routeNumber: route
+        routeNumber: route,
+        token: this.state.token
     }
-    console.log(param)
     let url = route ? "meals/routeOverviewDayRoute" : "meals/routeOverviewDay"
-    console.log(url)
     let response = await fetch(process.env.REACT_APP_SERVER_URL + url, {
         method: 'POST',
         headers: {

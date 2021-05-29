@@ -31,7 +31,8 @@ class Profile extends Component {
             hideCancel: true,
             RedirectLoggedUser: false,
             admin: false,
-            originalSite: localStorage.getItem('site')
+            originalSite: localStorage.getItem('site'),
+            token: localStorage.getItem('token')
         };
     }
 
@@ -58,11 +59,10 @@ class Profile extends Component {
     }
 
     async fetchUserData () {
-        let email = localStorage.getItem('userEmail')
+        let token = this.state.token
         let type = this.state.userType
         let info = {
-            email: email,
-            userType: type
+            token: token
         }
 
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'profile', {
@@ -75,12 +75,11 @@ class Profile extends Component {
         const data = await response.json();
         
         if (type === "volunteer") {
-            localStorage.setItem("volunteerID", data.volunteerID)
             this.setState( { 
                 firstName: data.firstName,
                 lastName: data.lastName,
                 site: data.site,
-                email: email,
+                email: data.email,
                 phoneNumber: data.phoneNumber,
                 availability: data.availability,
                 kitchenStaff: data.kitchenStaff,
@@ -96,7 +95,7 @@ class Profile extends Component {
                 lastName: data.lastName,
                 site: data.site,
                 admin: data.admin,
-                email: email,
+                email: data.email,
             })
         }
     }
@@ -125,11 +124,12 @@ class Profile extends Component {
 		let _this = this
 
         let {firstName, lastName, phoneNumber, availability, userType, 
-             email, driver, kitchenStaff, notes, originalUser, site, originalSite} = this.state
+             email, driver, kitchenStaff, notes, originalUser, site, token} = this.state
 
         let profile = {
             email: email,
             userType: originalUser,
+            newUser: userType,
             firstName: firstName,
             lastName: lastName, 
             notes: notes,
@@ -137,7 +137,8 @@ class Profile extends Component {
             availability: availability,
             driver: driver,
             kitchenStaff: kitchenStaff,
-            site: site
+            newSite: site,
+            token: token
         }
 
 
@@ -148,13 +149,17 @@ class Profile extends Component {
             },
             body: JSON.stringify(profile)
         })
-        .then((res) => {
+        .then(async (res) => {
             if (res.status === 404) {
                 _this.setState({error: true})
             }
             else {
+                const data = await res.json();
+                console.log(data)
                 localStorage.setItem("userType", userType)
                 localStorage.setItem("site", site)
+                console.log(data.new_token)
+                localStorage.setItem("token", data.new_token)
                 window.location.reload()
             }
         })

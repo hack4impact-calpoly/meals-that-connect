@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require("cors");
+var jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(cors());
@@ -10,7 +11,6 @@ app.use(bodyParser.json());
 var login = require('./src/login')
 var signup = require('./src/signup')
 var clients = require('./src/clients')
-var tables = require('./src/volunteerTables')
 var volunteer = require('./src/volunteers')
 var meals = require('./src/meals')
 var hours = require('./src/hours')
@@ -21,7 +21,6 @@ var profile = require('./src/profile')
 app.use('/login', login)
 app.use('/signup', signup)
 app.use('/clients', clients)
-app.use('/tables', tables)
 app.use('/volunteers', volunteer)
 app.use('/meals', meals)
 app.use('/hours', hours)

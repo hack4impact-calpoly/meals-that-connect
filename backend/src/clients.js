@@ -3,9 +3,31 @@ const express = require('express');
 const router = express.Router();
 
 const Client = require("../models/clients")
+const decodeToken = require("./token.js")
+
+/*
+  Contains methods:
+    addClient: Creates a new client for the given site
+    delete: Deletes the client with the provided clientID
+    site: Returns all the clients for the provided site
+    id: Returns the clients with the provided clientID
+    update-routes: Update 1 client field for the provided client
+    update-client-routes: Update the index field for all clients
+    update-client: Updates all client data
+    update-data: Updates some client data. Called from the routes table
+*/
 
 router.post('/addClient', async (req, res) => {
-  const {firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, site} = req.body
+  const { firstName, lastName, address, foodDays, frozenNumber, frozenDay, phoneNumber, emergencyNumber, emergencyContact, 
+          emergencyPhone, noMilk, specialInstructions, clientC2, NE, email, holidayFrozen, routeNumber, token} = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+  let site = userData.site
+
   console.log("Adding client")
   Client.findOne({'email': email}).then(function(result) {
   if (result) {
@@ -39,7 +61,14 @@ router.post('/addClient', async (req, res) => {
 })
 
 router.post('/delete', async (req, res) => {
-  const { id } = req.body
+  const { id, token } = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+
   Client.deleteOne({_id: id}).then(function(result) {
     if (result) {
       console.log("Deleted client")
@@ -54,59 +83,17 @@ router.post('/delete', async (req, res) => {
   })
 })
 
-router.post('/siteTotals', async (req, res) => {
-  const {site} = req.body
-  Client.find({site: site}, function (err, data) {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : -1 )
-      let clients = {}
-      let prevRoute = null
-      let routeData = []
-      let routes = []
-      for (let i = 0; i < data.length; i++) {
-          let client = data[i]
-
-          if (i > 0 && client.routeNumber != prevRoute) {
-              clients[prevRoute] = routeData
-              // make sure a null route does not get inserted into routes array
-              if (prevRoute !== null)
-                routes.push(prevRoute)
-              routeData = []
-          }
-          // makes sure the -1 route's data does not get inserted into routeData
-          if (client.routeNumber !== "-1"){
-            prevRoute = client.routeNumber
-            routeData.push(client)
-          }
-      }
-      if (routeData.length > 0) {
-          clients[prevRoute] = routeData
-          routes.push(prevRoute)
-      }
-      let mealTotals = []
-      for (let i = 0; i < routes.length; i++) {
-        mealTotals.push(getRouteTotals(clients[routes[i]]))
-      }  
-      res.send({"meals": mealTotals, "routes": routes})
-    }
-  })
-})
-
-router.post('/routeSite', async (req, res) => {
-  const {routeNumber, site} = req.body
-  Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
-    if (err) { console.log(err) }
-    else {
-      res.send(clients)
-    }
-  })
-})
 
 router.post('/site', async (req, res) => {
-  const {site} = req.body
+  const {token} = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+  let site = userData.site
+
   Client.find({site: site, index: {$exists:true}}, function (err, clients) {
     if (err) {
       console.log(err)
@@ -122,7 +109,14 @@ router.post('/site', async (req, res) => {
 })
 
 router.post('/id', async (req, res) => {
-  console.log("getting client")
+  const {token} = req.body
+  
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
+
   const {_id} = req.body
   Client.findOne({_id: _id}, function (err, client) {
     if (err) {
@@ -135,10 +129,16 @@ router.post('/id', async (req, res) => {
 })
 
 router.post('/update-routes', async (req, res) => {
-   const {id, key, data} = req.body
+   const {token, id, key, data} = req.body
 
    var query = {}
    query[key] = data;
+  
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
    Client.updateOne({'_id': id}, query)
     .then(function(result) {
@@ -153,7 +153,14 @@ router.post('/update-routes', async (req, res) => {
 });
 
 router.post('/update-client-routes', async (req, res) => {
-  const clients = req.body
+  const {clients, token} = req.body
+
+  
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
   for (let i = 0; i < clients.length; i++) {
     Client.updateOne({'_id': clients[i].id}, {'index': clients[i].index})
@@ -172,7 +179,8 @@ router.post('/update-client-routes', async (req, res) => {
 });
 
 router.post('/update-client', async (req, res) => {
-  const { firstName,
+  const { token,
+          firstName,
           lastName,
           address,
           foodDays,
@@ -191,6 +199,13 @@ router.post('/update-client', async (req, res) => {
           site,
           index,
           id} = req.body
+
+  
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
   Client.updateOne({'_id': id}, 
             { firstName: firstName,
@@ -224,7 +239,8 @@ router.post('/update-client', async (req, res) => {
 });
 
 router.post('/update-data', async (req, res) => {
-  const { id, 
+  const { token,
+          id, 
           firstName, 
           lastName, 
           address,   
@@ -236,6 +252,12 @@ router.post('/update-data', async (req, res) => {
           NE, 
           email, 
         } = req.body
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+  }
 
   Client.updateOne({'_id': id}, 
             { firstName: firstName,
@@ -259,30 +281,5 @@ router.post('/update-data', async (req, res) => {
     })
   res.send("Information updated");
 });
-
-function getRouteTotals(clientList) {
-    var days = ["M", "T", "W", "Th", "F"]
-    var whiteBagTotal = [0, 0, 0, 0, 0]
-    var frozenTotal = [0, 0, 0, 0, 0];
-    var mealTotal = [0, 0, 0, 0, 0];
-    for (var index in clientList) {
-      for (var day in days) {
-        if (clientList[index].foodDays[days[day]]) {
-          if(clientList[index].noMilk == false) {
-            mealTotal[day] += 1
-          }
-          else {
-            whiteBagTotal[day] += 1
-          }
-        }
-                
-        if (clientList[index].frozenDay == days[day]){
-          frozenTotal[day] += clientList[index].frozenNumber
-        }
-      }
-    }
-    var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal, "whitebag": whiteBagTotal}
-    return routeTotals
-  }
 
 module.exports = router;

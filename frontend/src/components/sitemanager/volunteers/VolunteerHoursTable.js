@@ -54,7 +54,8 @@ const EditableCell = (cellProperties, width, day) => {
         value: valueD,
         volunteerID: cellProperties.volunteerID,
         site: localStorage.getItem("site"),
-        date: day
+        date: day,
+        token: localStorage.getItem("token")
       }
       await fetch(process.env.REACT_APP_SERVER_URL + 'hours/edit-site-manager', {
           method: 'POST',

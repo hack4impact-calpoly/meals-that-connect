@@ -1,15 +1,32 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const router = express.Router()
-
 const moment = require('moment')
 
 const Meal = require("../models/meals")
 const Client = require("../models/clients")
+const decodeToken = require("./token.js")
+
+/*
+  Contains methods:
+    siteTotals: returns the meals, routes, and meal totals for a given site and week
+    routeOverviewDay: returns the list of clients and their ordered meals for a given site and day
+        Used to generate the route pdfs
+    routeOverviewDayRoute: returns the list of clients and their ordered meals for a given site and day and route
+        Used to generate the route pdfs
+    update-field: Update 1 field for a meal object given the clientID and date
+    update-data: Update all the data for a meal object given a meal ID
+*/
 
 // Given a meal field and a value, update the client's meal data for the specified week
 router.post('/update-field', async (req, res) => {
-    const {date, clientID, key, value} = req.body
+    const {date, clientID, key, value, token} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+    }
 
     var query = {}
     query[key] = value;
@@ -31,8 +48,15 @@ router.post('/update-data', async (req, res) => {
             frozenDay, 
             noMilk,   
             holidayFrozen, 
+            token,
           } = req.body
     date = formatDate(date)
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+      res.status(403).send("Unauthorized user")
+      return
+    }
 
     Meal.updateOne({_id: id}, 
               { foodDays: foodDays,
@@ -50,7 +74,178 @@ router.post('/update-data', async (req, res) => {
             }
       })
     res.send("Information updated");
-  });
+});
+
+
+// This function returns the correct list of clients 
+// that need deliveries for a given day
+router.post('/routeOverviewDay', (req, res) => {
+  // takes in these parameters from the front end.
+  // site is used to search and day which is a string M, T, W, Th, F
+  let { day, week, token } = req.body
+  week = formatDate(week)
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+    res.status(403).send("Unauthorized user")
+    return
+  }
+  let site = userData.site
+
+  Client.find({site: site}, function (err, clients) {
+    if (err) {
+      console.log(err) 
+      res.status(404).send("error")
+    } else {
+      var clientsWithMeals = []
+      for (let i = 0; i < clients.length; i++) {        
+        findClientMeal(clients[i], week).then(meal => {
+          var client = {}
+          if (meal != null) {
+            client.firstName = clients[i].firstName
+            client.lastName = clients[i].lastName
+            client.address = clients[i].address
+            client.phoneNumber = clients[i].phoneNumber
+            client.routeNumber = clients[i].routeNumber
+            client.emergencyContact = clients[i].emergencyContact
+            client.emergencyPhone = clients[i].emergencyPhone
+            client.specialInstructions = clients[i].specialInstructions
+            client.foodDays = meal.foodDays
+            client.frozenNumber = meal.frozenNumber
+            client.frozenDay = meal.frozenDay
+            client.noMilk = meal.noMilk
+          
+            clientsWithMeals.push(client)
+          }
+
+          if (i == clients.length - 1) {
+            var sortedRoutes = SortClients(clientsWithMeals, day)
+            res.send(sortedRoutes)
+          }
+        })
+      }
+    }
+  })
+})
+
+// This function returns the correct list of clients 
+// that need deliveries for a given day for a given site for a given route
+router.post('/routeOverviewDayRoute', (req, res) => {
+  // takes in these parameters from the front end.
+  // site is used to search and day which is a string M, T, W, Th, F
+  let {site, day, week, routeNumber, token} = req.body
+  week = formatDate(week)
+  console.log(req.body)
+
+  let userData = decodeToken(token)
+  if (userData == null) {
+    res.status(403).send("Unauthorized user")
+    return
+  }
+
+  Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
+    if (err) {
+      console.log(err) 
+      res.status(404).send("error")
+    } else {
+      console.log(clients)
+      var clientsWithMeals = []
+      for (let i = 0; i < clients.length; i++) {        
+        findClientMeal(clients[i], week).then(meal => {
+          var client = {}
+          if (meal != null) {
+            client.firstName = clients[i].firstName
+            client.lastName = clients[i].lastName
+            client.address = clients[i].address
+            client.phoneNumber = clients[i].phoneNumber
+            client.routeNumber = clients[i].routeNumber
+            client.emergencyContact = clients[i].emergencyContact
+            client.emergencyPhone = clients[i].emergencyPhone
+            client.specialInstructions = clients[i].specialInstructions
+            client.foodDays = meal.foodDays
+            client.frozenNumber = meal.frozenNumber
+            client.frozenDay = meal.frozenDay
+            client.noMilk = meal.noMilk
+          
+            clientsWithMeals.push(client)
+          }
+
+          if (i == clients.length - 1 || clients.length == 0) {
+            var sortedRoutes = SortClients(clientsWithMeals, day)
+            res.send(sortedRoutes)
+          }
+        })
+      }
+    }
+  })
+})
+
+
+router.post('/siteTotals', (req, res) => {
+  let {week, token} = req.body
+  console.log(req.body)
+  let currMonday = formatDate(getMonday(new Date()))
+  let userData = decodeToken(token)
+  if (userData == null) {
+    res.status(403).send("Unauthorized user")
+    return
+  }
+  let site = userData.site
+  week = formatDate(week)
+
+  console.log("calling site totals")
+
+  if (currMonday > week) {
+      Meal.find({site: site, startDate: week}, function (err, data) {
+      if (err) {
+          console.log(err)
+          res.status(404).send("error")
+      }
+      else {
+          console.log("Getting meal data")
+          let {routes, meals} = sortFormatMeals(data)
+          let mealTotals = []
+          var totals = {"meals": 0, "routes": 0, "totals": 0};
+          for (let i = 0; i < routes.length; i++) {
+            mealTotals.push(getRouteTotals(meals[routes[i]]))
+            
+          }  
+          res.send({"meals": meals, "routes": routes, "totals": mealTotals})
+      }
+      })
+  }
+  else {
+      Client.find({site: site}, async function (err, clients) {
+          if (err) {
+              console.log(err)
+              res.status(404).send("error") 
+          }
+          else {
+              data = []
+              let total = clients.length
+              for (let i = 0; i < clients.length; i++) {
+                  if (clients[i].routeNumber !== '-1') {
+                    existsMeal(clients[i], week).then(meal => {
+                        data.push(meal)
+                        if (data.length == total) {
+                            let {routes, meals} = sortFormatMeals(data)
+                            let mealTotals = []
+                            for (let i = 0; i < routes.length; i++) {
+                            mealTotals.push(getRouteTotals(meals[routes[i]]))
+                            }  
+                            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
+                        }
+                    })
+                  }
+                  else {
+                    total -= 1
+                  }
+              }
+          }
+      })
+  }
+})
+
 
 // Takes in the given data (Monday of the week) and the client 
 // Updates the meal with the client data if it exists, 
@@ -113,96 +308,6 @@ async function findClientMeal(client, week) {
   })
   return data
 }
-// This function returns the correct list of clients 
-// that need deliveries for a given day
-router.post('/routeOverviewDay', (req, res) => {
-    // takes in these parameters from the front end.
-    // site is used to search and day which is a string M, T, W, Th, F
-    let {site, day, week} = req.body
-    week = formatDate(week)
-
-    Client.find({site: site}, function (err, clients) {
-      if (err) {
-        console.log(err) 
-        res.status(404).send("error")
-      } else {
-        var clientsWithMeals = []
-        for (let i = 0; i < clients.length; i++) {        
-          findClientMeal(clients[i], week).then(meal => {
-            var client = {}
-            if (meal != null) {
-              client.firstName = clients[i].firstName
-              client.lastName = clients[i].lastName
-              client.address = clients[i].address
-              client.phoneNumber = clients[i].phoneNumber
-              client.routeNumber = clients[i].routeNumber
-              client.emergencyContact = clients[i].emergencyContact
-              client.emergencyPhone = clients[i].emergencyPhone
-              client.specialInstructions = clients[i].specialInstructions
-              client.foodDays = meal.foodDays
-              client.frozenNumber = meal.frozenNumber
-              client.frozenDay = meal.frozenDay
-              client.noMilk = meal.noMilk
-            
-              clientsWithMeals.push(client)
-            }
-
-            if (i == clients.length - 1) {
-              var sortedRoutes = SortClients(clientsWithMeals, day)
-              res.send(sortedRoutes)
-            }
-          })
-        }
-      }
-    })
-})
-
-// This function returns the correct list of clients 
-// that need deliveries for a given day for a given site
-router.post('/routeOverviewDayRoute', (req, res) => {
-  // takes in these parameters from the front end.
-  // site is used to search and day which is a string M, T, W, Th, F
-  let {site, day, week, routeNumber} = req.body
-  week = formatDate(week)
-  console.log("Getting route pdf data")
-  console.log(req.body)
-
-  Client.find({site: site, routeNumber: routeNumber}, function (err, clients) {
-    if (err) {
-      console.log(err) 
-      res.status(404).send("error")
-    } else {
-      console.log(clients)
-      var clientsWithMeals = []
-      for (let i = 0; i < clients.length; i++) {        
-        findClientMeal(clients[i], week).then(meal => {
-          var client = {}
-          if (meal != null) {
-            client.firstName = clients[i].firstName
-            client.lastName = clients[i].lastName
-            client.address = clients[i].address
-            client.phoneNumber = clients[i].phoneNumber
-            client.routeNumber = clients[i].routeNumber
-            client.emergencyContact = clients[i].emergencyContact
-            client.emergencyPhone = clients[i].emergencyPhone
-            client.specialInstructions = clients[i].specialInstructions
-            client.foodDays = meal.foodDays
-            client.frozenNumber = meal.frozenNumber
-            client.frozenDay = meal.frozenDay
-            client.noMilk = meal.noMilk
-          
-            clientsWithMeals.push(client)
-          }
-
-          if (i == clients.length - 1 || clients.length == 0) {
-            var sortedRoutes = SortClients(clientsWithMeals, day)
-            res.send(sortedRoutes)
-          }
-        })
-      }
-    }
-  })
-})
 
 // This function will return a sorted list of clients by route number.
 // sorts from ascending order and also sorts clients by their index value
@@ -252,62 +357,6 @@ function SortClients(clients, day) {
   return clientsByRoute
 }
 
-router.post('/siteTotals', (req, res) => {
-    let {site, week} = req.body
-    let currMonday = formatDate(getMonday(new Date()))
-    console.log("calling site totals")
-    week = formatDate(week)
-    if (currMonday > week) {
-        Meal.find({site: site, startDate: week}, function (err, data) {
-        if (err) {
-            console.log(err)
-            res.status(404).send("error")
-        }
-        else {
-            console.log("Getting meal data")
-            let {routes, meals} = sortFormatMeals(data)
-            let mealTotals = []
-            var totals = {"meals": 0, "routes": 0, "totals": 0};
-            for (let i = 0; i < routes.length; i++) {
-              mealTotals.push(getRouteTotals(meals[routes[i]]))
-              
-            }  
-            res.send({"meals": meals, "routes": routes, "totals": mealTotals})
-        }
-        })
-    }
-    else {
-        Client.find({site: site}, async function (err, clients) {
-            if (err) {
-                console.log(err)
-                res.status(404).send("error") 
-            }
-            else {
-                data = []
-                let total = clients.length
-                for (let i = 0; i < clients.length; i++) {
-                    if (clients[i].routeNumber !== '-1') {
-                      existsMeal(clients[i], week).then(meal => {
-                          data.push(meal)
-                          if (data.length == total) {
-                              let {routes, meals} = sortFormatMeals(data)
-                              let mealTotals = []
-                              for (let i = 0; i < routes.length; i++) {
-                              mealTotals.push(getRouteTotals(meals[routes[i]]))
-                              }  
-                              res.send({"meals": meals, "routes": routes, "totals": mealTotals})
-                          }
-                      })
-                    }
-                    else {
-                      total -= 1
-                    }
-                }
-            }
-        })
-    }
-})
-
 function getMonday(d) {
     d = new Date(d);
     var day = d.getDay(),
@@ -318,16 +367,6 @@ function getMonday(d) {
   function formatDate(date) {
     return (moment(date).format("YYYY-MM-DD"));
   }
-
-router.post('/routeSite', async (req, res) => {
-  const {routeNumber, site} = req.body
-  Meal.find({site: site, routeNumber: routeNumber}, function (err, clients) {
-    if (err) { console.log(err) }
-    else {
-      res.send(clients)
-    }
-  })
-})
 
 function sortFormatMeals(data) {
   data = data.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
@@ -357,71 +396,6 @@ function sortFormatMeals(data) {
   return {"meals": meals, "routes": routes}
 }
 
-router.post('/site', async (req, res) => {
-  const {site, week} = req.body
-  Meal.find({site: site, index: {$exists:true}}, function (err, clients) {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      clients = clients.sort((a, b) => (a.routeNumber > b.routeNumber) ? 1 : (a.routeNumber < b.routeNumber) ? -1 : (a.index >b.index) ? 1 : -1 )
-      clients = clients.filter(function (client) {return (moment(client.startDate)).week() === (moment(week)).week()})
-      for (let i = 0; i < clients.length; i++) {
-        clients[i].index = i
-      }
-      res.send(clients)
-    }
-  })
-})
-
-router.get('/all', async (req, res) => {
-  Meal.find({}, function (err, clients) {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      res.send(clients)
-    }
-  })
-})
-
-router.post('/update-routes', async (req, res) => {
-   const {id, key, data,} = req.body
-
-   var query = {}
-   query[key] = data;
-
-   Meal.updateOne({'clientID': id}, query)
-    .then(function(result) {
-        if (!result) {
-          console.log("Error in updating info");
-          res.send("Error in updating info");
-        } else {
-          console.log("Meal information updated");
-          res.send("Information updated");
-          }
-    })
-});
-
-router.post('/update-client-routes', async (req, res) => {
-  const clients = req.body
-
-  for (let i = 0; i < clients.length; i++) {
-    Meal.updateOne({'clientID': clients[i].id}, {'index': clients[i].index})
-    .then(function(result) {
-        if (!result) {
-          console.log("Error in updating info");
-          res.send("Error in updating info");
-          return;
-        } else {
-          console.log("Information updated");
-          }
-    })
-  }
-
-  res.send("Information updated");
-});
-
 function getRouteTotals(clientList) {
   var days = ["M", "T", "W", "Th", "F"]
   var whiteBagTotal = [0, 0, 0, 0, 0]
@@ -446,28 +420,5 @@ function getRouteTotals(clientList) {
   var routeTotals = {"frozen": frozenTotal, "meals" : mealTotal, "whitebag": whiteBagTotal}
   return routeTotals
 }
-
-  router.post('/get-clients', async (req, res) => {
-    const {site} = req.body
-    Client.find({site: site}, function (err, clients) {
-      if (err) { 
-        console.log(err) 
-        res.send("Invalid site")
-      }
-      else {
-        output = {}
-        clients.forEach(client => {
-          let ID = client._id
-          let clientOutput = {
-            firstName: client.firstName,
-            lastName: client.lastName,
-            address: client.address,
-          }
-          output[ID] = clientOutput
-        })
-        res.send(output)
-      }
-    })
-  });
 
 module.exports = router;

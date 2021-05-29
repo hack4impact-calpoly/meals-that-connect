@@ -4,9 +4,27 @@ const router = express.Router();
 
 const Volunteer = require('../models/volunteer');
 const Hours = require("../models/hours")
+const decodeToken = require("./token.js")
 
+/*
+  Contains methods:
+    totals: returns the hour totals for all volunteers at a site for a given week
+    edit-site-manager: edits the hours worked for a volunteer for a provided date
+    edit: Update the hours worked for a volunteer for a given hour log ID
+    delete: Deletes an hour log provided an hour log ID
+    all: Returns all the hours logged for the provided volunteer 
+    add: Adds a new hour log entry for a given volunteer
+*/
+  
 router.post('/edit', async (req, res) => {
-    const {logID, key, value} = req.body
+    const {logID, key, value, token} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+
     Hours.find({_id: logID}, function (err, hourLog) {
         if (err) {
             console.log(err)
@@ -20,7 +38,15 @@ router.post('/edit', async (req, res) => {
 })
 
 router.post('/edit-site-manager', async (req, res) => {
-    const {volunteerID, date, site, value} = req.body
+    const { date, value, token } = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let { site, volunteerID } = userData
+
     Hours.findOne({volunteerID, date, site}, function (err, result) {
         if (result) {
             Hours.updateOne({'_id': result._id}, {home: value}).then(function(hourLog) {
@@ -45,7 +71,15 @@ router.post('/edit-site-manager', async (req, res) => {
 
 
 router.post('/add', async (req, res) => {
-    const {volunteerID, date, hours, site} = req.body
+    const { date, hours, token } = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let { site, volunteerID } = userData
+
     Volunteer.findOne({'volunteerID': volunteerID}).then(function(result) {
         if (!result) {
             console.log('not a volunteer')
@@ -62,7 +96,14 @@ router.post('/add', async (req, res) => {
 })
 
 router.post('/delete', async (req, res) => {
-    const {_id} = req.body
+    const {_id, token} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+
     Hours.deleteOne({_id: _id}, function (err, deleted) {
         if (err) {
             console.log(err)
@@ -74,7 +115,15 @@ router.post('/delete', async (req, res) => {
 })
 
 router.post('/all', async (req, res) => {
-    const {volunteerID} = req.body
+    const {token} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let volunteerID = userData.volunteerID
+
     Hours.find({volunteerID: volunteerID}, function (err, hours) {
       if (err) {
         console.log(err)
@@ -87,20 +136,16 @@ router.post('/all', async (req, res) => {
       }
     })
   })
-
-  async function getVolunteersBySite(siteName) {
-    return await Volunteer.find({site: siteName}, function (err, volunteers) {
-      if (err) {
-        console.log(err)
-      }
-      else {
-        return volunteers
-      }
-    })
-  }
   
   router.post('/totals', async (req, res) => {
-    const {site, week} = req.body
+    const {token, week} = req.body
+
+    let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    let site = userData.site
   
     await Hours.find({ site: site,  date: {
         $gte: new Date(week[1]),
@@ -116,6 +161,17 @@ router.post('/all', async (req, res) => {
         }
     })
   })
+
+async function getVolunteersBySite(siteName) {
+    return await Volunteer.find({site: siteName}, function (err, volunteers) {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            return volunteers
+        }
+    })
+}
   
 async function getVolunteerHours(hours, site, week) {
     var volunteers = await getVolunteersBySite(site)

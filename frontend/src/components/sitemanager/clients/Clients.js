@@ -47,7 +47,8 @@ const Table = (props) => {
             const updateData = {
               id: clientID,
               key: key,
-              data: newValue
+              data: newValue,
+              token: localStorage.getItem("token")
             }
 
             if (key === "routeNumber") {
@@ -82,7 +83,8 @@ const Table = (props) => {
           const updateData = {
               id: clientID,
               key: key,
-              data: data
+              data: data,
+              token: localStorage.getItem("token")
             }
           await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-routes', {
               method: 'POST',

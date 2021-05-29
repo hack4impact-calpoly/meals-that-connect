@@ -54,6 +54,7 @@ class VolunteerOverview extends Component {
     async componentDidMount(){
         let info = {
             site: localStorage.getItem("site"),
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/volunteerSite', {
             method: 'POST',
@@ -73,7 +74,8 @@ class VolunteerOverview extends Component {
 
     handleOpenModal = async (id) => {
         let volunteerID = {
-            _id: id
+            _id: id,
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/id', {
             method: 'POST',
@@ -109,7 +111,8 @@ class VolunteerOverview extends Component {
             site: newVolunteer.site,
             notes: newVolunteer.notes,
             digitalSystem: newVolunteer.digitalSystem,
-            completedOrientation: newVolunteer.completedOrientation
+            completedOrientation: newVolunteer.completedOrientation,
+            token: localStorage.getItem("token")
         }
         /*Update Constant Fields*/
         await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/update-volunteer', {

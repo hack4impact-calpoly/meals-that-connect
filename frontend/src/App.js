@@ -30,7 +30,7 @@ import LogHours from './components/volunteer/LogHours'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-import { isAuthenticated, isLoggedIn, printStorage } from './components/authentication/authenticationUtils.js';
+import { isAuthenticated, printStorage, decodeToken } from './components/authentication/authenticationUtils.js';
 
 import './css/App.css';
 import Profile from './components/Profile';
@@ -39,7 +39,7 @@ import showSchedule from './components/volunteer/showSchedule';
 class App extends Component {
   constructor(props) {
         super(props);
-        this.state = { isLoggedIn: isLoggedIn, loaded: false};
+        this.state = { loaded: false};
     }
 
   // when page is reloaded it calls function that will check if storage has a user logged in
@@ -49,7 +49,6 @@ class App extends Component {
     if (!this.state.loaded) {
       this.setState({loaded: true})
     }
-    //window.location.reload(false)
   }
 
   //when initializing your private route links please include a requiredUser property!

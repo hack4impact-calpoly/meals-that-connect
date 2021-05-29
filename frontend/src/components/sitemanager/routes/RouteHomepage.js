@@ -43,7 +43,8 @@ class RouteHomepage extends Component {
                 routeNumber: null,
                 site: null,
                 index: null,
-                _id: null
+                _id: null,
+                token: localStorage.getItem("token")
             }   
         };
     }
@@ -67,8 +68,10 @@ class RouteHomepage extends Component {
         }
         let info = {
             site: localStorage.getItem("site"),
-            week: mondayDate
+            week: mondayDate,
+            token: localStorage.getItem("token")
         }
+        console.log(info)
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'meals/siteTotals', {
             method: 'POST',
             headers: {
@@ -120,7 +123,8 @@ class RouteHomepage extends Component {
             date: date,
             clientID: clientID, 
             key: key, 
-            value: value
+            value: value,
+            token: localStorage.getItem("token")
         }
         fetch(process.env.REACT_APP_SERVER_URL + 'meals/update-field', {
             method: 'POST',
@@ -138,7 +142,8 @@ class RouteHomepage extends Component {
 
     handleOpenModal = async (client) => {
         let data = {
-            _id: client.clientID
+            _id: client.clientID,
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/id', {
             method: 'POST',
@@ -165,6 +170,7 @@ class RouteHomepage extends Component {
     }
     
     submit = async (newClient) => {
+        let token = localStorage.getItem("token")
         let updateWeekly = {
             date: this.state.weekArr[1],
             id: newClient._id,
@@ -173,6 +179,7 @@ class RouteHomepage extends Component {
             frozenDay: newClient.frozenDay,
             noMilk: newClient.noMilk,
             holidayFrozen: newClient.holidayFrozen,
+            token: token
         }
         let updateConstant = {
             id: newClient.clientID,
@@ -186,6 +193,7 @@ class RouteHomepage extends Component {
             NE: newClient.NE,
             email: newClient.email,
             clientC2: newClient.clientC2,
+            token: token
         }
 
         /*Update Constant Fields in Client Database*/

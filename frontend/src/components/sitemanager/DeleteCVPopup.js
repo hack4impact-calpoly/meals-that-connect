@@ -36,8 +36,10 @@ async function remove(person, type)
     { 
     const current = person
     const currID = current["_id"]
+    let token = localStorage.getItem("token")
     const updateData = {
-        id: currID
+        id: currID,
+        token: token
     }
     if(type == "client")
     {

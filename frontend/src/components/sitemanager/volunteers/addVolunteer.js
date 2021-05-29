@@ -27,7 +27,8 @@ class AddVolunteer extends Component {
                     },
                     notes: "",
                     digitalSystem: false,
-                    completedOrientation: false
+                    completedOrientation: false,
+                    token: localStorage.getItem("token")
         }   
     }
 

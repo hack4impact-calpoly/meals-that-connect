@@ -13,7 +13,8 @@ class VolunteerInfo extends Component{
                 phoneNumber: "",
                 email: localStorage.getItem("userEmail"),
                 days: {},  
-                notes: ""
+                notes: "",
+				token: localStorage.getItem("token")
             },
             comments: "",
 

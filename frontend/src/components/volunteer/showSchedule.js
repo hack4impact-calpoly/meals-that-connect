@@ -92,7 +92,8 @@ class showSchedule extends Component {
         //console.log(type)
         let info = {
             email: email,
-            site: site
+            site: site,
+            token: localStorage.getItem("token")
         }
         let personalData = this.state.personalData;
 
@@ -115,10 +116,10 @@ class showSchedule extends Component {
     }
 
     async fetchSchedule(){
-        //console.log("here")
         let info = {
             site: localStorage.getItem("site"),
-            startDate: this.state.weekArr[1] 
+            startDate: this.state.weekArr[1],
+            token: localStorage.getItem("token") 
         }
 
         this.getDifferenceInDates(this.getMonday(new Date()), info.startDate);

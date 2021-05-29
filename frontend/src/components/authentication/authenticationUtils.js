@@ -1,17 +1,17 @@
 
+var jwt = require('jsonwebtoken');
+
 // This will check if user should remain signed in
 export function isAuthenticated() {
-    if (isLoggedIn()) {
-        let hoursPassed = getHoursPassed();
-        // Keeps users logged in for 24 hours
-        if (hoursPassed < 24) {
-            return true;
-        }
-        else {
-            signout()
-        }
-    } 
-    return false;
+    let decoded = decodeToken()
+
+    if (decoded && Date.now() < decoded.exp * 1000) {
+        localStorage.setItem("site", decoded.site)
+        localStorage.setItem("userType", decoded.user)
+        return true
+    }
+    signout()
+    return false
 }
 
 export function printStorage() {
@@ -26,36 +26,18 @@ export function printStorage() {
 
 }
 
-// Checks if current value of isLoggedIn in localStorage is true
-export function isLoggedIn() {
-    if (localStorage.hasOwnProperty("isLoggedIn") && (localStorage.getItem("isLoggedIn") === 'true')) {
-        return true;
-    } 
-    return false;
-}
-// Return the number of hours since the user last logged in
-export function getHoursPassed() {
-	let hours = 0;
-	if (localStorage.hasOwnProperty("isLoggedIn") && localStorage.hasOwnProperty("time")){
-		const currentTime = new Date();
-		let getStartTime = localStorage.getItem("time");
-		let startTime = new Date(getStartTime);
-		const diff = Math.abs(currentTime - startTime)
-		hours = Math.ceil(diff / (1000 * 60 * 60));
-	}
-	return hours;
+export function decodeToken() {
+    let token = localStorage.getItem("token")
+    if (!token) {
+        return null
+    }
+    var decoded = jwt.verify(token, process.env.REACT_APP_TOKEN_SECRET);
+    console.log(decoded)
+    return decoded
 }
 
 export function signout(){
-    localStorage.setItem("isLoggedIn", 'false')
-    localStorage.removeItem("email");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("site");
-    localStorage.removeItem("time");
-    localStorage.removeItem("week");
-    localStorage.removeItem("token");
-    localStorage.removeItem("volunteerID");
-    localStorage.removeItem("userType");
+    window.localStorage.clear();
 }
 
 export function hasPermission(requiredUsers){

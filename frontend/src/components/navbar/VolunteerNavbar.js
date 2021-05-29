@@ -16,11 +16,13 @@ class VolunteerNavBar extends Component {
         let email = localStorage.getItem('userEmail')
         let site = localStorage.getItem('site')
         let volunteerID = localStorage.getItem('volunteerID')
+        let token = localStorage.getItem('token')
 
         let info = {
             email: email,
             site: site,
-            volunteerID: volunteerID
+            volunteerID: volunteerID,
+            token: token
         }
 
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'volunteers/volunteer-driver-check', {

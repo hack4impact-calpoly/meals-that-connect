@@ -47,6 +47,7 @@ class ClientTableContainer extends Component {
     async componentDidMount(){
        let info = {
           site: localStorage.getItem("site"),
+          token: localStorage.getItem("token")
        }
        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/site', {
           method: 'POST',
@@ -70,7 +71,8 @@ class ClientTableContainer extends Component {
 
     handleOpenModal = async (id) => {
         let clientID = {
-            _id: id
+            _id: id,
+            token: localStorage.getItem("token")
         }
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'clients/id', {
             method: 'POST',
@@ -116,6 +118,7 @@ class ClientTableContainer extends Component {
             routeNumber: newClient.routeNumber,
             site: newClient.site,
             index: newClient.index,
+            token: localStorage.getItem("token")
         }
         /*Update Constant Fields*/
         await fetch(process.env.REACT_APP_SERVER_URL + 'clients/update-client', {
