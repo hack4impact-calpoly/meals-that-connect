@@ -50,8 +50,8 @@ class showSchedule extends Component {
     }
 
     getDifferenceInDates = (date1, date2) => {
-        console.log(date2.getDate())
-        console.log(date1.getDate())
+        //console.log(date2.getDate())
+        //console.log(date1.getDate())
         const diffInDays = date2.getDate() - date1.getDate();
 
         if (diffInDays < 0)
@@ -115,7 +115,7 @@ class showSchedule extends Component {
     }
 
     async fetchSchedule(){
-        console.log("here")
+        //console.log("here")
         let info = {
             site: localStorage.getItem("site"),
             startDate: this.state.weekArr[1] 
@@ -131,7 +131,7 @@ class showSchedule extends Component {
             body: JSON.stringify(info)
         })
         const data = await response.json();
-        console.log(data)
+        //console.log(data)
         this.setState({ loaded: true, routes: data.routes })
     }
 
