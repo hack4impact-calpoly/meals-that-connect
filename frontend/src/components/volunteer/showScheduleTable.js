@@ -232,7 +232,7 @@ const Table = (props) => {
 
     return (
         <Styles>
-          {notEmpty && !props.prevWeek ? <VolunteerScheduleTable columns={columns} data={routeList} props={props}/> : <div style={{marginLeft: "10px", marginRight: "145px"}}> You cannot view driver routes due to any of following: you have no routes assigned for this week or are trying to access previous weeks </div>}
+          {notEmpty && !props.prevWeek ? <VolunteerScheduleTable columns={columns} data={routeList} props={props}/> : <div style={{marginLeft: "10px", marginRight: "145px"}}> You cannot view driver routes due to any of the following: you have no routes assigned for this week or are trying to access previous weeks </div>}
         </Styles>
       )
 }
