@@ -161,7 +161,7 @@ const Table = (props) => {
     //routes is an Object
     let routesLength = Object.keys(props.routes).length
     let routesValues = Object.values(props.routes)
-    console.log(routesLength)
+    //console.log(routesLength)
 
     let currUserID = props.personalData.id
 
@@ -232,7 +232,7 @@ const Table = (props) => {
 
     return (
         <Styles>
-          {notEmpty ? <VolunteerScheduleTable columns={columns} data={routeList} props={props}/> : <div style={{marginLeft: "125px"}}> You have no routes assigned or you are not a driver </div>}
+          {notEmpty && !props.prevWeek ? <VolunteerScheduleTable columns={columns} data={routeList} props={props}/> : <div style={{marginLeft: "10px", marginRight: "145px"}}> You cannot view driver routes due to any of following: you have no routes assigned for this week or are trying to access previous weeks </div>}
         </Styles>
       )
 }

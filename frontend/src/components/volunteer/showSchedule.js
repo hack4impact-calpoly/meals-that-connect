@@ -23,6 +23,7 @@ class showSchedule extends Component {
             holidayArr: [],
             routes: [],
             loaded: false,
+            prevWeek: false, /*checks to see if accessing a previous week */
             mon: false,
             tue: false,
             wed: false,
@@ -33,6 +34,8 @@ class showSchedule extends Component {
 
     updateWeek = (week) => {
         this.setState({weekArr: week})
+        this.getDifferenceInDates(this.getMonday(new Date()), week[1]);
+        //this.fetchSchedule();
     }
 
     updateHoliday = (holidays) => {
@@ -44,6 +47,18 @@ class showSchedule extends Component {
         var day = d.getDay(), // current date
         diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday; take the difference to find monday
         return new Date(d.setDate(diff));
+    }
+
+    getDifferenceInDates = (date1, date2) => {
+        console.log(date2.getDate())
+        console.log(date1.getDate())
+        const diffInDays = date2.getDate() - date1.getDate();
+
+        if (diffInDays < 0)
+            this.setState({ prevWeek: true })
+        else
+            this.setState({ prevWeek: false })
+        //return diffInMs;
     }
 
     updatePDF = (day) => {
@@ -105,6 +120,9 @@ class showSchedule extends Component {
             site: localStorage.getItem("site"),
             startDate: this.state.weekArr[1] 
         }
+
+        this.getDifferenceInDates(this.getMonday(new Date()), info.startDate);
+
         let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
             method: 'POST',
             headers: {
@@ -118,14 +136,14 @@ class showSchedule extends Component {
     }
 
     render() {
-        let {weekArr, holidayArr, personalData, routes, loaded} = this.state
+        let {weekArr, holidayArr, personalData, routes, loaded, prevWeek} = this.state
         
         return (
             <div className = "schedule-volunteer">
                 <h1 style={{paddingTop: "100px"}}>Driver Schedule</h1>
                 <VolunteerScheduleNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 30}}>
-                {this.state.loaded ? <div id="volunteer-schedule"><VolunteerScheduleTable routes={routes} personalData={personalData} updatePDF={this.updatePDF} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
+                {this.state.loaded ? <div id="volunteer-schedule"><VolunteerScheduleTable routes={routes} prevWeek={prevWeek} personalData={personalData} updatePDF={this.updatePDF} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}

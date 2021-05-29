@@ -72,6 +72,22 @@ router.post('/volunteerSite', async (req, res) => {
   })
 })
 
+router.post('/volunteer-driver-check', async (req, res) => {
+  const {site, email, volunteerID} = req.body
+  console.log("checking if volunteer is a driver")
+
+  Volunteer.find({site: site, email: email, volunteerID: volunteerID}, function (err, volunteer) {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      //console.log(volunteer[0].driver)
+      res.send(volunteer[0].driver)
+    }
+  })
+
+})
+
 router.post('/availability', async (req, res) => {
     const {site} = req.body
     Volunteer.find({site: site, driver: true}, function (err, volunteers) {
