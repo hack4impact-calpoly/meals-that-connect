@@ -333,35 +333,4 @@ export async function printDocument(dayString, day, weekArr, site, route) {
 
 export default SiteManagerHomepage;
 
-<<<<<<< HEAD
-                        <div className = "confirmation-buttons" style={{ display:'flex', marginTop: 20, "alignItems": 'center' }} >
-                        { (localStorage.getItem("userType") == "site-manager") ? <h3 style={{width: 200}}>Confirm Total: </h3> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={0} totals={totals} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={1} totals={totals} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={2} totals={totals} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={3} totals={totals} showModal={this.handleOpenModal}/> : null }
-                        { (localStorage.getItem("userType") == "site-manager") ?  <PopupMealTotals weekArr= {weekArr} day={4} totals={totals} showModal={this.handleOpenModal}/> : null }
-                        </div>
-                        <div className = "confirmation-buttons" style={{ display: isPastWeek ? 'none' : 'flex', marginTop: 20, "alignItems": 'center'}} >
-                            <h3 style={{width: 200}}>Driver Routes: </h3>
-                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("M", 0)}>Monday</button>
-                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("T", 1)}>Tuesday</button>
-                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("W", 2)}>Wednesday</button>
-                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("Th", 3)}>Thursday</button>
-                            <button className="route" style={{width: 165}} onClick={() => this.printDocument("F", 4)}>Friday</button>
-                        </div>
-                    </div>
-                    <Modal isOpen={this.state.showModal} className="order-modal" overlayClassName="Overlay">
-                        <div id="order-modal-header">
-                            <h1>Successfully Submitted Order!</h1>
-                            <button onClick={this.handleCloseModal} id="order-modal-button">Close</button>
-                        </div>
-                    </Modal>
-                </div>
-            </div>
-        );
-    }
-}
-=======
->>>>>>> master
 
