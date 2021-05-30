@@ -46,7 +46,7 @@ class VolunteerSchedule extends Component {
     async componentWillMount(){
         this.state.weekArr[1] = this.getMonday(new Date());
         await this.fetchVolunteers();
-        this.fetchSchedule();
+        // this.fetchSchedule();
     }
 
     handleSelect = (site, date, props) => {
@@ -139,26 +139,6 @@ class VolunteerSchedule extends Component {
         })
     }
 
-    async fetchPreviousWeek() {
-        var currentWeek = new Date(this.state.weekArr[1])
-        var oneWeekAgo = new Date(currentWeek.setDate(currentWeek.getDate() - 7))
-        let info = {
-            site: localStorage.getItem("site"),
-            startDate: oneWeekAgo,
-            prevWeekData: null,
-            token: localStorage.getItem("token") 
-        }
-        let response = await fetch(process.env.REACT_APP_SERVER_URL + 'schedules/get', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(info)
-        })
-        const data = await response.json()
-        this.setState({prevWeekGet: true, prevWeek: data})
-    }
-
     render() {
         let {loaded, routes, weekArr, holidayArr, mealPrep, mealPrep2, mealPrep3, mealPrep4, mealPrep5, staff, computer, volunteers} = this.state
 
@@ -167,9 +147,9 @@ class VolunteerSchedule extends Component {
                 <h1 className="site-manager-page-header">Volunteer Schedule Overview</h1>
                 <VolunteerNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 0}}>
-                {this.state.loaded ? <VolunteersScheduleTable volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} 
+                {this.state.loaded ? routes ? <VolunteersScheduleTable volunteers={volunteers} routes={routes} weekArr={weekArr} holidayArr={holidayArr} 
                                         mealPrep={mealPrep} mealPrep2={mealPrep2} mealPrep3={mealPrep3} mealPrep4={mealPrep4} mealPrep5={mealPrep5} 
-                                        staff={staff} computer={computer} handleSelect={this.handleSelect}/> :
+                                        staff={staff} computer={computer} handleSelect={this.handleSelect}/> : <div> No schedule found</div> :
                     <div id = "spin">
                         <Spinner animation="border" role="status" style={{width:'70px', height:'70px', left: '50%', right: '40%', top: '40%', display: 'block', position:'absolute'}}/>
                     </div>}

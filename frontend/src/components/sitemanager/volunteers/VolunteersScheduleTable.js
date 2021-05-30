@@ -215,6 +215,7 @@ const Table = (props) => {
     let routeList = []
 
     //routes is an Object
+    console.log(props.routes)
     let routesLength = Object.keys(props.routes).length
     let routesValues = Object.values(props.routes)
 
