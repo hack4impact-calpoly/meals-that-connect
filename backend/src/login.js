@@ -1,8 +1,8 @@
 const express = require('express');
-var jwt = require("jsonwebtoken");
+// var jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs')
 const router = express.Router();
-require('dotenv').config()
+// require('dotenv').config()
 
 const Volunteer = require('../models/volunteer')
 const SiteManager = require('../models/siteManager')
@@ -26,6 +26,7 @@ router.post('/email-taken', async (req, res) =>{
 
 router.post('/', async (req, res) => {
    res.header('Access-Control-Allow-Origin', '*');
+   // console.log(req.body)
    const {email, user, password} = req.body
    
    let userType = getUser(user)
@@ -46,16 +47,17 @@ router.post('/', async (req, res) => {
          else {
             console.log("login successful")
             let { site, volunteerID } = result
-            var token = jwt.sign(
-               {  
-                  email: email, 
-                  user: user,
-                  site: site,
-                  volunteerID: volunteerID
-               },
-               process.env.TOKEN_SECRET,
-               { expiresIn: "24h" }
-            );
+            let token = " "
+            // var token = jwt.sign(
+            //    {  
+            //       email: email, 
+            //       user: user,
+            //       site: site,
+            //       volunteerID: volunteerID
+            //    },
+            //    process.env.TOKEN_SECRET,
+            //    { expiresIn: "24h" }
+            // );
             result['token'] = token
             res.send({result, token})
          }
