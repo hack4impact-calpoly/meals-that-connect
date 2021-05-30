@@ -4,7 +4,7 @@ const router = express.Router();
 const SiteManager = require('../models/siteManager');
 const Volunteer = require('../models/volunteer');
 const DataEntry = require('../models/dataEntry');
-const decodeToken = require("./token.js")
+const {decodeToken} = require("./token.js")
 var jwt = require('jsonwebtoken');
 
 /*

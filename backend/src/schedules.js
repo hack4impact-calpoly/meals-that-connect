@@ -4,7 +4,7 @@ const moment = require('moment');
 
 const Schedule = require('../models/schedule')
 const Client = require("../models/clients")
-const decodeToken = require("./token.js")
+const {decodeToken} = require("./token.js")
 
 /*
   Contains methods:

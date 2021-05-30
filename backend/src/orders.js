@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const express = require('express')
 const router = express.Router()
 const Orders = require("../models/orders");
-const decodeToken = require("./token.js")
+const {decodeToken} = require("./token.js")
 
 /*
   Contains methods:

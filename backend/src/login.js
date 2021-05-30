@@ -3,6 +3,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs')
 const router = express.Router();
 // require('dotenv').config()
+const {createToken} = require("./token.js")
 
 const Volunteer = require('../models/volunteer')
 const SiteManager = require('../models/siteManager')
@@ -47,17 +48,13 @@ router.post('/', async (req, res) => {
          else {
             console.log("login successful")
             let { site, volunteerID } = result
-            let token = " "
-            // var token = jwt.sign(
-            //    {  
-            //       email: email, 
-            //       user: user,
-            //       site: site,
-            //       volunteerID: volunteerID
-            //    },
-            //    process.env.TOKEN_SECRET,
-            //    { expiresIn: "24h" }
-            // );
+            let data = {  
+               email: email, 
+               user: user,
+               site: site,
+               volunteerID: volunteerID
+            }
+            let token = createToken(data)
             result['token'] = token
             res.send({result, token})
          }

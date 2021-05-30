@@ -7,4 +7,13 @@ const decodeToken = function (token) {
     return decoded
 }
 
-module.exports = decodeToken
+const createToken = function (data) {
+    var token = jwt.sign(
+        data,
+        process.env.TOKEN_SECRET,
+        { expiresIn: "24h" }
+    );
+    return token
+}
+
+module.exports = {decodeToken, createToken}

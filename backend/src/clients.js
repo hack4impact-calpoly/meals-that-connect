@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const Client = require("../models/clients")
-const decodeToken = require("./token.js")
+const {decodeToken} = require("./token.js")
 
 /*
   Contains methods:

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Volunteer = require('../models/volunteer')
-const decodeToken = require("./token.js")
+const {decodeToken} = require("./token.js")
 
 /*
   Contains methods:
