@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     width: 700px;
-    margin: 150px calc(50vw - 350px) 50px;
+    margin: 150px calc(50vw*1.2 - 350px) 50px;
     padding: 0px 10px 40px;
     flex-direction: column;
 
@@ -155,4 +155,21 @@ input[type=radio] {
     font-weight: 800;
     font-size: 17px;
     color: rgb(241, 80, 80);
+}
+
+
+@media screen and (max-width: 800px) {
+    .auth-form {
+        zoom: 0.6;
+        margin: 300px calc(50vw*2.1 - 350px) 50px;
+    }
+
+    .auth-form-container {
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 40px;
+    }
 }

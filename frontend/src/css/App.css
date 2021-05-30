@@ -7,6 +7,7 @@
   
   font-size: calc(10px + 2vmin);
   color: black;
+  zoom: 0.8;
 }
 
 .App-link {
@@ -48,6 +49,49 @@
    text-decoration: none;
    font-size: 20px;
    font-weight: bolder;
+   height: "35px";
+}
+
+.first-navbar-link{
+  display: inline-block;
+  text-align: center;
+  padding: 14px;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bolder;
+  height: "35px";
+  margin-left: 100px;
+}
+
+.navbar-icon {
+  height: 35px;
+}
+
+.navbar-logo {
+  height: 100px;
+}
+
+@media (max-width: 800px) {
+  .navbar-link, .first-navbar-link {
+    font-size: 12px;
+  }
+
+  .navbar-icon {
+    height: 25px;
+  }
+
+  .navbar-logo {
+    height: 50px;
+  }
+  
+  .first-navbar-link {
+    margin-left: 20px;
+  }
+
+  .navbar-left {
+    padding-left: 20px;
+  }
 }
 
 .generic-button {

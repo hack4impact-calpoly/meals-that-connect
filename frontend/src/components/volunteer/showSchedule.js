@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import MTCLogo from '../../MTC_logo.png';
-
 import VolunteerScheduleNavbar from './showScheduleNavBar';
 import VolunteerScheduleTable from './showScheduleTable';
 import Spinner from "react-bootstrap/Spinner"
+import "../../css/LogHours.css";
 
 
 class showSchedule extends Component {
@@ -50,15 +48,12 @@ class showSchedule extends Component {
     }
 
     getDifferenceInDates = (date1, date2) => {
-        //console.log(date2.getDate())
-        //console.log(date1.getDate())
         const diffInDays = date2.getDate() - date1.getDate();
 
         if (diffInDays < 0)
             this.setState({ prevWeek: true })
         else
             this.setState({ prevWeek: false })
-        //return diffInMs;
     }
 
     updatePDF = (day) => {
@@ -89,7 +84,6 @@ class showSchedule extends Component {
     async fetchUserData () {
         let email = localStorage.getItem('userEmail')
         let site = localStorage.getItem('site')
-        //console.log(type)
         let info = {
             email: email,
             site: site,
@@ -141,10 +135,10 @@ class showSchedule extends Component {
         
         return (
             <div className = "schedule-volunteer">
-                <h1 style={{paddingTop: "100px"}}>Driver Schedule</h1>
+                <h1 style={{paddingTop: "150px"}}>Driver Schedule</h1>
                 <VolunteerScheduleNavbar updateWeek={this.updateWeek} updateHoliday={this.updateHoliday}/>
                 <div className="site-manager-container" style={{paddingLeft: 30}}>
-                {this.state.loaded ? <div id="volunteer-schedule"><VolunteerScheduleTable routes={routes} prevWeek={prevWeek} personalData={personalData} updatePDF={this.updatePDF} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
+                {this.state.loaded ? <div className="schedule-volunteer-table"><VolunteerScheduleTable routes={routes} prevWeek={prevWeek} personalData={personalData} updatePDF={this.updatePDF} weekArr={weekArr} holidayArr={holidayArr}/></div> : 
                         <div>
                             <Spinner animation="border" role="status" />
                         </div>}

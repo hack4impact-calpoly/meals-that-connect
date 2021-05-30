@@ -91,10 +91,10 @@ class LogHours extends Component {
         let hoursExist = this.state.logs.length > 0
 
         return (
-            <div className="logging-container">
+            <div className="logging-container" >
                 <form className="log-input-box" onSubmit={this.newLog}>
                     <br/>
-                    <h1 style={{paddingTop: "100px"}}>Log Hours</h1>
+                    <h1 style={{paddingTop: "150px"}}>Log Hours</h1>
                     <br/>
                     <p className= "input-date">Date</p>
                     <input type="date" id="date" size="50" className="log-input" defaultValue={this.state.date} required={true} onChange={this.handleChange}/>
@@ -105,7 +105,7 @@ class LogHours extends Component {
                     <button id="submit-button" className="log-input"  type="submit">SUBMIT</button>
                     <br/>
                 </form>
-                {hoursExist? <LoggedHoursTable data={this.state.logs} deleteLog={this.deleteLog}/> 
+                {hoursExist? <div className="loggedHoursTable"><LoggedHoursTable data={this.state.logs} deleteLog={this.deleteLog}/></div> 
                 : <h2>No hours logged so far</h2>}
             </div>
         );

@@ -7,7 +7,7 @@ class DataEntryNavBar extends Component {
         return (
             <div className = "navbar">
             <div className = "navbar-left">
-                    <img src={MTCLogo} style={{height: '100px'}} />
+                    <img src={MTCLogo} className="navbar-logo" />
                 </div>
                 <div className="navbar-right">
                     <Link className="navbar-link" to="/">Routes</Link>
