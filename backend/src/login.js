@@ -9,6 +9,7 @@ const SiteManager = require('../models/siteManager')
 const DataEntry = require('../models/dataEntry')
 
 router.post('/email-taken', async (req, res) =>{
+   res.header('Access-Control-Allow-Origin', '*');
    const {email, user} = req.body
    let userType = getUser(user);
  
@@ -24,6 +25,7 @@ router.post('/email-taken', async (req, res) =>{
 });
 
 router.post('/', async (req, res) => {
+   res.header('Access-Control-Allow-Origin', '*');
    const {email, user, password} = req.body
    
    let userType = getUser(user)
@@ -64,6 +66,7 @@ router.post('/', async (req, res) => {
 
 // reset password
 router.post('/reset-password', async(req, res) => {
+   res.header('Access-Control-Allow-Origin', '*');
    const {email, userType, password} = req.body
 
    userType.findOne({"email": email}).then(function(user) {
