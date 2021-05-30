@@ -185,7 +185,7 @@ function getDate(weekArr, tableDay) {
   }
 
 // grabs the sorted list of clients by route and index based on site and da
-export async function fetchRouteOverview(dayString, weekArr, site, route) {
+export async function fetchRouteOverview(dayString, weekArr, site, route,) {
     //console.log("here")
     let Date = weekArr[1];
     let param = {
@@ -193,7 +193,7 @@ export async function fetchRouteOverview(dayString, weekArr, site, route) {
         day: dayString,
         week: Date,
         routeNumber: route,
-        token: this.state.token
+        token: localStorage.getItem("token")
     }
     let url = route ? "meals/routeOverviewDayRoute" : "meals/routeOverviewDay"
     let response = await fetch(process.env.REACT_APP_SERVER_URL + url, {

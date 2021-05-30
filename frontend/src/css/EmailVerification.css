@@ -26,3 +26,11 @@
 #emailv-header {
     font-weight: bold;
 }
+
+
+@media screen and (max-width: 800px) {
+    .email-verification {
+        margin: 40px;
+        margin-top: 200px;
+    }
+}

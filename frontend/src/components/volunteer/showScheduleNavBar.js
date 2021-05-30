@@ -18,9 +18,6 @@ class VolunteerScheduleNavbar extends Component {
                 <hr></hr>
                 <nav className="route-links">
                     <Calendar updateWeek={this.props.updateWeek} updateHoliday={this.props.updateHoliday}/>
-                    <Link to="/show-my-schedule">
-                        <button type="button" className="route">Overview</button>
-                    </Link><br/>
                 </nav>
             </div>
         );

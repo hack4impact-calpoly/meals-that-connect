@@ -38,16 +38,17 @@ class VolunteerNavBar extends Component {
 
     render() {
         let {volunteerDriver} = this.state;
+        console.log(this.state)
         return (
             <div className = "navbar">
                 <div className = "navbar-left">
-                    <img src={MTCLogo} style={{height: '100px'}} />
+                    <img src={MTCLogo} className="navbar-logo" />
                 </div>
                 <div className="navbar-right">
-                    <Link className="navbar-link" to="/" style={{marginLeft : '100px'}}>Home</Link>
+                    <Link className="first-navbar-link" to="/" >Home</Link>
                     {volunteerDriver ? <Link className="navbar-link" to="/show-my-schedule" style={{marginLeft : '20px'}}>Schedule</Link> : null }
                     <Link className="navbar-link" to="/profile">
-                        <img src = "https://static.thenounproject.com/png/3070444-200.png" style={{height: '35px'}}/>
+                        <img src = "https://static.thenounproject.com/png/3070444-200.png" className="navbar-icon"/>
                     </Link>
                 </div>
             </div>

@@ -112,16 +112,24 @@ router.post('/volunteerSite', async (req, res) => {
 })
 
 router.post('/volunteer-driver-check', async (req, res) => {
-  const {site, email, volunteerID} = req.body
+  const {site, email, volunteerID, token} = req.body
   console.log("checking if volunteer is a driver")
 
-  Volunteer.find({site: site, email: email, volunteerID: volunteerID}, function (err, volunteer) {
-    if (err) {
+  let userData = decodeToken(token)
+    if (userData == null) {
+        res.status(403).send("Unauthorized user")
+        return
+    }
+    console.log(req.body)
+
+  Volunteer.findOne({site: site, email: email, volunteerID: volunteerID}, function (err, volunteer) {
+    console.log(volunteer)
+    if (!volunteer) {
       console.log(err)
     }
     else {
       //console.log(volunteer[0].driver)
-      res.send(volunteer[0].driver)
+      res.send(volunteer.driver)
     }
   })
 

@@ -8,6 +8,7 @@ export function isAuthenticated() {
     if (decoded && Date.now() < decoded.exp * 1000) {
         localStorage.setItem("site", decoded.site)
         localStorage.setItem("userType", decoded.user)
+        localStorage.setItem("volunteerID", decoded.volunteerID)
         return true
     }
     signout()

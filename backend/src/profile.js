@@ -52,7 +52,6 @@ router.post('/update', async (req, res) => {
     }
     let email = userData.email
     let userType = userData.user
-    let site = userData.site
 
     let user = getUser(userType)
     if (user == null) {
@@ -82,12 +81,21 @@ router.post('/update', async (req, res) => {
             })
     }
     else {
-        user.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName, site: newSite }}).then((data) => {
+        user.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName, site: newSite }}).then(async (data) => {
+            let volunteerID = ""   
+            if (newUser === "volunteer") {
+               console.log("Here")
+               await Volunteer.findOne({'email': email}).then((data) => {
+                  volunteerID = data.volunteerID
+               })
+            }
+            console.log(volunteerID)
             var new_token = jwt.sign(
                 {  
                    email: email, 
                    user: newUser,
-                   site: newSite
+                   site: newSite,
+                   volunteerID: volunteerID
                 },
                 process.env.TOKEN_SECRET,
                 { expiresIn: "24h" }

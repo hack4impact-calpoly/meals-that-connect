@@ -6,11 +6,15 @@
     margin-right: auto;
 }
 
+.columns a {
+    text-decoration: none;
+}
+
 .home
 {
     padding: 10px 10% 20px;
     padding-bottom: 30px;
-    height: 350px;
+    height: 500px;
     min-height: 350px;
     background-color: white;
 
@@ -127,11 +131,7 @@
     background-color: #748998;
     color: white;
 }
-@media screen and (max-width: 600px) {
-    .column {
-      width: 100%;
-    }
-  }
+
 
 .row {
     width: 100%;
@@ -145,3 +145,32 @@
     display: table;
     clear: both;
 }
+
+@media screen and (max-width: 800px) {
+    .column {
+      width: 100%;
+    }
+
+    .row {
+        zoom: 0.7;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        position: static;
+    }
+
+    #column1, #column2, #column3 {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+    }
+
+    .home h1 {
+        font-size: 14px;
+    }
+
+    .home {
+        height: auto;
+        min-height: 200px;
+    }
+  }

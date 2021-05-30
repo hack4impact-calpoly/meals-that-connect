@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 80px;
 }
 
 .log-input-box {
@@ -56,4 +57,29 @@
 #submit-button:hover, #submit-button button-fade:focus, #submit-button button-fade:active {
     background-color: #2098D1;
     color: white;
+}
+
+
+
+
+@media (max-width: 800px) {
+    .logging-container {
+        zoom: 0.65;
+    }
+    .loggedHoursTable {
+        zoom: 0.7;
+    }
+
+    .schedule-volunteer {
+        zoom: 0.5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .schedule-volunteer-table {
+        padding-top: 30px;
+        zoom: 0.7;
+    }
+    /* CSS that should be displayed if width is equal to or less than 800px goes here */
 }

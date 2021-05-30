@@ -228,6 +228,7 @@ class Signup extends Component {
         }
 
         return (
+            <div className="auth-form-container">
             <div className="auth-form">
                 <h1 id="title">SIGN UP</h1>
                 <form onSubmit={this.signup}>
@@ -302,6 +303,7 @@ class Signup extends Component {
                 <input id = "signup-button" type="submit" value="CREATE ACCOUNT"/>
                 <p>Already have an account? <Link to="/login">Log in</Link></p>
                 </form>
+            </div>
             </div>
         );
     }

@@ -109,3 +109,12 @@ input[type=email]:focus {
     transition-property: color, background-color;
     width: 100%;
 }
+
+
+@media (max-width: 800px) {
+    .profile-container {
+        margin-top: 250px;
+        zoom: 0.4;
+        filter: none;
+    }
+}

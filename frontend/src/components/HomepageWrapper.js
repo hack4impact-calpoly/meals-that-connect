@@ -8,7 +8,6 @@ class HomepageWrapper extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: localStorage.getItem('isLoggedIn'), 
             userType: localStorage.getItem('userType')
         };
     }
