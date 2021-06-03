@@ -32,8 +32,12 @@ export function decodeToken() {
     if (!token) {
         return null
     }
-    var decoded = jwt.verify(token, process.env.REACT_APP_TOKEN_SECRET);
-    console.log(decoded)
+    try{
+        var decoded = jwt.verify(token, process.env.REACT_APP_TOKEN_SECRET);
+        console.log(decoded)
+    } catch(err){
+        console.log(err)
+    }
     return decoded
 }
 

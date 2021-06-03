@@ -4,8 +4,7 @@ const router = express.Router();
 const SiteManager = require('../models/siteManager');
 const Volunteer = require('../models/volunteer');
 const DataEntry = require('../models/dataEntry');
-const {decodeToken} = require("./token.js")
-var jwt = require('jsonwebtoken');
+const {decodeToken, createToken} = require("./token.js")
 
 /*
   Contains methods:
@@ -64,17 +63,13 @@ router.post('/update', async (req, res) => {
         Volunteer.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName, 
             phoneNumber: phoneNumber, availability: availability, driver: driver, 
             kitchenStaff: kitchenStaff, notes: notes }}).then(user => {
-
-                var new_token = jwt.sign(
-                    {  
-                       email: email, 
-                       user: newUser,
-                       site: newSite,
-                       volunteerID: user.volunteerID
-                    },
-                    process.env.TOKEN_SECRET,
-                    { expiresIn: "24h" }
-                 );
+               let token_data = {  
+                  email: email, 
+                  user: newUser,
+                  site: newSite,
+                  volunteerID: user.volunteerID
+               }
+               let new_token = createToken(token_data)
             
                 res.status(200).send({user, new_token})
                 console.log("successfully updates")
@@ -84,22 +79,18 @@ router.post('/update', async (req, res) => {
         user.updateOne({'email': email}, {$set: {firstName: firstName, lastName: lastName, site: newSite }}).then(async (data) => {
             let volunteerID = ""   
             if (newUser === "volunteer") {
-               console.log("Here")
                await Volunteer.findOne({'email': email}).then((data) => {
                   volunteerID = data.volunteerID
                })
             }
-            console.log(volunteerID)
-            var new_token = jwt.sign(
-                {  
-                   email: email, 
-                   user: newUser,
-                   site: newSite,
-                   volunteerID: volunteerID
-                },
-                process.env.TOKEN_SECRET,
-                { expiresIn: "24h" }
-             );
+
+            let token_data = {  
+               email: email, 
+               user: newUser,
+               site: newSite,
+               volunteerID: volunteerID
+            }
+            let new_token = createToken(token_data)
         
             res.status(200).send({data, new_token})
             console.log("successfully updates")
