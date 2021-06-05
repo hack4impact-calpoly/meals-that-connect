@@ -26,6 +26,8 @@ jobs:
         ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         ADMIN_CODE: ${{ secrets.ADMIN_CODE }}
+        TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+        USER_CODE: ${{ secrets.USER_CODE }}
 
     - run: echo API is at ${{ steps.backend-deployment.outputs.api-url }}
       shell: bash
